@@ -1,0 +1,558 @@
+\documentclass[a4paper, 11pt, oneside]{report} 
+\usepackage[utf8]{inputenc}
+\usepackage[dutch]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[toc,page]{appendix}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{tikz-qtree}
+\usepackage{graphicx}
+\usepackage{fancyref}
+\usepackage{wrapfig}
+\usepackage{url}
+\usepackage{pdflscape}
+\usepackage{fancyvrb}
+\graphicspath{ {Afbeeldingen/} }
+\usepackage{subfig}
+\usepackage{tabularx}
+\usepackage{apacite}
+\usepackage{longtable}
+\usepackage{titlecaps}
+%\usepackage[T1]{fontenc}
+\usepackage{titlesec, blindtext, color}
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+
+
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\titleformat{\chapter}[hang]{\huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Large\bfseries}
+
+
+\def\sectionautorefname{Paragraaf}
+\def\chapterautorefname{Hoofdstuk}
+\def\tableautorefname{Tabel}
+\DeclareRobustCommand{\VAN}[3]{#2} % set up for citation
+
+%% Sets page size and margins 
+\usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\author{M.W.J. Berentsen}
+
+\title{Plan van aanpak}
+\usepackage{titling}
+
+\newcommand{\subtitle}[8]{%
+	\posttitle{%
+		\par\end{center}
+	\begin{center}\large#1\end{center}
+	\vskip0.5em
+	\begin{center}\large#2\end{center}
+	\begin{center}\large#3\end{center}
+	\begin{center}\large#4\end{center}
+    \begin{center}\large#5\end{center}
+    \begin{center}\large#6\end{center}
+    \begin{center}\large#7\end{center}
+    \begin{center}\large#8\end{center}
+	\vskip0.5em}%
+}
+
+\subtitle{Afstudeerverslag}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: ir. J. Visch}{Assessor: ir. C.G.R. van Uffelen}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+
+
+\hypersetup{colorlinks=true, urlcolor=red,citecolor=black,linkcolor=blue}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
+\setcounter{tocdepth}{2}
+\begin{document}
+\begin{figure}
+\begin{center}\includegraphics[scale=0.2]{pf}\end{center}
+\end{figure}
+\maketitle
+
+%\section*{Voorwoord}
+%\addcontentsline{toc}{section}{\protect\numberline{}Voorwoord}
+%\pagebreak
+
+%Geschikt voor minimaal 50 nodes; Kan slecht of geen signaal nabootsen
+
+\tableofcontents
+\clearpage
+%\section*{Begrippenlijst}
+
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+%\begin{table}[H]
+%\centering
+
+%\label{begrippen}
+%\begin{tabular}{|l|l|}
+%\hline
+%\rowcolor[HTML]{C0C0C0}
+%Term        & Omschrijving                                                         \\ \hline
+%term        & Omschrijving                                                      	\\ \hline
+
+%\end{tabular}
+%\caption{Begrippenlijst}
+%\end{table}
+
+%\clearpage
+
+%\section*{Samenvatting}
+%\addcontentsline{toc}{section}{\protect\numberline{}Samenvatting}
+%\pagebreak
+
+
+\chapter{Inleiding}
+\label{chapter:inleiding}
+Het volgende verslag betreft het plan van aanpak voor de afstudeerstage van Maurice Berentsen (hierna: student).
+Dit plan van aanpak is gebaseerd op het document \textit{"Toelichting op PvA 3.0"} \cite{HoePVA}
+
+Het beschrijft de aanpak van de student waarin hij omschrijft wat hij gaat onderzoeken. 
+Hoe dit uitgevoerd wordt en wat de planning van het onderzoek is.
+
+Het doel is het onderzoeken of meerdere met elkaar verbonden kleine drones inzetbaar zijn voor monitoring van grote gebieden. Omdat de student geen vergunning heeft om te vliegen met drones gebruikt hij een simulatie.
+
+Hier wordt een mesh-netwerk prototype voor gebruikt en er wordt gekeken naar het optimaal verdelen van de drones.
+
+
+Dit document gaat eerst in op de \nameref{chapter:achtergrond} waar het bedrijf kort omschreven wordt en de achtergrond van het probleem.
+Vervolgens gaat \autoref{chapter:doelstelling} in op het doel, de opdracht en het resultaat van het project.
+Daarna is het project afgebakend in het hoofdstuk \nameref{chapter:projectgrenzen}.
+Direct daarop zijn de \nameref{chapter:randvoorwaarden} naar zowel het bedrijf als de school vastgelegd.
+Hierna is in \autoref{chapter:producten} per product, die de student wil opleveren, opgesteld wat de kwaliteitseisen zijn en hoe hij daar aan wil voldoen.
+\autoref{chapter:ontwikkelmethode} verduidelijkt welke ontwikkelmethode de student gebruikt tijdens het project.
+Een praktisch hoofdstuk wat betreft contactgegevens en onderlinge communicatie volgt hierop in \nameref{chapter:projectorganistatie}.
+De \nameref{chapter:planning} is in het daarop volgende hoofdstuk uitgewerkt.
+Tenslotte eindigt het plan van aanpak met een risico analyse in \autoref{chapter:risicos}.
+
+
+
+\chapter{Achtergrond van het project}
+\label{chapter:achtergrond}
+Alten is een bedrijf met omstreeks 650 medewerkers in dienst.
+De afdeling oost waar de stage plaats vindt telt ongeveer 50 medewerkers. 
+Dit zijn grotendeels consulenten die meewerken aan de productontwikkeling van de partners van Alten op het gebied van technische software engineering.
+Het overige deel is directie en human resource management.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[scale=0.35]{organogram}\end{center}
+	\caption{Organogram Alten IT}
+	\label{fig:organogram}
+\end{figure}
+
+In figuur \ref{fig:organogram} is het organogram van Alten IT zichtbaar.
+De student voert zijn onderzoek uit binnen het onderdeel Technical Software East.
+
+Het gebruik van drones neemt toe in Nederland.
+Volgens het luchtvaartregister in de publicatie van de inspectie Leefomgeving en Transport \cite{ILeT} zijn er op 03-10-2018 1806 drones geregistreerd. 
+Daarmee is de groep met een totaal aantal luchtvaart voertuigen van 4445 goed voor 40.6 procent.
+Op 1 juni 2017 heeft \citeauthor{aantalDrones} van het mediabedrijf dronewatch een zelfde berekening gedaan waarbij het aantal nog 755 drones was en goed voor 22 procent.
+
+Alten is in bezit van drones en wil haar kennis hierin uitbreiden.
+Deze kennis breidt zij uit door te investeren in studenten die onderzoek doen naar dit onderwerp.
+Daarbij is het probleem die de student wil oplossen niet urgent voor het bedrijf, maar het opgeleverde resultaat wel.
+
+
+\chapter{Doelstelling, opdracht en op te leveren resultaten voor het bedrijf en school}
+\label{chapter:doelstelling}
+
+Een probleem van veel drones is de korte tijd dat ze in de lucht kunnen blijven.
+Drones die dat wel kunnen zijn vaak enorm groot en duur.
+
+De student heeft als mogelijke oplossing hiervoor bedacht dat het gebruik van meerdere goedkope drones die vanaf de grond monitoring uitvoeren een alternatief kunnen zijn.
+Alten is geïnteresseerd in de mogelijk alternatieve oplossing van de student en biedt daarom een stageplek aan.
+
+De doelstelling van Alten is het beantwoorden van de volgende hoofdvraag: Is het mogelijk om meerdere drones verbonden in een onderling mesh netwerk in zetten voor het monitoren van gebieden?
+
+De opdracht hierin voor de student is het maken van een simulatie.
+Alten wil deze simulatie gebruiken om verschillende algoritmes te testen voor de verdeling van de drones.
+De simulatie moet aantonen hoeveel drones benodigd zouden zijn voor een gebied.
+
+Deze simulatie moet ook het gedrag van het netwerk nabootsen.
+Om het gedrag van het netwerk realistisch na te bootsen moet er een prototype gemaakt worden.
+Dit zodat getest kan worden op het gedrag bij slechte of geen verbinding.
+
+Aan het einde van het project levert de student de volgende producten op aan het bedrijf:
+
+\begin{itemize}
+\item Simulatiesoftware met meerdere drones en netwerk simulatie
+\item Prototype mesh netwerk.
+\item SRS (Software Requirement Specification)
+\item SDD (Software Design Document)
+\item Onderzoeksverslag
+\item Broncode
+\end{itemize}
+
+Aan het einde van het project levert de student het bovenstaande plus een projectverslag op aan school.
+
+
+\chapter{Projectgrenzen}
+\label{chapter:projectgrenzen}
+Om duidelijkheid te scheppen in dit project zullen hier de grenzen van het project besproken worden. Dit is om voor beide partijen duidelijkheid te creëren welke zaken er wel of niet uitgevoerd gaan worden. 
+
+Deze grenzen zijn onderverdeelt in:
+
+\begin{itemize}
+	\item Organisatorische grenzen.
+	\item Inhoudelijke grenzen.
+\end{itemize}
+
+\section{Organisatorische grenzen}
+Hier staan alle grenzen die organisatorische invloed hebben. 
+
+\begin{itemize}
+	\item Het project start op 1 februari 2019.
+	\item Het project stopt op 28 juni 2019.
+	\item De student werkt 5 dagen per week aan het project wat een totaal van 40 uur per week geeft.
+	\item Het project wordt door één student uitgevoerd.
+	\item De locatie waar de student werkt is vrij waarbij de werkplek van Alten voorkeur heeft.
+	\item Het schoolritme dicteert gedurende het project, ofwel tijdens de schoolvakanties is de student vrij.
+\end{itemize}
+
+\section{Inhoudelijke grenzen}
+Hier staan alle grenzen die inhoudelijk over het project gaan. In hoofdstuk \ref{chapter:doelstelling} is te vinden welke producten worden opgeleverd. Daarnaast zullen ook de volgende punten onder de inhoudelijke project grenzen vallen.
+
+\begin{itemize}
+	\item In het project wordt niet met fysieke drones gevlogen.
+	\item Het concept wordt alleen in een simulatie aangetoond.
+	\item Het prototype mesh-netwerk wordt alleen gebruikt om gedrag voor de simulatie te onderzoeken en te reproduceren.
+	\item De testopstelling waar het proof of concept in werkt zal gedefinieerd worden in de \nameref{sec:elaborationfase}.
+	\item Er is geen beschikbaar budget afgesproken met de Alten.
+	\item Versiebeheer voor code maar ook documenten vindt plaats op GitHub in prive repositories beheerd door de student.
+	\item Documentatie wordt geschreven in \LaTeX.
+	\item Code wordt geschreven in C++
+\end{itemize}
+
+\chapter{Randvoorwaarden}
+\label{chapter:randvoorwaarden}
+Bij randvoorwaarden geeft de student aan welke zaken er door de opdrachtgever geregeld moeten worden voordat hij aan het project kan beginnen. De student heeft randvoorwaarden opgedeeld in organisatorische- en inhoudelijke randvoorwaarden. 
+
+\section{Organisatorische randvoorwaarden}
+\begin{itemize}
+	\item Beschikbaarheid van de HAN procesbegeleider: Alle werkdagen per mail waarop binnen 72 uur geantwoord wordt, bereidt om naar Alten te reizen op de feedback momenten.
+	\item Alten stelt vijf dagen per week een werkplek met een internetverbinding beschikbaar.
+	\item Contactgegevens van alle betrokken partijen zijn bekend bij elkaar.
+	\item Begeleiders zijn in het bezit van een GitHub account en maken deze ook bekend aan de student.
+	
+\end{itemize}
+\section{Inhoudelijke randvoorwaarden}
+\begin{itemize}
+	\item Beschikbaarheid van de bedrijfsbegeleider: Alle werkdagen per mail waarop binnen 48 uur geantwoord wordt, eenmaal per week overleg/reflectie met de student.
+	\item Alten verzorgt een laptop krachtig genoeg voor simulaties voor de student.
+	\item De HAN procesbegeleider beoordeelt documentatie op ISAS binnen het door het systeem opgeven termijn.
+	  
+\end{itemize}
+
+\chapter{Op te leveren producten en kwaliteitseisen}
+\label{chapter:producten}
+In dit hoofdstuk worden de op te leveren producten, kwaliteitseisen en de uit te voeren activiteiten besproken.
+Het gaat hier om zowel de producten die aan de opdrachtgever worden opgeleverd, als om de producten die voor school worden opgeleverd.
+Hierbij worden de resultaten, zoals beschreven in \autoref{chapter:doelstelling}, nader uitgewerkt.
+Voor alle producten worden kwaliteitseisen opgesteld, waaraan de producten moeten voldoen.
+Daarnaast worden ook alle overige activiteiten aangehaald in dit hoofdstuk om te komen tot het product.
+
+Alle documentatie die wordt geschreven voldoet aan de kwaliteitseisen van de ICA controlekaart.
+
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Product                                                                                                    & Productkwaliteit eisen                                                                                                                                                                                                                    & \begin{tabular}[c]{@{}l@{}}Benodigde activiteiten \\ om te komen tot \\ het product\end{tabular}                                                                             & Proceskwaliteit                                                                                                                                        \\ \hline
+		Broncode                                                                                                   & \begin{tabular}[c]{@{}l@{}}Komt overeen met\\ SRS en SDD; Alle \\ publieke functies \\ zijn voorzien van \\ Engels commentaar;\\ Kritische functies\\  hebben unit tests; \\ Voldoet aan de \\ code standaard.\end{tabular}           & \begin{tabular}[c]{@{}l@{}}Schrijven code;\\ Opstellen code\\ standaard; Unit\\ testen schrijven;\\ Commentaar in\\ code schrijven.\end{tabular}                             & \begin{tabular}[c]{@{}l@{}}Wekelijks code\\ reviews; Tussentijdse\\ beoordeling door\\  begeleiders;\end{tabular}                                      \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Eindpresentatie\\ / verdediging\end{tabular}                                    & \begin{tabular}[c]{@{}l@{}}Ondersteunt het \\ projectverslag in het\\ aantonen van de 5 \\ beoordelingscriteria;\\ Geeft een indruk \\ van het opgeleverde\\  product; Duurt in \\ totaal niet langer \\ dan 30 minuten.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Presentatie maken;\\ Demonstratie product\\ maken.\end{tabular}                                                                                   & \begin{tabular}[c]{@{}l@{}}Oefenen met\\ bedrijfsbegeleiders\\ /collega’s.\end{tabular}                                                                \\ \hline
+		Plan van aanpak                                                                                            & \begin{tabular}[c]{@{}l@{}}Omschrijft wat \\ het plan van de\\  student is; Voldoet \\aan het  \\feedbackformulier \\ projectplan.\end{tabular}                                                                                          & \begin{tabular}[c]{@{}l@{}}Verdiepen in het\\ stage aanbiedende\\ bedrijf;\\ Verduidelijken\\ stageopdracht;\\ Het plan schrijven.\end{tabular}                              & \begin{tabular}[c]{@{}l@{}}Feedback/goedkeuring\\ van bedrijfsbegeleider;\\ Feedback van\\ procesbegeleider en \\ assessor;\end{tabular}               \\ \hline
+
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Product                                                                                                    & Productkwaliteit eisen                                                                                                                                                                                          & \begin{tabular}[c]{@{}l@{}}Benodigde activiteiten \\ om te komen tot \\ het product\end{tabular}                                                                             & Proceskwaliteit                                                                                                                \\ \hline
+		Projectverslag                                                                                             & \begin{tabular}[c]{@{}l@{}}Toont de 5 \\ beoordelingscriteria\\  met bijhorende\\  prestatiecriterium \\ voldoende aan; \\ Onderbouwt de \\ keuzes van handelen.\end{tabular}                                                             & \begin{tabular}[c]{@{}l@{}}Keuzes tijdens het\\ project documenteren;\\ Feedback gesprekken\\ houden; Het schrijven\\ van het verslag\end{tabular}                           & \begin{tabular}[c]{@{}l@{}}Tussentijdse \\ feedbackrondes; \\ Feedback van de \\ procesbegeleider; \\ Wekelijkse \\ feedbacksessie Alten.\end{tabular} \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Prototype mesh\\ netwerk\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}Geschikt om gedrag\\ te extraheren voor\\ de simulatie; \\ Voldoet aan de\\ opgestelde requirements \\ van het dronenetwerk.\end{tabular}                                                        & \begin{tabular}[c]{@{}l@{}}Keuze maken in\\ hardware gebruik;\\ Software voor\\ onderzoek schrijven;\\ Onderzoek naar\\ gedrag van het \\ netwerk.\end{tabular}              & \begin{tabular}[c]{@{}l@{}}Code reviews; feedback\\ op onderzoek van\\ begeleiding.\end{tabular}                                                       \\ \hline
+		Onderzoeksverslag                                                                                          & \begin{tabular}[c]{@{}l@{}}Bevat een \\ relevante \\ onderzoeksvraag; \\ Geeft antwoord op\\  de onderzoeksvraag;\\  Is gebaseerd op de \\ ICA-onderzoek kaart;\\ Volgt het onderzoek \\ template.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Zowel literatuur-\\ als labonderzoek\\ uitvoeren;\\ Voortdurend\\ bijhouden van\\ onderzoek\\  documentatie.\end{tabular}                         & \begin{tabular}[c]{@{}l@{}}Wekelijks reflecteren\\ met de stagebegeleider\\ op het proces van het \\ onderzoek.\end{tabular}   \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Simulatiesoftware\\ met meerdere \\ drones en \\ netwerk simulatie\end{tabular} & \begin{tabular}[c]{@{}l@{}}Realistisch en valide;\\ Geschikt om de \\ onderzoeksvraag te \\ beantwoorden; Is \\ voorzien van \\ documentatie.\end{tabular}                                                      & \begin{tabular}[c]{@{}l@{}}Schrijven van\\ code; Gedrag van\\ het netwerk \\ overzetten tot \\ gesimuleerd \\ gedrag; Een drone\\  simuleren.\end{tabular}                   & \begin{tabular}[c]{@{}l@{}}Code reviews; \\ Terugkoppeling \\ naar bedrijf\end{tabular}                                        \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Software Design\\ Document\end{tabular}                                         & \begin{tabular}[c]{@{}l@{}}Komt overeen met\\ code; Toont alle\\ relevante ontwerpen; \\ Ontwerpkeuzes staan\\  vastgelegd.\end{tabular}                                                                        & \begin{tabular}[c]{@{}l@{}}Usecases vertalen tot\\ activity diagrammen;  \\ Domein model \\ omzetten tot class\\ diagrammen; \\ component diagram\\  opstellen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Ontwerpkeuzes \\ bespreken met\\ begeleiding; \\ Ontwerp baseren\\ op ontwerppatronen.\end{tabular} \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Software \\ Requirement \\ Specification\end{tabular}                           & \begin{tabular}[c]{@{}l@{}}De requirements\\ komen overeen met\\ de wensen van de \\ opdrachtgever;\\ Bevat genoeg\\ informatie voor het\\ opstellen van een SDD\end{tabular}                                   & \begin{tabular}[c]{@{}l@{}}Eisen van het \\ product vaststellen;\\ usecases opstellen;\\ furps++ opstellen.\end{tabular}                                                     & \begin{tabular}[c]{@{}l@{}}Continue producteisen\\ en usescases\\ terugkoppelen naar\\ de opdrachtgever\end{tabular}           \\ \hline
+	\end{tabular}
+\end{table}
+
+
+\chapter{Ontwikkelmethoden}
+\label{chapter:ontwikkelmethode}
+De genoemde op te leveren producten in het voorgaande hoofdstuk worden gerealiseerd door middel van de ontwikkelmethoden RUP in combinatie met SCRUM.
+
+RUP (Rational Unified Process) is een iteratieve ontwikkelmethode. Dit houdt in dat het project
+wordt gerealiseerd in verschillende, elkaar opvolgende iteraties en dat ervaringen uit voorgaande iteraties in volgende iteraties worden meegenomen.\cite{RUP}
+
+\section{De vier fases van RUP}
+\label{sec:fasesRUP}
+RUP beschrijft vier fasen waarin de nadruk ligt op verschillende disciplines van RUP \cite{RUPwim}.
+Hieronder de vier fasen, hoelang ze duren en een korte beschrijving.
+
+\subsection{Inceptionfase}
+\label{sec:inceptionfase}
+De inceptie fase loopt tot en met 15 maart en duurt 5 weken.
+
+In deze periode gaat de student de scope, doelen, projectgrenzen, risico's en tegenmaatregelen vastleggen.
+Aan het einde van de inceptie fase is er een analyse gemaakt en zijn de eisen bekend.
+Ook zijn er ideeën bedacht en hoe het systeem geïmplementeerd moet worden.
+
+\subsection{Elaborationfase}
+\label{sec:elaborationfase}
+Deze fase eindigt op 17 mei  en duurt 8 weken.
+
+In deze fase worden de bedachten ideeën uit de inceptie fase uitgewerkt.
+Er worden prototypes gemaakt en onderzoeken gedaan om te kijken of bepaalde dingen mogelijk zijn.
+Aan het einde van de elaboratie fase is het bekend hoe het systeem wordt gerealiseerd en bestaat er een stabiele architectuur.
+Met stabiele architectuur wordt bedoelt dat er een versie bestaat van het systeem, waarbij er door op ontwikkelt kan worden.
+De elaboration fase is opgedeeld in vier iteraties van twee weken.
+
+\subsection{Constructionfase}
+\label{sec:constructionfase}
+Deze fase duurt 4 weken en is klaar op 14 juni.
+
+In deze fase wordt het systeem gerealiseerd. De constructie fase bestaat uit iteraties van een week.
+Volgens het onderwijs moet op vrijdag 14 juni alles op ISAS ingeleverd zijn, tot die tijd wordt alles afgerond.
+Aan het einde van deze fase is het proof of concept aanwezig en voldoet deze aan de gestelde kwaliteitseisen, zoals gesteld in \autoref{chapter:producten}.
+Tevens wordt er een onderzoeksrapport opgeleverd waarin de eerder genoemde gestelde vragen beantwoord worden.
+
+\subsection{Transistionfase}
+Deze fase loopt van 17 juni tot 27 juni.
+
+In de transitiefase wordt de presentatie en demo voorbereid. 
+In deze fase wordt het systeem gepresenteerd aan de opdrachtgever en school.
+
+\section{De aspecten van SCRUM}
+Net als RUP is SCRUM een agile framework die op een iteratieve manier te werk gaat.
+Zo hebben beide ontwikkelmethoden iteraties.
+Scrum is meer gericht op dagelijkse taken in tegenstelling to RUP waarbij dit niet het geval is.
+Scrum vereist dat het op te leveren product ten alle tijden potentially shippable is \cite{james}. 
+Dit betekent dat bij SCRUM het product continu goed geïntegreerd en getest moet zijn iedere iteratie. 
+
+Omdat dit project door één student wordt uitgevoerd zijn niet alle best practices van SCRUM van toegevoegde waarde en zijn daarom weggelaten.
+In de onderstaande \autoref{table:scrum} worden de aspecten van SCRUM aangekaart welke een gebruikt worden in dit project.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Element            & Wat houdt het in                                                                                                                                       & Waarom?                                                                                                                         \\ \hline
+		Sprint Review      & \begin{tabular}[c]{@{}l@{}}Presentatie van product\\ en voortgang aan de \\ opdrachtgever \& andere\\ belanghebbenden\end{tabular}                     & \begin{tabular}[c]{@{}l@{}}Om feedback te krijgen\\ van de opdrachtgever en\\ de prioriteiten te controleren\end{tabular}       \\ \hline
+		Retrospective      & \begin{tabular}[c]{@{}l@{}}Bespreking van proces. \\ Wat ging goed/fout en wat gaat\\  de student volgende keer beter doen?\end{tabular}               & \begin{tabular}[c]{@{}l@{}}Om het proces van het\\ project te verbeteren.\\ Proces heeft invloed\\ op het product.\end{tabular} \\ \hline
+		Product backlog    & Lijst met gewenste functionaliteit.                                                                                                                    &                                                                                                                                 \\ \hline
+		Sprint backlog     & \begin{tabular}[c]{@{}l@{}}Scrum board met taken\\ bestaande uit de kolommen: \\ Todo - busy - for review - done\end{tabular}                          & \begin{tabular}[c]{@{}l@{}}Overzicht houden in\\ de voortgang van taken\end{tabular}                           \\ \hline
+	\end{tabular}
+\caption{Overzicht elementen meegenomen uit SCRUM}
+	\label{table:scrum}
+\end{table}
+
+\chapter{Projectorganisatie en communicatie}
+\label{chapter:projectorganistatie}
+
+Het volgende hoofdstuk gaat in op praktische informatie als contactinformatie en vakantiedagen. Daarnaast worden overige afspraken vastgelegd waar in staat hoe er in bepaalde situaties gehandeld moet worden.
+
+\section{Begeleiders}
+\label{sec:begeleiders}
+Gedurende het project zijn er twee docenten van de HAN betrokken en twee medewerkers van Alten.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Organistatie                                                                   & Naam                                                        & Rol                & Contact                  \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Hogeschool\\ van Arnhem \\ en Nijmegen\end{tabular} & \begin{tabular}[c]{@{}l@{}}Chris van\\ Uffelen\end{tabular} & Assessor           & 		\href{mailto:Chris.vanUffelen@han.nl}{Chris.vanUffelen@han.nl}   \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Hogeschool\\ van Arnhem \\ en Nijmegen\end{tabular} & Jorg Visch                                                  & Processbegeleider  & 
+		\href{mailto:Jorg.Visch@han.nl}{Jorg.Visch@han.nl}   \\ \hline
+		HAN / Alten                                                                    & Maurice Berentsen                                           & Afstudeerder       & \href{mailto:mauriceberentsen@live.nl}{mauriceberentsen@live.nl}   \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Alten \\ Nederland B.V.\end{tabular}                & Hugo Logmans                                                & Technisch Manager  &  \href{mailto:hugo.logmans@alten.nl}{hugo.logmans@alten.nl}   \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Alten \\ Nederland B.V.\end{tabular}                & Hugo Heutinck                                               & Bedrijfsbegeleider & \href{mailto:hugo.heutinck@alten.nl}{hugo.heutinck@alten.nl}   \\ \hline
+	\end{tabular}
+\caption{Contactinformatie alle betrokkenen bij dit project}
+\label{table:begeleiders}
+\end{table}
+
+\section{Beschikbaarheid}
+In \autoref{table:beschikbaarheid} staat beschreven wanneer de student aanwezig dient te zijn.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Dag                 & Aanwezig     & Locatie                                        \\ \hline
+		Maandag t/m Vrijdag & 9:00 - 17:00 & Linie 544, 7325 DZ Apeldoorn 					\\ \hline
+		Zaterdag en Zondag  & Vrij         & N.V.T.                                         \\ \hline
+	\end{tabular}
+\caption{Beschikbaarheid student gedurende het project}
+\label{table:beschikbaarheid}
+\end{table}
+
+\section{Vrije dagen}
+
+\autoref{table:vrijedagen} beschrijft welke dagen de student vrij heeft vanwege verplichte vrije dagen of schoolvakanties.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Toelichting           & Datum                           \\ \hline
+		Voorjaarsvakantie     & 04-03-2019 - 10-03-2019 		\\ \hline
+		Goede Vrijdag         & 19-04-2019                      \\ \hline
+		2e Paasdag            & 22-04-2019                      \\ \hline
+		Meivakantie           & 29-04-2019 - 05-05-2019         \\ \hline
+		Hemelvaartsdag        & 30-05-2019                      \\ \hline
+		Dag na Hemelvaartsdag & 31-05-2019                      \\ \hline
+		2e Pinksterdag        & 10-06-2019                      \\ \hline
+	\end{tabular}
+\caption{Schoolvakanties en verplichte vrije dagen}
+\label{table:vrijedagen}
+\end{table}
+
+Deze afwezigheid door verplichte vrije dagen telt bij elkaar een volledige werkweek op die de student afwezig is. Dit wordt afgevangen het volgende hoofdstuk \nameref{chapter:planning}.
+
+\section{Overige afspraken}
+Om de student zo goed als mogelijk te kunnen begeleiden zijn de overige afspraken opgesteld in \autoref{table:overigeafspraken}.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Onderwerp                                                               & Afspraak                                                                                                                                                                                                                                                                                       \\ \hline
+		Ziekteverzuim                                                           & \begin{tabular}[c]{@{}l@{}}Bij ziekte maakt de student dit voor 09:00 telefonisch \\ bekend aan zijn manager. Bij langdurige ziekte maakt de student\\
+		 dit ook bekend aan alle begeleiders
+	 	\end{tabular}                                                                                                                                                                     \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Langdurige afwezig\\  of ziekte van \\ begeleiding\end{tabular} & \begin{tabular}[c]{@{}l@{}}Bij langdurige afwezigheid maakt de begeleider van \\ school of het bedrijf dit bekend aan de student per mail. \\ Bij afwezigheid langer dan twee weken moet de \\ organistatie een tijdelijke vervanger aanbieden.\end{tabular}                                    \\ \hline
+		Iteratie start                                                          & Iedere iteratie start op maandagochtend om 09:00                                                                                                                                                                                                                                               \\ \hline
+		Werkplek                                                                & \begin{tabular}[c]{@{}l@{}}Er wordt van de student verwacht dat hij werkt\\ op zijn werkplek bij Alten in Apeldoorn. Op het\\ moment dat dit afwijkt om bijvoorbeeld thuis \\ te werken laat hij dit minimaal een werkdag\\  van te voren weten aan de stage aanbiedende organisatie\end{tabular} \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Workshops en \\ terugkomdag\end{tabular}     & \begin{tabular}[c]{@{}l@{}}De student is vrij om de terugkomdag en workshops\\ verzorgd door de HAN bij te wonen. Wel laat hij dit tijdig \\ weten aan de stage aanbiedende organisatie. \end{tabular}                                                                                                                                                                  \\ \hline
+	\end{tabular}
+\caption{Overige afspraken voor de studenten en begeleiders}
+\label{table:overigeafspraken}
+\end{table}
+
+\chapter{Planning}
+\label{chapter:planning}
+In dit hoofdstuk wordt de planning voor het project behandeld.
+Het gaat hier over een globale planning waarin projectweken worden gebruiken.
+In totaal telt het project vanaf de eerste week tot aan de inleverdeadline 18 weken.
+Daarna zijn er nog twee weken waarin de presentatie zal plaats vinden. 
+Deze twee weken worden samengevoegd omdat er niet veel taken zullen staan.
+Bij de week nummers staat een letter welke aangeeft welke RUP fase de week is terug te vinden \autoref{sec:fasesRUP}
+
+\begin{longtable}[c]{|c|l|}
+	\hline
+	\rowcolor[HTML]{C0C0C0} 
+	\begin{tabular}[c]{@{}c@{}}Week\\ nummer\end{tabular}            & Geplande activiteiten                                                                                                                               \\ \hline
+	\endhead
+	%
+	\begin{tabular}[c]{@{}c@{}}1 - I\\ 4 feb - 8 feb\end{tabular}    & \begin{tabular}[c]{@{}l@{}}Opstellen van het plan van aanpak.\\ Defineren onderzoeksvraag.\\ Joinersdag Alten.\end{tabular}                         \\ \hline
+	\begin{tabular}[c]{@{}c@{}}2 - I\\ 11 feb - 15 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}15 feb: Inleveren Concept Projectplan.\\ Vaststellen requirements onderzoek\\ Afronden concept projectplan\end{tabular}  \\ \hline
+	\begin{tabular}[c]{@{}c@{}}3 - I\\ 18 feb - 22 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze simulatiesoftware\\ Onderzoek keuze netwerk prototype hardware\end{tabular}                              \\ \hline
+	\begin{tabular}[c]{@{}c@{}}4 - I\\ 25 feb - 1 mrt\end{tabular}   & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze drone simulatie\\ Onderzoek keuze netwerk prototype software\end{tabular}                                \\ \hline
+	\begin{tabular}[c]{@{}c@{}}5 - I\\ 11 mrt - 15 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}15 mrt: Inleveren Definitief Projectplan\\ Vaststellen interfaces tuseen componenten\\ Afronden projectplan\end{tabular} \\ \hline
+	\begin{tabular}[c]{@{}c@{}}6 - E\\ 18 mrt - 22 mrt\end{tabular}  &                                                                                                                                                     \\ \hline
+	\begin{tabular}[c]{@{}c@{}}7 - E\\ 25 mrt - 29 mrt\end{tabular}  & 29 maart: sprint review                                                                                                                             \\ \hline
+	\begin{tabular}[c]{@{}c@{}}8 - E\\ 1 apr - 5 apr\end{tabular}    &                                                                                                                                                     \\ \hline
+	\begin{tabular}[c]{@{}c@{}}9 - E\\ 8 apr - 12 apr\end{tabular}   & 12 april: sprint review                                                                                                                             \\ \hline
+	\begin{tabular}[c]{@{}c@{}}10 - E\\ 15 apr - 19 apr\end{tabular} & 19 april: Goede vrijdag                                                                                                                             \\ \hline
+	\begin{tabular}[c]{@{}c@{}}11 - E\\ 22 apr - 26 apr\end{tabular} & \begin{tabular}[c]{@{}l@{}}22 april: 2e paasdag\\ 26 april: sprint review\end{tabular}                                                              \\ \hline
+	\begin{tabular}[c]{@{}c@{}}12 - E\\ 6 mei - 10 mei\end{tabular}  &                                                                                                                                                     \\ \hline
+	\begin{tabular}[c]{@{}c@{}}13 - E\\ 13 mei - 17 mei\end{tabular} & \begin{tabular}[c]{@{}l@{}}17 mei: Inleveren Definitief 80 procent versie\\ 17 mei: 29 sprint review\\ Roosteren afstudeerpresentatie\end{tabular}  \\ \hline
+	\begin{tabular}[c]{@{}c@{}}14 - C\\ 20 mei - 24 mei\end{tabular} &                                                                                                                                                     \\ \hline
+	\begin{tabular}[c]{@{}c@{}}15 - C\\ 27 mei - 31 mei\end{tabular} & \begin{tabular}[c]{@{}l@{}}29 mei: sprint review30 mei: hemelvaartsdag\\ 31 mei: dag na hemelvaart\end{tabular}                                     \\ \hline
+	\begin{tabular}[c]{@{}c@{}}16 - C\\ 3 jun - 7 jun\end{tabular}   &                                                                                                                                                     \\ \hline
+	\begin{tabular}[c]{@{}c@{}}17 - C\\ 10 jun - 14 jun\end{tabular} & \begin{tabular}[c]{@{}l@{}}10 juni: 2de pinksterdag\\ 14 juni: Inleveren Definitief Eindverslag\end{tabular}                                        \\ \hline
+	\begin{tabular}[c]{@{}c@{}}18 - T\\ 17 jun - 21 jun\end{tabular} &                                                                                                                                                     \\ \hline
+	\begin{tabular}[c]{@{}c@{}}19 - T\\ 24 jun - 28 jun\end{tabular} &                                                                                                                                                     \\ \hline
+\end{longtable}
+
+
+
+\chapter{Risico's}
+\label{chapter:risicos}
+In dit hoofdstuk worden risico's van het project beschreven die niet afgevangen kunnen worden door de student. Er zal een scheiding gemaakt worden tussen risico's die intern kunnen optreden en welke van buitenaf komen. Onderkende risico's die wel afgevangen kunnen worden staan ook genoteerd.
+
+\section{Interne risico's}
+
+\begin{longtable}[c]{|l|l|l|l|l|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+Risico                                                                                                                                                 & Kans  & Impact & Tegenmaatregel                                                                                                                                                                                                                                                                              & Uitwijkstrategie                                                                                                          \\ \hline
+%\endfirsthead
+%
+\endhead
+%
+\begin{tabular}[c]{@{}l@{}}Langdurige ziekte\\ of verzuim.\end{tabular}                                                                                & Klein & Groot  & \begin{tabular}[c]{@{}l@{}}Op tijd contact\\ opnemen als het \\ blijkt dat de ziekte\\ of verzuim langer\\ gaat duren. De\\ vrij dagen bieden\\ een buffer van 15\\ dagen.\end{tabular}                                                                                                     & \begin{tabular}[c]{@{}l@{}}Overleggen met het\\ praktijkbureau naar\\ mogelijkheden\\ verschuiven deadlines.\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}l@{}}Unit-testen van\\ gemaakte interfaces \\ slaagt niet. (nadat \\ deze gepusht is op\\ de dev/master\\ branche).\end{tabular} & Klein & Klein  & \begin{tabular}[c]{@{}l@{}}Zorgen voor concrete \\ ontwerpen over de\\ interface in het SDD.\\ Deze ontwerpen en\\ protocol veranderingen\\ en de unit-tests aan\\ de hand daarvan\\ implementeren.\end{tabular}                                                                            & \begin{tabular}[c]{@{}l@{}}Probleem van het niet\\ slagen achterhalen en\\ oplossen.\end{tabular}                         \\ \hline
+\begin{tabular}[c]{@{}l@{}}Integratie interfaces\\ /componenten gaat\\ niet naar behoren.\end{tabular}                                                 & Klein & Groot  & \begin{tabular}[c]{@{}l@{}}Protocol en interfaces\\ tussen componenten \\ documenteren en hier\\ voor unit-tests en\\ mock-interfaces\\ schrijven\end{tabular}                                                                                                                              & \begin{tabular}[c]{@{}l@{}}Tijd reserveren in de\\ planning om realisatie\\ mogelijk te maken\end{tabular}                \\ \hline
+\begin{tabular}[c]{@{}l@{}}Planning voor het \\ onderzoek wordt \\ niet behaald.\end{tabular}                                                          & Groot & Groot  & \begin{tabular}[c]{@{}l@{}}De planning laten\\ reviewen door de\\ begeleiders of naar\\ haalbaarheid. \\ MoSCoW planning\\ gebruiken voor de\\ requirements. Tijdens \\ het project een Gantt\\ chart gebruiken voor\\ om zo vroeg mogelijk\\ achter dit probleem te \\ komen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Requirements die in\\ de could planning \\ vallen schrappen.\end{tabular}                      \\ \hline
+\end{longtable}
+
+\section{Externe risico's}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Risico                                                                                   & Kans  & Impact & Tegenmaatregel                                                                                                                                    & Uitwijkstrategie                                                                                       \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Hardware voor\\ prototype mesh\\ netwerk defect.\end{tabular} & Klein & Groot  & \begin{tabular}[c]{@{}l@{}}Hardware gebruiken\\ die snel leverbaar is.\\ Reserve hardware\\ bestellen als het\\ budget het toestaat.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Andere hardware die\\ aan de requirements\\ voldoet gebruiken.\end{tabular} \\ \hline
+	\end{tabular}
+\end{table}
+
+\section{Afgevangen risico's}
+Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heeft getroffen voor de risico's. Als een van onderstaande risico optreedt weet de student wat er van hen verwacht wordt en wordt de impact van de risico geminimaliseerd.
+
+\begin{longtable}{|l|l|l|l|l|}
+	\hline
+	\rowcolor[HTML]{C0C0C0} 
+	Risico                                                                                                                                     & Kans   & Impact & Tegenmaatregel                                                                                                                                                                                                                                                                                              & Uitwijkstrategie                                                                                                                                                                                                                                                                \\ \hline
+	%\endfirsthead
+	%
+	\endhead
+	%
+	\begin{tabular}[c]{@{}l@{}}Kwaliteit van\\ producten wordt\\ niet gewaarborgd.\end{tabular}                                                & Klein  & Middel & \begin{tabular}[c]{@{}l@{}}Kwaliteitseisen opstellen\\ in het plan van aanpak.\\ Daarbij wordt iedere\\ product gereviewed door\\ de bedrijfsbegeleider. \\ Het wordt op een later\\ moment nogmaals\\ gereviewed door de\\ student om te kijken\\ of de code voldoet\\ aan de gestelde eisen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Als er producten zijn \\ die alsnog niet voldoen \\ aan de kwaliteitseisen \\ zal de bedrijfbegeleider\\ actie ondernemen. \\ Hierdoor voldoen alle\\ producten aan de\\ gestelde kwaliteitseisen.\end{tabular}                                      \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Simulatie software \\ is niet toereikend\\ voor het onderzoek.\end{tabular}                                     & Klein  & Groot  & \begin{tabular}[c]{@{}l@{}}Requirements van uit\\ het onderzoek halen\\ waar de\\  simulatiesoftware \\ aan moet voldoen. De \\ \nameref{sec:inceptionfase} moet\\ dit voorkomen.\end{tabular}                                                                                                                     & \begin{tabular}[c]{@{}l@{}}Heronderzoeken welke\\ simulatiesoftware\\ wel toereikend is. \\ Wanneer de beschikbare\\ tijd het toestaat \\ overstappen.\\ Anders moeten de\\ requirements opnieuw \\ overwogen worden.\end{tabular}                                                                           \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Langdurige\\ afwezigheid\\ begeleiding.\end{tabular}                                                              & Klein  & Middel  & n.v.t.                                                                                                                                                                                                                                                                                                      & \begin{tabular}[c]{@{}l@{}}De organistatie van de\\ begeleider biedt een \\ tijdelijke vervanger aan.\end{tabular}                                                                                                                                                              \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Plan van aanpak\\ onderdeel blijkt niet\\  goed geformuleerd\\ of niet (goed)\\ omvattend te zijn.\end{tabular} & Middel & Middel & \begin{tabular}[c]{@{}l@{}}Laten reviewen door\\ begeleiders en docenten\\ of onderdelen correct\\ worden afgevangen.\\ Daarbij ieder hoofdstuk\\ naast het document\\ \APACcitebtitle{Toelichting op PvA 3.0} \\ houden en dit document\\ als een checklist \\ gebruiken.\end{tabular}                                          & \begin{tabular}[c]{@{}l@{}}Plan van Aanpak \\ onderdeel aanpassen\\ zodat het onderdeel\\ correct wordt\\ geformuleerd. Dit\\ onderdeel wordt\\ dan ook nogmaals\\ gereviewd en wordt\\ naast de checklist \\ gehouden, zoals\\ beschreven in de\\ tegenmaatregel.\end{tabular} \\ \hline
+\end{longtable}
+
+%\section*{Appendices}
+%\addcontentsline{toc}{section}{\protect\numberline{}Appendices}
+%\appendix
+%\input{appendix}
+%\pagebreak
+
+\bibliographystyle{apacite}
+\bibliography{Bibliography}
+
+
+%\appendix
+
+
+\end{document}
