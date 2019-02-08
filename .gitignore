@@ -1,0 +1,18 @@
+
+Docs/Plan van aanpak/main\.pdf
+
+*.aux
+
+*.bbl
+
+*.blg
+
+*.log
+
+Docs/Plan van aanpak/main\.out
+
+Docs/Plan van aanpak/main\.run\.xml
+
+Docs/Plan van aanpak/main\.synctex\.gz
+
+Docs/Plan van aanpak/main\.toc
