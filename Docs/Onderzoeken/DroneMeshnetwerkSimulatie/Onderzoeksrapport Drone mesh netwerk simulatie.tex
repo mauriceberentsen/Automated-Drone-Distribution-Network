@@ -1,0 +1,208 @@
+\documentclass[a4paper, 11pt, oneside]{report} 
+\usepackage[utf8]{inputenc}
+\usepackage[dutch]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[toc,page]{appendix}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{tikz-qtree}
+\usepackage{graphicx}
+\usepackage{fancyref}
+\usepackage{wrapfig}
+\usepackage{url}
+\usepackage{pdflscape}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+\graphicspath{ {Afbeeldingen/} }
+\usepackage{subfig}
+\usepackage{tabularx}
+\usepackage{apacite}
+\usepackage{longtable}
+\usepackage{titlecaps}
+%\usepackage[T1]{fontenc}
+\usepackage{titlesec, blindtext, color}
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+\usepackage{pdfpages}
+
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\titleformat{\chapter}[hang]{\huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Large\bfseries}
+
+
+\def\sectionautorefname{Paragraaf}
+\def\chapterautorefname{Hoofdstuk}
+\def\tableautorefname{Tabel}
+\DeclareRobustCommand{\VAN}[3]{#2} % set up for citation
+
+%% Sets page size and margins 
+\usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\author{M.W.J. Berentsen}
+
+\title{Onderzoeksrapport}
+\usepackage{titling}
+
+\newcommand{\subtitle}[8]{%
+	\posttitle{%
+		\par\end{center}
+	\begin{center}\large#1\end{center}
+	\vskip0.5em
+	\begin{center}\large#2\end{center}
+	\begin{center}\large#3\end{center}
+	\begin{center}\large#4\end{center}
+    \begin{center}\large#5\end{center}
+    \begin{center}\large#6\end{center}
+    \begin{center}\large#7\end{center}
+    \begin{center}\large#8\end{center}
+	\vskip0.5em}%
+}
+
+\subtitle{Drone mesh netwerk simulatie}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+
+
+\hypersetup{colorlinks=true, urlcolor=red,citecolor=black,linkcolor=blue}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
+\setcounter{tocdepth}{2}
+
+
+
+\begin{document}
+\begin{figure}
+\begin{center}\includegraphics[scale=0.1]{alten}\end{center}
+\end{figure}
+\maketitle
+
+%\section*{Voorwoord}
+%\addcontentsline{toc}{section}{\protect\numberline{}Voorwoord}
+%\pagebreak
+
+%Geschikt voor minimaal 50 nodes; Kan slecht of geen signaal nabootsen
+
+\tableofcontents
+\clearpage
+%\section*{Begrippenlijst}
+
+% Please add the following required packages to your document preamble:
+% \usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+%\begin{table}[H]
+%\centering
+
+%\label{begrippen}
+%\begin{tabular}{|l|l|}
+%\hline
+%\rowcolor[HTML]{C0C0C0}
+%Term        & Omschrijving                                                         \\ \hline
+%term        & Omschrijving                                                      	\\ \hline
+
+%\end{tabular}
+%\caption{Begrippenlijst}
+%\end{table}
+
+%\clearpage
+
+%\section*{Samenvatting}
+%\addcontentsline{toc}{section}{\protect\numberline{}Samenvatting}
+%\pagebreak
+
+\chapter{Samenvatting}
+Optioneel een samenvatting van het onderzoek. Hier kunnen medestudenten snel inzicht krijgen in wat jij hebt onderzocht en wat je conclusie is.
+\begin{itemize}
+	\item Kunnen derden snel inzicht krijgen in jouw onderzoek?
+	\item Staat de conclusie erin vermeld?
+\end{itemize}
+
+\chapter{Inleiding}
+\label{chapter:inleiding}
+De inleiding beschrijft:
+\begin{itemize}
+\item Waarvoor het onderzoek gedaan wordt;
+\item Beschrijf waarom het onderzoek nu wordt uitgevoerd;
+\item Het doel van het onderzoek.
+\end{itemize}
+
+\chapter{Hoofd- en deelvragen}
+Hier worden de hoofd- en deelvragen genoemd en onderbouwd.
+
+\begin{itemize}
+\item Is de onderzoeksmethode beargumenteerd?
+\item Staat hier wat je wel gaat onderzoeken en wat je niet gaat onderzoeken?
+\item Beschrijf de invloed van jouw onderzoek op het project.
+\end{itemize}
+
+\chapter{Criteria}
+Maak hier een lijst met criteria aan de hand van de hoofd- en deelvragen.
+\begin{itemize}
+	
+\item Zijn de criteria duidelijk opgesteld?
+\item Waar moet de oplossing aan voldoen, staat dit erin?
+\end{itemize}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Naam & Beschrijving & Kosten \\ \hline
+		&              &        \\ \hline
+		&              &        \\ \hline
+	\end{tabular}
+	\caption{Opgestelde criteria}
+	\label{tab:criteria}
+\end{table}
+
+\chapter{literatuur}
+Zet hier de achterliggende theorie.
+\begin{itemize}
+\item Staat erin vermeld dat je de bieb hebt toegepast uit de methodekaart van de HAN?
+\item Staan er oplossingsrichtingen vermeld die voldoen aan de criteria?
+\end{itemize}
+
+
+\chapter{Oplossingsrichtingen}
+\begin{itemize}
+\item Beschrijf je hoe jouw oplossingsrichting de hoofdvraag beantwoord?
+\item Beschrijft de oplossingsrichting de mogelijkheden?
+\item Staat hier "Veld" vermeldt van de methodekaart van de HAN?
+\end{itemize}
+
+\chapter{Experimenten}
+\begin{itemize}
+\item Beschrijft waarom dit experiment van belang is.
+\item Voldoet de code van het experiment aan de opgestelde eisen?
+\item Voldoet het programma aan de opgestelde QoS?
+\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde eisen?
+\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde QoS?
+\end{itemize}
+
+\chapter{Conclusie}
+\label{chapter:conclusie}
+Conclusie uit resultaten. Herhaal en beantwoord de hoofdvraag.
+\begin{itemize}
+\item Trek een conclusie uit de resultaten van de deelvragen.
+\item Wordt de hoofdvraag beantwoord?
+\item Wat beveel je aan?
+\end{itemize}
+
+
+\bibliographystyle{apacite}
+\bibliography{bilbliography.bib}
+
+\clearpage
+\appendix
+
+\end{document}
