@@ -16,3 +16,9 @@ Docs/Plan van aanpak/main\.run\.xml
 Docs/Plan van aanpak/main\.synctex\.gz
 
 Docs/Plan van aanpak/main\.toc
+
+*.gz
+
+*.toc
+
+*.out

@@ -68,7 +68,7 @@
 	\vskip0.5em}%
 }
 
-\subtitle{Afstudeerverslag}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: ir. J. Visch}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Drone mesh netwerk simulatie}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -82,7 +82,7 @@
 
 \begin{document}
 \begin{figure}
-\begin{center}\includegraphics[scale=0.15]{pf}\end{center}
+\begin{center}\includegraphics[scale=0.1]{alten}\end{center}
 \end{figure}
 \maketitle
 
@@ -197,11 +197,14 @@ Alten is geïnteresseerd in de mogelijk alternatieve oplossing van de student en
 De doelstelling van Alten is het beantwoorden van de volgende hoofdvraag: Is het mogelijk om meerdere op de grond geparkeerde drones, verbonden in een onderling mesh netwerk, in zetten voor het monitoren van gebieden?
 Hierbij wil Alten dat de drones gedrag hebben voor slechte of geen communicatie.
 
+Het doel die Alten hiermee wil behalen is het winnen van kennis naar mesh netwerken, ROS simulaties en drones.
+Alten heeft geen eigen software 1producten op de markt, dit project zal daar geen uitzondering op zijn.
+
 De opdracht hierin voor de student is het maken van een simulatie.
 Alten wil deze simulatie gebruiken om verschillende algoritmes te testen voor de verdeling van de drones.
-De simulatie moet aantonen hoeveel drones benodigd zouden zijn voor een gebied.
+De simulatie moet aantonen hoeveel drones nodig zijn voor een gebied.
 De simulatie moet realistisch en valide zijn.
-Dit houdt in dat 
+Wat realistisch en valide voor dit project inhoudt wordt beter gedefinieerd in het onderzoek op basis van de requirements. 
 
 Deze simulatie moet ook het gedrag van het netwerk nabootsen.
 Om het gedrag van het netwerk realistisch na te bootsen moet er een prototype gemaakt worden.
@@ -253,17 +256,22 @@ Hier staan alle grenzen die inhoudelijk over het project gaan. In hoofdstuk \ref
 	\item Het concept wordt alleen in een simulatie aangetoond.
 	\item Het prototype mesh-netwerk wordt alleen gebruikt om gedrag voor de simulatie te onderzoeken en te reproduceren.
 	\item De simulatie dient alleen het doel van het beantwoorden van de onderzoeksvraag.
+	\item De simulatie zal niet meer dan 100 drones gelijktijdig simuleren.
+	\item De simulatie zal alleen situaties nabootsen die echt kunnen gebeuren.
+	\item De simulatie zal alleen drones simuleren.
 	\item De testopstelling waar het proof of concept in werkt zal gedefinieerd worden in de \nameref{sec:elaborationfase}.
-	\item Er is geen beschikbaar budget afgesproken met de Alten.
+	\item Er is geen beschikbaar budget afgesproken met de Alten. De student maakt geen eigen kosten ten behoeve van de uitvoer van het	project. 
 	\item Versiebeheer voor code maar ook documenten vindt plaats op GitHub in een prive repository beheerd door de student alsook op de repository van het stage aanbiedende bedrijf.
+	\item Na de einddatum en wanneer alle resultaten geleverd zijn zal er geen nazorg meer geleverd
+	worden door de afstudeerder aan het project binnen het huidige dienstverband.
 	\item Documentatie wordt geschreven in \LaTeX.
-	\item Code wordt geschreven in C++.
+	\item Code wordt geschreven in C++ omdat dit hoort bij de specialisatie van de student als embedded software developer.
 	\item Er wordt één prototype gemaakt voor het mesh netwerk.
 \end{itemize}
 
 \chapter{Randvoorwaarden}
 \label{chapter:randvoorwaarden}
-Bij randvoorwaarden geeft de student aan welke zaken er door de opdrachtgever geregeld moeten worden voordat hij aan het project kan beginnen. De student heeft randvoorwaarden opgedeeld in organisatorische- en inhoudelijke randvoorwaarden. 
+Bij randvoorwaarden geeft de student aan welke zaken er door de opdrachtgever geregeld moeten worden voordat hij aan het project kan beginnen. De student heeft randvoorwaarden opgedeeld in organisatorische en inhoudelijke randvoorwaarden. 
 
 \section{Organisatorische randvoorwaarden}
 \begin{itemize}
@@ -280,6 +288,8 @@ Bij randvoorwaarden geeft de student aan welke zaken er door de opdrachtgever ge
 	\item Alten verzorgt een laptop krachtig genoeg voor simulaties voor de student.
 	\item De HAN procesbegeleider beoordeelt documentatie op ISAS binnen het door het systeem opgeven termijn.
 	\item Onderzoek naar hardware wordt als eerste uitgevoerd om een buffer op te bouwen voor levertijden van de te bestellen hardware.
+	\item Afstudeerder moet de kans krijgen om tijdens het project de competenties gesteld vanuit de
+	opleiding te kunnen behalen, en aan te kunnen tonen.
 	  
 \end{itemize}
 
@@ -307,7 +317,7 @@ Alle documentatie die wordt geschreven voldoet aan de kwaliteitseisen van de ICA
 		Projectverslag                                                                                             & \begin{tabular}[c]{@{}l@{}}Toont de 5 \\ beoordelingscriteria\\  met bijhorende\\  prestatiecriterium \\ voldoende aan; \\ Onderbouwt de \\ keuzes van handelen.\end{tabular}                                                             & \begin{tabular}[c]{@{}l@{}}Keuzes tijdens het\\ project documenteren;\\ Feedback gesprekken\\ houden; Het schrijven\\ van het verslag\end{tabular}                           & \begin{tabular}[c]{@{}l@{}}Tussentijdse \\ feedbackrondes; \\ Feedback van de \\ procesbegeleider; \\ Wekelijkse \\ feedbacksessie Alten.\end{tabular} \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Prototype mesh\\ netwerk\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}Geschikt om gedrag\\ te extraheren voor\\ de simulatie; \\ Voldoet aan de\\ opgestelde requirements \\ van het dronenetwerk.\end{tabular}                                                        & \begin{tabular}[c]{@{}l@{}}Keuze maken in\\ hardware gebruik;\\ Software voor\\ onderzoek schrijven;\\ Onderzoek naar\\ gedrag van het \\ netwerk.\end{tabular}              & \begin{tabular}[c]{@{}l@{}}Code reviews; feedback\\ op onderzoek van\\ begeleiding.\end{tabular}                                                       \\ \hline
 	Onderzoeksverslag                                                                                          & \begin{tabular}[c]{@{}l@{}}Bevat een relevante \\ onderzoeksvraag; \\ Geeft antwoord op\\  de onderzoeksvraag;\\  Is gebaseerd op de \\ ICA-onderzoek kaart.\\ \cite{MethodenKaart}\\\end{tabular} & \begin{tabular}[c]{@{}l@{}}Zowel literatuur-\\ als labonderzoek\\ uitvoeren;\\ Software bouwen\\ voor het bewijzen\\ van het antwoord.\end{tabular}                         & \begin{tabular}[c]{@{}l@{}}Wekelijks reflecteren\\ met de stagebegeleider\\ op het proces van het \\ onderzoek.\end{tabular}   \\ \hline
-	\begin{tabular}[c]{@{}l@{}}Simulatiesoftware\\ met meerdere \\ drones en \\ netwerk simulatie\end{tabular} & \begin{tabular}[c]{@{}l@{}}Realistisch en valide;\\ Geschikt om de \\ onderzoeksvraag te \\ beantwoorden; Is \\ voorzien van \\ documentatie.\end{tabular}                                                      & \begin{tabular}[c]{@{}l@{}}Schrijven van\\ code; Onderzoek\\ doen wanneer de\\simulatie realistisch\\en valide is; Gedrag\\ van het netwerk \\ overzetten tot \\ gesimuleerd gedrag;\\ Een drone simuleren.\end{tabular}                   & \begin{tabular}[c]{@{}l@{}}Code reviews; \\ Terugkoppeling \\ naar bedrijf\end{tabular}                                        \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Simulatiesoftware\\ met meerdere \\ drones en \\ netwerk simulatie\end{tabular} & \begin{tabular}[c]{@{}l@{}}Realistisch en valide;\\ Geschikt om de \\ onderzoeksvraag te \\ beantwoorden; Is voorzien\\ van  documentatie.\end{tabular}                                                      & \begin{tabular}[c]{@{}l@{}}Schrijven van\\ code; Onderzoek\\ doen wanneer de\\simulatie realistisch\\en valide is; Gedrag\\ van het netwerk \\ overzetten tot \\ gesimuleerd gedrag;\\ Een drone simuleren.\end{tabular}                   & \begin{tabular}[c]{@{}l@{}}Code reviews; \\ Terugkoppeling \\ naar bedrijf\end{tabular}                                        \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Software Design\\ Document\end{tabular}                                         & \begin{tabular}[c]{@{}l@{}}Komt overeen met\\ code; Toont alle\\ relevante ontwerpen; \\ Ontwerpkeuzes staan\\  vastgelegd.\end{tabular}                                                                        & \begin{tabular}[c]{@{}l@{}}Usecases vertalen tot\\ activity diagrammen;  \\ Domein model \\ omzetten tot class\\ diagrammen; \\ component diagram\\  opstellen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Ontwerpkeuzes \\ bespreken met\\ begeleiding; \\ Ontwerp baseren\\ op ontwerppatronen.\end{tabular} \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Software \\ Requirement \\ Specification\end{tabular}                           & \begin{tabular}[c]{@{}l@{}}De requirements\\ komen overeen met\\ de wensen van de \\ opdrachtgever; Bevat \\genoeg informatie\\ voor het opstellen\\ van een SDD\end{tabular}                                   & \begin{tabular}[c]{@{}l@{}}Eisen van het \\ product vaststellen;\\ usecases opstellen;\\ furps++ opstellen.\end{tabular}                                                     & \begin{tabular}[c]{@{}l@{}}Producteisen en\\ usescases terugkoppelen \\naar de opdrachtgever\end{tabular}           \\ \hline
 
@@ -492,13 +502,15 @@ Om de student zo goed als mogelijk te kunnen begeleiden zijn de overige afsprake
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Onderwerp                                                               & Afspraak                                                                                                                                                                                                                                                                                       \\ \hline
-		Ziekteverzuim                                                           & \begin{tabular}[c]{@{}l@{}}Bij ziekte maakt de student dit voor 09:00 telefonisch \\ bekend aan zijn manager. Bij langdurige ziekte maakt\\ de student
-		 dit ook bekend aan alle begeleiders
+		Ziekteverzuim                                                           & \begin{tabular}[c]{@{}l@{}}Bij ziekte maakt de student dit voor 09:00 telefonisch bekend aan zijn \\manager. Bij langdurige ziekte maakt de student
+		 dit ook bekend aan\\ alle begeleiders
 	 	\end{tabular}                                                                                                                                                                     \\ \hline
-		\begin{tabular}[c]{@{}l@{}}Langdurige afwezig\\  of ziekte van \\ begeleiding\end{tabular} & \begin{tabular}[c]{@{}l@{}}Bij langdurige afwezigheid maakt de begeleider van \\ school of het bedrijf dit bekend aan de student per mail. \\ Bij afwezigheid langer dan twee weken moet de \\ organistatie een tijdelijke vervanger aanbieden.\end{tabular}                                    \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Langdurige afwezig\\  of ziekte van \\ begeleiding\end{tabular} & \begin{tabular}[c]{@{}l@{}}Bij langdurige afwezigheid maakt de begeleider van de school of het bedrijf\\ dit bekend aan de student per mail. Bij afwezigheid langer dan twee weken \\moet de organistatie een tijdelijke vervanger aanbieden.\end{tabular}                                    \\ \hline
 		Iteratie start                                                          & Iedere iteratie start op maandagochtend om 09:00                                                                                                                                                                                                                                               \\ \hline
-		Werkplek                                                                & \begin{tabular}[c]{@{}l@{}}Er wordt van de student verwacht dat hij werkt\\ op zijn werkplek bij Alten in Apeldoorn. Op het\\ moment dat dit afwijkt om bijvoorbeeld thuis \\ te werken laat hij dit minimaal een werkdag\\  van te voren weten aan de stage aanbiedende organisatie\end{tabular} \\ \hline
-		\begin{tabular}[c]{@{}l@{}}Workshops en \\ terugkomdag\end{tabular}     & \begin{tabular}[c]{@{}l@{}}De student is vrij om de terugkomdag en workshops\\ verzorgd door de HAN bij te wonen. Wel laat hij dit \\tijdig weten aan de stage aanbiedende organisatie. \end{tabular}                                                                                                                                                                  \\ \hline
+		Werkplek                                                                & \begin{tabular}[c]{@{}l@{}}Er wordt van de student verwacht dat hij werkt op zijn werkplek bij Alten\\ in Apeldoorn. Op het moment dat dit afwijkt om bijvoorbeeld thuis te\\ werken laat hij dit minimaal een werkdag van te voren weten aan de stage\\ aanbiedende organisatie\end{tabular} \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Workshops en \\ terugkomdag\end{tabular}     & \begin{tabular}[c]{@{}l@{}}De student is vrij om de terugkomdag en workshops verzorgd door de HAN\\ bij te wonen. Wel laat hij dit tijdig weten aan de stage aanbiedende\\ organisatie. \end{tabular}                                                                                                                                                                  \\ \hline
+		\begin{tabular}[c]{@{}l@{}} Code \end{tabular}     & \begin{tabular}[c]{@{}l@{}}De student gebruikt in het project C++ als programmeertaal.\\ Dit omdat dit past bij zijn specialisatie als embedded software developer \end{tabular}                                                                                                                                                                  \\ \hline
+		\begin{tabular}[c]{@{}l@{}} IDE \end{tabular}     & \begin{tabular}[c]{@{}l@{}}De student is vrij in zijn keuze van IDE. \end{tabular}                                                                                                                                                                  \\ \hline
 	\end{tabular}
 \caption{Overige afspraken voor de studenten en begeleiders}
 \label{table:overigeafspraken}
@@ -591,11 +603,6 @@ Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heef
 	\begin{tabular}[c]{@{}l@{}}Plan van aanpak\\ onderdeel blijkt niet\\  goed geformuleerd\\ of niet (goed)\\ omvattend te zijn.\end{tabular} & Middel & Middel & \begin{tabular}[c]{@{}l@{}}Laten reviewen door\\ begeleiders en docenten\\ of onderdelen correct\\ worden afgevangen.\\ Daarbij ieder hoofdstuk\\ naast het document\\ \APACcitebtitle{Toelichting op PvA 3.0} \\ houden en dit document\\ als een checklist \\ gebruiken.\end{tabular}                                          & \begin{tabular}[c]{@{}l@{}}Plan van Aanpak \\ onderdeel aanpassen\\ zodat het onderdeel\\ correct wordt\\ geformuleerd. Dit\\ onderdeel wordt\\ dan ook nogmaals\\ gereviewd en wordt\\ naast de checklist \\ gehouden, zoals\\ beschreven in de\\ tegenmaatregel.\end{tabular} \\ \hline
 \end{longtable}
 
-%\section*{Appendices}
-%\addcontentsline{toc}{section}{\protect\numberline{}Appendices}
-%\appendix
-%\input{appendix}
-%\pagebreak
 
 \bibliographystyle{apacite}
 \bibliography{bilbliography.bib}
