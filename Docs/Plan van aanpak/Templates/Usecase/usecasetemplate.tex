@@ -1,0 +1,100 @@
+\documentclass[a4paper, 11pt, oneside]{article} 
+\usepackage[utf8]{inputenc}
+\usepackage[dutch]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[toc,page]{appendix}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{tikz-qtree}
+\usepackage{graphicx}
+\usepackage{fancyref}
+\usepackage{wrapfig}
+\usepackage{url}
+\usepackage{pdflscape}
+\usepackage{fancyvrb}
+\graphicspath{ {Afbeeldingen/} }
+\usepackage{subfig}
+\usepackage{tabularx}
+\usepackage{apacite}
+\usepackage{longtable}
+\usepackage{titlecaps}
+%\usepackage[T1]{fontenc}
+\usepackage{titlesec, blindtext, color}
+\usepackage{censor}
+\censorruledepth=-.2ex
+\censorruleheight=.1ex
+
+\usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+
+\author{M.W.J. Berentsen}
+
+\title{Usecase template}
+
+\begin{document}
+	\maketitle
+%\section{Use Case \xblackout{Naam van de usecase}}	
+
+\section{Fully-dressed use case description}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|}
+		\hline
+		Use Case: \textless{}use case naam\textgreater{}                                                                              \\ \hline
+		Purpose: \textless{}doel use case\textgreater{}                                                                               \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Description of use case:  \\ \textless{}wat kan je met de use case doen\textgreater{}\end{tabular} \\ \hline
+		Primary actor:  \textless{}actor\textgreater{}                                                                                \\ \hline
+		Preconditions: \textless{}pre conditie\textgreater{}                                                                          \\ \hline
+		Postconditions: \textless{}post conditie\textgreater{}                                                                        \\ \hline
+	\end{tabular}
+\end{table}
+
+\section{Basic Flow (Main Success Scenario)}
+{[}\textit{Vul deze tabel in met de happy flow van het systeem}{]}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Actor action  & System responsibility   \\ \hline
+		Actie actor 1 & systeem repsonse /actie \\ \hline
+		&                         \\ \hline
+		&                         \\ \hline
+		&                         \\ \hline
+		&                         \\ \hline
+	\end{tabular}
+\end{table}
+
+\section{Alternative Flows}
+{[}\textit{Geef hier een de alternative flow weer van het systeem. Per alternatieve flow een tabel}{]}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\rowcolor[HTML]{C0C0C0} 
+		Actor action  & System responsibility   \\ \hline
+		Actie actor 1 & systeem repsonse /actie \\ \hline
+		&                         \\ \hline
+		&                         \\ \hline
+		&                         \\ \hline
+		&                         \\ \hline
+	\end{tabular}
+\end{table}
+
+
+
+\end{document}

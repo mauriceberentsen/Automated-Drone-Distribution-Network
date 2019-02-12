@@ -21,6 +21,7 @@
 \usepackage{url}
 \usepackage{pdflscape}
 \usepackage{fancyvrb}
+\usepackage{fancyhdr}
 \graphicspath{ {Afbeeldingen/} }
 \usepackage{subfig}
 \usepackage{tabularx}
@@ -31,7 +32,7 @@
 \usepackage{titlesec, blindtext, color}
 \definecolor{gray75}{gray}{0.75}
 \newcommand{\hsp}{\hspace{20pt}}
-
+\usepackage{pdfpages}
 
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -76,6 +77,9 @@
 
 \hypersetup{colorlinks=true, urlcolor=red,citecolor=black,linkcolor=blue}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 \setcounter{tocdepth}{2}
+
+
+
 \begin{document}
 \begin{figure}
 \begin{center}\includegraphics[scale=0.15]{pf}\end{center}
@@ -157,9 +161,9 @@ Tenslotte eindigt het plan van aanpak met een risico analyse in \autoref{chapter
 Alten is een bedrijf met omstreeks 650 medewerkers in dienst.
 De afdeling oost waar de stage plaats vindt telt ongeveer 50 medewerkers. 
 Dit zijn grotendeels consulenten die meewerken aan de productontwikkeling van de partners van Alten op het gebied van technische software engineering.
-Het overige deel is directie en human resource management.
+Het overige deel is technisch management en human resource management.
 \begin{figure}[H]
-	\begin{center}\includegraphics[scale=0.25]{organogram}\end{center}
+	\begin{center}\includegraphics[scale=0.2]{organogram}\end{center}
 	\caption{Organogram Alten IT}
 	\label{fig:organogram}
 \end{figure}
@@ -190,12 +194,14 @@ Drones die wel langer kunnen vliegen zijn vaak groot en duur.
 De student heeft als mogelijke oplossing hiervoor bedacht dat het gebruik van meerdere goedkope drones die vanaf de grond monitoring uitvoeren een alternatief kunnen zijn.
 Alten is geïnteresseerd in de mogelijk alternatieve oplossing van de student en biedt daarom een stageplek aan.
 
-De doelstelling van Alten is het beantwoorden van de volgende hoofdvraag: Is het mogelijk om meerdere op de grond geparkeerde drones verbonden in een onderling mesh netwerk in zetten voor het monitoren van gebieden?
+De doelstelling van Alten is het beantwoorden van de volgende hoofdvraag: Is het mogelijk om meerdere op de grond geparkeerde drones, verbonden in een onderling mesh netwerk, in zetten voor het monitoren van gebieden?
 Hierbij wil Alten dat de drones gedrag hebben voor slechte of geen communicatie.
 
 De opdracht hierin voor de student is het maken van een simulatie.
 Alten wil deze simulatie gebruiken om verschillende algoritmes te testen voor de verdeling van de drones.
 De simulatie moet aantonen hoeveel drones benodigd zouden zijn voor een gebied.
+De simulatie moet realistisch en valide zijn.
+Dit houdt in dat 
 
 Deze simulatie moet ook het gedrag van het netwerk nabootsen.
 Om het gedrag van het netwerk realistisch na te bootsen moet er een prototype gemaakt worden.
@@ -296,14 +302,14 @@ Alle documentatie die wordt geschreven voldoet aan de kwaliteitseisen van de ICA
 	\centering
 	Product          & Productkwaliteit eisen	& \begin{tabular}[c]{@{}l@{}}Benodigde activiteiten \\ om te komen tot \\ het product\end{tabular}                                                                             & Proceskwaliteit                                                                                                                                        \\ \hline	\endhead
 	Broncode                                                                                                   & \begin{tabular}[c]{@{}l@{}}Komt overeen met\\ SRS en SDD; Alle \\ publieke functies \\ zijn voorzien van \\ Engels commentaar;\\ Kritische functies\\  hebben unit tests; \\ Voldoet aan de \\ code standaard.\end{tabular}           & \begin{tabular}[c]{@{}l@{}}Schrijven code;\\ Opstellen code\\ standaard; Unit\\ testen schrijven;\\ Commentaar in\\ code schrijven.\end{tabular}                             & \begin{tabular}[c]{@{}l@{}}Wekelijks code\\ reviews; Tussentijdse\\ beoordeling door\\  begeleiders; Het \\ gebruik van code\\ analysetool \href{http://cppcheck.sourceforge.net/}{Cppcheck} \end{tabular}                                      \\ \hline
-	\begin{tabular}[c]{@{}l@{}}Eindpresentatie\\ / verdediging\end{tabular}                                    & \begin{tabular}[c]{@{}l@{}}Ondersteunt het \\ projectverslag in het\\ aantonen van de 5 \\ beoordelingscriteria;\\ Geeft een indruk \\ van het opgeleverde\\  product; Duurt in \\ totaal niet langer \\ dan 30 minuten.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Presentatie maken;\\ Demonstratie product\\ maken.\end{tabular}                                                                                   & \begin{tabular}[c]{@{}l@{}}Oefenen met\\ bedrijfsbegeleiders\\ /collega’s.\end{tabular}                                                                \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Eindpresentatie\\ / verdediging\end{tabular}                                    & \begin{tabular}[c]{@{}l@{}}Ondersteunt het \\ projectverslag in het\\ aantonen van de 5 \\ beoordelingscriteria;\\ Geeft een indruk \\ van het opgeleverde\\  product; Duurt in \\ totaal niet langer \\ dan 30 minuten.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Presentatie maken;\\ Demonstratie van\\ het product maken.\end{tabular}                                                                                   & \begin{tabular}[c]{@{}l@{}}Oefenen met\\ bedrijfsbegeleiders\\ /collega’s.\end{tabular}                                                                \\ \hline
 	Plan van aanpak                                                                                            & \begin{tabular}[c]{@{}l@{}}Omschrijft wat \\ het plan van de\\  student is; Voldoet \\aan het  \\feedbackformulier \\ projectplan.\end{tabular}                                                                                          & \begin{tabular}[c]{@{}l@{}}Verdiepen in het\\ stage aanbiedende\\ bedrijf;\\ Verduidelijken\\ stageopdracht;\\ Het plan schrijven.\end{tabular}                              & \begin{tabular}[c]{@{}l@{}}Feedback/goedkeuring\\ van bedrijfsbegeleider;\\ Feedback van\\ procesbegeleider en \\ assessor;\end{tabular}               \\ \hline
 		Projectverslag                                                                                             & \begin{tabular}[c]{@{}l@{}}Toont de 5 \\ beoordelingscriteria\\  met bijhorende\\  prestatiecriterium \\ voldoende aan; \\ Onderbouwt de \\ keuzes van handelen.\end{tabular}                                                             & \begin{tabular}[c]{@{}l@{}}Keuzes tijdens het\\ project documenteren;\\ Feedback gesprekken\\ houden; Het schrijven\\ van het verslag\end{tabular}                           & \begin{tabular}[c]{@{}l@{}}Tussentijdse \\ feedbackrondes; \\ Feedback van de \\ procesbegeleider; \\ Wekelijkse \\ feedbacksessie Alten.\end{tabular} \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Prototype mesh\\ netwerk\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}Geschikt om gedrag\\ te extraheren voor\\ de simulatie; \\ Voldoet aan de\\ opgestelde requirements \\ van het dronenetwerk.\end{tabular}                                                        & \begin{tabular}[c]{@{}l@{}}Keuze maken in\\ hardware gebruik;\\ Software voor\\ onderzoek schrijven;\\ Onderzoek naar\\ gedrag van het \\ netwerk.\end{tabular}              & \begin{tabular}[c]{@{}l@{}}Code reviews; feedback\\ op onderzoek van\\ begeleiding.\end{tabular}                                                       \\ \hline
-	Onderzoeksverslag                                                                                          & \begin{tabular}[c]{@{}l@{}}Bevat een relevante \\ onderzoeksvraag; \\ Geeft antwoord op\\  de onderzoeksvraag;\\  Is gebaseerd op de \\ ICA-onderzoek kaart.\\\end{tabular} & \begin{tabular}[c]{@{}l@{}}Zowel literatuur-\\ als labonderzoek\\ uitvoeren;\\ Software bouwen\\ voor het bewijzen\\ van het antwoord.\end{tabular}                         & \begin{tabular}[c]{@{}l@{}}Wekelijks reflecteren\\ met de stagebegeleider\\ op het proces van het \\ onderzoek.\end{tabular}   \\ \hline
-	\begin{tabular}[c]{@{}l@{}}Simulatiesoftware\\ met meerdere \\ drones en \\ netwerk simulatie\end{tabular} & \begin{tabular}[c]{@{}l@{}}Realistisch en valide;\\ Geschikt om de \\ onderzoeksvraag te \\ beantwoorden; Is \\ voorzien van \\ documentatie.\end{tabular}                                                      & \begin{tabular}[c]{@{}l@{}}Schrijven van\\ code; Gedrag van\\ het netwerk \\ overzetten tot \\ gesimuleerd \\ gedrag; Een drone\\  simuleren.\end{tabular}                   & \begin{tabular}[c]{@{}l@{}}Code reviews; \\ Terugkoppeling \\ naar bedrijf\end{tabular}                                        \\ \hline
+	Onderzoeksverslag                                                                                          & \begin{tabular}[c]{@{}l@{}}Bevat een relevante \\ onderzoeksvraag; \\ Geeft antwoord op\\  de onderzoeksvraag;\\  Is gebaseerd op de \\ ICA-onderzoek kaart.\\ \cite{MethodenKaart}\\\end{tabular} & \begin{tabular}[c]{@{}l@{}}Zowel literatuur-\\ als labonderzoek\\ uitvoeren;\\ Software bouwen\\ voor het bewijzen\\ van het antwoord.\end{tabular}                         & \begin{tabular}[c]{@{}l@{}}Wekelijks reflecteren\\ met de stagebegeleider\\ op het proces van het \\ onderzoek.\end{tabular}   \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Simulatiesoftware\\ met meerdere \\ drones en \\ netwerk simulatie\end{tabular} & \begin{tabular}[c]{@{}l@{}}Realistisch en valide;\\ Geschikt om de \\ onderzoeksvraag te \\ beantwoorden; Is \\ voorzien van \\ documentatie.\end{tabular}                                                      & \begin{tabular}[c]{@{}l@{}}Schrijven van\\ code; Onderzoek\\ doen wanneer de\\simulatie realistisch\\en valide is; Gedrag\\ van het netwerk \\ overzetten tot \\ gesimuleerd gedrag;\\ Een drone simuleren.\end{tabular}                   & \begin{tabular}[c]{@{}l@{}}Code reviews; \\ Terugkoppeling \\ naar bedrijf\end{tabular}                                        \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Software Design\\ Document\end{tabular}                                         & \begin{tabular}[c]{@{}l@{}}Komt overeen met\\ code; Toont alle\\ relevante ontwerpen; \\ Ontwerpkeuzes staan\\  vastgelegd.\end{tabular}                                                                        & \begin{tabular}[c]{@{}l@{}}Usecases vertalen tot\\ activity diagrammen;  \\ Domein model \\ omzetten tot class\\ diagrammen; \\ component diagram\\  opstellen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Ontwerpkeuzes \\ bespreken met\\ begeleiding; \\ Ontwerp baseren\\ op ontwerppatronen.\end{tabular} \\ \hline
-	\begin{tabular}[c]{@{}l@{}}Software \\ Requirement \\ Specification\end{tabular}                           & \begin{tabular}[c]{@{}l@{}}De requirements\\ komen overeen met\\ de wensen van de \\ opdrachtgever; Bevat \\genoeg informatie\\ voor het opstellen\\ van een SDD\end{tabular}                                   & \begin{tabular}[c]{@{}l@{}}Eisen van het \\ product vaststellen;\\ usecases opstellen;\\ furps++ opstellen.\end{tabular}                                                     & \begin{tabular}[c]{@{}l@{}}Continue producteisen\\ en usescases\\ terugkoppelen naar\\ de opdrachtgever\end{tabular}           \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Software \\ Requirement \\ Specification\end{tabular}                           & \begin{tabular}[c]{@{}l@{}}De requirements\\ komen overeen met\\ de wensen van de \\ opdrachtgever; Bevat \\genoeg informatie\\ voor het opstellen\\ van een SDD\end{tabular}                                   & \begin{tabular}[c]{@{}l@{}}Eisen van het \\ product vaststellen;\\ usecases opstellen;\\ furps++ opstellen.\end{tabular}                                                     & \begin{tabular}[c]{@{}l@{}}Producteisen en\\ usescases terugkoppelen \\naar de opdrachtgever\end{tabular}           \\ \hline
 
 \end{longtable}
 
@@ -314,15 +320,20 @@ Alle documentatie die wordt geschreven voldoet aan de kwaliteitseisen van de ICA
 \label{chapter:ontwikkelmethode}
 De genoemde op te leveren producten in het voorgaande hoofdstuk worden gerealiseerd door middel van de ontwikkelmethoden RUP in combinatie met SCRUM.
 
+Deze ontwikkelmethode geeft de student de mogelijkheid om voldoende onderzoek te doen naar de problemen die deze opdracht met zich mee brengt. 
+Binnen RUP wordt er ook aan het einde van iedere iteratie een retrospectieve en een review gehouden. Tijdens deze retrospectieven en reviews wordt de voortgang van het proces en het product besproken. Hierdoor krijgt de student niet alleen een duidelijk beeld van de staat van het te ontwikkelen product, maar ook van de afgeronde competenties. Hierdoor kan de student vervolgens bijsturen wanneer nodig om de benodigde competenties te halen.
+
+\section{Rational Unified Process} 
+
 RUP (Rational Unified Process) is een iteratieve ontwikkelmethode. Dit houdt in dat het project
 wordt gerealiseerd in verschillende, elkaar opvolgende iteraties en dat ervaringen uit voorgaande iteraties in volgende iteraties worden meegenomen.\cite{RUP}
 
-\section{De vier fases van RUP}
+\subsection{De vier fases van RUP}
 \label{sec:fasesRUP}
 RUP beschrijft vier fasen waarin de nadruk ligt op verschillende disciplines van RUP \cite{RUPwim}.
 Hieronder de vier fasen, hoelang ze duren en een korte beschrijving.
 
-\subsection{Inceptionfase}
+\subsubsection{Inceptionfase}
 \label{sec:inceptionfase}
 De inceptie fase loopt tot en met 15 maart en duurt 5 weken.
 
@@ -330,7 +341,7 @@ In deze periode gaat de student de scope, doelen, projectgrenzen, risico's en te
 Aan het einde van de inceptie fase is er een analyse gemaakt en zijn de eisen bekend.
 Ook zijn er ideeën bedacht en hoe het systeem geïmplementeerd moet worden.
 
-\subsection{Elaborationfase}
+\subsubsection{Elaborationfase}
 \label{sec:elaborationfase}
 Deze fase eindigt op 17 mei  en duurt 8 weken.
 
@@ -340,7 +351,7 @@ Aan het einde van de elaboratie fase is het bekend hoe het systeem wordt gereali
 Met stabiele architectuur wordt bedoelt dat er een versie bestaat van het systeem, waarbij er door op ontwikkelt kan worden.
 De elaboration fase is opgedeeld in vier iteraties van twee weken.
 
-\subsection{Constructionfase}
+\subsubsection{Constructionfase}
 \label{sec:constructionfase}
 Deze fase duurt 4 weken en is klaar op 14 juni.
 
@@ -349,11 +360,36 @@ Volgens het onderwijs moet op vrijdag 14 juni alles op ISAS ingeleverd zijn, tot
 Aan het einde van deze fase is het proof of concept aanwezig en voldoet deze aan de gestelde kwaliteitseisen, zoals gesteld in \autoref{chapter:producten}.
 Tevens wordt er een onderzoeksrapport opgeleverd waarin de eerder genoemde gestelde vragen beantwoord worden.
 
-\subsection{Transistionfase}
+\subsubsection{Transistionfase}
 Deze fase loopt van 17 juni tot 27 juni.
 
 In de transitiefase wordt de presentatie en demo voorbereid. 
 In deze fase wordt het systeem gepresenteerd aan de opdrachtgever en school.
+
+\subsection{Risico vermindering}
+Zoals beschreven door \citeauthor{IBMrup}\citeyear{IBMrup} heeft RUP een algemene benadering wat betreft risico's. De risico's worden geïdentificeerden en er worden uitwijk strategieën opgesteld. De risico's worden gebruikt bij het prioriteren van de use cases en de risico's worden meegenomen als doelen voor het assessen van een iteratie. Tijdens de inceptionfase worden de grootste risico's beschreven (zie hoofdstuk Risico's in het Plan van Aanpak). In de elboratiefase worden risico's afgedekt door middel van proof of concepts.
+
+\subsection{Templates}
+Templates helpen met het stroomlijnen van het proces tijdens het project. RUP heeft een ruim aanbod van templates. Niet iedere template is relevant voor dit project. In dit hoofdstuk worden de templates behandeld die de student wil gebruiken in dit project.
+
+De volgende templates worden gebruikt tijdens het project.
+
+\subsubsection{Iteratieplan template}
+
+De iteratie template is handig te gebruiken, omdat hierin  wordt vastgelegd wat de doelen van de iteratie zijn. De iteratie template is uit RUP gehaald.
+
+\autoref{app:iteratieplan} \nameref{app:iteratieplan}
+
+\subsubsection{Iteration Assessment template}
+
+Aan het einde van een iteratie geëvalueerd hoe de iteratie is gegaan en wat er verbeterd kan worden. Om dit proces te structureren beschrijft RUP een 'Iteration Assessment template' hier worden actiepunten opgesteld en opgeschreven wat er gehaald is en wat niet.
+
+\autoref{app:assesement} \nameref{app:assesement}
+\subsubsection{Use Case template }
+
+Voor use cases gebruiken wordt er een zelfgemaakt template gebruikt. Dit template is gebaseerd op kennis uit het OSM semester en beschrijft voor een use case verschillende zaken zoals de actors, stakeholders en de flow.
+
+\autoref{app:usecasetemplate} \nameref{app:usecasetemplate}
 
 \section{De aspecten van SCRUM}
 Net als RUP is SCRUM een agile framework die op een iteratieve manier te werk gaat.
@@ -472,11 +508,11 @@ Om de student zo goed als mogelijk te kunnen begeleiden zijn de overige afsprake
 \label{chapter:planning}
 In dit hoofdstuk wordt de planning voor het project behandeld.
 Het gaat hier over een globale planning waarin projectweken worden gebruikt.
-De planning blijft globaal omdat de student op dit moment nog niet genoeg detail weet van de onderwerpen.
-Aan het begin van iedere iteratie zal de student de planning gedetailleerder maken. 
+De planning blijft globaal omdat de student op dit moment nog niet genoeg details weet van de onderwerpen.
+Aan het begin van iedere iteratie zal de student de planning gedetailleerder maken door het opstellen van een \nameref{app:iteratieplan}. 
 In totaal telt het project vanaf de eerste week tot aan de inleverdeadline 17 weken.
 Daarna zijn er nog twee weken waarin de presentatie zal plaats vinden. 
-Bij de week nummers staat een letter welke aangeeft welke RUP fase de week is terug te vinden \autoref{sec:fasesRUP}
+Bij de week nummers staat een letter welke aangeeft welke RUP fase de week is terug te vinden in \nameref{sec:fasesRUP}
 
 \begin{longtable}[c]{|c|l|}
 	\hline
@@ -486,7 +522,7 @@ Bij de week nummers staat een letter welke aangeeft welke RUP fase de week is te
 	%
 	\begin{tabular}[c]{@{}c@{}}1 - I-1\\ 4 feb - 8 feb\end{tabular}    & \begin{tabular}[c]{@{}l@{}}Opstellen van het plan van aanpak.\\ Defineren onderzoeksvraag.\\ Joinersdag Alten.\end{tabular}                            \\ \hline
 	\begin{tabular}[c]{@{}c@{}}2 - I-2\\ 11 feb - 15 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}15 feb: Inleveren Concept Projectplan.\\ Vaststellen requirements onderzoek.\\ Afronden concept projectplan.\end{tabular}   \\ \hline
-	\begin{tabular}[c]{@{}c@{}}3 - I-3\\ 18 feb - 22 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze simulatiesoftware.\\ Onderzoek keuze netwerk prototype hardware.\end{tabular}                               \\ \hline
+	\begin{tabular}[c]{@{}c@{}}3 - I-3\\ 18 feb - 22 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze simulatiesoftware. (valide en realistisch)\\ Onderzoek keuze netwerk prototype hardware.\end{tabular}                               \\ \hline
 	\begin{tabular}[c]{@{}c@{}}4 - I-4\\ 25 feb - 1 mrt\end{tabular}   & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze drone simulatie.\\ Onderzoek keuze netwerk prototype software.\end{tabular}                                 \\ \hline
 	\begin{tabular}[c]{@{}c@{}}5 - I-5\\ 11 mrt - 15 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}15 mrt: Inleveren Definitief Projectplan.\\ Vaststellen interfaces tussen componenten.\\ Afronden projectplan.\end{tabular} \\ \hline
 	\begin{tabular}[c]{@{}c@{}}6 - E-1\\ 18 mrt - 22 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Implementatie drone in simulatie software.\\ Implementatie mesh netwerk.\end{tabular}                                       \\ \hline
@@ -564,8 +600,29 @@ Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heef
 \bibliographystyle{apacite}
 \bibliography{bilbliography.bib}
 
+\clearpage
+\appendix
+\chapter{Iteratie plan template}
+\label{app:iteratieplan}
 
-%\appendix
+\begin{center}\includegraphics[page=1,width=.8\linewidth]{Templates/Iteratieplan/Iteratieplan.pdf}\end{center}
+.$\backslash$Templates$\backslash$Iteratieplan.pdf
+
+\chapter{Iteratie assessment template}
+\label{app:assesement}
+
+\begin{center}\includegraphics[page=1,width=.8\linewidth]{Templates/Ieteratieassessement/IterationAssessment.pdf}\end{center}
+\begin{center}\includegraphics[page=2,width=.8\linewidth]{Templates/Ieteratieassessement/IterationAssessment.pdf}\end{center}
+.$\backslash$Templates$\backslash$IterationAssessment.pdf
+
+
+\chapter{Iteratie plan template}
+\label{app:usecasetemplate}
+
+\begin{center}\includegraphics[page=1,width=.8\linewidth]{Templates/Usecase/usecasetemplate.pdf}\end{center}
+.$\backslash$Templates$\backslash$usecasetemplate.pdf
+
+
 
 
 \end{document}
