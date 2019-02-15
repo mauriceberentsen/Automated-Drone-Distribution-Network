@@ -49,8 +49,8 @@
 \usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
 \author{M.W.J. Berentsen}
-
-\title{Plan van aanpak}
+\font\myfont=cmr12 at 40pt
+\title{\myfont Plan van aanpak}
 \usepackage{titling}
 
 \newcommand{\subtitle}[8]{%
@@ -140,7 +140,7 @@ Een samenvatting van het plan is:
 \begin{itemize}
 	\item Onderzoek de keuze naar het gebruik van simulatie software, hardware en software meshnetwerk en drone simulatie.
 	\item Implementeer de drone in de simulatiesoftware; Bouw een prototype van het mesh netwerk en simuleer deze; Gebruik het netwerk om meerdere drones aan te sturen; Implementeer het gedrag van de drones binnen het netwerk voor verschillende usecases. %TODO link naar usecase
-	\item Beantwoordt de onderzoeksvraag en lever hiervoor een onderzoeksrapport op.
+	\item Beantwoord de onderzoeksvraag en lever hiervoor een onderzoeksrapport op.
 \end{itemize}
 
 
@@ -164,7 +164,7 @@ De afdeling oost waar de stage plaats vindt telt ongeveer 50 medewerkers.
 Dit zijn grotendeels consulenten die meewerken aan de productontwikkeling van de partners van Alten op het gebied van technische software engineering.
 Het overige deel is technisch management en human resource management.
 \begin{figure}[H]
-	\begin{center}\includegraphics[scale=0.2]{organogram}\end{center}
+	\begin{center}\includegraphics[scale=0.18]{organogram}\end{center}
 	\caption{Organogram Alten IT}
 	\label{fig:organogram}
 \end{figure}
@@ -175,14 +175,15 @@ De student voert zijn onderzoek uit binnen het onderdeel Technical Software East
 De omzet van Alten haalt zij uit het delen van kennis door onder andere het detacheren van specialisten, uitvoeren van projecten of het geven van workshops.
 Daarmee is kennis dus van groot belang voor Alten en is zij altijd bezig deze uit te breiden. 
 
+Alten is in het bezit van drones en is bezig haar kennis hierin uitbreiden.
+Deze kennis breidt zij uit door te investeren in onderzoeken naar dit onderwerp.
+
 Het gebruik van drones neemt toe in Nederland.
 Volgens het luchtvaartregister in de publicatie van \citeauthor{ILeT} \citeyear{ILeT} zijn er op 03-10-2018 1806 drones geregistreerd. 
 Daarmee is het aantal drones met een totaal aantal luchtvaart voertuigen van 4445 goed voor 40.6 procent.
 Op 1 juni 2017 heeft \citeauthor{aantalDrones}\citeyear{aantalDrones} van het mediabedrijf Dronewatch een zelfde berekening gedaan waarbij het aantal nog 755 drones was en goed voor 22 procent. Dit is dus een vervijfvoudiging in iets meer dan een jaar tijd.
 
-Alten is in het bezit van drones en wil haar kennis hierin uitbreiden.
-Deze kennis breidt zij uit door te investeren in onderzoek naar dit onderwerp.
-Daarbij is de urgentie voor het bedrijf om zo snel mogelijk meer kennis op te doen naar drones.
+Daardoor is het urgent voor Alten om zo snel mogelijk meer kennis op te doen naar drones.
 Zo kan Alten vroeg inspelen op deze trend qua kennisverschaffing.
 Daarnaast wil Alten haar kennis ook uitbreiden op het gebied van Internet of Things (IoT) en Robot Operating System (ROS).
 
@@ -199,7 +200,8 @@ De doelstelling van Alten is het beantwoorden van de volgende hoofdvraag: Is het
 Hierbij wil Alten dat de drones gedrag hebben voor slechte of geen communicatie.
 
 Het doel die Alten hiermee wil behalen is het winnen van kennis naar mesh netwerken, ROS simulaties en drones.
-Alten heeft geen eigen software producten op de markt, dit project zal daar geen uitzondering op zijn.
+Alten heeft geen eigen software producten op de markt.
+Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de markt te zetten.
 
 De opdracht hierin voor de student is het maken van een simulatie.
 Alten wil deze simulatie gebruiken om verschillende algoritmes te testen voor de verdeling van de drones.
@@ -313,7 +315,7 @@ Alle documentatie die wordt geschreven voldoet aan de kwaliteitseisen van de ICA
 	\rowcolor[HTML]{C0C0C0} 
 	\centering
 	Product          & Productkwaliteit eisen	& \begin{tabular}[c]{@{}l@{}}Benodigde activiteiten \\ om te komen tot \\ het product\end{tabular}                                                                             & Proceskwaliteit                                                                                                                                        \\ \hline	\endhead
-	Broncode                                                                                                   & \begin{tabular}[c]{@{}l@{}}Komt overeen met SRS en\\ SDD; Alle publieke functies \\ zijn voorzien van Engels\\ commentaar; Kritische\\ functies  hebben unit tests; \\ Voldoet aan de code\\ standaard van \autoref{app:code}.\end{tabular}           & \begin{tabular}[c]{@{}l@{}}Schrijven code;\\ Opstellen code\\ standaard; Unit\\ testen schrijven;\\ Commentaar in\\ code schrijven.\end{tabular}                             & \begin{tabular}[c]{@{}l@{}}Wekelijks code\\ reviews; Tussentijdse\\ beoordeling door\\  begeleiders; Het \\ gebruik van code\\ analysetool \href{http://cppcheck.sourceforge.net/}{Cppcheck} \end{tabular}                                      \\ \hline
+	Broncode                                                                                                   & \begin{tabular}[c]{@{}l@{}}Komt overeen met SRS en\\ SDD; Alle publieke functies \\ zijn voorzien van Engels\\ commentaar; Kritische\\ functies  hebben unit tests; \\ Voldoet aan de code\\ standaard van \autoref{app:code};\\ De \nameref{app:DoD}\\ is voldaan \end{tabular}           & \begin{tabular}[c]{@{}l@{}}Schrijven code;\\ Opstellen code\\ standaard; Unit\\ testen schrijven;\\ Commentaar in\\ code schrijven.\end{tabular}                             & \begin{tabular}[c]{@{}l@{}}Wekelijks code\\ reviews; Tussentijdse\\ beoordeling door\\  begeleiders; Het \\ gebruik van code\\ analysetool \href{http://cppcheck.sourceforge.net/}{Cppcheck}.\\ Invullen van de\\ \nameref{app:DoD} \end{tabular}                                      \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Presentatie /\\ verdediging\end{tabular}                                    & \begin{tabular}[c]{@{}l@{}}Ondersteunt het \\ projectverslag in het\\ aantonen van de vijf \\ beoordelingscriteria;\\ \cite{HANbc} \\ Geeft een indruk van het\\ opgeleverde product;\\ Duurt in totaal niet \\langer dan 30 minuten.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Presentatie maken;\\ Demonstratie van\\ het product maken.\end{tabular}                                                                                   & \begin{tabular}[c]{@{}l@{}}Oefenen met\\ bedrijfsbegeleiders\\ /collega’s.\end{tabular}                                                                
 	\\ \hline
 	\begin{tabular}[c]{@{}l@{}}Plan van\\ aanpak \end{tabular}                                                                                             & \begin{tabular}[c]{@{}l@{}}Omschrijft wat het plan\\ van de  student is; Voldoet \\aan het  feedbackformulier \\ projectplan van het\\\citeauthor{HANfeed}\\\citeyear{HANfeed}  .\end{tabular}                                                                                          & \begin{tabular}[c]{@{}l@{}}Verdiepen in het\\ stage aanbiedende\\ bedrijf;\\ Verduidelijken\\ stageopdracht;\\ Het plan schrijven.\end{tabular}                              & \begin{tabular}[c]{@{}l@{}}Feedback/goedkeuring\\ van bedrijfsbegeleider;\\ Feedback van\\ procesbegeleider en \\ assessor;\end{tabular}
@@ -439,6 +441,8 @@ In de onderstaande \autoref{table:scrum} worden de aspecten van scrum aangekaart
 		Burn down chart     & \begin{tabular}[c]{@{}l@{}}Grafiek die weergeeft wat er nog\\ gedaan moet worden.\end{tabular}                          & \begin{tabular}[c]{@{}l@{}}Toont in een oogopslag hoe\\ een sprint er voor staat en\\ de planning gehaald wordt.\end{tabular}                           
 		\\ \hline
 		Sprint planning     & \begin{tabular}[c]{@{}l@{}}Een detail planning\\ voor de sprint.\end{tabular}& \begin{tabular}[c]{@{}l@{}}Geeft overzicht en focus over\\ de te behalen doelen van de\\ sprint. \end{tabular}                           
+		\\ \hline
+		Definition of Done   & \begin{tabular}[c]{@{}l@{}}Een checklist om te controleren\\ of een programmeer taak klaar is.\end{tabular}& \begin{tabular}[c]{@{}l@{}}Voorkomt dat taken\\ vergeten worden. \end{tabular}                           
 		\\ \hline
 	\end{tabular}
 \caption{Overzicht elementen meegenomen uit scrum}
@@ -601,9 +605,9 @@ Risico                                                                          
 \endhead
 %
 \begin{tabular}[c]{@{}l@{}}Langdurige ziekte\\ of verzuim.\end{tabular}                                                                                & Klein & Groot  & \begin{tabular}[c]{@{}l@{}}Op tijd contact\\ opnemen als het \\ blijkt dat de ziekte\\ of verzuim langer\\ gaat duren. De\\ vrij dagen bieden\\ een buffer van 15\\ dagen.\end{tabular}                                                                                                     & \begin{tabular}[c]{@{}l@{}}Overleggen met het\\ praktijkbureau naar\\ mogelijkheden\\ verschuiven deadlines.\end{tabular} \\ \hline
-\begin{tabular}[c]{@{}l@{}}Unit-testen van\\ gemaakte interfaces \\ slaagt niet. (nadat \\ deze gepusht is op\\ de dev/master\\ branche).\end{tabular} & Klein & Klein  & \begin{tabular}[c]{@{}l@{}}Zorgen voor concrete \\ ontwerpen over de\\ interface in het SDD.\\ Deze ontwerpen en\\ protocol veranderingen\\ en de unit-tests aan\\ de hand daarvan\\ implementeren.\end{tabular}                                                                            & \begin{tabular}[c]{@{}l@{}}Probleem van het niet\\ slagen achterhalen en\\ oplossen.\end{tabular}                         \\ \hline
+\begin{tabular}[c]{@{}l@{}}Unit-testen van\\ gemaakte interfaces \\ slagen niet. (nadat \\ deze gepusht zijn\\ op de dev/master\\ branche).\end{tabular} & Klein & Klein  & \begin{tabular}[c]{@{}l@{}}Zorgen voor concrete \\ ontwerpen over de\\ interface in het SDD.\\ Deze ontwerpen, \\ protocol veranderingen\\ en de unit-tests aan\\ de hand daarvan\\ implementeren.\end{tabular}                                                                            & \begin{tabular}[c]{@{}l@{}}Probleem van het niet\\ slagen achterhalen en\\ oplossen.\end{tabular}                         \\ \hline
 \begin{tabular}[c]{@{}l@{}}Integratie interfaces\\ /componenten gaat\\ niet naar behoren.\end{tabular}                                                 & Klein & Groot  & \begin{tabular}[c]{@{}l@{}}Protocol en interfaces\\ tussen componenten \\ documenteren en hier\\ voor unit-tests en\\ mock-interfaces\\ schrijven\end{tabular}                                                                                                                              & \begin{tabular}[c]{@{}l@{}}Tijd reserveren in de\\ planning om realisatie\\ mogelijk te maken\end{tabular}                \\ \hline
-\begin{tabular}[c]{@{}l@{}}Planning voor het \\ onderzoek wordt \\ niet behaald.\end{tabular}                                                          & Groot & Groot  & \begin{tabular}[c]{@{}l@{}}De planning laten\\ reviewen door de\\ begeleiders of naar\\ haalbaarheid. \\ MoSCoW planning\\ gebruiken voor de\\ requirements. Tijdens \\ het project een Gantt\\ chart gebruiken voor\\ om zo vroeg mogelijk\\ achter dit probleem te \\ komen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Requirements die in\\ de could planning \\ vallen schrappen.\end{tabular}                      \\ \hline
+\begin{tabular}[c]{@{}l@{}}Planning voor het \\ onderzoek wordt \\ niet behaald.\end{tabular}                                                          & Groot & Groot  & \begin{tabular}[c]{@{}l@{}}De planning laten\\ reviewen door de\\ begeleiders of naar\\ haalbaarheid. \\ MoSCoW planning\\ gebruiken voor de\\ requirements. Tijdens \\ het project een Gantt\\ chart gebruiken voor\\ om zo vroeg mogelijk\\ achter dit probleem \\te  komen. Sprints \\gebruiken i.c.m. een\\ burndown chart\end{tabular} & \begin{tabular}[c]{@{}l@{}}Requirements die in\\ de could planning \\ vallen schrappen.\end{tabular}                      \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Simulatie software \\ is niet toereikend\\ voor het onderzoek.\end{tabular}                                     & Klein  & Groot  & \begin{tabular}[c]{@{}l@{}}Requirements van uit\\ het onderzoek halen\\ waar de\\  simulatiesoftware \\ aan moet voldoen. De \\ \nameref{sec:inceptionfase} moet\\ dit voorkomen.\end{tabular}                                                                                                                     & \begin{tabular}[c]{@{}l@{}}Heronderzoeken welke\\ simulatiesoftware\\ wel toereikend is. \\ Wanneer de beschikbare\\ tijd het toestaat \\ overstappen.\\ Anders moeten de\\ requirements opnieuw \\ overwogen worden.\end{tabular}                                                                           \\ \hline
 \caption{Interne risico's}
 \end{longtable}
@@ -622,7 +626,7 @@ Risico                                                                          
 \end{table}
 
 \section{Afgevangen risico's}
-Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heeft getroffen voor de risico's. Als een van onderstaande risico optreedt weet de student wat er van hen verwacht wordt en wordt de impact van de risico geminimaliseerd.
+Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heeft getroffen voor de risico's. Als een van onderstaande risico optreedt weet de student wat er van hem verwacht wordt en wordt de impact van het risico geminimaliseerd.
 
 \begin{longtable}{|l|l|l|l|l|}
 	\hline
@@ -632,7 +636,7 @@ Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heef
 	%
 	\endhead
 	%
-	\begin{tabular}[c]{@{}l@{}}Kwaliteit van\\ producten wordt\\ niet gewaarborgd.\end{tabular}                                                & Klein  & Middel & \begin{tabular}[c]{@{}l@{}}Kwaliteitseisen opstellen\\ in het plan van aanpak.\\ Daarbij wordt iedere\\ product gereviewed door\\ de bedrijfsbegeleider. \\ Het wordt op een later\\ moment nogmaals\\ gereviewed door de\\ student om te kijken\\ of de code voldoet\\ aan de gestelde eisen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Als er producten zijn \\ die alsnog niet voldoen \\ aan de kwaliteitseisen \\ zal de bedrijfbegeleider\\ actie ondernemen. \\ Hierdoor voldoen alle\\ producten aan de\\ gestelde kwaliteitseisen.\end{tabular}                                      \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Kwaliteit van\\ producten wordt\\ niet gewaarborgd.\end{tabular}                                                & Klein  & Middel & \begin{tabular}[c]{@{}l@{}}Kwaliteitseisen opstellen\\ in het plan van aanpak.\\ Daarbij wordt ieder\\ product gereviewed door\\ de bedrijfsbegeleider. \\ Het wordt op een later\\ moment nogmaals\\ gereviewed door de\\ student om te kijken\\ of de code voldoet\\ aan de gestelde eisen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Als er producten zijn \\ die alsnog niet voldoen \\ aan de kwaliteitseisen \\ zal de bedrijfbegeleider\\ actie ondernemen. \\ Hierdoor voldoen alle\\ producten aan de\\ gestelde kwaliteitseisen.\end{tabular}                                      \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Langdurige\\ afwezigheid\\ begeleiding.\end{tabular}                                                              & Klein  & Middel  & \begin{tabular}[c]{@{}l@{}}Na een week van geen\\ gehoor stelt de student\\ een ultimatum.\end{tabular}                                                                                                                                                                                                                                                                                                     & \begin{tabular}[c]{@{}l@{}}De organistatie van de\\ begeleider biedt een \\ tijdelijke vervanger aan.\end{tabular}                                                                                                                                                              \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Plan van aanpak\\ onderdeel blijkt niet\\  goed geformuleerd\\ of niet (goed)\\ omvattend te zijn.\end{tabular} & Middel & Middel & \begin{tabular}[c]{@{}l@{}}Laten reviewen door\\ begeleiders en docenten\\ of onderdelen correct\\ worden afgevangen.\\ Daarbij ieder hoofdstuk\\ naast het document\\ \APACcitebtitle{Toelichting op PvA 3.0} \\ houden en dit document\\ als een checklist \\ gebruiken.\end{tabular}                                          & \begin{tabular}[c]{@{}l@{}}Plan van Aanpak \\ onderdeel aanpassen\\ zodat het onderdeel\\ correct wordt\\ geformuleerd. Dit\\ onderdeel wordt\\ dan ook nogmaals\\ gereviewd en wordt\\ naast de checklist \\ gehouden, zoals\\ beschreven in de\\ tegenmaatregel.\end{tabular} \\ \hline
 \caption{Afgevangen risico's}
@@ -658,7 +662,7 @@ In deze bijlage is de code guideline opgesteld, deze is gebasseerd op de google 
 \item Het gebruik van verouderde .h libraries is verboden. Gebruik hiervoor de c++ variant. Bijvoorbeeld $<$cmath$>$ ipv $<$math.h$>$
 \item Bij if, else, while, do en for instructies altijd accolades gebruiken. Accolade openen op de volgende regel.
 \item Geen onnodig witregels. Binnen een codeblok is er maximaal één opeenvolgend witregel toegestaan. Daarbuiten zijn er maximaal twee toegestaan.
-\item Code wat niet wordt gebruikt of is uitgecommentarieerd wordt verwijderd.
+\item Code die niet wordt gebruikt of is uitgecommentarieerd wordt verwijderd.
 \item Maximale aantal tekens per rij is 80 regels. Uitzonderingen hierop als er gebruik wordt gemaakt van raw String data, deze zullen niet meetellen in het aantal karakters.
 \item Foutmeldingen alleen in de vorm van exeptions/runtime errors. Het gebruik van return fouten (illegale Int \& bool) is verboden.
 \end{itemize}
@@ -677,7 +681,7 @@ In deze bijlage is de code guideline opgesteld, deze is gebasseerd op de google 
 \item Commentaar over wat een functie doet staat in de header. Uitleg over de werking ervan staat in de source file.
 \item Een functie heeft niet meer dan één doel. Aan de hand van het commentaar is dit doel duidelijk.
 \item Accolades op een nieuwe regel.
-\item De scoop van een functie is zo klein mogelijk.
+\item De scope van een functie is zo klein mogelijk.
 \item Parameters die niet gewijzigd worden binnen de functie zijn als const aangeduid alleen wanneer er geen sprake is van "pass by value".
 \item Probeer forward declerations zoveel mogelijk te vermijden.
 \item Inline functies mogen niet groter zijn dan 1 regel.
@@ -709,7 +713,7 @@ In deze bijlage is de code guideline opgesteld, deze is gebasseerd op de google 
 \item In de tag @return wordt beschreven wat de functie retourneert.
 \item Commentaar voor een functie hoeft niet in een @brief tag worden beschreven.
 \item In de beschrijving van de functie een pre en post conditie van de functie benoemen. Bij get en set is dit niet verplicht. 
-\item Commentaar moet enkel gaan over code en niet over ontwerpen over andere externe bronnen.
+\item Commentaar moet enkel gaan over code en niet over ontwerpen of andere externe bronnen.
 \item Commentaar wordt geschreven boven de functie. Deze is alleen nodig wanneer het toegevoegde waarde heeft.
 \item Commentaar wordt geschreven boven of naast de variabele. Deze is alleen nodig wanneer het toegevoegde waarde heeft.
 \end{itemize}
@@ -733,6 +737,22 @@ In deze bijlage is de code guideline opgesteld, deze is gebasseerd op de google 
 
 \begin{center}\includegraphics[page=1,width=.8\linewidth]{Templates/Usecase/usecasetemplate.pdf}\end{center}
 .$\backslash$Templates$\backslash$usecasetemplate.pdf
+
+\chapter{Definition of Done}
+\label{app:DoD}
+Voor elke programmeer taak is een gelijke definition of done opgesteld.
+Dit is een simpele checklist om de programmeur scherp te houden of het opgeleverde werk ook echt af is.
+Deze lijst zal in de taken op redmine terug te vinden zijn.
+
+\begin{itemize}
+	\item Documentatie voldoet aan gestelde eisen.
+	\item Ontwerpen voldoen aan gestelde eisen.
+	\item Code getest.
+	\item Code voldoet aan Code style guideline.
+	\item Code gedocumenteerd (Doxygen).
+	\item Code compileert.
+	\item Code doet wat het moet doen.
+\end{itemize}
 
 
 
