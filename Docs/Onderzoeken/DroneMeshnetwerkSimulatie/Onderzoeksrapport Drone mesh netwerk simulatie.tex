@@ -44,6 +44,7 @@
 \newcommand\tagreq[2]{#1\def\@currentlabel{#1}\label{#2}}
 \makeatother
 
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
 
 \def\sectionautorefname{Paragraaf}
 \def\chapterautorefname{Hoofdstuk}
@@ -242,6 +243,7 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 		\hypertarget{sk4}{SK4}		& Heeft een ingebouwde pathfinding oplossing.        \\ \hline
 		\hypertarget{sk5}{SK5}		& Ondersteunt ROS als middleware.        \\ \hline
 		\hypertarget{sk6}{SK6}		& Ondersteunt de detectie van botsingen.        \\ \hline
+		\hypertarget{sk7}{SK7}		& Ondersteunt de simulatie 100 drones tegelijk.        \\ \hline
 		DR1		& De drone is een quadcopter.        \\ \hline
 		DR2		& De drone is is voorzien van een API voor aansturing op basis van coördinaten.       \\ \hline
 		DR3		& De API sluit aan op de middleware ROS.        \\ \hline
@@ -263,12 +265,6 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 
 \chapter{Literatuur}
 
-Zet hier de achterliggende theorie.
-\begin{itemize}
-\item Staat erin vermeld dat je de bieb hebt toegepast uit de methodekaart van de HAN?
-\item Staan er oplossingsrichtingen vermeld die voldoen aan de criteria?
-\end{itemize}
-\hrule
 
 \section{Welke simulatie software is geschikt om een drone in na te bootsen?}
 
@@ -292,22 +288,46 @@ De kandidaten zijn:
 \begin{table}[H]
 	\centering
 	\begin{tabular}{l|*{10}r}
-		\toprule
 		%\backslashbox{Input}{Output} & int8\_t & int16\_t & int32\_t & uint8\_t & uint16\_t & uint32\_t \\
-		\diagbox[width=2.7cm, height=2.7cm]{\raisebox{5pt}{\hspace*{0.25cm}Simulator}}{\raisebox{-1.27cm}{\rotatebox{90}{Eis}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{alg1}{ALG1}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{alg2}{ALG2}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{alg3}{ALG3}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{alg4}{ALG4}}} &
+		\diagbox[width=2.7cm, height=2.4cm]{\raisebox{5pt}{\hspace*{0.25cm}Simulator}}{\raisebox{-1.27cm}{\rotatebox{90}{Eis}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{alg1}{ALG1}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{alg2}{ALG2}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{alg3}{ALG3}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{alg4}{ALG4}}} &
 		\raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{sk1}{SK1}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{sk2}{SK2}}} &
 		\raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{sk3}{SK3}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{sk4}{SK4}}} &
 		\raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{sk5}{SK5}}} & \raisebox{-0.25cm}{\rotatebox{90}{\hyperlink{sk6}{SK6}}} \\
 		\midrule\\
-		\hspace*{0.25cm}Actin & x & x & x & x & x 	 & x  & x & x &x & x\\ \\
-		\hspace*{0.25cm}Gazebo & x & x & x & x & x 	 & x & x & x &x & x \\ \\
-		\hspace*{0.25cm}V-REP & x & x & x & x & x 	 & x  & x & x &x & x\\ \\
-		\hspace*{0.25cm}Webots & x & x & x & x & w 	 & x & x & x &x & x \\ \\
-		\hspace*{0.25cm}OpenRAVE & x & x & x & x & x & x & x & x &x & x \\ \\
+		\hspace*{0.25cm}Actin 	& \checkmark & \checkmark 	& \checkmark & x 		  & \checkmark & x 			& \checkmark & x 		  &\checkmark & \checkmark	\\ \\
+		\hspace*{0.25cm}Gazebo 	& \checkmark & \checkmark 	& \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &\checkmark & \checkmark	\\ \\
+		\hspace*{0.25cm}V-REP 	& \checkmark & x 			& \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &\checkmark & x	\\ \\
+		\hspace*{0.25cm}Webots 	& \checkmark & \checkmark 	& \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &\checkmark & \checkmark 	\\ \\
+		\hspace*{0.25cm}OpenRAVE& \checkmark & \checkmark	& \checkmark & \checkmark & x 		   & \checkmark & \checkmark & \checkmark &\checkmark & x 	\\ \\
 		\bottomrule
 	\end{tabular}%
-	\label{tab:addlabel}%
+	\caption{Kruistabel simulatiekeuze}
+	\label{tab:kruissimkeuze}%
 \end{table}%
+
+In de \autoref{tab:kruissimkeuze} komt de simulatie software van Gazebo en Webots naar voren als enige simulatoren die voldoen aan de gestelde eisen.
+Het nu zaak om te uit te zoeken welke van de twee het meest geschikt is voor het uitvoeren van dit onderzoek.
+
+\subsection{Gazebo of Webots?}
+In januari 2018 hebben \citeauthor{RobotCompare} een publicatie geschreven waarin zij drie simulatoren vergelijken in het aanbod van features en performance. 
+Zij hebben een vergelijking gedaan tussen V-REP, Gazebo en ARGoS. 
+ARGoS wordt niet alsnog toegevoegd in de overweging omdat het geen ondersteuning heeft voor ROS.
+
+In de conclusie van de publicatie komt Webots als het meest gebruiksvriendelijk naar voren in het gebruik en is in het bezit van de meeste features.
+Het grote nadeel van Webots is dat het veel kracht vraagt van de computer waardoor het niet geschikt is voor de simulatie van veel drones tegelijk.
+
+Daarmee komt de keuze uit op Gazebo. 
+De resultaten van in de publicatie van \citeA{RobotCompare} tonen aan dat de software in staat is om veel drones tegelijk aan te kunnen sturen.
+\citeA{RobotCompare} geeft als nadeel aan Gazebo dat de software niet in staat is om 3d meshes te manipuleren, de user interface niet inovatief is en Gazebo soms problemen met dependencies door de veschillende versies van ROS.
+Dit laatste brengt een risico met zich mee voor het onderzoek daarom is het ook zaak dat dit als criteria meegenomen word in de deelvraag van \autoref{sec:dronekeuze} \nameref{sec:dronekeuze}. 
+
+\subsection{Conclusie}
+Voor het onderzoek wordt Gazebo gebruikt omdat het voldoet aan de gestelde \nameref{chapter:criteria}.
+De meest recente versie van Gazebo, die niet meer beta is op 19 februari 2019, is Gazebo 9.
+Deze versie vereist het gebruik van van ROS Melodic volgens haar eigen website  (\href{http://gazebosim.org/tutorials?tut=ros_wrapper_versions}{zie link}).
+
+\section{Welke gesimuleerde drone is geschikt voor de simulatie software?}
+\label{sec:dronekeuze}
 
 \chapter{Oplossingsrichtingen}
 
