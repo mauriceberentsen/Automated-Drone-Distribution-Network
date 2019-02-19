@@ -1,4 +1,4 @@
-
+#Tex ignore
 Docs/Plan van aanpak/main\.pdf
 
 *.aux
@@ -22,3 +22,50 @@ Docs/Plan van aanpak/main\.toc
 *.toc
 
 *.out
+
+#ROS ignore
+
+code/catkin_ws/build/
+code/catkin_ws/logs/
+code/catkin_ws/devel/
+code/catkin_ws/bin/
+code/catkin_ws/lib/
+code/catkin_ws/msg_gen/
+code/catkin_ws/srv_gen/
+code/catkin_ws/msg/*Action.msg
+code/catkin_ws/msg/*ActionFeedback.msgmsg/*ActionGoal.msg
+code/catkin_ws/msg/*ActionResult.msg
+code/catkin_ws/msg/*Feedback.msg
+code/catkin_ws/msg/*Goal.msg
+code/catkin_ws/msg/*Result.msg
+code/catkin_ws/msg/_*.py
+code/catkin_ws/build_isolated/
+code/catkin_ws/devel_isolated/
+
+code/catkin_ws/\.project
+code/catkin_ws/\.cproject
+
+*.cfgc
+code/catkin_ws/cfg/cpp/
+code/catkin_ws/cfg/*.py
+
+code/catkin_ws/srv/_*.py
+*.pcd
+*.pyc
+code/catkin_ws/qtcreator-*
+*.user
+
+
+code/catkin_ws/CMakeLists.txt.user
+
+*~
+
+# Emacs
+.#*
+
+# Catkin custom files
+CATKIN_IGNORE
+
+code/catkin_ws/\.catkin_workspace
+
+code/catkin_ws/src/CMakeLists\.txt
