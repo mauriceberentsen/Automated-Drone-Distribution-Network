@@ -56,7 +56,7 @@
 
 \author{M.W.J. Berentsen}
 \font\myfont=cmr12 at 40pt
-\title{\myfont Onderzoeksrapport}
+\title{\myfont Drone mesh netwerk simulatie}
 \usepackage{titling}
 
 \newcommand{\subtitle}[8]{%
@@ -74,7 +74,7 @@
 	\vskip0.5em}%
 }
 
-\subtitle{Drone mesh netwerk simulatie}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Onderzoeksrapport}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -156,7 +156,7 @@ Tenslotte wordt de invloed van het onderzoek op het afstudeerproject beschreven.
 \section{Hoofdvraag}
 Het doel van dit onderzoeksrapport is het beantwoorden van de volgende opgesteld hoofdvraag:
 \begin{quotation}
-\textit{Is het mogelijk om meerdere op de grond geparkeerde drones, verbonden in een onderling mesh netwerk, in zetten voor het monitoren van gebieden?}	
+\textit{Is het mogelijk om meerdere drones, verbonden in een onderling mesh netwerk, in zetten voor het monitoren van gebieden?}	
 \end{quotation}
 Doordat de uitvoerende student van dit onderzoek niet beschikt over een certificaat om met drones te mogen vliegen behoudt dit onderzoek zich tot een simulatie.
 Het mesh netwerk wordt wel voorzien van een fysiek prototype.
@@ -246,7 +246,7 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 		\hypertarget{sk7}{SK7}		& Ondersteunt de simulatie 100 drones tegelijk.        \\ \hline
 		DR1		& De drone is een quadcopter.        \\ \hline
 		DR2		& De drone is is voorzien van een API voor aansturing op basis van coördinaten.       \\ \hline
-		DR3		& De API sluit aan op de middleware ROS.        \\ \hline
+		DR3		& De API sluit aan op de middleware ROS melodic.        \\ \hline
 		DR4		& De drone is bruikbaar binnen de gekozen simulatie software.        \\ \hline%TODO gekozen software toevoegen
 		DR5		& De drone moet een kleine goedkope drone representeren.        \\ \hline
 		PH1		& Ondersteunt een bereik van minimaal 100 meter tot 1000 meter.  \\ \hline
@@ -256,8 +256,8 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 		PH5		& Moet zuinig in gebruik van stroom zijn. TODO beter defineren \\ \hline
 		PS1		& Ondersteund een mesh netwerk van minimaal 100 nodes. \\ \hline
 		PS2		& Het netwerk is zelf herstellend. \\ \hline
-		PS3		& Ondersteund het draaien op een raspberry pi of een ardunio (UNO of NANO). \\ \hline
-		PS4		& Ondersteund het versturen van zelfgemaakte berichten. \\ \hline
+		PS3		& Ondersteunt het draaien op een raspberry pi of een ardunio (UNO of NANO). \\ \hline
+		PS4		& Ondersteunt het versturen van zelfgemaakte berichten. \\ \hline
 		
 	\caption{Opgestelde criteria}
 	\label{tab:criteria}
@@ -267,7 +267,7 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 
 
 \section{Welke simulatie software is geschikt om een drone in na te bootsen?}
-
+\label{sec:welkesim}
 Voor het onderzoek wordt gebruik gemaakt van een simulatie omgeving.
 Welke software wordt gebruik staat vastgesteld in deze paragraaf.
 De keuze van software wordt bepaald door het uitvoeren van de bieb onderzoeksmethode. 
@@ -328,6 +328,15 @@ Deze versie vereist het gebruik van ROS Melodic volgens haar eigen website  (\hr
 
 \section{Welke gesimuleerde drone is geschikt voor de simulatie software?}
 \label{sec:dronekeuze}
+
+In \autoref{sec:welkesim} is geconcludeerd dat als simulatie software ROS melodic met Gazebo9 wordt gebruikt.
+Hierin kwam naar voren dat niet elke drone package gebruikt kan worden doordat ze specifiek gemaakt zijn voor de versie van ROS.
+
+Door gebruik te maken van de bieb onderzoeksmethode moet er een uitkomst komen welke drone package gebruikt kan worden.
+Eerst wordt er gekeken welke er compatibel zijn met ROS melodic.
+Zodra daar meerdere kandidaten voor gevonden zijn worden deze gefilterd door ze te toetsen aan de gestelde \nameref{chapter:criteria}.
+
+
 
 \chapter{Oplossingsrichtingen}
 

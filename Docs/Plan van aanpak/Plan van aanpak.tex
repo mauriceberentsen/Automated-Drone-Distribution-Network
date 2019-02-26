@@ -202,7 +202,7 @@ Het is daarom urgent voor Alten om te investeren in onderzoeken naar toepassinge
 \chapter{Doelstelling, opdracht en op te leveren resultaten voor het bedrijf en school}
 \label{chapter:doelstelling}
 Het doel van Alten is om onderling verbonden drones kunnen verdelen om zo een netwerk op te kunnen bouwen over een gebied. 
-Alten wil dat dit netwerk zichzelf kan onderhouden door te reageren op uitval of een slechte verbinding door een herverdeling van de drones.
+Alten wil dat dit netwerk zichzelf kan onderhouden door te reageren op uitval of een slechte verbinding door de één of meerdere drones te herverdelen.
 
 \section{Probleem}
 Het probleem wat een dronenetwerk met zich meebrengt is dat er wellicht een drone kan uitvallen of dat een punt in het netwerk een slechte verbinding heeft. 
@@ -211,21 +211,29 @@ Een herverdeling van de drones is hiervoor een oplossing. Alleen wat is een effi
 Het makkelijkste is om alle drones terug naar hun start punt laten vliegen maar dit zou betekenen dat het netwerk op dat moment niet beschikbaar is en het zou ook nog eens onnodig veel stroom verbruiken. 
 
 \section{Doelstelling}
-Het doel van dit project is dus om te onderzoeken wat een slimme manier is om de drones te herverdelen bij uitval. Alten wil deze intelligentie overlaten aan de netwerkmodule die toegevoegd moet worden aan de drone. Deze module bestaat nog niet en er moet dus een prototype gebouwd worden door de student. Hierbij hoeft de netwerkmodule alleen een nieuwe coördinaat te geven aan de drone als een verplaatsing nodig is. Hoe de verplaatsing uitgevoerd wordt heeft geen betrekking op dit project. 
+Het doel van dit project is dus om te onderzoeken wat een slimme manier is om de drones te herverdelen bij uitval. Alten wil deze intelligentie overlaten aan de netwerkmodule die toegevoegd moet worden aan de drone. Deze module bestaat nog niet en er moet dus een prototype gebouwd worden door de student. Hierbij hoeft de netwerkmodule alleen een nieuw coördinaat te geven aan de drone als een verplaatsing nodig is. Hoe de verplaatsing uitgevoerd wordt heeft geen betrekking op dit project. 
 
 \section{Opdracht}
 De opdracht van dit project is de ontwikkeling van meerdere producten die bijdragen aan het behalen van het doel. 
-De afstudeerder moet een algoritme maken die bepaald hoe de drones zich moeten verdelen en hoe ze moeten reageren bij uitval of slechte verbinding.
+De afstudeerder moet een algoritme maken die bepaald hoe de drones zich moeten verdelen in een gebied en hoe ze moeten reageren bij uitval of slechte verbinding.
 Een gebruiker moet kunnen aangeven over wat voor een gebied de drones zich moeten verdelen.
 Dit gebied bestaat uit een vrije vorm zoals een cirkel, hoefijzer, vierkant of donut.
-Er moet een prototype gemaakt worden van een netwerkmodule die het onderlinge meshnetwerk verzorgt en zichzelf kan herstellen wanneer er uitval is maar wel een andere communicatie route mogelijk is. 
+
+Er moet een prototype gemaakt worden van een netwerkmodule die het onderlinge meshnetwerk verzorgt en zichzelf kan herstellen bij uitval maar wel een andere communicatie route mogelijk is. 
+Wanneer dit niet het geval is moet de module de drone herpositioneren.
+
 Tenslotte moet de student een simulatie opzetten waarin al het bovenstaande gedrag in terug komt. 
 Deze simulatie is nuttig voor het testen van het verdelingsalgoritme en het visualiseren van het netwerk.
 Alten wil graag dat de simulatie uitgevoerd wordt in Robot Operating System (ROS). 
-De simulatie zal bestaan uit een stuk waar de input van de gebruiker ingevoerd kan worden, en een stuk waar een $n$ aantal drones zich zullen verdelen over een gebied.
+Dit wil Alten omdat zij nog geen ervaring heeft in ROS in combinatie met drones en mesh netwerken en door het begeleiden hier ervaring in opdoet.
+Het ervaring opdoen in ROS is geen doel van dit project en de student hoeft zich niet op te concentreren.
+De simulatie zal bestaan uit een stuk waar de input van de gebruiker ingevoerd kan worden, en een stuk waar een instelbaar aantal drones zich zullen verdelen over het opgegeven gebied.
 
 De simulatie moet realistisch en valide zijn.
-Wat realistisch en valide voor dit project inhoudt wordt beter gedefinieerd in het onderzoek op basis van de requirements. 
+Dit houdt voor dit project in dat de drones met elkaar communiceren via een gesimuleerd mesh netwerk. 
+De drones moeten in de simulatie kunnen uitvallen en de onderlinge afstand heeft effect op de signaalsterkte.
+De simulatie moet aan de hand van een script herhaalbaar zijn met een zelfde resultaat.
+ 
 
 Alten heeft geen eigen software producten op de markt.
 Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de markt te zetten.
