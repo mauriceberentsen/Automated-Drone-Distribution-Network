@@ -50,7 +50,7 @@
 
 \author{M.W.J. Berentsen}
 \font\myfont=cmr12 at 40pt
-\title{\myfont Plan van aanpak}
+\title{\myfont Drone mesh netwerk simulatie}
 \usepackage{titling}
 
 \newcommand{\subtitle}[8]{%
@@ -68,7 +68,7 @@
 	\vskip0.5em}%
 }
 
-\subtitle{Drone mesh netwerk simulatie}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Plan van aanpak}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 2}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -128,21 +128,34 @@ Dit plan van aanpak is gebaseerd op het document \textit{"Toelichting op PvA 3.0
 Het beschrijft de aanpak van de student waarin hij omschrijft wat hij gaat onderzoeken, 
 hoe dit uitgevoerd wordt en wat de planning van het onderzoek is.
 
-Het probleem is dat drones door hun stroomverbruik niet in staat zijn lang in de lucht te blijven en daarom niet geschikt zijn om langdurig grote gebieden te monitoren.
+Drones zijn onbemande luchtvaartuigen die kunnen navigeren door de lucht en daarom toepasbaar om bepaalde taken uit te voeren voor de mens.
+Alten wil gebruik maken van drones om een netwerk te kunnen creëren over een groot te gebied. 
+Daarbij wil Alten dat dit netwerk zichzelf kan herstellen door drones te kunnen herpositioneren bij uitval of een slechte verbinding.
+Het onderzoek die uitgevoerd gaat worden in dit luidt de volgende vraag:
+\begin{quotation}
+	\textit{Welke verdeel algoritme en extra intelligentie is nodig voor en netwerkmodule, aangesloten op een drone, om te zorgen voor een optimaal netwerk van drones in een gebied?}
+\end{quotation}
 
-De student heeft als doel het onderzoeken of meerdere met elkaar verbonden geparkeerde drones inzetbaar zijn voor monitoring van grote gebieden. Omdat de student geen vergunning heeft om te vliegen met drones gebruikt hij een simulatie.
+Dit project heeft een tweedelig doel.
+Het doel voor de student is het aantonen dat hij competent in zijn vak als embedded software developer en het behalen van zijn bachelor diploma Technische Informatica.
+Het doel van de organisatie Alten Nederland BV. is het zetten van een eerste stap naar bouwen van een drone netwerk door een prototype van een netwerkmodule voor een drone op te leveren die het meshnetwerk opzet en wanneer nodig de drones kan herverdelen.
 
-Er wordt een mesh-netwerk prototype gemaakt voor het testen van het communicatie gedrag.
-In de simulatie wordt er gekeken naar het verdelen van de drones en het gedrag bij uitval van drones.
+Omdat de uitvoerende student geen vergunning heeft om te vliegen met drones gebruikt hij een simulatie.
+De simulatie heeft als doel om de verdeling van de drones te visualizeren, het gedrag te testen bij uitval of storing in het netwerk en simuleren van de drones zelf.
+
+Er wordt voor de communicatie een fysiek prototype gemaakt.
+Dit prototype zal bestaan uit microcontrollers die draadloos met elkaar communiceren via een onderling meshnetwerk. 
+Dit prototype wordt niet alleen gemaakt voor het aantonen van de communicatie maar ook voor het extraheren van realistisch communicatie gedrag in de simulatie.
 
 Een samenvatting van het plan is:
 
 \begin{itemize}
-	\item Onderzoek de keuze naar het gebruik van simulatie software, hardware en software meshnetwerk en drone simulatie.
+	\item Onderzoek de keuze naar het gebruik van simulatiesoftware, hardware en software meshnetwerk en drone simulatie.
 	\item Implementeer de drone in de simulatiesoftware; Bouw een prototype van het mesh netwerk en simuleer deze; Gebruik het netwerk om meerdere drones aan te sturen; Implementeer het gedrag van de drones binnen het netwerk voor verschillende usecases. %TODO link naar usecase
 	\item Beantwoord de onderzoeksvraag en lever hiervoor een onderzoeksrapport op.
 \end{itemize}
 
+\section{Leeswijzer}
 
 Dit document gaat eerst in op de \nameref{chapter:achtergrond} waar het bedrijf kort omschreven wordt en de aanleiding voor dit project.
 Vervolgens gaat \autoref{chapter:doelstelling} in op het doel, de opdracht en het resultaat van het project.
@@ -152,7 +165,7 @@ Hierna is in \autoref{chapter:producten} per product, die de student wil oplever
 \autoref{chapter:ontwikkelmethode} verduidelijkt welke ontwikkelmethode de student gebruikt tijdens het project.
 Een praktisch hoofdstuk wat betreft contactgegevens en onderlinge communicatie volgt hierop in \nameref{chapter:projectorganistatie}.
 De \nameref{chapter:planning} is in het daarop volgende hoofdstuk uitgewerkt.
-Tenslotte eindigt het plan van aanpak met een risico analyse in \autoref{chapter:risicos}.
+Tenslotte eindigt het plan van aanpak met een risicoanalyse in \autoref{chapter:risicos}.
 
 
 
@@ -165,7 +178,7 @@ Dit zijn grotendeels consulenten die meewerken aan de productontwikkeling van de
 Het overige deel is technisch management en human resource management.
 \begin{figure}[H]
 	\begin{center}\includegraphics[scale=0.18]{organogram}\end{center}
-	\caption{Organogram Alten IT}
+	\caption{Organogram Alten IT. Afkomstig van \textit{intranet.alten.nl}, 5 februari 2019 }
 	\label{fig:organogram}
 \end{figure}
 
@@ -179,53 +192,58 @@ Alten is in het bezit van drones en is bezig haar kennis hierin uitbreiden.
 Deze kennis breidt zij uit door te investeren in onderzoeken naar dit onderwerp.
 
 Het gebruik van drones neemt toe in Nederland.
-Volgens het luchtvaartregister in de publicatie van \citeauthor{ILeT} \citeyear{ILeT} zijn er op 03-10-2018 1806 drones geregistreerd. 
+Volgens het luchtvaartregister in de publicatie van \citeA{ILeT} zijn er op 03-10-2018 1806 drones geregistreerd. 
 Daarmee is het aantal drones met een totaal aantal luchtvaart voertuigen van 4445 goed voor 40.6 procent.
-Op 1 juni 2017 heeft \citeauthor{aantalDrones}\citeyear{aantalDrones} van het mediabedrijf Dronewatch een zelfde berekening gedaan waarbij het aantal nog 755 drones was en goed voor 22 procent. Dit is dus een vervijfvoudiging in iets meer dan een jaar tijd.
+Op 1 juni 2017 heeft \citeA{aantalDrones} van het mediabedrijf Dronewatch een zelfde berekening gedaan waarbij het aantal nog 755 drones was en goed voor 22 procent. Dit is dus een vervijfvoudiging in iets meer dan een jaar tijd.
 
-Daardoor is het urgent voor Alten om zo snel mogelijk meer kennis op te doen naar drones.
-Zo kan Alten vroeg inspelen op deze trend qua kennisverschaffing.
-Daarnaast wil Alten haar kennis ook uitbreiden op het gebied van Internet of Things (IoT) en Robot Operating System (ROS).
+Alten springt in op deze snel groei in toename van drones door zo snel mogelijk meer kennis op te doen naar dit onderwerp.
+Het is daarom urgent voor Alten om te investeren in onderzoeken naar toepassingen van drones.
 
 \chapter{Doelstelling, opdracht en op te leveren resultaten voor het bedrijf en school}
 \label{chapter:doelstelling}
+Het doel van Alten is om onderling verbonden drones kunnen verdelen om zo een netwerk op te kunnen bouwen over een gebied. 
+Alten wil dat dit netwerk zichzelf kan onderhouden door te reageren op uitval of een slechte verbinding door een herverdeling van de drones.
 
-Een probleem van veel drones is de korte tijd dat ze in de lucht kunnen blijven.
-Drones die wel langer kunnen vliegen zijn vaak groot en duur.
+\section{Probleem}
+Het probleem wat een dronenetwerk met zich meebrengt is dat er wellicht een drone kan uitvallen of dat een punt in het netwerk een slechte verbinding heeft. 
+Op het moment dat dit gebeurd heeft het een negatieve impact op het hele netwerk, omdat er mogelijk andere drones afhankelijk zijn van dit communicatiepunt.
+Een herverdeling van de drones is hiervoor een oplossing. Alleen wat is een efficiënte manier van herverdelen?
+Het makkelijkste is om alle drones terug naar hun start punt laten vliegen maar dit zou betekenen dat het netwerk op dat moment niet beschikbaar is en het zou ook nog eens onnodig veel stroom verbruiken. 
 
-De student heeft als mogelijke oplossing hiervoor bedacht dat het gebruik van meerdere goedkope drones die vanaf de grond monitoring uitvoeren een alternatief kunnen zijn.
-Alten is geïnteresseerd in de mogelijk alternatieve oplossing van de student en biedt daarom een stageplek aan.
+\section{Doelstelling}
+Het doel van dit project is dus om te onderzoeken wat een slimme manier is om de drones te herverdelen bij uitval. Alten wil deze intelligentie overlaten aan de netwerkmodule die toegevoegd moet worden aan de drone. Deze module bestaat nog niet en er moet dus een prototype gebouwd worden door de student. Hierbij hoeft de netwerkmodule alleen een nieuwe coördinaat te geven aan de drone als een verplaatsing nodig is. Hoe de verplaatsing uitgevoerd wordt heeft geen betrekking op dit project. 
 
-De doelstelling van Alten is het beantwoorden van de volgende hoofdvraag: Is het mogelijk om meerdere op de grond geparkeerde drones, verbonden in een onderling mesh netwerk, in zetten voor het monitoren van gebieden?
-Hierbij wil Alten dat de drones gedrag hebben voor slechte of geen communicatie.
+\section{Opdracht}
+De opdracht van dit project is de ontwikkeling van meerdere producten die bijdragen aan het behalen van het doel. 
+De afstudeerder moet een algoritme maken die bepaald hoe de drones zich moeten verdelen en hoe ze moeten reageren bij uitval of slechte verbinding.
+Een gebruiker moet kunnen aangeven over wat voor een gebied de drones zich moeten verdelen.
+Dit gebied bestaat uit een vrije vorm zoals een cirkel, hoefijzer, vierkant of donut.
+Er moet een prototype gemaakt worden van een netwerkmodule die het onderlinge meshnetwerk verzorgt en zichzelf kan herstellen wanneer er uitval is maar wel een andere communicatie route mogelijk is. 
+Tenslotte moet de student een simulatie opzetten waarin al het bovenstaande gedrag in terug komt. 
+Deze simulatie is nuttig voor het testen van het verdelingsalgoritme en het visualiseren van het netwerk.
+Alten wil graag dat de simulatie uitgevoerd wordt in Robot Operating System (ROS). 
+De simulatie zal bestaan uit een stuk waar de input van de gebruiker ingevoerd kan worden, en een stuk waar een $n$ aantal drones zich zullen verdelen over een gebied.
 
-Het doel die Alten hiermee wil behalen is het winnen van kennis naar mesh netwerken, ROS simulaties en drones.
-Alten heeft geen eigen software producten op de markt.
-Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de markt te zetten.
-
-De opdracht hierin voor de student is het maken van een simulatie.
-Alten wil deze simulatie gebruiken om verschillende algoritmes te testen voor de verdeling van de drones.
-De simulatie moet aantonen hoeveel drones nodig zijn voor een gebied.
 De simulatie moet realistisch en valide zijn.
 Wat realistisch en valide voor dit project inhoudt wordt beter gedefinieerd in het onderzoek op basis van de requirements. 
 
-Deze simulatie moet ook het gedrag van het netwerk nabootsen.
-Om het gedrag van het netwerk realistisch na te bootsen moet er een prototype gemaakt worden.
-Dit zodat getest kan worden op het gedrag bij slechte of geen verbinding.
+Alten heeft geen eigen software producten op de markt.
+Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de markt te zetten.
+
+\section{Op te leveren resultaten voor het bedrijf en school}
 
 Aan het einde van het project levert de student de volgende producten op aan het bedrijf:
 
 \begin{itemize}
-\item Simulatiesoftware met meerdere drones en netwerk simulatie
-\item Prototype mesh netwerk.
+\item Simulatiesoftware met meerdere drones en netwerksimulatie
+\item Prototype meshnetwerk module.
+\item Broncode van de bovenstaande producten. 
 \item SRS (Software Requirement Specification)
 \item SDD (Software Design Document)
 \item Onderzoeksverslag
-\item Broncode
 \end{itemize}
 
-Aan het einde van het project levert de student het bovenstaande plus een projectverslag op aan school.
-
+Aan het einde van het project levert de student het bovenstaande plus een projectverslag op aan de Hogeschool van Arnhem en Nijmegen.
 
 \chapter{Projectgrenzen}
 \label{chapter:projectgrenzen}
@@ -256,22 +274,20 @@ Hier staan alle grenzen die inhoudelijk over het project gaan. In hoofdstuk \ref
 
 \begin{itemize}
 	\item In het project wordt niet met fysieke drones gevlogen.
-	\item Het concept wordt alleen in een simulatie aangetoond.
-	\item Het prototype mesh-netwerk wordt alleen gebruikt om gedrag voor de simulatie te onderzoeken en te reproduceren.
+	\item Het verdelingsalgoritme wordt alleen in een simulatie aangetoond
 	\item De simulatie dient alleen het doel van het beantwoorden van de onderzoeksvraag.
-	\item De simulatie zal niet meer dan 100 drones gelijktijdig simuleren.
+	\item De simulatie zal niet meer dan 100 drones gelijktijdig simuleren door de limieten van de simulatiesoftware.
 	\item De simulatie zal alleen situaties nabootsen die echt kunnen gebeuren.
 	\item De simulatie bootst alleen een grote vlakke ruimte na waar de drones in gaan vliegen en parkeren.
 	\item Als middleware voor de simulatie moet ROS gebruikt worden om de kennis van Alten uit te breiden.
-	\item De simulatie zal alleen drones simuleren.
-	\item De testopstelling waar het proof of concept in werkt zal gedefinieerd worden in de \nameref{sec:elaborationfase}.
+	\item De simulatie zal alleen drones en een vlak grond gebied simuleren.
 	\item Er is geen beschikbaar budget afgesproken met de Alten. De student maakt geen eigen kosten ten behoeve van de uitvoer van het	project. 
-	\item Versiebeheer voor code maar ook documenten vindt plaats op GitHub in een prive repository beheerd door de student alsook op de repository van het stage aanbiedende bedrijf.
+	\item Versiebeheer voor code maar ook documenten vindt plaats op de repository van het stage aanbiedende bedrijf.
 	\item Na de einddatum en wanneer alle resultaten geleverd zijn zal er geen nazorg meer geleverd
 	worden door de afstudeerder aan het project binnen het huidige dienstverband.
-	\item Documentatie wordt geschreven in \LaTeX.
-	\item Code wordt geschreven in C++ omdat dit hoort bij de specialisatie van de student als embedded software developer.
-	\item Er wordt één soort prototype gemaakt voor het mesh netwerk.
+	\item Documentatie wordt geschreven in latex om het voor de student gemakkelijk te maken algoritmes te documenteren.
+	\item Code wordt geschreven in C$++$ omdat dit hoort bij de specialisatie van de student als embedded software developer.
+	\item Er wordt één soort prototype netwerkmodule gemaakt.
 \end{itemize}
 
 \chapter{Randvoorwaarden}
@@ -280,7 +296,7 @@ Bij randvoorwaarden geeft de student aan welke zaken er door de opdrachtgever ge
 
 \section{Organisatorische randvoorwaarden}
 \begin{itemize}
-	\item Beschikbaarheid van de HAN procesbegeleider: Alle werkdagen per mail waarop binnen 72 uur geantwoord wordt, bereidt om naar Alten te reizen op de feedback momenten.
+	\item Beschikbaarheid van de HAN procesbegeleider: Alle werkdagen per mail waarop binnen 72 uur geantwoord wordt, bereidt om naar Alten te reizen op de feedbackmomenten.
 	\item Alten stelt vijf dagen per week een werkplek met een internetverbinding beschikbaar.
 	\item Contactgegevens van alle betrokken partijen zijn bekend bij elkaar.
 	\item Begeleiders zijn in het bezit van een GitHub account en maken deze ook bekend aan de student.
@@ -292,7 +308,6 @@ Bij randvoorwaarden geeft de student aan welke zaken er door de opdrachtgever ge
 	\item Beschikbaarheid van de bedrijfsbegeleider: Alle werkdagen per mail waarop binnen 48 uur geantwoord wordt, eenmaal per week overleg/reflectie met de student.
 	\item Alten verzorgt een laptop krachtig genoeg voor simulaties voor de student.
 	\item De HAN procesbegeleider beoordeelt documentatie op ISAS binnen het door het systeem opgeven termijn.
-	\item Onderzoek naar hardware wordt als eerste uitgevoerd om een buffer op te bouwen voor levertijden van de te bestellen hardware.
 	\item Afstudeerder moet de kans krijgen om tijdens het project de competenties gesteld vanuit de
 	opleiding te kunnen behalen, en aan te kunnen tonen.
 \end{itemize}
@@ -359,20 +374,21 @@ Hieronder de vier fasen, hoelang ze duren en een korte beschrijving.
 
 \subsubsection{Inceptionfase}
 \label{sec:inceptionfase}
-De inceptie fase loopt tot en met 15 maart en duurt 5 weken.
+De inceptiefase loopt tot en met 15 maart en duurt 5 weken.
 
 In deze periode gaat de student de scope, doelen, projectgrenzen, risico's en tegenmaatregelen vastleggen.
+Deze worden vast gelegd in het plan van aanpak.
 Aan het einde van de inceptie fase is er een analyse gemaakt en zijn de eisen bekend.
-Ook zijn er ideeën bedacht en hoe het systeem geïmplementeerd moet worden.
+Ook zijn er ideeën bedacht over hoe het systeem geïmplementeerd moet worden.
 
 \subsubsection{Elaborationfase}
 \label{sec:elaborationfase}
 Deze fase eindigt op 17 mei  en duurt 8 weken.
 
-In deze fase worden de bedachten ideeën uit de inceptie fase uitgewerkt.
+In deze fase worden de bedachten ideeën uit de inceptiefase uitgewerkt.
 Er worden prototypes gemaakt en onderzoeken gedaan om te kijken of bepaalde dingen mogelijk zijn.
 Aan het einde van de elaboratie fase is het bekend hoe het systeem wordt gerealiseerd en bestaat er een stabiele architectuur.
-Met stabiele architectuur wordt bedoelt dat er een versie bestaat van het systeem, waarbij er door op ontwikkelt kan worden.
+Met stabiele architectuur wordt bedoelt dat er een versie bestaat van het systeem, waarbij er door op ontwikkeld kan worden.
 De elaboration fase is opgedeeld in vier iteraties van twee weken.
 
 \subsubsection{Constructionfase}
@@ -390,8 +406,8 @@ Deze fase loopt van 17 juni tot 27 juni.
 In de transitiefase wordt de presentatie en demo voorbereid. 
 In deze fase wordt het systeem gepresenteerd aan de opdrachtgever en school.
 
-\subsection{Risico vermindering}
-\citeauthor{IBMrup}\citeyear{IBMrup} beschijft dat RUP een algemene benadering heeft wat betreft risico's. De risico's worden geïdentificeerd en er worden uitwijk strategieën opgesteld. De risico's worden gebruikt bij het prioriteren van de use cases en de risico's worden meegenomen als doelen voor het beoordelen van een iteratie. Tijdens de inceptionfase worden de grootste risico's beschreven. In de elboratiefase worden risico's afgedekt door middel van proof of concepts.
+\subsection{Risicovermindering}
+\citeauthor{IBMrup}\citeyear{IBMrup} beschijft dat RUP een algemene benadering heeft wat betreft risico's. De risico's worden geïdentificeerd en er worden uitwijkstrategieën opgesteld. De risico's worden gebruikt bij het prioriteren van de use cases en de risico's worden meegenomen als doelen voor het beoordelen van een iteratie. Tijdens de inceptionfase worden de grootste risico's beschreven. In de elboratiefase worden risico's afgedekt door middel van proof of concepts.
 
 \subsection{Templates}
 Templates helpen met het stroomlijnen van het proces tijdens het project. RUP heeft een ruim aanbod van templates. Niet iedere template is relevant voor dit project. In dit hoofdstuk worden de templates behandeld die de student wil gebruiken in dit project.
@@ -584,7 +600,7 @@ Deze grafiek geeft goed inzicht in de voortgang van het project en de planning.
 Doordat deze omgeving alleen voor medewerkers van Alten beschikbaar is de grafiek gedeeld in dit verslag aan de hand van een geëxporteerde afbeelding uit redmine.
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=1.1\linewidth]{Gantt}\end{center}
+	\begin{center}\includegraphics[width=1.1\linewidth]{gantt}\end{center}
 	\caption{Gantt chart}
 	\label{fig:gantt}
 \end{figure}
@@ -604,9 +620,6 @@ Risico                                                                          
 %
 \endhead
 %
-\begin{tabular}[c]{@{}l@{}}Langdurige ziekte\\ of verzuim.\end{tabular}                                                                                & Klein & Groot  & \begin{tabular}[c]{@{}l@{}}Op tijd contact\\ opnemen als het \\ blijkt dat de ziekte\\ of verzuim langer\\ gaat duren. De\\ vrij dagen bieden\\ een buffer van 15\\ dagen.\end{tabular}                                                                                                     & \begin{tabular}[c]{@{}l@{}}Overleggen met het\\ praktijkbureau naar\\ mogelijkheden\\ verschuiven deadlines.\end{tabular} \\ \hline
-\begin{tabular}[c]{@{}l@{}}Unit-testen van\\ gemaakte interfaces \\ slagen niet. (nadat \\ deze gepusht zijn\\ op de dev/master\\ branche).\end{tabular} & Klein & Klein  & \begin{tabular}[c]{@{}l@{}}Zorgen voor concrete \\ ontwerpen over de\\ interface in het SDD.\\ Deze ontwerpen, \\ protocol veranderingen\\ en de unit-tests aan\\ de hand daarvan\\ implementeren.\end{tabular}                                                                            & \begin{tabular}[c]{@{}l@{}}Probleem van het niet\\ slagen achterhalen en\\ oplossen.\end{tabular}                         \\ \hline
-\begin{tabular}[c]{@{}l@{}}Integratie interfaces\\ /componenten gaat\\ niet naar behoren.\end{tabular}                                                 & Klein & Groot  & \begin{tabular}[c]{@{}l@{}}Protocol en interfaces\\ tussen componenten \\ documenteren en hier\\ voor unit-tests en\\ mock-interfaces\\ schrijven\end{tabular}                                                                                                                              & \begin{tabular}[c]{@{}l@{}}Tijd reserveren in de\\ planning om realisatie\\ mogelijk te maken\end{tabular}                \\ \hline
 \begin{tabular}[c]{@{}l@{}}Planning voor het \\ onderzoek wordt \\ niet behaald.\end{tabular}                                                          & Groot & Groot  & \begin{tabular}[c]{@{}l@{}}De planning laten\\ reviewen door de\\ begeleiders of naar\\ haalbaarheid. \\ MoSCoW planning\\ gebruiken voor de\\ requirements. Tijdens \\ het project een Gantt\\ chart gebruiken voor\\ om zo vroeg mogelijk\\ achter dit probleem \\te  komen. Sprints \\gebruiken i.c.m. een\\ burndown chart\end{tabular} & \begin{tabular}[c]{@{}l@{}}Requirements die in\\ de could planning \\ vallen schrappen.\end{tabular}                      \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Simulatie software \\ is niet toereikend\\ voor het onderzoek.\end{tabular}                                     & Klein  & Groot  & \begin{tabular}[c]{@{}l@{}}Requirements van uit\\ het onderzoek halen\\ waar de\\  simulatiesoftware \\ aan moet voldoen. De \\ \nameref{sec:inceptionfase} moet\\ dit voorkomen.\end{tabular}                                                                                                                     & \begin{tabular}[c]{@{}l@{}}Heronderzoeken welke\\ simulatiesoftware\\ wel toereikend is. \\ Wanneer de beschikbare\\ tijd het toestaat \\ overstappen.\\ Anders moeten de\\ requirements opnieuw \\ overwogen worden.\end{tabular}                                                                           \\ \hline
 \caption{Interne risico's}
