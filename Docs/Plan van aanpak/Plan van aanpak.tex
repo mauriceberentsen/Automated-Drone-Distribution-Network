@@ -196,7 +196,7 @@ Volgens het luchtvaartregister in de publicatie van \citeA{ILeT} zijn er op 03-1
 Daarmee is het aantal drones met een totaal aantal luchtvaart voertuigen van 4445 goed voor 40.6 procent.
 Op 1 juni 2017 heeft \citeA{aantalDrones} van het mediabedrijf Dronewatch een zelfde berekening gedaan waarbij het aantal nog 755 drones was en goed voor 22 procent. Dit is dus een vervijfvoudiging in iets meer dan een jaar tijd.
 
-Alten springt in op deze snel groei in toename van drones door zo snel mogelijk meer kennis op te doen naar dit onderwerp.
+Alten springt in op deze snelle groei in toename van drones door zo snel mogelijk meer kennis op te doen naar dit onderwerp.
 Het is daarom urgent voor Alten om te investeren in onderzoeken naar toepassingen van drones.
 
 \chapter{Doelstelling, opdracht en op te leveren resultaten voor het bedrijf en school}
@@ -205,33 +205,45 @@ Het doel van Alten is om onderling verbonden drones kunnen verdelen om zo een ne
 Alten wil dat dit netwerk zichzelf kan onderhouden door te reageren op uitval of een slechte verbinding door de één of meerdere drones te herverdelen.
 
 \section{Probleem}
-Het probleem wat een dronenetwerk met zich meebrengt is dat er wellicht een drone kan uitvallen of dat een punt in het netwerk een slechte verbinding heeft. 
-Op het moment dat dit gebeurd heeft het een negatieve impact op het hele netwerk, omdat er mogelijk andere drones afhankelijk zijn van dit communicatiepunt.
-Een herverdeling van de drones is hiervoor een oplossing. Alleen wat is een efficiënte manier van herverdelen?
-Het makkelijkste is om alle drones terug naar hun start punt laten vliegen maar dit zou betekenen dat het netwerk op dat moment niet beschikbaar is en het zou ook nog eens onnodig veel stroom verbruiken. 
+Op dit moment is Alten in het bezit van drones maar deze kunnen niet met elkaar communiceren.
+Om te kunnen communiceren moet er een netwerkmodule toegevoegd worden aan elke drone.
+Alten wil grote netwerken kunnen opbouwen die robuust zijn en daarom wil zij gebruik maken van een zelf herstellend meshnetwerk.
+Hoewel er al meerdere oplossingen bestaan in het gebruik van meshnetwerken wil het zelf herstellend vermogen vergroten. 
+Daarom wil Alten dat de focus van de netwerkmodule ligt op het snel detecteren van uitval van punten in het netwerk zodat daar adequaat op gereageerd kan worden.
+Adequaat reageren kan op twee manieren volgens Alten.
+De netwerkmodule kan een ander netwerkpunt zoeken om via dat punt te communiceren, of als deze niet beschikbaar is moeten de drones zich herverdelen.
+
+Alleen wat is een efficiënte manier van herverdelen?
+Het makkelijkste is om alle drones terug naar hun start punt laten vliegen maar dit zou betekenen dat het netwerk op dat moment niet beschikbaar is en het zou ook nog eens onnodig veel stroom verbruiken.
+
+Om algoritmes te testen voor het verdelen van de drones is een simulatie de oplossing.
+Hierbij is het dus ook van belang dat een simulatieomgeving zich realistisch gedraagt. 
+Om realistisch gedrag na te bootsen moeten de virtuele netwerk modules zich in de simulatie zich net zo gedragen als in het echt.
 
 \section{Doelstelling}
-Het doel van dit project is dus om te onderzoeken wat een slimme manier is om de drones te herverdelen bij uitval. Alten wil deze intelligentie overlaten aan de netwerkmodule die toegevoegd moet worden aan de drone. Deze module bestaat nog niet en er moet dus een prototype gebouwd worden door de student. Hierbij hoeft de netwerkmodule alleen een nieuw coördinaat te geven aan de drone als een verplaatsing nodig is. Hoe de verplaatsing uitgevoerd wordt heeft geen betrekking op dit project. 
+Het doel van dit project is het zetten van de eerste stap in de ontwikkeling van het dronenetwerk.
+De eerste stap is ontwikkelen van een netwerkmodule voor het onderling verbinden van drones.
+Het is van belang dat het meshnetwerk van de drones snel kan reageren op uitval van netwerkpunten.
+Deze netwerkmodule moet zowel virtueel als fysiek gerealiseerd worden in dit project.
+
+Voor het virtueel realiseren van de netwerkmodule moet een simulatie gebruikt worden. 
+Omdat er nog geen simulatiesoftware beschikbaar is wil Alten dat de student uitzoekt welke simulatiesoftware geschikt is voor het simuleren van meer dan 100 drones.
+Volgens kan de student deze software gebruiken om de virtuele netwerkmodules te testen.
 
 \section{Opdracht}
 De opdracht van dit project is de ontwikkeling van meerdere producten die bijdragen aan het behalen van het doel. 
-De afstudeerder moet een algoritme maken die bepaald hoe de drones zich moeten verdelen in een gebied en hoe ze moeten reageren bij uitval of slechte verbinding.
-Een gebruiker moet kunnen aangeven over wat voor een gebied de drones zich moeten verdelen.
-Dit gebied bestaat uit een vrije vorm zoals een cirkel, hoefijzer, vierkant of donut.
 
-Er moet een prototype gemaakt worden van een netwerkmodule die het onderlinge meshnetwerk verzorgt en zichzelf kan herstellen bij uitval maar wel een andere communicatie route mogelijk is. 
-Wanneer dit niet het geval is moet de module de drone herpositioneren.
+Er moet een prototype gemaakt worden van een netwerkmodule die het onderlinge meshnetwerk verzorgt en zichzelf kan herstellen bij uitval of slecht signaal.
+Wanneer er geen alternatieve communicatie route mogelijk is moet de module de drone een instructie uitsturen om zich te herpositioneren.
 
-Tenslotte moet de student een simulatie opzetten waarin al het bovenstaande gedrag in terug komt. 
+De student een simulatie opzetten waarin de netwerkmodules verplaatst kunnen worden in een vrije ruimte. 
 Deze simulatie is nuttig voor het testen van het verdelingsalgoritme en het visualiseren van het netwerk.
 Alten wil graag dat de simulatie uitgevoerd wordt in Robot Operating System (ROS). 
-Dit wil Alten omdat zij nog geen ervaring heeft in ROS in combinatie met drones en mesh netwerken en door het begeleiden hier ervaring in opdoet.
-Het ervaring opdoen in ROS is geen doel van dit project en de student hoeft zich niet op te concentreren.
-De simulatie zal bestaan uit een stuk waar de input van de gebruiker ingevoerd kan worden, en een stuk waar een instelbaar aantal drones zich zullen verdelen over het opgegeven gebied.
+Dit wil Alten omdat zij al kennis heeft in ROS maar nog niet in combinatie met drones en mesh netwerken en door het begeleiden hier ervaring in opdoet.
+Het ervaring opdoen in ROS is geen doel van dit project en de student hoeft zich hier niet op te concentreren.
+Hoewel de keuze van de simulatiesoftware zich concentreert op het simuleren van een dronenetwerk zal de student initieel alleen de netwerkmodule toevoegen aan de simulatie. 
 
-De simulatie moet realistisch en valide zijn.
-Dit houdt voor dit project in dat de drones met elkaar communiceren via een gesimuleerd mesh netwerk. 
-De drones moeten in de simulatie kunnen uitvallen en de onderlinge afstand heeft effect op de signaalsterkte.
+De netwerkmodules moeten in de simulatie kunnen uitvallen en de onderlinge afstand heeft effect op de signaalsterkte.
 De simulatie moet aan de hand van een script herhaalbaar zijn met een zelfde resultaat.
  
 
@@ -243,7 +255,7 @@ Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de m
 Aan het einde van het project levert de student de volgende producten op aan het bedrijf:
 
 \begin{itemize}
-\item Simulatiesoftware met meerdere drones en netwerksimulatie
+\item Simulatiesoftware met netwerksimulatie
 \item Prototype meshnetwerk module.
 \item Broncode van de bovenstaande producten. 
 \item SRS (Software Requirement Specification)
