@@ -131,9 +131,9 @@ hoe dit uitgevoerd wordt en wat de planning van het onderzoek is.
 Drones zijn onbemande luchtvaartuigen die kunnen navigeren door de lucht en daarom toepasbaar om bepaalde taken uit te voeren voor de mens.
 Alten wil gebruik maken van drones om een netwerk te kunnen creëren over een groot te gebied. 
 Daarbij wil Alten dat dit netwerk zichzelf kan herstellen door drones te kunnen herpositioneren bij uitval of een slechte verbinding.
-Het onderzoek die uitgevoerd gaat worden in dit luidt de volgende vraag:
+De opdracht die uitgevoerd gaat worden in dit project luidt als volgt:
 \begin{quotation}
-	\textit{Welke verdeel algoritme en extra intelligentie is nodig voor en netwerkmodule, aangesloten op een drone, om te zorgen voor een optimaal netwerk van drones in een gebied?}
+	\textit{Maak een netwerkmodule voor een drone die het mogelijk maakt om meerdere drones onderling te voorzien van een zelf herstellend meshnetwerk. Maak een simulatie die geschikt is om meer dan 100 drones te simuleren waarvan het netwerk zich gelijk gedraagt zodat er verdeelalgoritmes getest kunnen worden.}
 \end{quotation}
 
 Dit project heeft een tweedelig doel.
@@ -150,9 +150,9 @@ Dit prototype wordt niet alleen gemaakt voor het aantonen van de communicatie ma
 Een samenvatting van het plan is:
 
 \begin{itemize}
-	\item Onderzoek de keuze naar het gebruik van simulatiesoftware, hardware en software meshnetwerk en drone simulatie.
-	\item Implementeer de drone in de simulatiesoftware; Bouw een prototype van het mesh netwerk en simuleer deze; Gebruik het netwerk om meerdere drones aan te sturen; Implementeer het gedrag van de drones binnen het netwerk voor verschillende usecases. %TODO link naar usecase
-	\item Beantwoord de onderzoeksvraag en lever hiervoor een onderzoeksrapport op.
+	\item Onderzoek de keuze naar het gebruik van simulatiesoftware, hardware en software meshnetwerk.
+	\item Implementeer een abstracte drone de simulatiesoftware; Bouw een prototype van het mesh netwerk en simuleer deze; Gebruik het netwerk om meerdere drones aan te sturen.
+	\item Lever een onderzoeksrapport op waarin aangetoond wordt dat de simulatie geschikt is voor de wens van Alten om verdeelalgoritmes te testen met meer dan 100 drones.
 \end{itemize}
 
 \section{Leeswijzer}
@@ -177,7 +177,7 @@ De afdeling oost waar de stage plaats vindt telt ongeveer 50 medewerkers.
 Dit zijn grotendeels consulenten die meewerken aan de productontwikkeling van de partners van Alten op het gebied van technische software engineering.
 Het overige deel is technisch management en human resource management.
 \begin{figure}[H]
-	\begin{center}\includegraphics[scale=0.18]{organogram}\end{center}
+	\begin{center}\includegraphics[scale=0.2]{organogram}\end{center}
 	\caption{Organogram Alten IT. Afkomstig van \textit{intranet.alten.nl}, 5 februari 2019 }
 	\label{fig:organogram}
 \end{figure}
@@ -201,18 +201,18 @@ Het is daarom urgent voor Alten om te investeren in onderzoeken naar toepassinge
 
 \chapter{Doelstelling, opdracht en op te leveren resultaten voor het bedrijf en school}
 \label{chapter:doelstelling}
-Het doel van Alten is om onderling verbonden drones kunnen verdelen om zo een netwerk op te kunnen bouwen over een gebied. 
+Het doel van Alten is om onderling verbonden drones te kunnen verdelen om zo een netwerk op te kunnen bouwen over een gebied. 
 Alten wil dat dit netwerk zichzelf kan onderhouden door te reageren op uitval of een slechte verbinding door de één of meerdere drones te herverdelen.
 
 \section{Probleem}
 Op dit moment is Alten in het bezit van drones maar deze kunnen niet met elkaar communiceren.
 Om te kunnen communiceren moet er een netwerkmodule toegevoegd worden aan elke drone.
 Alten wil grote netwerken kunnen opbouwen die robuust zijn en daarom wil zij gebruik maken van een zelf herstellend meshnetwerk.
-Hoewel er al meerdere oplossingen bestaan in het gebruik van meshnetwerken wil het zelf herstellend vermogen vergroten. 
+Hoewel er al meerdere oplossingen bestaan in het gebruik van meshnetwerken wil Alten het zelf herstellend vermogen vergroten. 
 Daarom wil Alten dat de focus van de netwerkmodule ligt op het snel detecteren van uitval van punten in het netwerk zodat daar adequaat op gereageerd kan worden.
 Adequaat reageren kan op twee manieren volgens Alten.
-De netwerkmodule kan een ander netwerkpunt zoeken om via dat punt te communiceren, of als deze niet beschikbaar is moeten de drones zich herverdelen.
-
+De netwerkmodule kan een ander netwerkpunt zoeken om via dat punt te communiceren, als deze niet beschikbaar is het alternatief om de drones opnieuw te verdelen.
+Het autonoom fysiek kunnen verplaatsten van de netwerkpunten is dan ook de uitbreiding die Alten wil toevoegen aan het zelf herstellend vermogen.
 Alleen wat is een efficiënte manier van herverdelen?
 Het makkelijkste is om alle drones terug naar hun start punt laten vliegen maar dit zou betekenen dat het netwerk op dat moment niet beschikbaar is en het zou ook nog eens onnodig veel stroom verbruiken.
 
@@ -228,27 +228,27 @@ Deze netwerkmodule moet zowel virtueel als fysiek gerealiseerd worden in dit pro
 
 Voor het virtueel realiseren van de netwerkmodule moet een simulatie gebruikt worden. 
 Omdat er nog geen simulatiesoftware beschikbaar is wil Alten dat de student uitzoekt welke simulatiesoftware geschikt is voor het simuleren van meer dan 100 drones.
-Volgens kan de student deze software gebruiken om de virtuele netwerkmodules te testen.
+Vervolgens kan de student deze software gebruiken om de virtuele netwerkmodules te testen.
 
 \section{Opdracht}
 De opdracht van dit project is de ontwikkeling van meerdere producten die bijdragen aan het behalen van het doel. 
 
-Er moet een prototype gemaakt worden van een netwerkmodule die het onderlinge meshnetwerk verzorgt en zichzelf kan herstellen bij uitval of slecht signaal.
+De student moet een prototype maken van een netwerkmodule die het onderlinge meshnetwerk verzorgt en zichzelf kan herstellen bij uitval of slecht signaal.
 Wanneer er geen alternatieve communicatie route mogelijk is moet de module de drone een instructie uitsturen om zich te herpositioneren.
 
-De student een simulatie opzetten waarin de netwerkmodules verplaatst kunnen worden in een vrije ruimte. 
-Deze simulatie is nuttig voor het testen van het verdelingsalgoritme en het visualiseren van het netwerk.
-Alten wil graag dat de simulatie uitgevoerd wordt in Robot Operating System (ROS). 
+De student moet een simulatie opzetten waarin de netwerkmodules verplaatst kunnen worden in een vrije ruimte. 
+In de simulatie moet het mogelijk zijn om de netwerkmodules te verplaatsen aan de hand van hun $X$, $Y$ en $Z$ as zodat er verdeelalgoritmes getest kunnen worden.  
+De netwerkmodules moeten in de simulatie kunnen uitvallen en de onderlinge afstand heeft effect op de virtuele signaalsterkte.
+De simulatie moet aan de hand van een script herhaalbaar zijn met eenzelfde resultaat.
+
+Alten wil graag dat de simulatiesoftware gebruik maakt van Robot Operating System (ROS) als middleware. 
 Dit wil Alten omdat zij al kennis heeft in ROS maar nog niet in combinatie met drones en mesh netwerken en door het begeleiden hier ervaring in opdoet.
 Het ervaring opdoen in ROS is geen doel van dit project en de student hoeft zich hier niet op te concentreren.
-Hoewel de keuze van de simulatiesoftware zich concentreert op het simuleren van een dronenetwerk zal de student initieel alleen de netwerkmodule toevoegen aan de simulatie. 
 
-De netwerkmodules moeten in de simulatie kunnen uitvallen en de onderlinge afstand heeft effect op de signaalsterkte.
-De simulatie moet aan de hand van een script herhaalbaar zijn met een zelfde resultaat.
- 
+Hoewel de keuze van de simulatiesoftware zich concentreert op het simuleren van een dronenetwerk zal de student alleen de netwerkmodule toevoegen aan de simulatie. 
+De student zal zich dus niet specialiseren in het realistisch simuleren van drones.
 
-Alten heeft geen eigen software producten op de markt.
-Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de markt te zetten.
+Het project is geslaagd als een prototype van het meshnetwerk is opgeleverd samen met een simulatie waarin het mesh netwerk getest kan worden met verschillende verdelingsalgoritmes.
 
 \section{Op te leveren resultaten voor het bedrijf en school}
 
@@ -294,20 +294,14 @@ Hier staan alle grenzen die inhoudelijk over het project gaan. In hoofdstuk \ref
 
 \begin{itemize}
 	\item In het project wordt niet met fysieke drones gevlogen.
-	\item Het verdelingsalgoritme wordt alleen in een simulatie aangetoond
-	\item De simulatie dient alleen het doel van het beantwoorden van de onderzoeksvraag.
-	\item De simulatie zal niet meer dan 100 drones gelijktijdig simuleren door de limieten van de simulatiesoftware.
-	\item De simulatie zal alleen situaties nabootsen die echt kunnen gebeuren.
-	\item De simulatie bootst alleen een grote vlakke ruimte na waar de drones in gaan vliegen en parkeren.
-	\item Als middleware voor de simulatie moet ROS gebruikt worden om de kennis van Alten uit te breiden.
-	\item De simulatie zal alleen drones en een vlak grond gebied simuleren.
+	\item Als middleware voor de simulatie moet ROS gebruikt worden op wens van Alten.
+	\item De student zal zich niet verdiepen in het realistisch simuleren van drones.
 	\item Er is geen beschikbaar budget afgesproken met de Alten. De student maakt geen eigen kosten ten behoeve van de uitvoer van het	project. 
 	\item Versiebeheer voor code maar ook documenten vindt plaats op de repository van het stage aanbiedende bedrijf.
-	\item Na de einddatum en wanneer alle resultaten geleverd zijn zal er geen nazorg meer geleverd
-	worden door de afstudeerder aan het project binnen het huidige dienstverband.
-	\item Documentatie wordt geschreven in latex om het voor de student gemakkelijk te maken algoritmes te documenteren.
+	\item Na de einddatum en wanneer alle resultaten geleverd zijn zal er geen nazorg meer geleverd	worden door de afstudeerder aan het project binnen het huidige dienstverband.
 	\item Code wordt geschreven in C$++$ omdat dit hoort bij de specialisatie van de student als embedded software developer.
-	\item Er wordt één soort prototype netwerkmodule gemaakt.
+	\item Alten heeft geen eigen softwareproducten op de markt.
+	Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de markt te zetten.
 \end{itemize}
 
 \chapter{Randvoorwaarden}
@@ -327,7 +321,7 @@ Bij randvoorwaarden geeft de student aan welke zaken er door de opdrachtgever ge
 \begin{itemize}
 	\item Beschikbaarheid van de bedrijfsbegeleider: Alle werkdagen per mail waarop binnen 48 uur geantwoord wordt, eenmaal per week overleg/reflectie met de student.
 	\item Alten verzorgt een laptop krachtig genoeg voor simulaties voor de student.
-	\item De HAN procesbegeleider beoordeelt documentatie op ISAS binnen het door het systeem opgeven termijn.
+	\item De HAN procesbegeleider beoordeelt documentatie op ISAS binnen het door het systeem opgeven termijn. Zodat de student genoeg tijd heeft om de feedback te verwerken.
 	\item Afstudeerder moet de kans krijgen om tijdens het project de competenties gesteld vanuit de
 	opleiding te kunnen behalen, en aan te kunnen tonen.
 \end{itemize}
@@ -397,7 +391,7 @@ Hieronder de vier fasen, hoelang ze duren en een korte beschrijving.
 De inceptiefase loopt tot en met 15 maart en duurt 5 weken.
 
 In deze periode gaat de student de scope, doelen, projectgrenzen, risico's en tegenmaatregelen vastleggen.
-Deze worden vast gelegd in het plan van aanpak.
+Deze worden vastgelegd in het plan van aanpak.
 Aan het einde van de inceptie fase is er een analyse gemaakt en zijn de eisen bekend.
 Ook zijn er ideeën bedacht over hoe het systeem geïmplementeerd moet worden.
 
@@ -592,10 +586,10 @@ Bij de week nummers staat een letter welke aangeeft welke RUP fase de week is te
 	%
 	\begin{tabular}[c]{@{}c@{}}1 - I-1\\ 4 feb - 8 feb\end{tabular}    & \begin{tabular}[c]{@{}l@{}}Opstellen van het plan van aanpak.\\ Defineren onderzoeksvraag.\\ Joinersdag Alten.\end{tabular}                            \\ \hline
 	\begin{tabular}[c]{@{}c@{}}2 - I-2\\ 11 feb - 15 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}15 feb: Inleveren Concept Projectplan.\\ Vaststellen requirements onderzoek.\\ Afronden concept projectplan.\end{tabular}   \\ \hline
-	\begin{tabular}[c]{@{}c@{}}3 - I-3\\ 18 feb - 22 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze simulatiesoftware. (valide en realistisch)\\ Onderzoek keuze drone simulatie.\end{tabular}                               \\ \hline
-	\begin{tabular}[c]{@{}c@{}}4 - I-4\\ 25 feb - 1 mrt\end{tabular}   & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze netwerk prototype hardware.\\ Onderzoek keuze netwerk prototype software.\end{tabular}                                 \\ \hline
-	\begin{tabular}[c]{@{}c@{}}5 - I-5\\ 11 mrt - 15 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}15 mrt: Inleveren Definitief Projectplan.\\ Vaststellen interfaces tussen componenten.\\ Afronden projectplan.\end{tabular} \\ \hline
-	\begin{tabular}[c]{@{}c@{}}6 - E-1\\ 18 mrt - 22 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Implementatie drone in simulatie software.\\ Implementatie mesh netwerk.\end{tabular}                                       \\ \hline
+	\begin{tabular}[c]{@{}c@{}}3 - I-3\\ 18 feb - 22 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze simulatiesoftware.\\Bijwerken projectplan a.d.h.v. feedback assessor en begeleider. \end{tabular}                               \\ \hline
+	\begin{tabular}[c]{@{}c@{}}4 - I-4\\ 25 feb - 1 mrt\end{tabular}   & \begin{tabular}[c]{@{}l@{}} Onderzoek keuze netwerk prototype hardware.\end{tabular}                                 \\ \hline
+	\begin{tabular}[c]{@{}c@{}}5 - I-5\\ 11 mrt - 15 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}15 mrt: Inleveren Definitief Projectplan.\\ Onderzoek keuze netwerk prototype.\\ Vaststellen interfaces tussen componenten.\\ Afronden projectplan.\end{tabular} \\ \hline
+	\begin{tabular}[c]{@{}c@{}}6 - E-1\\ 18 mrt - 22 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Implementatie abstracte drone in simulatie software.\\ Implementatie mesh netwerk.\end{tabular}                                       \\ \hline
 	\begin{tabular}[c]{@{}c@{}}7 - E-2\\ 25 mrt - 29 mrt\end{tabular}  & 29 maart: sprint review.                                                                                                                               \\ \hline
 	\begin{tabular}[c]{@{}c@{}}8 - E-3\\ 1 apr - 5 apr\end{tabular}    & Implementatie simulatie mesh netwerk.                                                                                                                  \\ \hline
 	\begin{tabular}[c]{@{}c@{}}9 - E-4\\ 8 apr - 12 apr\end{tabular}   & 12 april sprint review.                                                                                                                                \\ \hline
@@ -603,7 +597,7 @@ Bij de week nummers staat een letter welke aangeeft welke RUP fase de week is te
 	\begin{tabular}[c]{@{}c@{}}11 - E-6\\ 22 apr - 26 apr\end{tabular} & \begin{tabular}[c]{@{}l@{}}22 april: 2e paasdag.\\ 26 april: sprint review.\end{tabular}                                                               \\ \hline
 	\begin{tabular}[c]{@{}c@{}}12 - E-7\\ 6 mei - 10 mei\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek gedrag mesh netwerk bij slecht signaal.\\ Implementatie gedrag netwerk bij slecht of geen signaal.\end{tabular}   \\ \hline
 	\begin{tabular}[c]{@{}c@{}}13 - E-8\\ 13 mei - 17 mei\end{tabular} & \begin{tabular}[c]{@{}l@{}}17 mei: Inleveren Definitief 80 procent versie.\\ 17 mei: 29 sprint review.\\ Roosteren afstudeerpresentatie.\end{tabular}  \\ \hline
-	\begin{tabular}[c]{@{}c@{}}14 - C-1\\ 20 mei - 24 mei\end{tabular} & Beantwoorden onderzoeksvraag                                                                                                                           \\ \hline
+	\begin{tabular}[c]{@{}c@{}}14 - C-1\\ 20 mei - 24 mei\end{tabular} & Afronden onderzoeksrapport.                                                                                                                           \\ \hline
 	\begin{tabular}[c]{@{}c@{}}15 - C-2\\ 27 mei - 31 mei\end{tabular} & \begin{tabular}[c]{@{}l@{}}29 mei: sprint review\\ 30 mei: hemelvaartsdag\\ 31 mei: dag na hemelvaart\end{tabular}                                     \\ \hline
 	\begin{tabular}[c]{@{}c@{}}16 - C-3\\ 3 jun - 7 jun\end{tabular}   & \begin{tabular}[c]{@{}l@{}}Feedback verwerken op onderzoek.\\ Op orde maken van alle documentatie\end{tabular}                                         \\ \hline
 	\begin{tabular}[c]{@{}c@{}}17 - C-4\\ 10 jun - 14 jun\end{tabular} & \begin{tabular}[c]{@{}l@{}}10 juni: 2de pinksterdag\\ 14 juni: Inleveren Definitief Eindverslag\end{tabular}                                           \\ \hline
@@ -641,7 +635,7 @@ Risico                                                                          
 \endhead
 %
 \begin{tabular}[c]{@{}l@{}}Planning voor het \\ onderzoek wordt \\ niet behaald.\end{tabular}                                                          & Groot & Groot  & \begin{tabular}[c]{@{}l@{}}De planning laten\\ reviewen door de\\ begeleiders of naar\\ haalbaarheid. \\ MoSCoW planning\\ gebruiken voor de\\ requirements. Tijdens \\ het project een Gantt\\ chart gebruiken voor\\ om zo vroeg mogelijk\\ achter dit probleem \\te  komen. Sprints \\gebruiken i.c.m. een\\ burndown chart\end{tabular} & \begin{tabular}[c]{@{}l@{}}Requirements die in\\ de could planning \\ vallen schrappen.\end{tabular}                      \\ \hline
-	\begin{tabular}[c]{@{}l@{}}Simulatie software \\ is niet toereikend\\ voor het onderzoek.\end{tabular}                                     & Klein  & Groot  & \begin{tabular}[c]{@{}l@{}}Requirements van uit\\ het onderzoek halen\\ waar de\\  simulatiesoftware \\ aan moet voldoen. De \\ \nameref{sec:inceptionfase} moet\\ dit voorkomen.\end{tabular}                                                                                                                     & \begin{tabular}[c]{@{}l@{}}Heronderzoeken welke\\ simulatiesoftware\\ wel toereikend is. \\ Wanneer de beschikbare\\ tijd het toestaat \\ overstappen.\\ Anders moeten de\\ requirements opnieuw \\ overwogen worden.\end{tabular}                                                                           \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Simulatiesoftware \\ is niet toereikend\\ voor het doel.\end{tabular}                                     & Klein  & Groot  & \begin{tabular}[c]{@{}l@{}}Requirements van uit\\ het onderzoek halen\\ waar de\\  simulatiesoftware \\ aan moet voldoen. De \\ \nameref{sec:inceptionfase} moet\\ dit voorkomen.\end{tabular}                                                                                                                     & \begin{tabular}[c]{@{}l@{}}Heronderzoeken welke\\ simulatiesoftware\\ wel toereikend is. \\ Wanneer de beschikbare\\ tijd het toestaat \\ overstappen.\\ Anders moeten de\\ requirements opnieuw \\ overwogen worden.\end{tabular}                                                                           \\ \hline
 \caption{Interne risico's}
 \end{longtable}
 
@@ -669,8 +663,8 @@ Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heef
 	%
 	\endhead
 	%
-	\begin{tabular}[c]{@{}l@{}}Kwaliteit van\\ producten wordt\\ niet gewaarborgd.\end{tabular}                                                & Klein  & Middel & \begin{tabular}[c]{@{}l@{}}Kwaliteitseisen opstellen\\ in het plan van aanpak.\\ Daarbij wordt ieder\\ product gereviewed door\\ de bedrijfsbegeleider. \\ Het wordt op een later\\ moment nogmaals\\ gereviewed door de\\ student om te kijken\\ of de code voldoet\\ aan de gestelde eisen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Als er producten zijn \\ die alsnog niet voldoen \\ aan de kwaliteitseisen \\ zal de bedrijfbegeleider\\ actie ondernemen. \\ Hierdoor voldoen alle\\ producten aan de\\ gestelde kwaliteitseisen.\end{tabular}                                      \\ \hline
-	\begin{tabular}[c]{@{}l@{}}Langdurige\\ afwezigheid\\ begeleiding.\end{tabular}                                                              & Klein  & Middel  & \begin{tabular}[c]{@{}l@{}}Na een week van geen\\ gehoor stelt de student\\ een ultimatum.\end{tabular}                                                                                                                                                                                                                                                                                                     & \begin{tabular}[c]{@{}l@{}}De organistatie van de\\ begeleider biedt een \\ tijdelijke vervanger aan.\end{tabular}                                                                                                                                                              \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Kwaliteit van op\\te leveren producten\\ wordt niet\\ gewaarborgd.\end{tabular}                                                & Klein  & Middel & \begin{tabular}[c]{@{}l@{}}Kwaliteitseisen opstellen\\ in het plan van aanpak.\\ Daarbij wordt ieder\\ product gereviewed door\\ de bedrijfsbegeleider. \\ Het wordt op een later\\ moment nogmaals\\ gereviewed door de\\ student om te kijken\\ of de code voldoet\\ aan de gestelde eisen.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Als er producten zijn \\ die alsnog niet voldoen \\ aan de kwaliteitseisen \\ zal de bedrijfbegeleider\\ actie ondernemen. \\ Hierdoor voldoen alle\\ producten aan de\\ gestelde kwaliteitseisen.\end{tabular}                                      \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Langdurige\\ afwezigheid\\ begeleiding.\end{tabular}                                                              & Klein  & Middel  & \begin{tabular}[c]{@{}l@{}}Na een week van geen\\ gehoor contacteert de \\student de organisatie.\end{tabular}                                                                                                                                                                                                                                                                                                     & \begin{tabular}[c]{@{}l@{}}De organistatie van de\\ begeleider biedt een \\ tijdelijke vervanger aan.\end{tabular}                                                                                                                                                              \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Plan van aanpak\\ onderdeel blijkt niet\\  goed geformuleerd\\ of niet (goed)\\ omvattend te zijn.\end{tabular} & Middel & Middel & \begin{tabular}[c]{@{}l@{}}Laten reviewen door\\ begeleiders en docenten\\ of onderdelen correct\\ worden afgevangen.\\ Daarbij ieder hoofdstuk\\ naast het document\\ \APACcitebtitle{Toelichting op PvA 3.0} \\ houden en dit document\\ als een checklist \\ gebruiken.\end{tabular}                                          & \begin{tabular}[c]{@{}l@{}}Plan van Aanpak \\ onderdeel aanpassen\\ zodat het onderdeel\\ correct wordt\\ geformuleerd. Dit\\ onderdeel wordt\\ dan ook nogmaals\\ gereviewd en wordt\\ naast de checklist \\ gehouden, zoals\\ beschreven in de\\ tegenmaatregel.\end{tabular} \\ \hline
 \caption{Afgevangen risico's}
 \end{longtable}
