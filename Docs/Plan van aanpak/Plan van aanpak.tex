@@ -39,7 +39,7 @@
 
 \titleformat{\chapter}[hang]{\huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Large\bfseries}
 
-
+\def\figureautorefname{Figuur}
 \def\sectionautorefname{Paragraaf}
 \def\chapterautorefname{Hoofdstuk}
 \def\tableautorefname{Tabel}
@@ -133,7 +133,7 @@ Alten wil gebruik maken van drones om een netwerk te kunnen creëren over een gr
 Daarbij wil Alten dat dit netwerk zichzelf kan herstellen door drones te kunnen herpositioneren bij uitval of een slechte verbinding.
 De opdracht die uitgevoerd gaat worden in dit project luidt als volgt:
 \begin{quotation}
-	\textit{Maak een netwerkmodule voor een drone die het mogelijk maakt om meerdere drones onderling te voorzien van een zelf herstellend meshnetwerk. Maak een simulatie die geschikt is om meer dan 100 drones te simuleren waarvan het netwerk zich gelijk gedraagt zodat er verdeelalgoritmes getest kunnen worden.}
+	\textit{Maak een netwerkmodule voor een drone die het mogelijk maakt om meerdere drones onderling te voorzien van een zelf herstellend meshnetwerk. Maak deze module na in een simulatie die geschikt is om meer dan 100 drones te simuleren waarvan het netwerk zich gelijk gedraagt zodat er verdeelalgoritmes getest kunnen worden.}
 \end{quotation}
 
 Dit project heeft een tweedelig doel.
@@ -250,6 +250,28 @@ De student zal zich dus niet specialiseren in het realistisch simuleren van dron
 
 Het project is geslaagd als een prototype van het meshnetwerk is opgeleverd samen met een simulatie waarin het mesh netwerk getest kan worden met verschillende verdelingsalgoritmes.
 
+\subsection*{Casus}
+Om het doel waar naartoe gewerkt moet worden te voorzien van een richting heeft Alten een casus bedacht.
+Deze casus wordt hieronder toegelicht in een schets en is voorzien van individuele situaties.
+Er wordt gedrag omschreven voor een simpel algoritme van het herstel van het meshnetwerk om aan te tonen dat dit getest kan worden in de simulatie.
+In de casus blijft het vlieggedrag buiten de scope.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.62\linewidth]{schetsNetwerk}\end{center}
+	\caption{Schets van casus netwerk}
+	\label{fig:schetsNetwerk}
+\end{figure}
+
+In de schets van \autoref{fig:schetsNetwerk} wordt er vanuit gegaan dat elke drone een line of sight heeft met zijn verbonden netwerkpunt.
+De verbindingen zijn gemaakt  om de casus uit te leggen en volgen dus niet de realistische verbindingen.
+In de casus komen de volgende situaties voor apart voor:
+
+\begin{itemize}
+	\item Punt 2 valt uit waardoor punt 1 geen verbinding meer heeft met het basisstation. Het verwachte resultaat is dat drone 1 zich verplaatst naar de positie van drone 2 en zo het netwerk herstelt.
+	\item Punt 3 valt uit waardoor punt 1 en 2 geen verbinding meer hebben met het basisstation. Het verwachte resultaat is dat drone 2 een nieuwe verbinding aangaat met drone 4.
+	\item Punt 14 valt uit waardoor punt 15, 16 en 17 geen verbinding meer hebben met het basisstation. Het verwachte resultaat is dat de drones 15, 16 en 17 eerst met elkaar verbinden, vervolgens zal één van de drones zich verplaatsen naar punt 14. 
+\end{itemize}
+
 \section{Op te leveren resultaten voor het bedrijf en school}
 
 Aan het einde van het project levert de student de volgende producten op aan het bedrijf:
@@ -299,7 +321,7 @@ Hier staan alle grenzen die inhoudelijk over het project gaan. In hoofdstuk \ref
 	\item Er is geen beschikbaar budget afgesproken met de Alten. De student maakt geen eigen kosten ten behoeve van de uitvoer van het	project. 
 	\item Versiebeheer voor code maar ook documenten vindt plaats op de repository van het stage aanbiedende bedrijf.
 	\item Na de einddatum en wanneer alle resultaten geleverd zijn zal er geen nazorg meer geleverd	worden door de afstudeerder aan het project binnen het huidige dienstverband.
-	\item Code wordt geschreven in C$++$ omdat dit hoort bij de specialisatie van de student als embedded software developer.
+	\item Code wordt geschreven in C$++$/C omdat dit hoort bij de specialisatie van de student als embedded software developer.
 	\item Alten heeft geen eigen softwareproducten op de markt.
 	Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de markt te zetten.
 \end{itemize}
@@ -677,7 +699,7 @@ Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heef
 \appendix
 \chapter{Code guideline}
 \label{app:code}
-In deze bijlage is de code guideline opgesteld, deze is gebasseerd op de google C++ Styleguide (\href{https://google.github.io/styleguide/cppguide.html}{link}) en die van Lockheed Martin (\href{http://www.stroustrup.com/JSF-AV-rules.pdf}{link}) 
+In deze bijlage is de code guideline opgesteld, deze is gebasseerd op de google C++ Styleguide (\href{https://google.github.io/styleguide/cppguide.html}{link}) en die van Lockheed Martin (\href{http://www.stroustrup.com/JSF-AV-rules.pdf}{link}). 
 \section{Algemeen}
 
 \begin{itemize}
