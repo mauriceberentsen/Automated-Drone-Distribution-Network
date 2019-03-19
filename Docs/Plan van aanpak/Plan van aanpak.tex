@@ -250,24 +250,25 @@ De student zal zich dus niet specialiseren in het realistisch simuleren van dron
 
 Het project is geslaagd als een prototype van het meshnetwerk is opgeleverd samen met een simulatie waarin het mesh netwerk getest kan worden met verschillende verdelingsalgoritmes.
 
-\subsection*{Casus}
+\subsection{Casus}
 Om het doel waar naartoe gewerkt moet worden te voorzien van een richting heeft Alten een casus bedacht.
 Deze casus wordt hieronder toegelicht in een schets en is voorzien van individuele situaties.
 Er wordt gedrag omschreven voor een simpel algoritme van het herstel van het meshnetwerk om aan te tonen dat dit getest kan worden in de simulatie.
 In de casus blijft het vlieggedrag buiten de scope.
 
+
+In de schets van \autoref{fig:schetsNetwerk} wordt er vanuit gegaan dat elke drone een directe vluchtroute heeft met zijn verbonden netwerkpunt.
+De verbindingen zijn gemaakt  om de casus uit te leggen en volgen dus niet de realistische verbindingen die ze zouden hebben op basis van locatie.
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=0.62\linewidth]{schetsNetwerk}\end{center}
+	\begin{center}\includegraphics[width=0.61\linewidth]{schetsNetwerk}\end{center}
 	\caption{Schets van casus netwerk}
 	\label{fig:schetsNetwerk}
 \end{figure}
-
-In de schets van \autoref{fig:schetsNetwerk} wordt er vanuit gegaan dat elke drone een line of sight heeft met zijn verbonden netwerkpunt.
-De verbindingen zijn gemaakt  om de casus uit te leggen en volgen dus niet de realistische verbindingen.
-In de casus komen de volgende situaties voor apart voor:
+In de casus komen de volgende situaties apart voor:
 
 \begin{itemize}
 	\item Punt 2 valt uit waardoor punt 1 geen verbinding meer heeft met het basisstation. Het verwachte resultaat is dat drone 1 zich verplaatst naar de positie van drone 2 en zo het netwerk herstelt.
+	\item De bovenstaande situatie gebeurd. Tijdens het verplaatsen van punt 1 herstelt punt 2 zich weer. Het verwachte resultaat is dat punt 1 weer terug  keert naar zijn oude positie.
 	\item Punt 3 valt uit waardoor punt 1 en 2 geen verbinding meer hebben met het basisstation. Het verwachte resultaat is dat drone 2 een nieuwe verbinding aangaat met drone 4.
 	\item Punt 14 valt uit waardoor punt 15, 16 en 17 geen verbinding meer hebben met het basisstation. Het verwachte resultaat is dat de drones 15, 16 en 17 eerst met elkaar verbinden, vervolgens zal één van de drones zich verplaatsen naar punt 14. 
 \end{itemize}
@@ -320,7 +321,7 @@ Hier staan alle grenzen die inhoudelijk over het project gaan. In hoofdstuk \ref
 	\item De student zal zich niet verdiepen in het realistisch simuleren van drones.
 	\item Er is geen beschikbaar budget afgesproken met de Alten. De student maakt geen eigen kosten ten behoeve van de uitvoer van het	project. 
 	\item Versiebeheer voor code maar ook documenten vindt plaats op de repository van het stage aanbiedende bedrijf.
-	\item Na de einddatum en wanneer alle resultaten geleverd zijn zal er geen nazorg meer geleverd	worden door de afstudeerder aan het project binnen het huidige dienstverband.
+	\item Na de einddatum en wanneer alle resultaten opgeleverd zijn zal er geen nazorg meer geleverd	worden door de afstudeerder aan het project binnen het huidige dienstverband.
 	\item Code wordt geschreven in C$++$/C omdat dit hoort bij de specialisatie van de student als embedded software developer.
 	\item Alten heeft geen eigen softwareproducten op de markt.
 	Het bedrijf heeft daarom op dit moment ook geen interesse om dit product op de markt te zetten.
