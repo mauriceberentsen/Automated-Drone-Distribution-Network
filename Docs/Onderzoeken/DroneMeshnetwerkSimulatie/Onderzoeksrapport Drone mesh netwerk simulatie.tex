@@ -47,6 +47,7 @@
 
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
 \def\figureautorefname{Figuur}
+\def\subsectionautorefname{Subparagraaf}
 \def\sectionautorefname{Paragraaf}
 \def\chapterautorefname{Hoofdstuk}
 \def\tableautorefname{Tabel}
@@ -189,7 +190,7 @@ Om de hoofdvraag te kunnen beantwoorden zijn er de volgende deelvragen opgesteld
 
 \begin{itemize}
 	\item Welke simulatie software is geschikt om een netwerk van ongeveer 100 drones in na te bootsen?
-	\item Wat is de grote van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor een aansturingssysteem?
+	\item Wat is de grote van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?
 	\item Welke mesh netwerk hardware is geschikt voor het onderling verbinden van drones?
 	\item Welke mesh netwerk libary is geschikt voor de te gebruiken hardware?
 	\item Hoe gedraagt een node uit het mesh netwerk zich bij slecht of geen bereik?
@@ -247,7 +248,8 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 	\item ALG: Een algemene eis die in elke onderzoek meegenomen moet worden.
 	\item SK: Een eis die gesteld worden in de keuze naar simulatie software.
 	\item DR: Een eis voor de te gebruiken drone in de simulatie.
-	\item PH: Eisen opgesteld aan het hardware prototype.
+	\item PH: Eisen opgesteld aan de prototype hardware.
+	\item PS: Eisen opgesteld aan de prototype software.
 \end{itemize}
 
 \begin{longtable}{|l|l|l|}
@@ -273,12 +275,12 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 		DR3		& De API sluit aan op de middleware ROS melodic.        \\ \hline
 		DR4		& De drone is bruikbaar binnen de gekozen simulatie software.        \\ \hline%TODO gekozen software toevoegen
 		DR5		& De drone moet een kleine goedkope drone representeren.        \\ \hline
-		\hypertarget{ph1}{PH1}		& Ondersteunt een bereik van minimaal 100 meter.  \\ \hline
+		\hypertarget{ph1}{PH1}		& Ondersteunt een bereik van minimaal 500 meter.  \\ \hline
 		\hypertarget{ph2}{PH2}		& Ondersteunt het gebruik van grid networking om tot een mesh te kunnen komen.  \\ \hline
 		\hypertarget{ph3}{PH3}		& Maakt gebruik van een openbare bandbreedte.\\ \hline
-		\hypertarget{ph4}{PH4}		& De antenne mag niet meer dan 10 euro kosten. \\ \hline
-		PH5		& Moet zuinig in gebruik van stroom zijn. TODO beter defineren \\ \hline
-		PS1		& Ondersteund een mesh netwerk van minimaal 100 nodes. \\ \hline
+		\hypertarget{ph4}{PH4}		& Voorziet zichzelf van een draadloos netwerk en leunt dus niet op technieken zoals 4G\\ \hline
+		\hypertarget{ph5}{PH5}		& Is een product ontwikkeld voor low energy toepassingen. \\ \hline
+		PS1		& Ondersteunt een mesh netwerk van minimaal 100 nodes. \\ \hline
 		PS2		& Het netwerk is zelf herstellend. \\ \hline
 		PS3		& Ondersteunt het draaien op een raspberry pi of een ardunio (UNO of NANO). \\ \hline
 		PS4		& Ondersteunt het versturen van zelfgemaakte berichten. \\ \hline
@@ -350,7 +352,7 @@ Voor het onderzoek wordt Gazebo gebruikt omdat het voldoet aan de gestelde \name
 De meest recente versie van Gazebo, die niet meer beta is op 19 februari 2019, is Gazebo 9.
 Deze versie vereist het gebruik van ROS Melodic volgens haar eigen website  (\href{http://gazebosim.org/tutorials?tut=ros_wrapper_versions}{zie link}).
 
-\section{Wat is de grootte van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor een aansturingssysteem?}
+\section{Wat is de grootte van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?}
 
 De payload is het gedeelte van een bericht die vrij is naar de gebruiker om invulling te geven.
 De maximale grote van een payload verschilt per protocol.
@@ -383,9 +385,8 @@ Deze flexibiliteit is alleen niet van toepassing op het doel van dit project, da
 Voor nu wordt er vanuit gegaan dat 1 byte genoeg zal zijn omdat de communicatiesoftware van de netwerkmodule niet meer dan 256 ($2^{8}$) berichtentypes hoeft te ondersteunen.
 Mocht het blijken dat dit toch niet genoeg is kan er er een byte toegevoegd worden waardoor er 65536 ($2^{16}$) types mogelijk zouden zijn.
 Daarnaast moet een bericht om nuttig te zijn voor het netwerk altijd aan een apparaat gekoppeld kunnen worden.
-De opdracht gaat over een netwerk van ongeveer 100 drones dit past ruim in een byte.
-
-
+De opdracht gaat over een netwerk van ongeveer 100 drones wat ruim past in een byte
+Daarom wordt er gekozen om een byte te gebruiken wat 255 unieke ID's mogelijk zou maken. 
 Hiermee komt het eerste deel van het bericht dus al tot stand het telt nu minimaal 2 bytes.
 
 \begin{table}[H]
@@ -400,10 +401,22 @@ Hiermee komt het eerste deel van het bericht dus al tot stand het telt nu minima
 	\label{tab:serialstart}
 \end{table}
 
-\subsection{Wat is de grootte van een bericht voor de locatie bepaling van drones?}
+\subsection{Wat is nuttige informatie die in een bericht kan staan voor of van een aansturingssysteem?}
+\label{sub:watisnuttigeinformatie}
+Hoewel er nog niet bekend is welk type netwerk er gebruikt gaat worden is het al wel bekend dat dit een low power long range netwerk zal zijn om aan de requirements te voldoen.
+Een gedeelde eigenschap van zulke netwerken is de lage bandbreedte waardoor ze niet geschikt zijn voor realtime applicaties.
+Deze kennis kan toegepast worden op de informatie die de drones met hun netwerkmodules bij zich dragen. 
+Informatie zoals snelheid en richting heeft geen prioriteit om verstuurd te worden omdat deze niet relevant is voor het aansturingssysteem aangezien hier geen beslissingen op gebaseerd kunnen worden.
+Wat wel van belang is voor het aansturingssysteem is informatie als waar bevindt een netwerkmodule zich op welk moment in tijd.
+Daarnaast kan informatie zoals de status van de batterij en de sterkte van de verbinding van belang zijn voor het systeem omdat deze informatie gebruikt kan worden om preventieve beslissingen te nemen in het onderhoud van het netwerk.
 
-Om duidelijk te maken wat nuttig voor het systeem wordt als eerste de basis informatie vastgesteld. 
-De huidige locatie is essentieel voor de verdeling van de drones.
+Een bericht die het aansturingssysteem tenminste zal verzenden zal het commando zijn om een drone naar een coordinaat te sturen.
+Daarnaast zal er een bericht moeten komen waarmee het systeem de status van het netwerk kan controleren, wat voor bericht dit zal zijn is nog niet bekend.
+
+
+\subsection{Wat is de grootte van een bericht voor de locatie bepaling van drones?}
+\label{sub:locatie}
+De huidige locatie is essentiële administratie voor de verdeling van de drones.
 Omdat de drones zich kunnen verplaatsen is naast de locatie ook het tijdstip waarop het bericht verstuurd wordt van belang.
 
 \subsubsection*{Coördinaat vanuit de informatie van de GPS module}
@@ -472,13 +485,230 @@ Een systeem kan met dit bericht in ieder geval elke drone afzonderlijk in kaart 
 \label{tab:locatiebericht} 
 \end{table}
 In \ref{tab:locatiebericht} is het aantal bytes te zien benodigd voor een locatie bericht.
-Het totaal aantal bytes voor dit bericht is 16 bytes.
-Later moet er gekeken worden of iets aan een bericht toegevoegd kan worden om uitval sneller te detecteren. 
-Desondanks het nog niet bekend is wat dit is kan er vanuit gegaan worden dat er niet meer dan 4 bytes nodig zullen zijn.
-
-Concluderend wordt voor dit bericht een grootte van 20 bytes aangehouden waarbij 16 bytes het minimum is.
+Concluderend wordt voor dit bericht een grootte van minimaal 16 bytes gebruikt.
  
-\subsection{Wat is de grootte van een bericht waarin een netwerkmodule zijn verbinding met anderen aangeeft}
+\subsection{Wat is de grootte van een bericht waarin een netwerkmodule zijn verbinding met anderen aangeeft?}
+
+Een van de wensen van de Alten is het in kaart brengen van de onderlinge verbindingen van de modules in het drone netwerk. 
+Als voorbeeld hoe dit eruit kan zien is de schets afkomstig van de casus uit het plan van aanpak toegevoegd als bijlage te vinden in \autoref{app:schetsNetwerk}.
+De informatie van de locatie van de netwerkpunten zijn al bekend door het gebruik van het bericht in \autoref{sub:locatie}
+Wat overblijft als onbekende informatie is de onderlinge verbinding.
+
+In het netwerk kunnen twee rollen verdeeld worden.
+De rol van zender aan het device die informatie wil versturen naar het basis station.
+Of de rol van ontvanger aan het device die de informatie van zender ontvangt.
+Een device die beide rollen kan aannemen wordt een transceiver genoemd.
+Als werkbaar voorbeeld wordt het netwerk uit de \nameref{app:schetsNetwerk} gebruikt.
+De ontvangers en zenders zijn verdeelt in \autoref{tab:ontvangerzender}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{
+		>{\columncolor[HTML]{C0C0C0}}r |c|c|c|c|c|c|c|c|c|c|c|c}
+	Ontvanger & BS   & 9   & 7 & 5 & 3 & 2 & 8 & 6 & 11    & 13 & 12 & 14       \\ \hline
+	Zender    & 9,11 & 7,8 & 5 & 3 & 2 & 1 & 6 & 4 & 13,10 & 12 & 14 & 15,16,17
+\end{tabular}
+	\caption{De ontvangers en zenders uit de casus}
+	\label{tab:ontvangerzender}
+\end{table} 
+
+\subsubsection*{Topologie met PlantUML}  
+Om snel aan te kunnen tonen dat er weinig informatie nodig is om een topologie op te stellen gebruikt de student PlantUML.
+Hiermee wordt aangetoond dat een bericht die de ontvanger aanmaakt zodra een zender zich bij hem aanmeld waar in staat wie de zender is genoeg is voor een topologie.
+De keuze om de verantwoording bij de ontvanger neer te leggen is omdat een zender niet bij elke soort netwerk weet wie de ontvanger is.
+De uitwerking hiervan is zichtbaar in \autoref{fig:toplogienetwerkuml}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{zenderontvangertopo}\end{center}
+	\caption{Topologie van het casusnetwerk door middel van PlantUML}
+	\label{fig:toplogienetwerkuml}
+\end{figure}
+
+
+\subsubsection*{Conclusie}  
+Het ID van de ontvanger zit al in het bericht aangezien deze de opsteller van het bericht is.
+Dit houdt in dat enkel een ID toegevoegd hoeft te worden van de aangemelde zender.
+De byte grootte van de ID's is al bekend deze telt namelijk 1 byte.
+Daarmee zou het bericht het volgende format krijgen te zien in \autoref{tab:topologiemessage}
+
+\begin{table}[H]
+	\centering
+\begin{tabular}{l|l|l|l|}
+	\cline{2-4}
+	& \cellcolor[HTML]{C0C0C0}ID & \cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Bericht \\ type\end{tabular} & \cellcolor[HTML]{C0C0C0}ZenderID  \\ \hline
+	\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}			Aantal\\ Bytes\end{tabular}} & 1   & 1  & 1  \\ \hline
+\end{tabular}
+	\caption{Berichtsamenstelling aanmelding zender voor topologie}
+	\label{tab:topologiemessage}
+\end{table}
+Dit houdt in dat dit bericht een totaal van 3 bytes telt.
+
+\subsection{Conclusie}
+\label{sec:payloadconclusie}
+
+In deze paragraaf wordt antwoord gegeven op de vraag: Wat is de grootte van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?
+Er is gekeken hoe het bericht opgesteld moet worden en naar de inhoud van twee verschillende berichten die relevant zijn voor het aansturingssysteem.
+Het grootste bericht van deze twee was het bericht waar in staat op welke positie de netwerkmodule zich bevindt.
+Dit bericht telt 17 bytes en is een bericht die informatie bevat van vier verschillende waardes.
+Hoewel er meer berichten zullen bestaan in het netwerk is het onaannemelijk dat deze groter zullen zijn dan deze 17 bytes.
+Om toch ruimte te houden voor extra informatie in een bericht voor bijvoorbeeld data verificatie worden er 4 bytes toegevoegd aan het maximum. 
+Dit zou voldoende ruimte moeten geven doordat er één 32 bits waarde of twee 16 bits waardes toegevoegd kunnen worden.
+
+Daarmee is de conclusie dat de maximale grootte 21 byte is voor een bericht om nuttig te zijn voor een aansturingssysteem.
+
+\section{Welke mesh netwerk hardware is geschikt voor het onderling verbinden van drones?}
+\label{sec:meshnetwerkkeuze}
+
+Om een onderling netwerk op te bouwen is hardware nodig. 
+Deze hardware moet voldoen aan de gestelde \nameref{chapter:criteria} zodat het geschikt is voor een drone netwerk.
+In \autoref{sec:payloadconclusie} is vastgesteld dat de payload berichten van 21 byte moet kunnen bevatten.
+Criteria \hyperlink{ph1}{PH1} eist dat het bereik van de modules minimaal 500 meter is.
+Vervolgens stelt criteria \hyperlink{ph5}{PH5} stelt dat het netwerk zuinig in gebruik moet zijn. 
+\subsection{Wat is een meshnetwerk?}
+Een meshnetwerk is een term die gebruikt wordt voor een topologie techniek in netwerken.
+Om een voorbeeld beter toe te kunnen lichten worden eerst de tegenhangers besproken de ster en boom topologie.
+
+Een doorsnee huishouden maakt zeer waarschijnlijk gebruik van een ster topologie.
+Er staat een modem bij de aansluiting in het huis die een Wifi signaal uitzendt waar vervolgens alle mobiele apparaten mee verbinden en vaak nog een fysieke poorten aanbiedt voor een bekabelde verbinding.
+Dat levert een topologie op zichtbaar in \autoref{fig:toplogiester}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.4\linewidth]{sterTopo}\end{center}
+	\caption{Topologie van ster netwerk}
+	\label{fig:toplogiester}
+\end{figure}
+
+In de meeste huishoudens volstaat dit aangezien de router bereikbaar is vanaf elk punt in het huis.
+Op het moment dat dit niet zo is het gangbaar om uit te wijken tot een boom topologie door een of meerdere routers toe te voegen in het netwerk.
+Vertaalt naar een topologie zou dit er als \autoref{fig:toplogieboom} uitzien.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.5\linewidth]{treeTopo}\end{center}
+	\caption{Topologie van boom netwerk}
+	\label{fig:toplogieboom}
+\end{figure}
+
+Een probleem wat uit deze twee voorbeelden duidelijk wordt is de grens van het bereik. 
+Deze is namelijk alleen uit te breiden in door het toevoegen van extra netwerkpunten.
+De mesh netwerk techniek is een oplossing voor dit probleem.
+In een meshnetwerk zijn de apparaten in staat om direct met elkaar te verbinden. 
+Zo is elk apparaat in het netwerk direct een uitbreiding in het bereik van het netwerk doordat het informatie kan doorgeven.
+
+Er zitten aan een meshnetwerk ook nadelen.
+Omdat er nu meerdere routes van en naar een apparaat zijn komt er een extra protocol bij kijken welke route genomen moet worden wat extra complexiteit toevoegt.
+Daarnaast zal het draadloze verkeer verhoogt worden waardoor uiteindelijk apparaten elkaar zullen verstoren.
+Tenslotte voegt het ook een afhankelijkheid toe omdat bijvoorbeeld de televisie in het tuinhuisje de laptop in de keuken gebruikt als stap naar het modem.
+
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.3\linewidth]{meshclass}\end{center}
+	\caption{Verbanden tussen de rollen in een mesh netwerk}
+	\label{fig:meshrol}
+\end{figure}
+
+In een meshnetwerk zijn er twee rollen te verdelen \cite{compNRF}.
+Er is de rol van gateway waarmee het netwerk verbonden wordt naar een extern punt. 
+En er is de rol van node welke in staat is om de gateway te verbinden of met een andere node.
+
+Een node is vervolgens weer te verdelen in drie types, de namen die hier aan gegeven worden verschillen maar voor het gemak worden die van LoRa gebruikt.
+In LoRa wordt gesproken over type A, B en C waarbij elke type gericht is op een verschillende visie van stroom consumptie\cite{LoraLimit}.
+
+\begin{itemize}
+	\item \textbf{Type A} is de energiezuinigste variant doordat het alleen online komt op het moment dat het data moet versturen.
+Het grote nadeel van dat het communiceren naar dit type onmogelijk is en het dus ook niet bijdraagt het uitbreiden van het netwerk.
+	\item \textbf{Type B} is een variant van type A welke na het zenden van een bericht enige tijd online blijft om een berichten te kunnen ontvangen. 
+Een voordeel is dat deze dus wel op afstand aan te sturen is maar nog steeds is deze alleen een gebruiker van het netwerk.
+	\item \textbf{Type C} is de minst zuinige variant van de nodes doordat hij altijd aan staat.
+Het nadeel is dus dat deze het meest stroom verbruikt daarin tegen kan deze node wel de belangrijke rol krijgen van router en biedt vergroot daarmee het mesh netwerk.
+\end{itemize}
+
+In het geval van de opdracht wordt alleen gekeken naar type C nodes omdat er interesse is naar de dynamische plaatsing van dit type.
+
+
+
+
+
+\subsection{LPWAN LoRa}
+Deze twee eisen zijn een logische stap om een verdieping uit te voeren in low-power wide-area network (LPWAN) netwerken.
+
+In de publicatie van \cite{LoraConnect} wordt het LoRaWAN netwerk onderzocht.
+Ook worden daar de grootste concurrenten van het LoRaWAN netwerk benoemd namelijk \href{https://www.sigfox.com/en}{SigFox} en Narrowband IoT (NB-IoT).
+Ondanks het feit dat deze protocollen niet interessant zijn voor het project omdat ze in de verkeerde OSI-laag vallen namelijk de netwerklaag is het wel interessant om te kijken welke techniek deze gebruiken.
+NB-IoT valt direct af als interesse doordat het gebruikt maakt van mobiele communicatie en dus niet zou voldoen aan criteria \hyperlink{ph4}{PH4}.
+Daarna valt SiGFox ook af simpelweg omdat het gebruik maar beperkt openbaar is gemaakt waardoor het niet geschikt is om een meshnetwerk mee te bouwen. 
+
+Dan blijft uit deze publicatie het LoRaWAN netwerk over. 
+Deze is gebasseerd op de LoRa fysieke laag (PHY)\cite{LoRAMOD} implementatie om de communicatie af te handelen.
+LoRaWAN is een netwerkstandaard opgezet voor telecom providers om het mogelijk te maken netwerken op te zetten voor communicatie over afstanden tot 15km.
+Alleen het LoRaWAN maakt gebruikt van een ster topologie doordat nodes maar 1 hop kunnen maken naar een gateway van het netwerk.
+Een andere nadeel die het LoRa netwerk heeft is dat ondanks de grote afstand die het kan afleggen door de spreidingsfactor te vergroten en de gevoeligheid van de ontvanger te verhogen dit ten koste gaat van de snelheid van de datadoorvoer.
+\citeA{LoraMesh} hebben in onderzoek gedaan naar de mogelijk om het LoRa PHY netwerk te gebruiken als mesh netwerk en ook aangetoond dat dit werkt.
+Het doel van hun onderzoek was om door middel van mesh technieken LoRa geschikter te maken voor verstedelijkt gebied zonder het toevoegen van extra gateways. 
+Een nadeel wat ze beschrijven in de conclusie is het aantal nodes wat ze kunnen verwerken verkleind wordt.
+Dit komt door de degradatie van timing prestaties waarin ze stellen dat periode $p$ die een bericht nodig heeft om verstuurd te worden naar de gateway de volgende regel volgt ($p = 2h\cdot t$) waarbij $h$ het aantal hops is die het bericht maakt en $t$ de frametijd. Om de frametijd te berekenen geldt het volgende: $frametijd = \frac{framelengte}{bitsnelheid}$. 
+Voordeel van het gebruik die een mesh kan hebben ten opzichte van een ster netwerk is dat het een hogere bitsnelheid kan behouden omdat er kleinere afstanden overbrugt hoeven te worden waardoor de frametijd alsnog klein kan blijven.
+Een voorwaarde van het gebruik van dit netwerk is dus wel dat de framelengte klein moet zijn waardoor het niet geschikt is voor het verwerken van grote berichten zoals afbeeldingen video of andere grote bestanden.
+
+\subsubsection*{LPWAN LoRa samengevat}
+Als er gekeken wordt naar LPWAN oplossingen is LoRa PHY de enige noemenswaardige oplossing voor dit project.
+\citeA{LoraMesh} hebben al aangetoond dat een mesh netwerk op bais van LoRa mogelijk is waardoor het risico afneemt in de haalbaarheid van dit onderzoek.
+Een voordeel van dit netwerk is de afstand die de netwerkmodules van elkaar kunnen staan die met deze techniek kan oplopen tot meer dan 10 kilometer afhankelijk van de hoeveelheid en frequentie van de data die verstuurd moet worden.
+Een ander voordeel van deze techniek is dat het signaal enorme afstanden kan halen bij een vrije line of sight waarbij het wereldrecord zelf op 702 kilometer staat door een weerballon op 38 kilometer hoogte te gebruiken \cite{LoRARecord}.
+Hoewel deze extreme usecase niet zal voorkomen worden de netwerk modules wel gemaakt om aan drone gekoppeld te worden.
+Hierdoor is het makkelijk mogelijk voor een netwerkmodule om geplaatst te worden op hoge punten. 
+Een nadeel van dit netwerk is de lage data snelheid waardoor het alleen geschikt is voor toepassingen die weinig data versturen zoals sensor netwerken.
+
+\subsection{nRF24l01+}
+De nRF24l01 long range is een transciever van Nordic Semiconductor die werkzaam is op de 2,4ghz band \cite{nRFspec}.
+De module kan gebruik maken van verschillende standen van datasnelheid: 250kbps, 1Mbps, 2Mbps.
+Hoewel het een 3,3 volt apparaat is zijn de I/O pinnen 5 volt tolerant waardoor het een veilige interface biedt aan microcontrollers zoals die van Arduino.
+
+Er zijn van de module twee varianten met een gelijke interface. 
+Er is een module (nRF24l01) voor korte afstand en een module (nRF24l01+pa+lna) voor lange afstanden vaak aangeduid als nRF24l01+.
+De module voor lange afstanden beschikt over een power amplifier en een low noise amplifier wat het een beter zend en ontvangst vermogen geeft.
+De module heeft volgens de specificaties een theoretisch bereik van 1100 meter bij vrij zicht.
+Er zijn verschillende video's op youtube waar aangetoond wordt dat deze afstand gehaald wordt.
+Zo wordt in de video (\href{https://www.youtube.com/watch?v=lR60toEjHl8}{https://www.youtube.com/watch?v=lR60toEjHl8}) van iforce2d een afstand overbrugt van 700m met een data rate van 250kbps \cite{nrfAfstand}.
+Het zal in ieder geval voldoende zijn om de eis van 500 meter te overbruggen.  
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.4\linewidth]{Afbeeldingen/nrfMulticiever.jpg}\end{center}
+	\caption{Werking van verbindingen nRF24l01. Afkomstig van \href{https://www.instructables.com/id/NRF24L01-Multiceiver-Network}{https://www.instructables.com/id/NRF24L01-Multiceiver-Network}, 18 maart 2019}
+	\label{fig:nrfchannel}
+\end{figure}
+Hij kan tot zes kanalen tegelijk open houden die kunnen schakelen tussen een RX (ontvang) en TX (zend) stand. 
+\autoref{fig:nrfchannel} laat het gebruik van adressen zien, hierin is te zien dat een adres is opgebouwd uit 5 bytes.
+Dit levert een totaal op van 10782039375 ($255^{5}$) unieke adressen.
+Het grote aantal zal waarschijnlijk nooit bereikt worden door de complexiteit die de topologie van een dusdanig netwerk geeft.
+De modules versturen pakketten met een maximale grootte van 32 byte.
+
+
+Als er gekeken wordt naar de populaire libary genaamd nRF24 dan wordt er gebruikt gemaakt van 1 byte voor het adres wat 255 unieke mogelijkheden geeft.
+De samenstelling van een pakket is af te lezen in \autoref{tab:nrf} \nameref{tab:nrf}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l|l|l|l|l|l|}
+		\cline{2-6}
+		& \cellcolor[HTML]{C0C0C0}FROM & \cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}} TO\end{tabular} & \cellcolor[HTML]{C0C0C0}FORWARD & \cellcolor[HTML]{C0C0C0}ACK & \cellcolor[HTML]{C0C0C0}PAYLOAD \\ \hline
+		\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Aantal\\ Bytes\end{tabular}} & 1                          & 1                                                                               & 1                                & 1                                 & 28                                                          \\ \hline
+	\end{tabular}
+	\caption{NRF24 libary pakket}
+	\label{tab:nrf} 
+\end{table}
+
+In deze toepassing blijft er dus ruimte over voor 28 bytes als payload wat nog steeds voldoende zou zijn voor de netwerkmodules van de drones.
+
+
+\subsection{Conclusie keuze hardware: LoRa vs nRF}
+
+Er zijn nu twee kandidaten voor het netwerk.
+De LoRa PHY module die gigantische afstanden kan afleggen maar als keerzijde een langzame verbinding heeft.
+Als andere kandidaat is er de nRF24l01+ een module die vele malen sneller is maar dan ook flink inlevert op het bereik ten opzichte van LoRa.
+
+Omdat beide modules voldoen aan de gestelde eisen en in staat zijn de gewenste payload te versturen zijn ze voorgelegd aan de technisch manager van Alten Nederland.
+Hij ziet een betere business case in een netwerk met een hogere dichtheid maar dan ook een hogere snelheid.
+Daarom zal er in dit project gebruik gemaakt worden van de nRF24l01+.
 
 
 \chapter{Oplossingsrichtingen}
@@ -527,5 +757,12 @@ Conclusie uit resultaten. Herhaal en beantwoord de hoofdvraag.
 
 \clearpage
 \appendix
+\chapter{Schets voor casus drone netwerk}
+ \label{app:schetsNetwerk}
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{schetsNetwerk}\end{center}
+	\caption{Schets van casus netwerk}
+	\label{fig:schetsNetwerk}
+\end{figure}
 
 \end{document}

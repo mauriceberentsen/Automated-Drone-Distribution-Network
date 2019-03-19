@@ -1,0 +1,29 @@
+package "Mesh Network"
+{
+class "Enddevice" as End
+class "Network \nGateway" as Gate
+class "Router" as Router
+class "Type A" as A
+class "Type B" as B
+class "Type C" as C
+
+C -up-|> End
+B -up-|> End
+A -up-|> End
+
+}
+
+package "Internet" as INT
+{
+	class "ControlClient" as CC
+    class "DataServer" as DS
+}
+
+Gate ..> DS : Pushes info to
+CC .up.> Gate : Configures
+
+Gate -right- INT : <<TCP/IP>>
+
+Gate "0..1" -left- "*" End
+Gate "0..1" -down- "*" Router
+Router "0..1" -down- "*"End

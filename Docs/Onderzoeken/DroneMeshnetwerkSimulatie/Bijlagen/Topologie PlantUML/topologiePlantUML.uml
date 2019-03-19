@@ -1,0 +1,39 @@
+class "1" << (D,#FF7700) Drone >>
+class "2" << (D,#FF7700) Drone >>
+class "3" << (D,#FF7700) Drone >>
+class "4"<< (D,#FF7700) Drone >>
+class "5"<< (D,#FF7700) Drone >>
+class "6"<< (D,#FF7700) Drone >>
+class "7"<< (D,#FF7700) Drone >>
+class "8"<< (D,#FF7700) Drone >>
+class "9"<< (D,#FF7700) Drone >>
+class "10"<< (D,#FF7700) Drone >>
+class "11"<< (D,#FF7700) Drone >>
+class "12"<< (D,#FF7700) Drone >>
+class "13"<< (D,#FF7700) Drone >>
+class "14"<< (D,#FF7700) Drone >>
+class "15"<< (D,#FF7700) Drone >>
+class "16"<< (D,#FF7700) Drone >>
+class "17"<< (D,#FF7700) Drone >>
+class "Basis station" as BS << (G,#F077F0) Gateway >>
+
+BS 	 -- "9"
+"9"  -- "7"
+"7"  -- "5"
+"5"  -- "3"
+"3"  -- "2"
+"2"  -- "1"
+
+"9"  -- "8"
+"8"  -- "6"
+"6"  -- "4"
+
+BS   -- "11"
+"11" -- "13"
+"13" -- "12"
+"12" -- "14"
+"14" -- "15"
+"14" -- "16"
+"14" -- "17"
+
+"11" -- "10"
