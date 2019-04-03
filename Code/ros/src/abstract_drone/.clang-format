@@ -1,0 +1,28 @@
+﻿---
+BasedOnStyle: Google
+AlignEscapedNewlinesLeft: 'true'
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AllowShortBlocksOnASingleLine: 'true'
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: 'true'
+AllowShortLoopsOnASingleLine: 'false'
+AlwaysBreakBeforeMultilineStrings: 'true'
+AlwaysBreakTemplateDeclarations: 'true'
+BreakBeforeBraces: Linux
+BreakBeforeTernaryOperators: 'true'
+BreakConstructorInitializersBeforeComma: 'true'
+ColumnLimit: '80'
+Cpp11BracedListStyle: 'true'
+IndentWidth: '1'
+IndentWrappedFunctionNames: 'true'
+Language: Cpp
+MaxEmptyLinesToKeep: '1'
+NamespaceIndentation: Inner
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: 'true'
+SpacesInAngles: 'true'
+SpacesInCStyleCastParentheses: 'true'
+SpacesInParentheses: 'true'
+Standard: Cpp11
+
+...

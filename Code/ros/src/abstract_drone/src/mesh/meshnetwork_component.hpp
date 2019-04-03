@@ -24,78 +24,71 @@ namespace gazebo
 class MeshnetworkCommponent : public ModelPlugin
 {
 public:
-  MeshnetworkCommponent(){};
-  void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
-  void forwardMessage(const abstract_drone::NRF24ConstPtr &_msg);
-  void OnRosMsg(const abstract_drone::NRF24ConstPtr &_msg);
-  
-  virtual void OnUpdate() = 0;
-  virtual void processMessage(const abstract_drone::NRF24ConstPtr &_msg) = 0;
-  virtual void processIntroduction(const abstract_drone::NRF24ConstPtr &_msg) = 0;
+ MeshnetworkCommponent( ){};
+ void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf );
+ void forwardMessage( const abstract_drone::NRF24ConstPtr &_msg );
+ void OnRosMsg( const abstract_drone::NRF24ConstPtr &_msg );
 
+ virtual void OnUpdate( ) = 0;
+ virtual void processMessage( const abstract_drone::NRF24ConstPtr &_msg ) = 0;
+ virtual void processIntroduction(
+     const abstract_drone::NRF24ConstPtr &_msg ) = 0;
 
-  void publishDebugInfo();
-  bool sendHeartbeat(uint8_t other, bool gateway = true);
-  void searchOtherNodesInRange();
-  void IntroduceNode(uint8_t other);
-  void reassignID(uint8_t ID);
+ void publishDebugInfo( );
+ bool sendHeartbeat( uint8_t other, bool gateway = true );
+ void searchOtherNodesInRange( );
+ void IntroduceNode( uint8_t other );
+ void reassignID( uint8_t ID );
 
+ uint8_t getNodePath( uint8_t other );
+ void sendGoalToEngine( const abstract_drone::NRF24ConstPtr &_msg );
 
-
-
-  uint8_t getNodePath(uint8_t other);
-  void sendGoalToEngine(const abstract_drone::NRF24ConstPtr &_msg);
-
-
-
-
-  // Called by the world update start event
-  /// \brief ROS helper function that processes messages
+ // Called by the world update start event
+ /// \brief ROS helper function that processes messages
 protected:
-  void QueueThread();
-  virtual void CheckConnection() = 0;
+ void QueueThread( );
+ virtual void CheckConnection( ) = 0;
 
-  uint8_t NodeID;
-  bool init = false;
-  uint16_t droneID;
+ uint8_t NodeID;
+ bool init = false;
+ uint16_t droneID;
 
-  std::map<uint8_t, uint8_t> connectedNodes; //ID and hop route;
+ std::map< uint8_t, uint8_t > connectedNodes;  // ID and hop route;
 
-  uint8_t shortestPathToGatewayID = 255;
-  uint8_t HopsUntilGateway = 255;
-  uint32_t totalMessageSund = 0;
-  ros::ServiceClient areaScanner;
+ uint8_t shortestPathToGatewayID = 255;
+ uint8_t HopsUntilGateway = 255;
+ uint32_t totalMessageSund = 0;
+ ros::ServiceClient areaScanner;
 
-  ros::ServiceClient publishService;
-  // Pointer to the model
+ ros::ServiceClient publishService;
+ // Pointer to the model
 
-  physics::ModelPtr model;
-  // Pointer to the update event connection
+ physics::ModelPtr model;
+ // Pointer to the update event connection
 
-  event::ConnectionPtr updateConnection;
-  /// \brief A node use for ROS transport
+ event::ConnectionPtr updateConnection;
+ /// \brief A node use for ROS transport
 
-  std::unique_ptr<ros::NodeHandle> rosNode;
-  /// \brief A ROS publisher
+ std::unique_ptr< ros::NodeHandle > rosNode;
+ /// \brief A ROS publisher
 
-  ros::Publisher rosPub;
-  ros::Publisher NodeDebugTopic;
+ ros::Publisher rosPub;
+ ros::Publisher NodeDebugTopic;
 
-  ros::Publisher droneEnginePublisher;
-  /// \brief A ROS subscriber
+ ros::Publisher droneEnginePublisher;
+ /// \brief A ROS subscriber
 
-  ros::Subscriber rosSub;
-  /// \brief A ROS callbackqueue that helps process messages
+ ros::Subscriber rosSub;
+ /// \brief A ROS callbackqueue that helps process messages
 
-  ros::CallbackQueue rosQueue;
-  /// \brief A thread the keeps running the rosQueue
+ ros::CallbackQueue rosQueue;
+ /// \brief A thread the keeps running the rosQueue
 
-  std::thread rosQueueThread;
-  std::thread heartbeatThread;
-  std::thread NodeInfoThread;
+ std::thread rosQueueThread;
+ std::thread heartbeatThread;
+ std::thread NodeInfoThread;
 
-}; // namespace gazebo
-} // namespace gazebo
+};  // namespace gazebo
+}  // namespace gazebo
 
-
-#endif //MESHNETWORKCOMPONENT
+#endif  // MESHNETWORKCOMPONENT
