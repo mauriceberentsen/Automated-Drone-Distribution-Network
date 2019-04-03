@@ -16,7 +16,9 @@ private:
   ss << "<sdf version ='1.4'>\
           <model name ='drone'>\
            <static>1</static>\
-            <pose>0 0 0.5 0 0 0</pose>\
+            <pose>"
+     << x << " " << y << " " << z + 0.5 << " "
+     << "0 0 0</pose>\
             <link name ='link'>\
               <inertial>\
               <pose>"
@@ -56,9 +58,10 @@ private:
  }
 
 public:
- void createDrone( uint8_t ID, float x, float y, float z,
+ void createDrone( float x, float y, float z,
                    physics::WorldPtr _parent )
  {
+   static int ID = 1;
   sdf::SDF boxSDF;
   boxSDF.SetFromString( createDroneSDFstring( ID, x, y, z ) );
   // Demonstrate using a custom model name.
@@ -66,6 +69,7 @@ public:
   model->GetAttribute( "name" )->SetFromString( "drone" +
                                                 std::to_string( ID ) );
   _parent->InsertModelSDF( boxSDF );
+  ++ID;
  }
 
 public:
@@ -73,13 +77,30 @@ public:
  {
   int amount = 0;
 
-  if ( _sdf->HasElement( "amountOfDrones" ) )
+  if ( _sdf->HasElement( "amountOfDrones" ) ) {
    amount = _sdf->Get< int >( "amountOfDrones" );
-
-  for ( int i = 1; i < amount + 1;
-        i++ )  // start with 1 since the gateway already is number 0
-
-   createDrone( i, i, 0, 0, _parent );
+  }
+  if ( amount < 10 ) {
+   for ( int i = 1; i < amount + 1; i++ ) {
+    // start with 1 since the gateway already is number 0
+    createDrone( i, 0, 0, _parent );
+   }
+  } else {
+   int rows, left;
+   rows = std::floor( amount / 10 );
+   left = (amount % 10) + 1;
+   for ( int i = 0; i < rows; i++ ) {
+    for ( int j = 0; j < 10; j++ ) {
+      if(i+j == 0) continue;
+     createDrone( i*5, j*5, 0.5, _parent );
+    }
+   }
+  //  for(int i = amount - left; i <= amount; i++)
+  //  {
+  //   createDrone( i, rows*5+1,i*5 , 0.5, _parent );
+  //  }
+   
+  }
  }
 };
 

@@ -68,6 +68,7 @@ public:
 
   ROS_WARN( "Loaded DroneEngine Plugin with parent...%s",
             this->model->GetName( ).c_str( ) );
+            informPostmaster( );
  }
 
  // Called by the world update start event
