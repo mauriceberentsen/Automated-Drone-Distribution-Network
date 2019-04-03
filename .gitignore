@@ -69,3 +69,13 @@ CATKIN_IGNORE
 code/catkin_ws/\.catkin_workspace
 
 code/catkin_ws/src/CMakeLists\.txt
+
+Code/ros/build/
+
+Code/ros/devel/
+
+Code/ros/install/
+
+Code/ros/src/abstract_drone/\.vscode/
+
+Code/ros/src/abstract_drone/build/

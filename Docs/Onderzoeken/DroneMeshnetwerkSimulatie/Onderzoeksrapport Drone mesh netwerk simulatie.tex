@@ -453,7 +453,7 @@ Uit dit onderzoek is gebleken dat een continue vliegende drone een accuraatheid 
 Hieruit is te halen dat het geen zin heeft om op centimeter niveau de hoogte van een drone aan te geven.
 Op het moment dat er een signed integer van 16 bits gebruikt zou worden kan er een afstand van 32.767 meter zowel boven als onder zeeniveau verstuurd worden.
 Het is een realistische waarde om te gebruiken aangezien de grootste hoogte die gebruik kan worden dan 32 kilometer is.
-Deze hoogte is al ver in de stratosfeer en al boven het niveau de weerballon halen. 
+Deze hoogte is al ver in de stratosfeer en zelfs al boven het niveau die een weerballon haalt. 
 De keuze om een signed integer te gebruiken is om ondersteuning te bieden aan plekken onder het zeeniveau waarvan Nederland een groot voorbeeld is.
 
 Voor de hoogte moeten 2 bytes gereserveerd worden. 
@@ -599,7 +599,6 @@ Omdat er nu meerdere routes van en naar een apparaat zijn komt er een extra prot
 Daarnaast zal het draadloze verkeer verhoogt worden waardoor uiteindelijk apparaten elkaar zullen verstoren.
 Tenslotte voegt het ook een afhankelijkheid toe omdat bijvoorbeeld de televisie in het tuinhuisje de laptop in de keuken gebruikt als stap naar het modem.
 
-
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.3\linewidth]{meshclass}\end{center}
 	\caption{Verbanden tussen de rollen in een mesh netwerk}
@@ -608,10 +607,10 @@ Tenslotte voegt het ook een afhankelijkheid toe omdat bijvoorbeeld de televisie 
 
 In een meshnetwerk zijn er twee rollen te verdelen \cite{compNRF}.
 Er is de rol van gateway waarmee het netwerk verbonden wordt naar een extern punt. 
-En er is de rol van node welke in staat is om de gateway te verbinden of met een andere node.
+En er is de rol van node welke in staat is om met een gateway te verbinden of met een andere node.
 
-Een node is vervolgens weer te verdelen in drie types, de namen die hier aan gegeven worden verschillen maar voor het gemak worden die van LoRa gebruikt.
-In LoRa wordt gesproken over type A, B en C waarbij elke type gericht is op een verschillende visie van stroom consumptie\cite{LoraLimit}.
+Een node is vervolgens weer te verdelen in drie types, de namen die hier aan gegeven worden verschillen per aanbieder voor het gemak worden die van LoRa gebruikt.
+In LoRa wordt gesproken over type A, B en C waarbij elke type gericht is op een verschillende visie van stroomconsumptie \cite{LoraLimit}.
 
 \begin{itemize}
 	\item \textbf{Type A} is de energiezuinigste variant doordat het alleen online komt op het moment dat het data moet versturen.
