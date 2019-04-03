@@ -10,7 +10,6 @@ void MeshnetworkCommunicator::Load(physics::ModelPtr _parent, sdf::ElementPtr _s
   this->NodeID = 255;  //unkown nodes are number 255
   this->droneID = 666; //Drones need unique id's in the simulation to connect each motor
 
-  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
   if (_sdf->HasElement("NodeID"))
   {
     this->NodeID = _sdf->Get<int>("NodeID");
@@ -23,6 +22,7 @@ void MeshnetworkCommunicator::Load(physics::ModelPtr _parent, sdf::ElementPtr _s
   {
     ROS_ERROR("Drone com being used without a droneid, set up using the tag <DroneID> unique <DroneID> \n  Restart ussing droneID's else drone movement will be messy");
   }
+  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
       std::bind(&MeshnetworkCommunicator::OnUpdate, this));
   std::string Node_TopicName;
   std::string WirelessSignalSimulatorName;
