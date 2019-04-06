@@ -46,9 +46,11 @@ private:
   } else {
    if ( from == Network.end( ) ) {
     ROS_ERROR( "Sender %d doesnt exist in Network", ( int )req.from );
+    res.succes = false;
    }
    if ( to == Network.end( ) ) {
     ROS_ERROR( "reciever %d doesnt exist in Network", ( int )req.to );
+    res.succes = false;
    }
    res.succes = false;
   }

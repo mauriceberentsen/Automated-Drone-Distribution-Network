@@ -1,5 +1,7 @@
 uint8 nodeID
-uint8 HopsUntilGateway 
-uint8 PreferredNode
+bool ConnectedWithGateway 
+uint16 familySize
 uint32 totalMessages
+uint8 connectedNodes
+uint8 prefferedGateWay
 

@@ -11,7 +11,7 @@ void MeshnetworkCommunicator::OnUpdate( )
   std::mt19937 mt( rd( ) );
   std::uniform_real_distribution< double > dist( 10.0, 20.0 );
 
-  common::Time::Sleep( dist( mt ) );
+  // common::Time::Sleep( dist( mt ) );
   searchOtherNodesInRange( );
   // simulate startup time of a nrf node
   // TODO research how long a nrf takes to start;
@@ -24,27 +24,28 @@ void MeshnetworkCommunicator::OnUpdate( )
 void MeshnetworkCommunicator::processIntroduction(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- IntroduceMessage introduce( _msg->payload.data( ) );
- ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName( ).c_str( ),
-           introduce.toString( ).c_str( ) );
- auto from = connectedNodes.find( introduce.getID( ) );
- if ( introduce.getHopsUntilsGateway( ) <
-      HopsUntilGateway )  // minus one since we are only interested in shorter
-                          // paths not alternatives
- {
-  shortestPathToGatewayID = introduce.getID( );
-  HopsUntilGateway = introduce.getHopsUntilsGateway( ) + 1;
- }
- if ( from != connectedNodes.end( ) )  // A known node update the hops
- {
-  connectedNodes.insert( std::pair< uint8_t, uint8_t >(
-      introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- } else  // A new node lets add him and send back a response
- {
-  connectedNodes.insert( std::pair< uint8_t, uint8_t >(
-      introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
-  IntroduceNode( introduce.getID( ) );
- }
+ //  IntroduceMessage introduce( _msg->payload.data( ) );
+ //  ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName( ).c_str(
+ //  ),
+ //            introduce.toString( ).c_str( ) );
+ //  auto from = connectedNodes.find( introduce.getID( ) );
+ //  if ( introduce.getHopsUntilsGateway( ) <
+ //       HopsUntilGateway )  // minus one since we are only interested in
+ //       shorter
+ //                           // paths not alternatives
+ //  {
+ //   HopsUntilGateway = introduce.getHopsUntilsGateway( ) + 1;
+ //  }
+ //  if ( from != connectedNodes.end( ) )  // A known node update the hops
+ //  {
+ //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
+ //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
+ //  } else  // A new node lets add him and send back a response
+ //  {
+ //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
+ //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
+ //   IntroduceNode( introduce.getID( ) );
+ //  }
 }
 
 void MeshnetworkCommunicator::processMessage(
@@ -71,6 +72,15 @@ void MeshnetworkCommunicator::processMessage(
    ROS_INFO( "%s Recieved PRESENT", this->model->GetName( ).c_str( ) );
    processIntroduction( _msg );
    break;
+  case DECEASED:
+   ROS_WARN( "%s DECEASED message recieved", this->model->GetName( ).c_str( ) );
+   processDeceased( _msg );
+   break;
+  case HEARTBEAT:
+   ROS_WARN( "%s HEARTBEAT message recieved",
+             this->model->GetName( ).c_str( ) );
+   processHeartbeat( _msg );
+   break;
   case MOVE_TO_LOCATION:
    ROS_WARN( "MOVE_TO_LOCATION message recieved" );
    sendGoalToEngine( _msg );
@@ -80,27 +90,52 @@ void MeshnetworkCommunicator::processMessage(
    break;
  }
 }
+void MeshnetworkCommunicator::processHeartbeat(
+    const abstract_drone::NRF24ConstPtr &_msg )
+{
+ HeartbeatMessage msg( _msg->payload.data( ) );
+ // if sender is gateway flip bool and return
+ if ( msg.getIsGateway( ) ) {
+  connectedToGateway = true;
+  return;
+ }
+ // if sender doesn't know gateway but we do tell him
+ if ( !msg.getKnowGateway( ) && connectedToGateway ) {
+  sendHeartbeat( msg.getID( ) );
+ }
+ // if sender knows gateway and we don't try pinging gateway again
+ else if ( msg.getKnowGateway( ) && !connectedToGateway ) {
+  NodeTable.proofOfLive( msg.getID( ), msg.getPrefferedGateway( ) );
+  prefferedGateWay = msg.getPrefferedGateway( );
+  sendHeartbeatToGateway( );
+ }
+}
 
 void MeshnetworkCommunicator::CheckConnection( )
 {
  while ( this->rosNode->ok( ) ) {
-  common::Time::Sleep( 30 );  // check every 30 seconds
-  if ( !sendHeartbeat( shortestPathToGatewayID ) ) {
-   lostConnection( );
-  } else {
-   searchOtherNodesInRange( );  // maybe there is someone closer
-   sendHeartbeatToGateway( );
+  common::Time::Sleep( 10 );  // check every 30 seconds
+  for ( auto &node : NodeTable.getFamily( ) ) {
+   sendHeartbeat( node.first );
   }
+  searchOtherNodesInRange( );  // maybe there is someone close
+  if ( connectedToGateway )
+   sendHeartbeatToGateway( );
+  else
+   lostConnection( );
  }
 }
+
 void MeshnetworkCommunicator::sendHeartbeatToGateway( )
 {
+ if(!sendHeartbeat( prefferedGateWay ))
+ {
+    ROS_INFO("NO WAY FOUND TOWARDS GATEWAY");
+ }
+ connectedToGateway = false;
 }
 void MeshnetworkCommunicator::lostConnection( )
 {
- // ROS_WARN("%s lost conncection", this->model->GetName().c_str());
- shortestPathToGatewayID = 255;
- HopsUntilGateway = 255;
 }
 
 }  // namespace gazebo

@@ -86,9 +86,11 @@ void MeshnetworkCommponent::publishDebugInfo( )
  while ( this->rosNode->ok( ) ) {
   common::Time::Sleep( 1 );  // 1hz refresh is enough
   msg.nodeID = this->NodeID;
-  msg.HopsUntilGateway = this->HopsUntilGateway;
-  msg.PreferredNode = this->shortestPathToGatewayID;
-  msg.totalMessages = this->totalMessageSund;
+  msg.ConnectedWithGateway = this->connectedToGateway;
+  msg.familySize = this->NodeTable.familysize();
+  msg.totalMessages = this->totalMessageSent;
+  msg.connectedNodes = this->NodeTable.getFamily( ).size( );
+  msg.prefferedGateWay = this->prefferedGateWay;
   NodeDebugTopic.publish( msg );
  }
 }
@@ -98,6 +100,7 @@ void MeshnetworkCommponent::OnRosMsg(
 {
  ( _msg->forward == this->NodeID ) ? processMessage( _msg )
                                    : forwardMessage( _msg );
+ NodeTable.proofOfLive( _msg->from, _msg->payload[0] );
  // TODO send ack message back
 }
 
@@ -107,37 +110,90 @@ void MeshnetworkCommponent::forwardMessage(
  ROS_WARN( "%s foward message", this->model->GetName( ).c_str( ) );
  abstract_drone::WirelessMessage WM;
  WM.request.from = this->NodeID;
- uint8_t nextInLine = ( _msg->forward == 0 ) ? this->shortestPathToGatewayID
-                                             : getNodePath( _msg->forward );
+ uint8_t nextInLine = NodeTable.getDirectionToNode( _msg->forward );
+ if ( nextInLine == 255 ) return;
  WM.request.to = nextInLine;
  WM.request.message = *( _msg );
  WM.request.message.from = this->NodeID;
  WM.request.message.to = nextInLine;
- if ( publishService.call( WM ) ) ++totalMessageSund;
+ if ( publishService.call( WM ) ) ++totalMessageSent;
 }
 
-bool MeshnetworkCommponent::sendHeartbeat( uint8_t other, bool gateway )
+bool MeshnetworkCommponent::sendHeartbeat( uint8_t other )
 {
  // create a Message to introduce yourself to others
  uint8_t payload[28];
  const uint8_t constID = this->NodeID;
- Message heartbeat( constID, HEARTBEAT );
+ HeartbeatMessage heartbeat( constID, connectedToGateway,prefferedGateWay );
  abstract_drone::WirelessMessage WM;
  abstract_drone::NRF24 nrfmsg;
- uint8_t toward = gateway ? other : shortestPathToGatewayID;
+
+ uint8_t towards = NodeTable.getDirectionToNode( other );
+ if ( towards == 255 ) return false;
  WM.request.from = this->NodeID;
- WM.request.to = toward;
+ WM.request.to = towards;
  nrfmsg.from = this->NodeID;
- nrfmsg.to = other;
- nrfmsg.forward = toward;
+ nrfmsg.to = towards;
+ nrfmsg.forward = other;
  nrfmsg.ack = 0;
  heartbeat.toPayload( nrfmsg.payload.data( ) );
  WM.request.message = nrfmsg;
- ++totalMessageSund;
+ ++totalMessageSent;
  if ( publishService.call( WM ) ) {
-  return WM.response.succes;
+  if ( !WM.response.succes ) {
+   if(NodeTable.proofOfDeceased( towards, towards ) > 0)
+   informAboutDeceasedChild( this->NodeID, towards );
+  } else {
+   NodeTable.proofOfLive( towards, towards );
+   return true;
+  }
  } else {
+   if(NodeTable.proofOfDeceased( towards, towards ) > 0)
+  informAboutDeceasedChild( this->NodeID, towards );
   return false;
+ }
+}
+
+
+
+
+void MeshnetworkCommponent::processDeceased(
+    const abstract_drone::NRF24ConstPtr &_msg )
+{
+ DeceasedMessage msg( _msg->payload.data( ) );
+ if ( NodeTable.proofOfDeceased( msg.getID( ), msg.getDeceased( ) ) > 0 )
+  informAboutDeceasedChild( msg.getID( ), msg.getDeceased( ) );
+}
+
+void MeshnetworkCommponent::informAboutDeceasedChild( uint8_t parent,
+                                                      uint8_t child )
+{
+ // create a Message to introduce yourself to others
+ DeceasedMessage deceased( this->NodeID, child );
+ abstract_drone::WirelessMessage WM;
+ abstract_drone::NRF24 nrfmsg;
+ for ( auto &other : NodeTable.getFamily( ) ) {
+  if ( parent == other.first ) continue;
+  uint8_t towards = NodeTable.getDirectionToNode( other.first );
+  if ( towards == 255 ) continue;
+  WM.request.from = this->NodeID;
+  WM.request.to = towards;
+  nrfmsg.from = this->NodeID;
+  nrfmsg.to = towards;
+  nrfmsg.forward = other.first;
+  nrfmsg.ack = 0;
+  deceased.toPayload( nrfmsg.payload.data( ) );
+  WM.request.message = nrfmsg;
+  ++totalMessageSent;
+  if ( publishService.call( WM ) ) {
+   if ( !WM.response.succes ) {
+    NodeTable.proofOfDeceased( towards, towards );
+   } else {
+    NodeTable.proofOfLive( towards, towards );
+   }
+  } else {
+    NodeTable.proofOfDeceased( towards, towards );
+  }
  }
 }
 
@@ -165,27 +221,29 @@ void MeshnetworkCommponent::searchOtherNodesInRange( )
 void MeshnetworkCommponent::processIntroduction(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- IntroduceMessage introduce( _msg->payload.data( ) );
- ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName( ).c_str( ),
-           introduce.toString( ).c_str( ) );
- auto from = connectedNodes.find( introduce.getID( ) );
- if ( introduce.getHopsUntilsGateway( ) <
-      HopsUntilGateway )  // minus one since we are only interested in shorter
-                          // paths not alternatives
- {
-  shortestPathToGatewayID = introduce.getID( );
-  HopsUntilGateway = introduce.getHopsUntilsGateway( ) + 1;
- }
- if ( from != connectedNodes.end( ) )  // A known node update the hops
- {
-  connectedNodes.insert( std::pair< uint8_t, uint8_t >(
-      introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- } else  // A new node lets add him and send back a response
- {
-  connectedNodes.insert( std::pair< uint8_t, uint8_t >(
-      introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
-  IntroduceNode( introduce.getID( ) );
- }
+ //  IntroduceMessage introduce( _msg->payload.data( ) );
+ //  ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName( ).c_str(
+ //  ),
+ //            introduce.toString( ).c_str( ) );
+ //  auto from = connectedNodes.find( introduce.getID( ) );
+ //  if ( introduce.getHopsUntilsGateway( ) <
+ //       HopsUntilGateway )  // minus one since we are only interested in
+ //       shorter
+ //                           // paths not alternatives
+ //  {
+ //   shortestPathToGatewayID = introduce.getID( );
+ //   HopsUntilGateway = introduce.getHopsUntilsGateway( ) + 1;
+ //  }
+ //  if ( from != connectedNodes.end( ) )  // A known node update the hops
+ //  {
+ //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
+ //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
+ //  } else  // A new node lets add him and send back a response
+ //  {
+ //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
+ //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
+ //   IntroduceNode( introduce.getID( ) );
+ //  }
 }
 void MeshnetworkCommponent::IntroduceNode( uint8_t other )
 {
@@ -207,7 +265,7 @@ void MeshnetworkCommponent::IntroduceNode( uint8_t other )
  nrfmsg.ack = 0;
  introduce.toPayload( nrfmsg.payload.data( ) );
  WM.request.message = nrfmsg;
- if ( publishService.call( WM ) ) ++totalMessageSund;
+ if ( publishService.call( WM ) ) ++totalMessageSent;
 }
 
 void MeshnetworkCommponent::reassignID( uint8_t ID )
@@ -222,11 +280,6 @@ void MeshnetworkCommponent::reassignID( uint8_t ID )
          boost::bind( &MeshnetworkCommponent::OnRosMsg, this, _1 ),
          ros::VoidPtr( ), &this->rosQueue );
  this->rosSub = this->rosNode->subscribe( so );
-}
-
-uint8_t MeshnetworkCommponent::getNodePath( uint8_t other )
-{
- return 2;
 }
 
 void MeshnetworkCommponent::sendGoalToEngine(

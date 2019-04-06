@@ -6,7 +6,15 @@ MeshnetworkGateway::MeshnetworkGateway( )
 {
  shortestPathToGatewayID = 0;
  HopsUntilGateway = 0;
+ connectedToGateway = true;
+ isGateway = true;
+ //prefferedGateWay = this->NodeID;
+
+ // this->pingService = this->rosNode->advertiseService(
+ //   "SwitchBool", &MeshnetworkGateway::switchBool, this );
 }
+
+
 void MeshnetworkGateway::OnUpdate( )
 {
  // Will probally stay empty
@@ -15,27 +23,37 @@ void MeshnetworkGateway::OnUpdate( )
 void MeshnetworkGateway::processIntroduction(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- IntroduceMessage introduce( _msg->payload.data( ) );
- ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName( ).c_str( ),
-           introduce.toString( ).c_str( ) );
- auto from = connectedNodes.find( introduce.getID( ) );
- if ( from != connectedNodes.end( ) ) {  // A known node update the hops
-  ROS_INFO( "NODE %d UPDATE", introduce.getID( ) );
-  connectedNodes.insert( std::pair< uint8_t, uint8_t >(
-      introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- } else  // A new node lets add him and send back a response
- {
-  ROS_INFO( "NEW NODE %d ADDED", introduce.getID( ) );
-  connectedNodes.insert( std::pair< uint8_t, uint8_t >(
-      introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
-  IntroduceNode( introduce.getID( ) );
+ //  IntroduceMessage introduce( _msg->payload.data( ) );
+ //  //ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName(
+ //  ).c_str( ),
+ //      //      introduce.toString( ).c_str( ) );
+ //  auto from = connectedNodes.find( introduce.getID( ) );
+ //  if ( from != connectedNodes.end( ) ) {  // A known node update the hops
+ //  // ROS_INFO( "NODE %d UPDATE", introduce.getID( ) );
+ //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
+ //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
+ //  } else  // A new node lets add him and send back a response
+ //  {
+ //  // ROS_INFO( "NEW NODE %d ADDED", introduce.getID( ) );
+ //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
+ //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
+ //   IntroduceNode( introduce.getID( ) );
+ //  }
+}
+
+void MeshnetworkGateway::CheckConnection( )
+{
+ while ( this->rosNode->ok( ) ) {
+  common::Time::Sleep( 10 );  // check every 30 seconds
+  for ( auto &node : NodeTable.getFamily( ) )
+   sendHeartbeat( node.first );
  }
 }
 
 void MeshnetworkGateway::processMessage(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- ROS_WARN( "ProcessMessage with type %d", _msg->payload[1] );
+ // ROS_WARN( "ProcessMessage with type %d", _msg->payload[1] );
  const uint8_t msgType = _msg->payload[1];
  switch ( msgType ) {
   case NOTDEFINED:
@@ -47,11 +65,15 @@ void MeshnetworkGateway::processMessage(
    break;
   case PRESENT:
    ROS_INFO( "%s Recieved PRESENT", this->model->GetName( ).c_str( ) );
-   processIntroduction( _msg );
+   // processIntroduction( _msg );
+   break;
+  case DECEASED:
+   ROS_WARN( "%s DECEASED message recieved", this->model->GetName( ).c_str( ) );
+   processDeceased( _msg );
    break;
   case SIGNON:
    ROS_WARN( "%s SIGNON message recieved", this->model->GetName( ).c_str( ) );
-   _msg->from == 255 ? handOutNewID( _msg ) : registerNode( _msg );
+   //_msg->from == 255 ? handOutNewID( _msg ) : registerNode( _msg );
    break;
   case HEARTBEAT:
    ROS_WARN( "HEARTBEAT message recieved" );
@@ -65,12 +87,39 @@ void MeshnetworkGateway::processMessage(
    break;
  }
 }
+
+void MeshnetworkGateway::floodMessage(const abstract_drone::NRF24ConstPtr &_msg)
+{
+ abstract_drone::WirelessMessage WM;
+ for ( auto &other : NodeTable.getFamily( ) ) {
+  if ( _msg->from == other.first ) continue;
+  uint8_t towards = NodeTable.getDirectionToNode( other.first );
+  if ( towards == 255 ) continue;
+  WM.request.from = this->NodeID;
+  WM.request.to = towards;
+  WM.request.message = *(_msg);
+  WM.request.message.to = towards;
+
+  ++totalMessageSent;
+  if ( publishService.call( WM ) ) {
+   if ( !WM.response.succes ) {
+    NodeTable.proofOfDeceased( towards, towards );
+   } else {
+    NodeTable.proofOfLive( towards, towards );
+   }
+  } else {
+   NodeTable.proofOfDeceased( towards, towards );
+  }
+ }
+}
+
 void MeshnetworkGateway::processHeartbeat(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- Message msg( _msg->payload.data( ) );
- ROS_WARN( "%s heartbeat message recieved: %s", msg.toString( ).c_str( ),
-           this->model->GetName( ).c_str( ) );
+ HeartbeatMessage msg( _msg->payload.data( ) );
+ ROS_WARN( "%s heartbeat message recieved: %s",
+           this->model->GetName( ).c_str( ), msg.toString( ).c_str( ) );
+ sendHeartbeat( msg.getID( ) );
 }
 
 void MeshnetworkGateway::registerNode(

@@ -17,6 +17,7 @@
 #include "abstract_drone/WirelessMessage.h"
 #include "abstract_drone/AreaScan.h"
 #include "abstract_drone/NodeDebugInfo.h"
+#include "ChildTableTree.hpp"
 #include <random>
 
 namespace gazebo
@@ -35,12 +36,14 @@ public:
      const abstract_drone::NRF24ConstPtr &_msg ) = 0;
 
  void publishDebugInfo( );
- bool sendHeartbeat( uint8_t other, bool gateway = true );
+ bool sendHeartbeat( uint8_t other );
  void searchOtherNodesInRange( );
  void IntroduceNode( uint8_t other );
  void reassignID( uint8_t ID );
+ void informAboutDeceasedChild(uint8_t parent, uint8_t child);
+ void processDeceased(
+    const abstract_drone::NRF24ConstPtr &_msg );
 
- uint8_t getNodePath( uint8_t other );
  void sendGoalToEngine( const abstract_drone::NRF24ConstPtr &_msg );
 
  // Called by the world update start event
@@ -57,7 +60,7 @@ protected:
 
  uint8_t shortestPathToGatewayID = 255;
  uint8_t HopsUntilGateway = 255;
- uint32_t totalMessageSund = 0;
+ uint32_t totalMessageSent = 0;
  ros::ServiceClient areaScanner;
 
  ros::ServiceClient publishService;
@@ -87,6 +90,11 @@ protected:
  std::thread rosQueueThread;
  std::thread heartbeatThread;
  std::thread NodeInfoThread;
+
+ ChildTableTree NodeTable;
+ bool connectedToGateway = false;
+ bool isGateway = false;
+ uint8_t prefferedGateWay = 0;
 
 };  // namespace gazebo
 }  // namespace gazebo

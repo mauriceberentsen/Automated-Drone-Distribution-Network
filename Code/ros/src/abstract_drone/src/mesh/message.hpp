@@ -10,6 +10,8 @@ enum Messagetype : uint8_t {
  GIVEID,
  PRESENT,
  HEARTBEAT,
+ DECEASED,
+ FLOOD,
  MOVE_TO_LOCATION,
  SIGNON = 255
 };
@@ -76,6 +78,37 @@ public:
 
 private:
  uint8_t hopsUntilsGateway;
+};
+
+class HeartbeatMessage : public Message
+{
+public:
+ HeartbeatMessage( const uint8_t _ID, const bool _knowGateway, const uint8_t _prefferedGateWay );
+ HeartbeatMessage( const uint8_t *payload );
+ ~HeartbeatMessage( );
+ std::string toString( );
+ void toPayload( uint8_t *payload );
+ bool getKnowGateway( );
+ uint8_t getPrefferedGateway();
+ bool getIsGateway( );
+
+private:
+ bool knowGateway;
+ uint8_t prefferedGateWay;
+};
+
+class DeceasedMessage : public Message
+{
+public:
+ DeceasedMessage( const uint8_t _ID, const uint8_t _deceased );
+ DeceasedMessage( const uint8_t *payload );
+ ~DeceasedMessage( );
+ std::string toString( );
+ void toPayload( uint8_t *payload );
+ uint8_t getDeceased( );
+
+private:
+ uint8_t deceased;
 };
 
 class GoToLocationMessage : public Message

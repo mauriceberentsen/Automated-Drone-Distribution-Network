@@ -68,18 +68,19 @@ public:
 
   ROS_WARN( "Loaded DroneEngine Plugin with parent...%s",
             this->model->GetName( ).c_str( ) );
-            informPostmaster( );
+  informPostmaster( );
  }
 
  // Called by the world update start event
 public:
  void OnUpdate( )
  {
+  if ( !this->hasGoal ) { return; }
   while ( !atGoal( ) && !moving ) {
    MoveModelsPlane( );
   }
   if ( moving ) { informPostmaster( ); }
-  if ( this->atGoal( ) ) { moving = false; }
+  if ( this->atGoal( ) ) { moving = false; hasGoal = false;}
  }
 
  bool atGoal( )
@@ -151,6 +152,7 @@ public:
   goal.Pos( ).X( longitude );
   goal.Pos( ).Y( latitude );
   goal.Pos( ).Z( height );
+  this->hasGoal = true;
  }
 
 public:
@@ -172,6 +174,7 @@ private:
  // Pointer to the model
 private:
  physics::ModelPtr model;
+ bool hasGoal = false;
 
 private:
  bool moving = false;

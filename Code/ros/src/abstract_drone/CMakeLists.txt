@@ -62,6 +62,8 @@ add_service_files(
    FILES
   WirelessMessage.srv
   AreaScan.srv
+  SwitchBool.srv
+  MoveDroneToLocation.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -85,9 +87,9 @@ generate_messages(
 #target_link_libraries(listener ${catkin_LIBRARIES})
 #add_dependencies(listener abstract_drone_gencpp)
 
-#add_executable(drone_manager_server src/drone_manager_server.cpp src/drone.cpp)
-#target_link_libraries(drone_manager_server ${catkin_LIBRARIES})
-#add_dependencies(drone_manager_server abstract_drone_gencpp)
+add_executable(drone_manager src/devider/DroneManager.cpp)
+target_link_libraries(drone_manager ${catkin_LIBRARIES})
+add_dependencies(drone_manager abstract_drone_gencpp)
 
 #add_executable(request_drone_flight_client src/request_drone_flight_client.cpp)
 #target_link_libraries(request_drone_flight_client ${catkin_LIBRARIES})
@@ -144,11 +146,11 @@ find_package(gazebo REQUIRED)
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} include)
 
-add_library(meshnetworkCom SHARED src/mesh/meshnetwork_component.cpp src/mesh/meshnetwork_communicator.cpp src/mesh/message.cpp)
+add_library(meshnetworkCom SHARED src/mesh/meshnetwork_component.cpp src/mesh/meshnetwork_communicator.cpp src/mesh/ChildTableTree.cpp src/mesh/message.cpp)
 target_link_libraries(meshnetworkCom ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(meshnetworkCom abstract_drone_generate_messages_cpp)
 
-add_library(meshnetworkGateway SHARED src/mesh/meshnetwork_component.cpp src/mesh/meshnetwork_gateway.cpp src/mesh/message.cpp)
+add_library(meshnetworkGateway SHARED src/mesh/meshnetwork_component.cpp src/mesh/meshnetwork_gateway.cpp src/mesh/ChildTableTree.cpp src/mesh/message.cpp)
 target_link_libraries(meshnetworkGateway ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(meshnetworkGateway abstract_drone_generate_messages_cpp)
 

@@ -1,0 +1,5 @@
+uint8 ID
+float32 longitude
+float32 latitude
+uint16 height 
+---

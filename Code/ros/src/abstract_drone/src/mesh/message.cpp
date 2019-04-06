@@ -177,6 +177,114 @@ uint8_t IntroduceMessage::getHopsUntilsGateway( )
  return hopsUntilsGateway;
 }
 
+DeceasedMessage::DeceasedMessage( const uint8_t _ID, const uint8_t _deceased )
+    : Message( _ID, DECEASED ), deceased( _deceased )
+{
+}
+
+DeceasedMessage::~DeceasedMessage( )
+{
+}
+
+DeceasedMessage::DeceasedMessage( const uint8_t *payload )
+    : Message( ( uint8_t )payload[0], DECEASED )
+{
+ int counter = 0;
+ counter += sizeof( ID );
+ counter += sizeof( type );
+ CopyFromCharArray( ( uint8_t * )&deceased, sizeof( deceased ), payload,
+                    counter );
+}
+
+void DeceasedMessage::toPayload( uint8_t *payload )
+{
+ int counter = 0;
+ CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
+ counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
+ counter += sizeof( type );
+ CopyToCharArray( ( uint8_t * )&deceased, sizeof( deceased ), payload,
+                  counter );
+}
+
+std::string DeceasedMessage::toString( )
+{
+ std::stringstream ss;
+ ss << "ID[" << std::to_string( ID ) << "] Type[" << std::to_string( type )
+    << "]"
+    << "knowGateway[" << std::to_string( deceased ) << "]" << std::endl;
+
+ return ss.str( );
+}
+
+uint8_t DeceasedMessage::getDeceased( )
+{
+ return deceased;
+}
+
+HeartbeatMessage::HeartbeatMessage( const uint8_t _ID, const bool _knowGateway,
+                                    const uint8_t _prefferedGateWay )
+    : Message( _ID, HEARTBEAT )
+    , knowGateway( _knowGateway )
+    , prefferedGateWay( _prefferedGateWay )
+{
+}
+
+HeartbeatMessage::~HeartbeatMessage( )
+{
+}
+
+HeartbeatMessage::HeartbeatMessage( const uint8_t *payload )
+    : Message( ( uint8_t )payload[0], HEARTBEAT )
+{
+ int counter = 0;
+ counter += sizeof( ID );
+ counter += sizeof( type );
+ CopyFromCharArray( ( uint8_t * )&knowGateway, sizeof( knowGateway ), payload,
+                    counter );
+ counter += sizeof( knowGateway );
+ CopyFromCharArray( ( uint8_t * )&prefferedGateWay, sizeof( prefferedGateWay ), payload,
+                    counter );
+}
+
+void HeartbeatMessage::toPayload( uint8_t *payload )
+{
+ int counter = 0;
+ CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
+ counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
+ counter += sizeof( type );
+ CopyToCharArray( ( uint8_t * )&knowGateway, sizeof( knowGateway ), payload,
+                  counter );
+ counter += sizeof( knowGateway );
+ CopyToCharArray( ( uint8_t * )&prefferedGateWay, sizeof( prefferedGateWay ), payload,
+                  counter );
+}
+
+std::string HeartbeatMessage::toString( )
+{
+ std::stringstream ss;
+ ss << "ID[" << std::to_string( ID ) << "] Type[" << std::to_string( type )
+    << "]"
+    << "knowGateway[" << std::to_string( knowGateway ) << "]" << std::endl;
+
+ return ss.str( );
+}
+
+uint8_t HeartbeatMessage::getPrefferedGateway()
+{
+    return prefferedGateWay;
+}
+
+bool HeartbeatMessage::getIsGateway( )
+{
+ return ID == prefferedGateWay;
+}
+bool HeartbeatMessage::getKnowGateway( )
+{
+ return knowGateway;
+}
+
 GoToLocationMessage::GoToLocationMessage( uint8_t _ID, float _latitude,
                                           float _longitude, int16_t _height )
     : Message( _ID, MOVE_TO_LOCATION )

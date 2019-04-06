@@ -17,6 +17,8 @@ private:
  uint8_t getNodePath( uint8_t other );
  void sendHeartbeatToGateway( );
  void lostConnection( );
+ void processHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
+ 
 
 };  // namespace gazebo
 // Register this plugin with the simulator
