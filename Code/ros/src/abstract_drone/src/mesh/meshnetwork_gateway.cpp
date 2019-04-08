@@ -4,20 +4,32 @@ namespace gazebo
 {
 MeshnetworkGateway::MeshnetworkGateway( )
 {
- shortestPathToGatewayID = 0;
- HopsUntilGateway = 0;
- connectedToGateway = true;
- isGateway = true;
- //prefferedGateWay = this->NodeID;
-
- // this->pingService = this->rosNode->advertiseService(
- //   "SwitchBool", &MeshnetworkGateway::switchBool, this );
 }
-
 
 void MeshnetworkGateway::OnUpdate( )
 {
- // Will probally stay empty
+ if ( !init ) {
+  shortestPathToGatewayID = 0;
+  HopsUntilGateway = 0;
+  connectedToGateway = true;
+  isGateway = true;
+  prefferedGateWay = this->NodeID;
+
+  ros::SubscribeOptions so = ros::SubscribeOptions::create<
+      abstract_drone::RequestGatewayDroneFlight >(
+      "/gateway", 1000,
+      boost::bind( &MeshnetworkGateway::gatewayQueue, this, _1 ),
+      ros::VoidPtr( ), &this->rosQueue );
+  this->gatewaySub = this->rosNode->subscribe( so );
+
+  init = true;
+ }
+}
+
+void MeshnetworkGateway::gatewayQueue(
+    const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg )
+{
+ sendGoalToDrone( _msg->ID, _msg->latitude, _msg->longitude, _msg->height );
 }
 
 void MeshnetworkGateway::processIntroduction(
@@ -45,6 +57,7 @@ void MeshnetworkGateway::CheckConnection( )
 {
  while ( this->rosNode->ok( ) ) {
   common::Time::Sleep( 10 );  // check every 30 seconds
+  //if ( !this->on ) continue;
   for ( auto &node : NodeTable.getFamily( ) )
    sendHeartbeat( node.first );
  }
@@ -88,7 +101,8 @@ void MeshnetworkGateway::processMessage(
  }
 }
 
-void MeshnetworkGateway::floodMessage(const abstract_drone::NRF24ConstPtr &_msg)
+void MeshnetworkGateway::floodMessage(
+    const abstract_drone::NRF24ConstPtr &_msg )
 {
  abstract_drone::WirelessMessage WM;
  for ( auto &other : NodeTable.getFamily( ) ) {
@@ -97,7 +111,7 @@ void MeshnetworkGateway::floodMessage(const abstract_drone::NRF24ConstPtr &_msg)
   if ( towards == 255 ) continue;
   WM.request.from = this->NodeID;
   WM.request.to = towards;
-  WM.request.message = *(_msg);
+  WM.request.message = *( _msg );
   WM.request.message.to = towards;
 
   ++totalMessageSent;

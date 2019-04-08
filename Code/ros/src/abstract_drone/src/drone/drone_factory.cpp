@@ -77,7 +77,7 @@ public:
   if ( _sdf->HasElement( "amountOfDrones" ) ) {
    amount = _sdf->Get< int >( "amountOfDrones" );
   }
-  if ( amount < 10 ) {
+  if ( amount < 100 ) {
    for ( int i = 1; i < amount + 1; i++ ) {
     // start with 1 since the gateway already is number 0
     createDrone( 0, 0, 0, _parent );

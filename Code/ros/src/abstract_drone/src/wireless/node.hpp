@@ -20,6 +20,7 @@ public:
  void isMoved( bool moved );
  bool getMoved( );
  void recieveMessage( abstract_drone::NRF24& msg );
+ bool on;
 
 private:
  ros::Publisher rosPub;

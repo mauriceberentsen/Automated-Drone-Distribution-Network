@@ -55,7 +55,7 @@ public:
   // Plannar Pose
   ros::SubscribeOptions so =
       ros::SubscribeOptions::create< abstract_drone::Location >(
-          move_to_TopicName, 1,
+          move_to_TopicName, 100,
           boost::bind( &DroneEngine::OnRosMsg_Pos, this, _1 ), ros::VoidPtr( ),
           &this->rosQueue );
   this->rosSub = this->rosNode->subscribe( so );
@@ -144,6 +144,7 @@ public:
   nI.position[1] = pose.Pos( ).Y( );
   nI.position[2] = pose.Pos( ).Z( );
   nI.sub = "";
+  nI.on = true;
   rosPostmasterPub.publish( nI );
  }
 

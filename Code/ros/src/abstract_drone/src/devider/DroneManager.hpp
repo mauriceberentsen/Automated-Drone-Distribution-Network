@@ -1,38 +1,30 @@
-#include <map>
-#include <thread>
+#ifndef DRONEMANAGER
+#define DRONEMANAGER
 
 #include "ros/ros.h"
-#include "ros/callback_queue.h"
-#include "ros/subscribe_options.h"
-#include "abstract_drone/nodeInfo.h"
-#include "abstract_drone/WirelessMessage.h"
-#include "abstract_drone/AreaScan.h"
-
+#include "abstract_drone/RequestDroneFlight.h"
 
 class DroneManager
 {
 public:
- DroneManager( );
- ~DroneManager(){};
- void OnRosMsg( const abstract_drone::nodeInfoConstPtr &_msg );
+ DroneManager( std::shared_ptr< ros::NodeHandle > _rosNode,
+               std::string GatewayTopicName = "/gateway");
+ ~DroneManager( );
+ bool RequestMovement(uint8_t ID,float longitude,float latitude,uint16_t height = 0);
+ bool RequestMovement(abstract_drone::RequestDroneFlight::Request  &req,
+         abstract_drone::RequestDroneFlight::Response &res);
+bool setDronesToCasus(abstract_drone::RequestDroneFlight::Request  &req,
+         abstract_drone::RequestDroneFlight::Response &res);
 
 private:
- bool sendDroneToLocation( abstract_drone::AreaScan::Request &req,
-                           abstract_drone::AreaScan::Response &res );
-
  /// \brief ROS helper function that processes messages
 
- void QueueThread( );
+ std::shared_ptr< ros::NodeHandle > nodeHandle;
+ std::string GatewayTopic;
+    
 
-std::string Node_TopicName;
- ros::ServiceServer service;
- ros::ServiceServer sendToLocationService;
- /// \brief A node use for ROS transport
- std::shared_ptr< ros::NodeHandle > rosNode;
- /// \brief A ROS subscriber
- ros::Subscriber rosSub;
- /// \brief A ROS callbackqueue that helps process messages
- ros::CallbackQueue rosQueue;
- /// \brief A thread the keeps running the rosQueue
- std::thread rosQueueThread;
+ /// \brief A ROS publisher
+ ros::Publisher rosPub;
 };
+
+#endif //DRONEMANAGER

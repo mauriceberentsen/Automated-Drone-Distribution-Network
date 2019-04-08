@@ -9,6 +9,7 @@ Node::Node( Vector3< float >& _position,
     , position( _position )
     , nodeHandle( _nodeHandle )
     , subtopicname( _subtopicname )
+    , on(true)
 {
  rosPub =
      nodeHandle->advertise< abstract_drone::NRF24 >( subtopicname, 100, true );

@@ -33,6 +33,8 @@ void MeshnetworkCommponent::Load( physics::ModelPtr _parent,
      "/Drones/" + std::to_string( this->droneID ) + "/goal";
  std::string DebugInfoName =
      "/Nodes/" + std::to_string( this->droneID ) + "/debug";
+ std::string powerSwitch =
+     "/Nodes/" + std::to_string( this->droneID ) + "/powerSwitch";
 
  // Initialize ros, if it has not already been initialized.
  if ( !ros::isInitialized( ) ) {
@@ -48,7 +50,7 @@ void MeshnetworkCommponent::Load( physics::ModelPtr _parent,
  // Plannar Pose
  ros::SubscribeOptions so =
      ros::SubscribeOptions::create< abstract_drone::NRF24 >(
-         Node_TopicName, 1,
+         Node_TopicName, 1000,
          boost::bind( &MeshnetworkCommponent::OnRosMsg, this, _1 ),
          ros::VoidPtr( ), &this->rosQueue );
  this->rosSub = this->rosNode->subscribe( so );
@@ -65,6 +67,8 @@ void MeshnetworkCommponent::Load( physics::ModelPtr _parent,
  this->publishService =
      this->rosNode->serviceClient< abstract_drone::WirelessMessage >(
          "/SignalSimulator/message" );
+ this->switchPowerService = this->rosNode->advertiseService(
+     powerSwitch, &MeshnetworkCommponent::switchPower, this );
  // Spin up the queue helper thread.
  this->rosQueueThread =
      std::thread( std::bind( &MeshnetworkCommponent::QueueThread, this ) );
@@ -78,8 +82,23 @@ void MeshnetworkCommponent::Load( physics::ModelPtr _parent,
  abstract_drone::nodeInfo nodeinf;
  nodeinf.nodeID = NodeID;
  nodeinf.sub = Node_TopicName;
+ nodeinf.on = true;
  rosPub.publish( nodeinf );
 }
+
+bool MeshnetworkCommponent::switchPower( std_srvs::TriggerRequest &request,
+                                         std_srvs::TriggerResponse &response )
+{
+ this->on = !this->on;
+ if(!this->on)lostConnection( );
+ abstract_drone::nodeInfo nodeinf;
+ nodeinf.nodeID = this->NodeID;
+ nodeinf.on = this->on;
+ rosPub.publish( nodeinf );
+ ROS_INFO( "SWITCH POWER OF %s to %d", this->model->GetName( ).c_str(), this->on );
+ return true;
+}
+
 void MeshnetworkCommponent::publishDebugInfo( )
 {
  abstract_drone::NodeDebugInfo msg;
@@ -87,10 +106,11 @@ void MeshnetworkCommponent::publishDebugInfo( )
   common::Time::Sleep( 1 );  // 1hz refresh is enough
   msg.nodeID = this->NodeID;
   msg.ConnectedWithGateway = this->connectedToGateway;
-  msg.familySize = this->NodeTable.familysize();
+  msg.familySize = this->NodeTable.familysize( );
   msg.totalMessages = this->totalMessageSent;
   msg.connectedNodes = this->NodeTable.getFamily( ).size( );
   msg.prefferedGateWay = this->prefferedGateWay;
+  msg.on = this->on;
   NodeDebugTopic.publish( msg );
  }
 }
@@ -107,7 +127,9 @@ void MeshnetworkCommponent::OnRosMsg(
 void MeshnetworkCommponent::forwardMessage(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- ROS_WARN( "%s foward message", this->model->GetName( ).c_str( ) );
+ ROS_WARN( "%s foward message from %u for %u type %u",
+           this->model->GetName( ).c_str( ), _msg->from, _msg->forward,
+           _msg->payload[1] );
  abstract_drone::WirelessMessage WM;
  WM.request.from = this->NodeID;
  uint8_t nextInLine = NodeTable.getDirectionToNode( _msg->forward );
@@ -124,7 +146,7 @@ bool MeshnetworkCommponent::sendHeartbeat( uint8_t other )
  // create a Message to introduce yourself to others
  uint8_t payload[28];
  const uint8_t constID = this->NodeID;
- HeartbeatMessage heartbeat( constID, connectedToGateway,prefferedGateWay );
+ HeartbeatMessage heartbeat( constID, connectedToGateway, prefferedGateWay );
  abstract_drone::WirelessMessage WM;
  abstract_drone::NRF24 nrfmsg;
 
@@ -141,21 +163,49 @@ bool MeshnetworkCommponent::sendHeartbeat( uint8_t other )
  ++totalMessageSent;
  if ( publishService.call( WM ) ) {
   if ( !WM.response.succes ) {
-   if(NodeTable.proofOfDeceased( towards, towards ) > 0)
-   informAboutDeceasedChild( this->NodeID, towards );
+   if ( NodeTable.proofOfDeceased( towards, towards ) > 0 )
+    informAboutDeceasedChild( this->NodeID, towards );
   } else {
    NodeTable.proofOfLive( towards, towards );
    return true;
   }
  } else {
-   if(NodeTable.proofOfDeceased( towards, towards ) > 0)
-  informAboutDeceasedChild( this->NodeID, towards );
+  if ( NodeTable.proofOfDeceased( towards, towards ) > 0 )
+   informAboutDeceasedChild( this->NodeID, towards );
   return false;
  }
 }
 
+void MeshnetworkCommponent::sendGoalToDrone( const uint8_t ID,
+                                             const float longitude,
+                                             const float latitude,
+                                             const uint16_t height )
+{
+ GoToLocationMessage GTLmsg( this->NodeID, longitude, latitude, height );
 
+ abstract_drone::WirelessMessage WM;
+ abstract_drone::NRF24 nrfmsg;
 
+ uint8_t towards = NodeTable.getDirectionToNode( ID );
+ WM.request.from = this->NodeID;
+ WM.request.to = towards;
+ nrfmsg.from = this->NodeID;
+ nrfmsg.to = towards;
+ nrfmsg.forward = ID;
+ nrfmsg.ack = 0;
+ GTLmsg.toPayload( nrfmsg.payload.data( ) );
+ WM.request.message = nrfmsg;
+ ++totalMessageSent;
+ if ( publishService.call( WM ) ) {
+  if ( !WM.response.succes ) {
+   NodeTable.proofOfDeceased( towards, towards );
+  } else {
+   NodeTable.proofOfLive( towards, towards );
+  }
+ } else {
+  NodeTable.proofOfDeceased( towards, towards );
+ }
+}
 
 void MeshnetworkCommponent::processDeceased(
     const abstract_drone::NRF24ConstPtr &_msg )
@@ -168,7 +218,6 @@ void MeshnetworkCommponent::processDeceased(
 void MeshnetworkCommponent::informAboutDeceasedChild( uint8_t parent,
                                                       uint8_t child )
 {
- // create a Message to introduce yourself to others
  DeceasedMessage deceased( this->NodeID, child );
  abstract_drone::WirelessMessage WM;
  abstract_drone::NRF24 nrfmsg;
@@ -192,7 +241,7 @@ void MeshnetworkCommponent::informAboutDeceasedChild( uint8_t parent,
     NodeTable.proofOfLive( towards, towards );
    }
   } else {
-    NodeTable.proofOfDeceased( towards, towards );
+   NodeTable.proofOfDeceased( towards, towards );
   }
  }
 }
@@ -247,14 +296,11 @@ void MeshnetworkCommponent::processIntroduction(
 }
 void MeshnetworkCommponent::IntroduceNode( uint8_t other )
 {
- ROS_INFO( "PRESENT ourself to %d", other );
+ ROS_INFO( "%s presents himself to %d", this->model->GetName( ).c_str( ) ,other );
  // create a Message to introduce yourself to others
  uint8_t payload[28];
- ROS_WARN( "%s ==> ID = [%d] HOPS = [%d]", this->model->GetName( ).c_str( ),
-           this->NodeID, this->HopsUntilGateway );
+
  IntroduceMessage introduce( this->NodeID, this->HopsUntilGateway );
- ROS_INFO( "%s created IntroduceMessage %s", this->model->GetName( ).c_str( ),
-           introduce.toString( ).c_str( ) );
  abstract_drone::WirelessMessage WM;
  abstract_drone::NRF24 nrfmsg;
  WM.request.from = this->NodeID;
@@ -265,7 +311,20 @@ void MeshnetworkCommponent::IntroduceNode( uint8_t other )
  nrfmsg.ack = 0;
  introduce.toPayload( nrfmsg.payload.data( ) );
  WM.request.message = nrfmsg;
- if ( publishService.call( WM ) ) ++totalMessageSent;
+ ++totalMessageSent;
+ if ( publishService.call( WM ) ) {
+  if ( !WM.response.succes ) {
+   if ( NodeTable.proofOfDeceased( other, other ) > 0 )
+    informAboutDeceasedChild( this->NodeID, other );
+  } else {
+   NodeTable.proofOfLive( other, other );
+   return;
+  }
+ } else {
+  if ( NodeTable.proofOfDeceased( other, other ) > 0 )
+   informAboutDeceasedChild( this->NodeID, other );
+  return;
+ }
 }
 
 void MeshnetworkCommponent::reassignID( uint8_t ID )
@@ -276,7 +335,7 @@ void MeshnetworkCommponent::reassignID( uint8_t ID )
  this->NodeID = ID;
  ros::SubscribeOptions so =
      ros::SubscribeOptions::create< abstract_drone::NRF24 >(
-         Node_TopicName, 1,
+         Node_TopicName, 1000,
          boost::bind( &MeshnetworkCommponent::OnRosMsg, this, _1 ),
          ros::VoidPtr( ), &this->rosQueue );
  this->rosSub = this->rosNode->subscribe( so );

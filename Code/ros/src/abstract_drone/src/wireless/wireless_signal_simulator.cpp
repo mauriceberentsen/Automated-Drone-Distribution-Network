@@ -25,12 +25,21 @@ private:
  bool send_message( abstract_drone::WirelessMessage::Request &req,
                     abstract_drone::WirelessMessage::Response &res )
  {
+  auto to = Network.find( req.to );
+
   auto from = Network.find( req.from );
 
-  auto to = Network.find( req.to );
   if ( from != Network.end( ) &&
        to != Network.end( ) )  // Already exists in the Network UpdateLocation
   {
+   if ( !from->second->on ) {
+    res.succes = false;
+    return false;
+   }
+   if ( !to->second->on ) {
+    res.succes = false;
+    return false;
+   }
    ROS_INFO( "compare nodes %d ==> %d", req.from, req.to );
    float distance =
        from->second->getPosition( ).Distance( to->second->getPosition( ) );
@@ -54,6 +63,7 @@ private:
    }
    res.succes = false;
   }
+  return res.succes;
  }
 
 private:
@@ -64,7 +74,8 @@ private:
   res.near.clear( );
   if ( from != Network.end( ) ) {
    for ( std::pair< uint8_t, wireless::Node * > other : Network ) {
-    if ( other.first == from->first ) continue;
+    if ( other.first == from->first ) continue;  // not interrested in ourself
+    if ( !other.second->on ) continue;
     float distance =
         from->second->getPosition( ).Distance( other.second->getPosition( ) );
     // using pythgoras in the function Vector3 to get the distance between to
@@ -101,7 +112,7 @@ public:
 
   ros::SubscribeOptions so =
       ros::SubscribeOptions::create< abstract_drone::nodeInfo >(
-          Node_TopicName, 1,
+          Node_TopicName, 1000,
           boost::bind( &WirelessSignalSimulator::OnRosMsg, this, _1 ),
           ros::VoidPtr( ), &this->rosQueue );
   this->rosSub = this->rosNode->subscribe( so );
@@ -109,6 +120,7 @@ public:
       "message", &WirelessSignalSimulator::send_message, this );
   this->service = this->rosNode->advertiseService(
       "othersInRange", &WirelessSignalSimulator::getNodesInRange, this );
+
   this->rosQueueThread =
       std::thread( std::bind( &WirelessSignalSimulator::QueueThread, this ) );
  }
@@ -119,17 +131,22 @@ public:
   auto it = Network.find( _msg->nodeID );
   if ( it != Network.end( ) )  // Already exists in the Network UpdateLocation
   {
-   float x = _msg->position[0];
-   float y = _msg->position[1];
-   float z = _msg->position[2];
-   Vector3< float > vec( x, y, z );
-   it->second->setPosition( vec );
+   if ( it->second->on == _msg->on ) {
+    float x = _msg->position[0];
+    float y = _msg->position[1];
+    float z = _msg->position[2];
+    Vector3< float > vec( x, y, z );
+    it->second->setPosition( vec );
+   } else {
+    it->second->on = _msg->on;
+   }
+
   }
 
   else  // new node addNodeToNetwork
   {
    if ( _msg->sub == "" ) {
-    ROS_WARN( "NO TOPIC NAME" );
+    ROS_ERROR( "NO TOPIC NAME" );
     return;
    }  // We dont want to add a node with no topic name;
    float x = _msg->position[0];

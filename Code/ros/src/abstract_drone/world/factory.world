@@ -8,15 +8,15 @@
       <uri>model://sun</uri>
     </include>
     <plugin name="wirelessSimulator" filename="libwirelessSimulator.so">
-    <CommunicationDistance>7</CommunicationDistance>
+      <CommunicationDistance>9</CommunicationDistance>
     </plugin>
 
     <model name ='gateway_drone'>
       <static>1</static>
-      <pose>0 0 5 0 0 0</pose>
+      <pose>0 0 0 0 0 0</pose>
       <link name ='link'>
         <inertial>
-          <pose>0 0 5 0 0 0</pose>
+          <pose>0 0 0 0 0 0</pose>
         </inertial>
         <collision name ='collision'>
           <geometry>
@@ -34,7 +34,7 @@
           <material>
             <script>
               <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Red</name>
+              <name>Gazebo/Purple</name>
             </script>
           </material>
         </visual>
@@ -49,10 +49,8 @@
     </model>
 
 
-
-
     <plugin name="dronefactory" filename="libdronefactory.so">
-      <amountOfDrones>5</amountOfDrones>
+      <amountOfDrones>17</amountOfDrones>
     </plugin>
   </world>
 </sdf>

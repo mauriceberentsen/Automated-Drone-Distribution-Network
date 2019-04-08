@@ -31,8 +31,6 @@ uint8_t ChildTableTree::proofOfDeceased( uint8_t teller, uint8_t child )
  // teller claims that he lost a child, check if he is talking about himself
  if ( teller == child ) {
   // Disable the route to this child;
-  std::cout << "Killed child " << ( int )child << " got [" << family.size( )
-            << "] left" << std::endl;
   return family.erase( child );
 
  } else {
@@ -64,8 +62,6 @@ void ChildTableTree::RegisterChild( uint8_t child )
  {
   family.insert( std::pair< uint8_t, std::set< uint8_t > >(
       child, std::set< uint8_t >( ) ) );
-  std::cout << "added child " << ( int )child << " got [" << family.size( )
-            << "] now" << std::endl;
  }
 }
 
@@ -78,8 +74,6 @@ void ChildTableTree::RegisterGrandChildOfChild( uint8_t child,
   return;
  } else {
   it->second.insert( grandChild );
-  std::cout << "added child[ " << ( int )child << "][" << ( int )grandChild
-            << "] got [" << family.size( ) << "] now" << std::endl;
   return;  // add grandchild to set and return;
  }
 }

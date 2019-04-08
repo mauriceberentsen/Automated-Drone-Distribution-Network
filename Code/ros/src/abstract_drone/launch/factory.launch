@@ -5,7 +5,7 @@
         <arg name="headless" default="true"/>
         <arg name="debug" default="true"/>
 
-
+  <node name="drone_manager" pkg="abstract_drone" type="drone_manager"/>
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find abstract_drone)/world/factory.world"/>
         <arg name="extra_gazebo_args" default=""/>

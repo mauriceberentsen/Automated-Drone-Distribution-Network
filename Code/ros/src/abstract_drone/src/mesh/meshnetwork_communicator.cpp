@@ -96,6 +96,7 @@ void MeshnetworkCommunicator::processHeartbeat(
  HeartbeatMessage msg( _msg->payload.data( ) );
  // if sender is gateway flip bool and return
  if ( msg.getIsGateway( ) ) {
+     prefferedGateWay = msg.getPrefferedGateway( );
   connectedToGateway = true;
   return;
  }
@@ -114,7 +115,12 @@ void MeshnetworkCommunicator::processHeartbeat(
 void MeshnetworkCommunicator::CheckConnection( )
 {
  while ( this->rosNode->ok( ) ) {
-  common::Time::Sleep( 10 );  // check every 30 seconds
+  common::Time::Sleep( 10 );  // check every 10 seconds
+  if(!this->on) 
+  {
+      connectedToGateway = false;
+      continue;
+  }
   for ( auto &node : NodeTable.getFamily( ) ) {
    sendHeartbeat( node.first );
   }
@@ -136,6 +142,8 @@ void MeshnetworkCommunicator::sendHeartbeatToGateway( )
 }
 void MeshnetworkCommunicator::lostConnection( )
 {
+    NodeTable.proofOfDeceased( prefferedGateWay, prefferedGateWay );
+    informAboutDeceasedChild(this->NodeID, prefferedGateWay);
 }
 
 }  // namespace gazebo

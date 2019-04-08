@@ -55,6 +55,7 @@ add_message_files(
    NRF24.msg
    nodeInfo.msg
    NodeDebugInfo.msg
+   RequestGatewayDroneFlight.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -63,7 +64,7 @@ add_service_files(
   WirelessMessage.srv
   AreaScan.srv
   SwitchBool.srv
-  MoveDroneToLocation.srv
+  RequestDroneFlight.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -87,9 +88,9 @@ generate_messages(
 #target_link_libraries(listener ${catkin_LIBRARIES})
 #add_dependencies(listener abstract_drone_gencpp)
 
-add_executable(drone_manager src/devider/DroneManager.cpp)
+add_executable(drone_manager src/devider/DroneManagerService.cpp src/devider/DroneManager.cpp)
 target_link_libraries(drone_manager ${catkin_LIBRARIES})
-add_dependencies(drone_manager abstract_drone_gencpp)
+add_dependencies(drone_manager abstract_drone_gencpp abstract_drone_generate_messages_cpp)
 
 #add_executable(request_drone_flight_client src/request_drone_flight_client.cpp)
 #target_link_libraries(request_drone_flight_client ${catkin_LIBRARIES})
