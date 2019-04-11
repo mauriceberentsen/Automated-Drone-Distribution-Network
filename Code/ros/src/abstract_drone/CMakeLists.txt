@@ -65,6 +65,7 @@ add_service_files(
   AreaScan.srv
   SwitchBool.srv
   RequestDroneFlight.srv
+  RequestGPS.srv
 )
 
 ## Generate actions in the 'action' folder

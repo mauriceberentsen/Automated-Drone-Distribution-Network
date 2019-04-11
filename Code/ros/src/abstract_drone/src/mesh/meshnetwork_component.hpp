@@ -27,7 +27,8 @@ namespace gazebo
 class MeshnetworkCommponent : public ModelPlugin
 {
 public:
- MeshnetworkCommponent( ){};
+ MeshnetworkCommponent( )
+     : lastGoodKnownLocation( locationMessage( 0, 0, 0, 0, 0 , 0) ){};
  void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf );
  void forwardMessage( const abstract_drone::NRF24ConstPtr &_msg );
  void OnRosMsg( const abstract_drone::NRF24ConstPtr &_msg );
@@ -44,11 +45,18 @@ public:
  void reassignID( uint8_t ID );
  void informAboutDeceasedChild( uint8_t parent, uint8_t child );
  void processDeceased( const abstract_drone::NRF24ConstPtr &_msg );
- void sendGoalToDrone(const uint8_t ID,const float longitude,const float latitude,const uint16_t height);
+ void sendGoalToDrone( const uint8_t ID, const float longitude,
+                       const float latitude, const uint16_t height );
  void sendGoalToEngine( const abstract_drone::NRF24ConstPtr &_msg );
- bool switchPower(std_srvs::TriggerRequest& request, std_srvs::TriggerResponse& response);
+ void sendGoalToEngine( const locationMessage &_msg );
+ bool switchPower( std_srvs::TriggerRequest &request,
+                   std_srvs::TriggerResponse &response );
  virtual void lostConnection( ) = 0;
-
+ void requestLocation( const uint8_t other );
+ void processRequestLocation( const abstract_drone::NRF24ConstPtr &_msg );
+ void sendLocation( const uint8_t other );
+ void processLocation( const abstract_drone::NRF24ConstPtr &_msg );
+ float distanceBetweenMeAndLocation( const locationMessage &A );
  // Called by the world update start event
  /// \brief ROS helper function that processes messages
 protected:
@@ -65,6 +73,7 @@ protected:
  uint8_t HopsUntilGateway = 255;
  uint32_t totalMessageSent = 0;
  ros::ServiceClient areaScanner;
+ ros::ServiceClient GPSLink;
 
  ros::ServiceClient publishService;
  // Pointer to the model
@@ -80,7 +89,7 @@ protected:
 
  ros::Publisher rosPub;
  ros::Publisher NodeDebugTopic;
-  ros::ServiceServer switchPowerService;
+ ros::ServiceServer switchPowerService;
 
  ros::Publisher droneEnginePublisher;
  /// \brief A ROS subscriber
@@ -94,12 +103,16 @@ protected:
  std::thread rosQueueThread;
  std::thread heartbeatThread;
  std::thread NodeInfoThread;
-
+ locationMessage lastGoodKnownLocation;
+ bool knowPrefferedGatewayLocation = false;
+ locationMessage prefferedGateWayLocation = locationMessage( 0, 0, 0, 0, 0 , false);
  ChildTableTree NodeTable;
  bool on = true;
  bool connectedToGateway = false;
  bool isGateway = false;
  uint8_t prefferedGateWay = 0;
+ uint8_t hopsFromGatewayAway = 0;
+
 
 };  // namespace gazebo
 }  // namespace gazebo

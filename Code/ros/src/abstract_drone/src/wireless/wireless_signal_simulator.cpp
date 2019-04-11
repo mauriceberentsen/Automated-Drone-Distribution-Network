@@ -40,12 +40,10 @@ private:
     res.succes = false;
     return false;
    }
-   ROS_INFO( "compare nodes %d ==> %d", req.from, req.to );
    float distance =
        from->second->getPosition( ).Distance( to->second->getPosition( ) );
    // using pythgoras in the function Vector3 to get the distance between to
    // nodes
-   ROS_INFO( "distance = %f", distance );
    if ( distance < maxComDistance ) {
     to->second->recieveMessage( req.message );
     res.succes = true;

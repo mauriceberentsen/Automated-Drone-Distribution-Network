@@ -1,4 +1,6 @@
 #include "meshnetwork_component.hpp"
+#include "abstract_drone/RequestGPS.h"
+#include <math.h>
 
 namespace gazebo
 {
@@ -35,7 +37,8 @@ void MeshnetworkCommponent::Load( physics::ModelPtr _parent,
      "/Nodes/" + std::to_string( this->droneID ) + "/debug";
  std::string powerSwitch =
      "/Nodes/" + std::to_string( this->droneID ) + "/powerSwitch";
-
+ std::string gps_ServiceName =
+     "/Drones/" + std::to_string( this->droneID ) + "/gps";
  // Initialize ros, if it has not already been initialized.
  if ( !ros::isInitialized( ) ) {
   int argc = 0;
@@ -64,6 +67,8 @@ void MeshnetworkCommponent::Load( physics::ModelPtr _parent,
                                                            100 );
  this->areaScanner = this->rosNode->serviceClient< abstract_drone::AreaScan >(
      "/SignalSimulator/othersInRange" );
+ this->GPSLink = this->rosNode->serviceClient< abstract_drone::RequestGPS >(
+     gps_ServiceName );
  this->publishService =
      this->rosNode->serviceClient< abstract_drone::WirelessMessage >(
          "/SignalSimulator/message" );
@@ -90,12 +95,11 @@ bool MeshnetworkCommponent::switchPower( std_srvs::TriggerRequest &request,
                                          std_srvs::TriggerResponse &response )
 {
  this->on = !this->on;
- if(!this->on)lostConnection( );
+ if ( !this->on ) lostConnection( );
  abstract_drone::nodeInfo nodeinf;
  nodeinf.nodeID = this->NodeID;
  nodeinf.on = this->on;
  rosPub.publish( nodeinf );
- ROS_INFO( "SWITCH POWER OF %s to %d", this->model->GetName( ).c_str(), this->on );
  return true;
 }
 
@@ -111,6 +115,8 @@ void MeshnetworkCommponent::publishDebugInfo( )
   msg.connectedNodes = this->NodeTable.getFamily( ).size( );
   msg.prefferedGateWay = this->prefferedGateWay;
   msg.on = this->on;
+  msg.hops = this->hopsFromGatewayAway;
+  msg.prefLoc = this->lastGoodKnownLocation.getID();
   NodeDebugTopic.publish( msg );
  }
 }
@@ -127,15 +133,19 @@ void MeshnetworkCommponent::OnRosMsg(
 void MeshnetworkCommponent::forwardMessage(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- ROS_WARN( "%s foward message from %u for %u type %u",
-           this->model->GetName( ).c_str( ), _msg->from, _msg->forward,
-           _msg->payload[1] );
  abstract_drone::WirelessMessage WM;
+  WM.request.message = *( _msg );
+ if ( _msg->payload[1] == HEARTBEAT ) {
+  HeartbeatMessage msg( _msg->payload.data( ) );
+  msg.makeHop();
+   msg.toPayload(WM.request.message.payload.data( ));
+  
+ } 
+
  WM.request.from = this->NodeID;
  uint8_t nextInLine = NodeTable.getDirectionToNode( _msg->forward );
  if ( nextInLine == 255 ) return;
  WM.request.to = nextInLine;
- WM.request.message = *( _msg );
  WM.request.message.from = this->NodeID;
  WM.request.message.to = nextInLine;
  if ( publishService.call( WM ) ) ++totalMessageSent;
@@ -250,15 +260,12 @@ void MeshnetworkCommponent::searchOtherNodesInRange( )
 {
  abstract_drone::AreaScan scanMsg;
  scanMsg.request.id = this->NodeID;
- ROS_WARN( "Node %d  started to look for others", this->NodeID );
  if ( areaScanner.call( scanMsg ) ) {
   if ( scanMsg.response.near.empty( ) ) {
    ROS_WARN( "Node %d found none", this->NodeID );
    return;
   }
 
-  ROS_WARN( "%s  found  %d others", this->model->GetName( ).c_str( ),
-            scanMsg.response.near.size( ) );
   for ( const uint8_t &n : scanMsg.response.near ) {
    IntroduceNode( n );
   }
@@ -267,40 +274,113 @@ void MeshnetworkCommponent::searchOtherNodesInRange( )
  }
 }
 
+void MeshnetworkCommponent::requestLocation( const uint8_t other )
+{
+ Message msg( this->NodeID, REQUESTLOCATION );
+ abstract_drone::WirelessMessage WM;
+ abstract_drone::NRF24 nrfmsg;
+ WM.request.from = this->NodeID;
+ WM.request.to = other;
+ nrfmsg.from = this->NodeID;
+ nrfmsg.to = other;
+ nrfmsg.forward = other;
+ nrfmsg.ack = 0;
+ msg.toPayload( nrfmsg.payload.data( ) );
+ WM.request.message = nrfmsg;
+ ++totalMessageSent;
+ if ( publishService.call( WM ) ) {
+  if ( !WM.response.succes ) {
+   if ( NodeTable.proofOfDeceased( other, other ) > 0 )
+    informAboutDeceasedChild( this->NodeID, other );
+  } else {
+   NodeTable.proofOfLive( other, other );
+   return;
+  }
+ } else {
+  if ( NodeTable.proofOfDeceased( other, other ) > 0 )
+   informAboutDeceasedChild( this->NodeID, other );
+  return;
+ }
+}
+
+void MeshnetworkCommponent::processRequestLocation(
+    const abstract_drone::NRF24ConstPtr &_msg )
+{
+ Message msg( _msg->payload.data( ) );
+ sendLocation( msg.getID( ) );
+}
+void MeshnetworkCommponent::sendLocation( const uint8_t other )
+{
+ abstract_drone::RequestGPS GPS;
+ GPS.request.ID = this->NodeID;
+ if ( GPSLink.call( GPS ) ) {
+  locationMessage msg( this->NodeID, GPS.response.latitude,
+                       GPS.response.longitude, GPS.response.height, 0 , this->connectedToGateway);
+  abstract_drone::WirelessMessage WM;
+  abstract_drone::NRF24 nrfmsg;
+  WM.request.from = this->NodeID;
+  WM.request.to = other;
+  nrfmsg.from = this->NodeID;
+  nrfmsg.to = other;
+  nrfmsg.forward = other;
+  nrfmsg.ack = 0;
+  msg.toPayload( nrfmsg.payload.data( ) );
+  WM.request.message = nrfmsg;
+  ++totalMessageSent;
+  if ( publishService.call( WM ) ) {
+   if ( !WM.response.succes ) {
+    if ( NodeTable.proofOfDeceased( other, other ) > 0 )
+     informAboutDeceasedChild( this->NodeID, other );
+   } else {
+    NodeTable.proofOfLive( other, other );
+    return;
+   }
+  } else {
+   if ( NodeTable.proofOfDeceased( other, other ) > 0 )
+    informAboutDeceasedChild( this->NodeID, other );
+   return;
+  }
+ } else {
+  ROS_ERROR( "GPS NOT AVAILABLE" );
+ }
+}
+void MeshnetworkCommponent::processLocation(
+    const abstract_drone::NRF24ConstPtr &_msg )
+{
+ locationMessage msg( _msg->payload.data( ) );
+ if ( msg.getID( ) == prefferedGateWay ) {
+  prefferedGateWayLocation = msg;
+  knowPrefferedGatewayLocation = true;
+ } else {
+     if(msg.knowGateway)
+  lastGoodKnownLocation = msg;
+ }
+}
+
+float MeshnetworkCommponent::distanceBetweenMeAndLocation(
+    const locationMessage &A )
+{
+ abstract_drone::RequestGPS GPS;
+
+ GPS.request.ID = this->NodeID;
+ if ( GPSLink.call( GPS ) ) {
+  float a = A.longitude - GPS.response.longitude;
+  float b = A.latitude - GPS.response.latitude;
+  float c = A.height - GPS.response.height;
+  return std::sqrt( std::pow( a, 2 ) + std::pow( b, 2 ) + std::pow( c, 2 ) );
+ } else {
+  return 0;
+ }
+}
+
 void MeshnetworkCommponent::processIntroduction(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- //  IntroduceMessage introduce( _msg->payload.data( ) );
- //  ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName( ).c_str(
- //  ),
- //            introduce.toString( ).c_str( ) );
- //  auto from = connectedNodes.find( introduce.getID( ) );
- //  if ( introduce.getHopsUntilsGateway( ) <
- //       HopsUntilGateway )  // minus one since we are only interested in
- //       shorter
- //                           // paths not alternatives
- //  {
- //   shortestPathToGatewayID = introduce.getID( );
- //   HopsUntilGateway = introduce.getHopsUntilsGateway( ) + 1;
- //  }
- //  if ( from != connectedNodes.end( ) )  // A known node update the hops
- //  {
- //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
- //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- //  } else  // A new node lets add him and send back a response
- //  {
- //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
- //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- //   IntroduceNode( introduce.getID( ) );
- //  }
 }
 void MeshnetworkCommponent::IntroduceNode( uint8_t other )
 {
- ROS_INFO( "%s presents himself to %d", this->model->GetName( ).c_str( ) ,other );
  // create a Message to introduce yourself to others
- uint8_t payload[28];
-
- IntroduceMessage introduce( this->NodeID, this->HopsUntilGateway );
+ IntroduceMessage introduce( this->NodeID,this->connectedToGateway ,this->hopsFromGatewayAway );
  abstract_drone::WirelessMessage WM;
  abstract_drone::NRF24 nrfmsg;
  WM.request.from = this->NodeID;
@@ -344,11 +424,21 @@ void MeshnetworkCommponent::reassignID( uint8_t ID )
 void MeshnetworkCommponent::sendGoalToEngine(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- GoToLocationMessage locmsg( _msg->payload.data( ) );
+ locationMessage locmsg( _msg->payload.data( ) );
  abstract_drone::Location msg;
  msg.latitude = locmsg.latitude;
  msg.longitude = locmsg.longitude;
  msg.height = locmsg.height;
+
+ droneEnginePublisher.publish( msg );
+}
+
+void MeshnetworkCommponent::sendGoalToEngine( const locationMessage &_msg )
+{
+ abstract_drone::Location msg;
+ msg.latitude = _msg.latitude;
+ msg.longitude = _msg.longitude;
+ msg.height = _msg.height;
 
  droneEnginePublisher.publish( msg );
 }

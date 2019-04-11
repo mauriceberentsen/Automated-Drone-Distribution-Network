@@ -18,8 +18,13 @@ private:
  void sendHeartbeatToGateway( );
  void lostConnection( );
  void processHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
- 
-
+ void startEmergencyProtocol( );
+ void startMovementNegotiation( );
+ void informOthersAboutDistance(float distance);
+ void processMovementNegotiationMessage (const abstract_drone::NRF24ConstPtr &_msg );
+ bool timerStarted = false;
+ std::multimap<float, uint8_t> negotiationList;
+ common::Time lastTimeOnline;
 };  // namespace gazebo
 // Register this plugin with the simulator
 GZ_REGISTER_MODEL_PLUGIN( MeshnetworkCommunicator )

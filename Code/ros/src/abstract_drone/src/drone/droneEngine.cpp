@@ -8,6 +8,7 @@
 #include "ros/subscribe_options.h"
 #include "abstract_drone/Location.h"
 #include "abstract_drone/nodeInfo.h"
+#include "abstract_drone/RequestGPS.h"
 
 namespace gazebo
 {
@@ -28,6 +29,7 @@ public:
 
   std::string move_to_TopicName;
   std::string gps_TopicName;
+  std::string gps_ServiceName;
   std::string ModelName = this->model->GetName( );
   // Check that the velocity element exists, then read the value
   if ( _sdf->HasElement( "DroneID" ) ) {
@@ -37,6 +39,7 @@ public:
   } else {
    move_to_TopicName = ModelName + "/goal";
    gps_TopicName = "/Drones/" + std::to_string( this->drone_id ) + "/gps";
+   gps_ServiceName = "/Drones/" + std::to_string( this->drone_id ) + "/gpsservice";
   }
 
   // Create a topic name
@@ -66,6 +69,9 @@ public:
   this->rosQueueThread =
       std::thread( std::bind( &DroneEngine::QueueThread, this ) );
 
+  this->gpsService = this->rosNode->advertiseService(
+      gps_TopicName, &DroneEngine::get_location, this );
+
   ROS_WARN( "Loaded DroneEngine Plugin with parent...%s",
             this->model->GetName( ).c_str( ) );
   informPostmaster( );
@@ -80,7 +86,10 @@ public:
    MoveModelsPlane( );
   }
   if ( moving ) { informPostmaster( ); }
-  if ( this->atGoal( ) ) { moving = false; hasGoal = false;}
+  if ( this->atGoal( ) ) {
+   moving = false;
+   hasGoal = false;
+  }
  }
 
  bool atGoal( )
@@ -161,6 +170,15 @@ public:
  {
   this->setGoal( _msg->longitude, _msg->latitude, _msg->height );
  }
+ public:
+ bool get_location(abstract_drone::RequestGPS::Request &req, abstract_drone::RequestGPS::Response &res )
+ {
+     //+ROS_INFO("Request for GPS by %u", req.ID);
+     res.longitude = pose.Pos( ).X( );
+     res.latitude = pose.Pos( ).Y( );
+     res.height = pose.Pos( ).Z( );
+     return true;
+ }
 
  /// \brief ROS helper function that processes messages
 private:
@@ -185,6 +203,9 @@ private:
  // Pointer to the update event connection
 private:
  event::ConnectionPtr updateConnection;
+
+private:
+ ros::ServiceServer gpsService;
 
 private:
  int drone_id;

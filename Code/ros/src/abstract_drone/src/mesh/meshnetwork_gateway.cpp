@@ -56,8 +56,8 @@ void MeshnetworkGateway::processIntroduction(
 void MeshnetworkGateway::CheckConnection( )
 {
  while ( this->rosNode->ok( ) ) {
-  common::Time::Sleep( 10 );  // check every 30 seconds
-  //if ( !this->on ) continue;
+  common::Time::Sleep( 10 );  // check every 10 seconds
+  // if ( !this->on ) continue;
   for ( auto &node : NodeTable.getFamily( ) )
    sendHeartbeat( node.first );
  }
@@ -77,8 +77,11 @@ void MeshnetworkGateway::processMessage(
    ROS_WARN( "Location message recieved" );
    break;
   case PRESENT:
-   ROS_INFO( "%s Recieved PRESENT", this->model->GetName( ).c_str( ) );
+   //ROS_INFO( "%s Recieved PRESENT", this->model->GetName( ).c_str( ) );
    // processIntroduction( _msg );
+   break;
+  case REQUESTLOCATION:
+   processRequestLocation( _msg );
    break;
   case DECEASED:
    ROS_WARN( "%s DECEASED message recieved", this->model->GetName( ).c_str( ) );
@@ -89,7 +92,7 @@ void MeshnetworkGateway::processMessage(
    //_msg->from == 255 ? handOutNewID( _msg ) : registerNode( _msg );
    break;
   case HEARTBEAT:
-   ROS_WARN( "HEARTBEAT message recieved" );
+   //ROS_WARN( "HEARTBEAT message recieved" );
    processHeartbeat( _msg );
    break;
   case GIVEID:
@@ -131,8 +134,8 @@ void MeshnetworkGateway::processHeartbeat(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
  HeartbeatMessage msg( _msg->payload.data( ) );
- ROS_WARN( "%s heartbeat message recieved: %s",
-           this->model->GetName( ).c_str( ), msg.toString( ).c_str( ) );
+ //ROS_WARN( "%s heartbeat message recieved: %s",
+ //          this->model->GetName( ).c_str( ), msg.toString( ).c_str( ) );
  sendHeartbeat( msg.getID( ) );
 }
 
