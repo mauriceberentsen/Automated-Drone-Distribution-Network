@@ -9,8 +9,6 @@ MeshnetworkGateway::MeshnetworkGateway( )
 void MeshnetworkGateway::OnUpdate( )
 {
  if ( !init ) {
-  shortestPathToGatewayID = 0;
-  HopsUntilGateway = 0;
   connectedToGateway = true;
   isGateway = true;
   prefferedGateWay = this->NodeID;
@@ -35,22 +33,6 @@ void MeshnetworkGateway::gatewayQueue(
 void MeshnetworkGateway::processIntroduction(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- //  IntroduceMessage introduce( _msg->payload.data( ) );
- //  //ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName(
- //  ).c_str( ),
- //      //      introduce.toString( ).c_str( ) );
- //  auto from = connectedNodes.find( introduce.getID( ) );
- //  if ( from != connectedNodes.end( ) ) {  // A known node update the hops
- //  // ROS_INFO( "NODE %d UPDATE", introduce.getID( ) );
- //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
- //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- //  } else  // A new node lets add him and send back a response
- //  {
- //  // ROS_INFO( "NEW NODE %d ADDED", introduce.getID( ) );
- //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
- //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- //   IntroduceNode( introduce.getID( ) );
- //  }
 }
 
 void MeshnetworkGateway::CheckConnection( )
@@ -120,12 +102,12 @@ void MeshnetworkGateway::floodMessage(
   ++totalMessageSent;
   if ( publishService.call( WM ) ) {
    if ( !WM.response.succes ) {
-    NodeTable.proofOfDeceased( towards, towards );
+    NodeTable.proofOfMissing( towards, towards );
    } else {
-    NodeTable.proofOfLive( towards, towards );
+    NodeTable.proofOfAvailability( towards, towards );
    }
   } else {
-   NodeTable.proofOfDeceased( towards, towards );
+   NodeTable.proofOfMissing( towards, towards );
   }
  }
 }
@@ -134,8 +116,7 @@ void MeshnetworkGateway::processHeartbeat(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
  HeartbeatMessage msg( _msg->payload.data( ) );
- //ROS_WARN( "%s heartbeat message recieved: %s",
- //          this->model->GetName( ).c_str( ), msg.toString( ).c_str( ) );
+ //ROS_INFO("RECIEVED A HEARTBEAT FROM %u", msg.getID( ));
  sendHeartbeat( msg.getID( ) );
 }
 

@@ -7,16 +7,7 @@ void MeshnetworkCommunicator::OnUpdate( )
 {
  if ( !this->init )  // we want this to happen once after all nodes are loaded
  {
-  std::random_device rd;
-  std::mt19937 mt( rd( ) );
-  std::uniform_real_distribution< double > dist( 10.0, 20.0 );
-
-  // common::Time::Sleep( dist( mt ) );
   searchOtherNodesInRange( );
-  // simulate startup time of a nrf node
-  // TODO research how long a nrf takes to start;
-  // search a connection route;
-  // scan for nodes Nodes near
   init = true;
  }
 }
@@ -28,30 +19,8 @@ void MeshnetworkCommunicator::processIntroduction(
  if ( introduce.getKnowGateway( ) &&
       introduce.getHopsUntilsGateway( ) < this->hopsFromGatewayAway &&
       introduce.getID( ) != lastGoodKnownLocation.getID( ) ) {
-  ROS_INFO( "SOMEONE CLOSER WHERE IS HE FROM?" );
   requestLocation( introduce.getID( ) );
  }
- //  ROS_INFO( "%s recieved IntroduceMessage %s", this->model->GetName( ).c_str(
- //  ),
- //            introduce.toString( ).c_str( ) );
- //  auto from = connectedNodes.find( introduce.getID( ) );
- //  if ( introduce.getHopsUntilsGateway( ) <
- //       HopsUntilGateway )  // minus one since we are only interested in
- //       shorter
- //                           // paths not alternatives
- //  {
- //   HopsUntilGateway = introduce.getHopsUntilsGateway( ) + 1;
- //  }
- //  if ( from != connectedNodes.end( ) )  // A known node update the hops
- //  {
- //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
- //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- //  } else  // A new node lets add him and send back a response
- //  {
- //   connectedNodes.insert( std::pair< uint8_t, uint8_t >(
- //       introduce.getID( ), introduce.getHopsUntilsGateway( ) ) );
- //   IntroduceNode( introduce.getID( ) );
- //  }
 }
 
 void MeshnetworkCommunicator::processMessage(
@@ -104,7 +73,7 @@ void MeshnetworkCommunicator::processHeartbeat(
  if ( msg.getIsGateway( ) ) {
   prefferedGateWay = msg.getPrefferedGateway( );
   connectedToGateway = true;
-  hopsFromGatewayAway = msg.hops;
+  hopsFromGatewayAway = msg.hops + 1;  // count our own hop towards gateway
   return;
  }
  // if sender doesn't know gateway but we do tell him
@@ -113,7 +82,7 @@ void MeshnetworkCommunicator::processHeartbeat(
  }
  // if sender knows gateway and we don't try pinging gateway again
  else if ( msg.getKnowGateway( ) && !connectedToGateway ) {
-  NodeTable.proofOfLive( msg.getID( ), msg.getPrefferedGateway( ) );
+  NodeTable.proofOfAvailability( msg.getID( ), msg.getPrefferedGateway( ) );
   // aks him where he lives in case we lose him
   // requestLocation( msg.getID( ) );
   prefferedGateWay = msg.getPrefferedGateway( );
@@ -143,9 +112,7 @@ void MeshnetworkCommunicator::CheckConnection( )
 
 void MeshnetworkCommunicator::sendHeartbeatToGateway( )
 {
- if ( !sendHeartbeat( prefferedGateWay ) ) {
-  // ROS_INFO( "NO WAY FOUND TOWARDS GATEWAY" );
- }
+ if ( !sendHeartbeat( prefferedGateWay ) ) {}
  // this we be flipped back by response of the gateway
  connectedToGateway = false;
 }
@@ -156,8 +123,8 @@ void MeshnetworkCommunicator::lostConnection( )
   return;
  }
  if ( !timerStarted ) {
-  NodeTable.proofOfDeceased( prefferedGateWay, prefferedGateWay );
-  informAboutDeceasedChild( this->NodeID, prefferedGateWay );
+  NodeTable.proofOfMissing( prefferedGateWay, prefferedGateWay );
+  informAboutMissingChild( this->NodeID, prefferedGateWay );
   this->lastTimeOnline = this->model->GetWorld( )->SimTime( );
   timerStarted = true;
  } else if ( lastTimeOnline < this->model->GetWorld( )->SimTime( ) - 30 ) {
@@ -169,11 +136,17 @@ void MeshnetworkCommunicator::lostConnection( )
 
 void MeshnetworkCommunicator::startEmergencyProtocol( )
 {
- if ( NodeTable.empty( ) )
+ if ( connectedToGateway )  // in case we meanwhile found a connectetion
+ {
+  negotiationList.clear( );
+  return;
+ }
+ if ( NodeTable.empty( ) ) {
   sendGoalToEngine( lastGoodKnownLocation );
- else {
+  NodeTable.getFamily( ).clear( );
+  lastGoodKnownLocation = prefferedGateWayLocation;
+ } else {
   // start negotiation about who needs to move
-
   startMovementNegotiation( );
  }
 }
@@ -183,31 +156,37 @@ void MeshnetworkCommunicator::startMovementNegotiation( )
  // Find out which who the greatest distance from the GATEWAY. He shall be
  // choosen to replace the missing node
  // before we go to action we first make a list of everybody disconnected
- while ( negotiationList.size( ) <= NodeTable.getFamily( ).size( ) ) {
-  ROS_INFO( "LOST AS A GROUP LETS BUILD PICK SOMEONE TO MOVE" );
-  // First find out how far away you are
-  float myDistance = distanceBetweenMeAndLocation( prefferedGateWayLocation );
-  // add ourself to the list
-  negotiationList.insert( std::make_pair( myDistance, this->NodeID ) );
-  // tell others how far away we are
-  informOthersAboutDistance( myDistance );
-  // next time here we go to action
+ ROS_INFO( "LOST AS A GROUP LETS PICK SOMEONE TO MOVE" );
+ // First find out how far away you are
+ float myDistance = -1;
+ if ( NodeTable.getDirectionToNode( lastGoodKnownLocation.getID( ) ) == 255 ) {
+  myDistance = distanceBetweenMeAndLocation( prefferedGateWayLocation );
+ }
+ // add ourself to the list
+ // tell others how far away we are
+ informOthersAboutDistance( myDistance );
+ if ( negotiationList.size( ) < NodeTable.getFamily( ).size( ) ) {
+  // wait another round
+  return;
  }
  // now it is time for action
 
+ negotiationList.insert( std::make_pair( myDistance, this->NodeID ) );
  for ( auto &i : negotiationList ) {
   std::cout << this->model->GetName( ) + " " << ( int )i.second << "--"
             << i.first << std::endl;
  }
- ROS_INFO( "%s Node %u has the greatest distance",
-           this->model->GetName( ).c_str( ),
+ ROS_INFO( "%s Node %u has the greatest cost", this->model->GetName( ).c_str( ),
            negotiationList.rbegin( )->second );
- if ( negotiationList.rbegin( )->second == this->NodeID ) {
-  ROS_INFO( "%s lets move this boi", this->model->GetName( ).c_str( ) );
+ if ( myDistance >= 0 && negotiationList.rbegin( )->second == this->NodeID ) {
+  ROS_INFO( "%s: i'm the one who need to move ",
+            this->model->GetName( ).c_str( ) );
   sendGoalToEngine( lastGoodKnownLocation );
+  NodeTable.getFamily( ).clear( );
 
-  negotiationList.clear( );
+  lastGoodKnownLocation = prefferedGateWayLocation;
  }
+ negotiationList.clear( );
 }
 
 void MeshnetworkCommunicator::informOthersAboutDistance( float distance )
@@ -229,12 +208,12 @@ void MeshnetworkCommunicator::informOthersAboutDistance( float distance )
   ++totalMessageSent;
   if ( publishService.call( WM ) ) {
    if ( !WM.response.succes ) {
-    NodeTable.proofOfDeceased( towards, towards );
+    NodeTable.proofOfMissing( towards, towards );
    } else {
-    NodeTable.proofOfLive( towards, towards );
+    NodeTable.proofOfAvailability( towards, towards );
    }
   } else {
-   NodeTable.proofOfDeceased( towards, towards );
+   NodeTable.proofOfMissing( towards, towards );
   }
  }
 }

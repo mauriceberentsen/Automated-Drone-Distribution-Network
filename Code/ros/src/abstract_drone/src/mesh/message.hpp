@@ -6,15 +6,15 @@
 
 enum Messagetype : uint8_t {
  NOTDEFINED = 0,
- LOCATION,
- REQUESTLOCATION,
- GIVEID,
- PRESENT,
- HEARTBEAT,
- DECEASED,
- FLOOD,
- MOVE_TO_LOCATION,
- MOVEMENT_NEGOTIATION,
+ LOCATION, // 1
+ REQUESTLOCATION, // 2
+ GIVEID, // 3
+ PRESENT, // 4
+ HEARTBEAT, // 5
+ DECEASED, // 6
+ FLOOD, // 7
+ MOVE_TO_LOCATION, // 8
+ MOVEMENT_NEGOTIATION, // 9
  SIGNON = 255
 };
 
@@ -45,7 +45,7 @@ class locationMessage : public Message
 {
 public:
  locationMessage( uint8_t _ID, float latitude, float longitude, int16_t height,
-                  uint32_t timeSincePosix, bool _knowGateway );
+                  uint32_t timeSincePosix );
  locationMessage( const uint8_t *payload );
  ~locationMessage( );
  std::string toString( );
@@ -53,7 +53,6 @@ public:
 
  float latitude, longitude;
  int16_t height;
- bool knowGateway;
 private:
  uint32_t timeSincePosix;
 };
@@ -72,7 +71,7 @@ public:
 class IntroduceMessage : public Message
 {
 public:
- IntroduceMessage( const uint8_t _ID,const bool _knowGateway, const uint8_t _hopsUntilsGateway );
+ IntroduceMessage( const uint8_t _ID,const uint8_t _hopsUntilsGateway, const bool _knowGateway );
  IntroduceMessage( const uint8_t *payload );
  ~IntroduceMessage( );
  std::string toString( );
@@ -81,8 +80,8 @@ public:
  uint8_t getHopsUntilsGateway( );
 
 private:
- bool knowGateway;
  uint8_t hopsUntilsGateway;
+ bool knowGateway;
 };
 
 class HeartbeatMessage : public Message

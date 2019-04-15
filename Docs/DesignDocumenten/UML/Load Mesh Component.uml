@@ -1,0 +1,66 @@
+@startuml
+
+start
+partition Load {
+:store model pointer;
+:get NodeID from XML;
+if(get DroneID from XML) then (false)
+:ROS_ERROR(Warning message);
+endif
+:Bind update to gazebo;
+:Create ros names;
+note right
+  Create names to use in ros transport
+  ====
+  * Node_TopicName
+  * WirelessSignalSimulatorName
+  * Engine connection
+  * DebugInfoName
+  * powerSwitch
+  * gps_ServiceName
+end note 
+if (ros is initialized) then (false)
+	:initialize ros;
+    else (true)
+endif
+:Create rosNode;
+:Create queue for ros messages;
+:Advertise topics;
+note left
+  Advertise topics for
+  ====
+  * Information for the wireless
+  commuincation simulation
+  * Engine connection
+  * Debug information 
+end note 
+:Connect to services;
+note right
+  Setup the following services
+  ====
+  * Communication simulation
+  * Area scanner
+  * GPS 
+  * ON/OFF button
+end note    
+:Start up threads;
+note left
+  Start the following threads
+  ====
+  * OnUpdate
+  * OnRosMsg
+  * Check connection
+  * Publish Debuginfo  
+end note 
+:publish Node information;
+note right
+	Used for the wireless signal
+    simulation
+end note
+}
+stop    
+
+
+
+
+@enduml

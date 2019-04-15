@@ -121,10 +121,8 @@ public:
 
   // create the animation
   gazebo::common::PoseAnimationPtr anim(
-      // name the animation "test",
-      // make it last 10 seconds,
-      // and set it on a repeat loop
-      new gazebo::common::PoseAnimation( "movement", distance, false ) );
+  
+  new gazebo::common::PoseAnimation( "movement", distance, false ) );
 
   gazebo::common::PoseKeyFrame *key;
 
@@ -173,7 +171,6 @@ public:
  public:
  bool get_location(abstract_drone::RequestGPS::Request &req, abstract_drone::RequestGPS::Response &res )
  {
-     //+ROS_INFO("Request for GPS by %u", req.ID);
      res.longitude = pose.Pos( ).X( );
      res.latitude = pose.Pos( ).Y( );
      res.height = pose.Pos( ).Z( );

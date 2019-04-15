@@ -27,8 +27,6 @@ namespace gazebo
 class MeshnetworkCommponent : public ModelPlugin
 {
 public:
- MeshnetworkCommponent( )
-     : lastGoodKnownLocation( locationMessage( 0, 0, 0, 0, 0 , 0) ){};
  void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf );
  void forwardMessage( const abstract_drone::NRF24ConstPtr &_msg );
  void OnRosMsg( const abstract_drone::NRF24ConstPtr &_msg );
@@ -43,7 +41,7 @@ public:
  void searchOtherNodesInRange( );
  void IntroduceNode( uint8_t other );
  void reassignID( uint8_t ID );
- void informAboutDeceasedChild( uint8_t parent, uint8_t child );
+ void informAboutMissingChild( uint8_t parent, uint8_t child );
  void processDeceased( const abstract_drone::NRF24ConstPtr &_msg );
  void sendGoalToDrone( const uint8_t ID, const float longitude,
                        const float latitude, const uint16_t height );
@@ -69,8 +67,6 @@ protected:
 
  std::map< uint8_t, uint8_t > connectedNodes;  // ID and hop route;
 
- uint8_t shortestPathToGatewayID = 255;
- uint8_t HopsUntilGateway = 255;
  uint32_t totalMessageSent = 0;
  ros::ServiceClient areaScanner;
  ros::ServiceClient GPSLink;
@@ -93,7 +89,8 @@ protected:
 
  ros::Publisher droneEnginePublisher;
  /// \brief A ROS subscriber
-
+ bool sendMessage( const uint8_t other,
+                   abstract_drone::WirelessMessage &message );
  ros::Subscriber rosSub;
  /// \brief A ROS callbackqueue that helps process messages
 
@@ -103,16 +100,15 @@ protected:
  std::thread rosQueueThread;
  std::thread heartbeatThread;
  std::thread NodeInfoThread;
- locationMessage lastGoodKnownLocation;
+ locationMessage lastGoodKnownLocation = locationMessage( 0, 0, 0, 0, 0 );
  bool knowPrefferedGatewayLocation = false;
- locationMessage prefferedGateWayLocation = locationMessage( 0, 0, 0, 0, 0 , false);
+ locationMessage prefferedGateWayLocation = locationMessage( 0, 0, 0, 0, 0 );
  ChildTableTree NodeTable;
  bool on = true;
  bool connectedToGateway = false;
  bool isGateway = false;
  uint8_t prefferedGateWay = 0;
  uint8_t hopsFromGatewayAway = 0;
-
 
 };  // namespace gazebo
 }  // namespace gazebo

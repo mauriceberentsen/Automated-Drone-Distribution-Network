@@ -14,7 +14,7 @@ uint8_t ChildTableTree::getDirectionToNode( const uint8_t node )
 {
  // is it one of our own childeren?
  auto it = family.find( node );
- if ( it != family.end( ) )  // we dont know the child add him to the family
+ if ( it != family.end( ) )
  {
   return it->first;
  } else  // is it one of the grandchilderen? Direct them that way
@@ -26,7 +26,7 @@ uint8_t ChildTableTree::getDirectionToNode( const uint8_t node )
  return 255;
 }
 
-uint8_t ChildTableTree::proofOfDeceased( uint8_t teller, uint8_t child )
+uint8_t ChildTableTree::proofOfMissing( uint8_t teller, uint8_t child )
 {
  // teller claims that he lost a child, check if he is talking about himself
  if ( teller == child ) {
@@ -40,7 +40,7 @@ uint8_t ChildTableTree::proofOfDeceased( uint8_t teller, uint8_t child )
  return 0;
 }
 
-void ChildTableTree::proofOfLive( uint8_t teller, uint8_t child )
+void ChildTableTree::proofOfAvailability( uint8_t teller, uint8_t child )
 {
  // teller claims that he knows child, check if he is talking about himself
  if ( teller == child ) {

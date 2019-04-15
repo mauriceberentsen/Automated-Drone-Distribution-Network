@@ -50,13 +50,12 @@ void Message::CopyFromCharArray( uint8_t *value, uint16_t size,
 
 locationMessage::locationMessage( uint8_t _ID, float _latitude,
                                   float _longitude, int16_t _height,
-                                  uint32_t _timeSincePosix, bool _knowgateway )
+                                  uint32_t _timeSincePosix )
     : Message( _ID, LOCATION )
     , latitude( _latitude )
     , longitude( _longitude )
     , height( _height )
     , timeSincePosix( _timeSincePosix )
-    , knowGateway( _knowgateway )
 {
 }
 
@@ -76,9 +75,6 @@ locationMessage::locationMessage( const uint8_t *payload )
  counter += sizeof( height );
  CopyFromCharArray( ( uint8_t * )&timeSincePosix, sizeof( timeSincePosix ),
                     payload, counter );
- counter += sizeof( timeSincePosix );
- CopyFromCharArray( ( uint8_t * )&knowGateway, sizeof( knowGateway ), payload,
-                    counter );
 }
 
 locationMessage::~locationMessage( )
@@ -102,9 +98,6 @@ void locationMessage::toPayload( uint8_t *payload )
  counter += sizeof( height );
  CopyToCharArray( ( uint8_t * )&timeSincePosix, sizeof( timeSincePosix ),
                   payload, counter );
- counter += sizeof( timeSincePosix );
- CopyToCharArray( ( uint8_t * )&knowGateway, sizeof( knowGateway ), payload,
-                    counter );
 }
 
 std::string locationMessage::toString( )
@@ -137,11 +130,12 @@ std::string GiveIDMessage::toString( )
  return ss.str( );
 }
 
-IntroduceMessage::IntroduceMessage( const uint8_t _ID, const bool _knowGateway,
-                                    const uint8_t _hopsUntilsGateway )
+IntroduceMessage::IntroduceMessage( const uint8_t _ID,
+                                    const uint8_t _hopsUntilsGateway,
+                                    const bool _knowGateway )
     : Message( _ID, PRESENT )
-    , knowGateway( _knowGateway )
     , hopsUntilsGateway( _hopsUntilsGateway )
+    , knowGateway( _knowGateway )
 {
 }
 
@@ -157,9 +151,9 @@ IntroduceMessage::IntroduceMessage( const uint8_t *payload )
  counter += sizeof( type );
  CopyFromCharArray( ( uint8_t * )&hopsUntilsGateway,
                     sizeof( hopsUntilsGateway ), payload, counter );
- counter += sizeof( hopsUntilsGateway );
  CopyFromCharArray( ( uint8_t * )&knowGateway, sizeof( knowGateway ), payload,
-                    counter );
+                  counter );
+ counter += sizeof( knowGateway );
 }
 
 void IntroduceMessage::toPayload( uint8_t *payload )

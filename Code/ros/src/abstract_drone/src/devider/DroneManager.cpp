@@ -142,7 +142,7 @@ bool DroneManager::setDronesToCasus(
 
    RequestMovement( 16, 11, 25 );
 
-   RequestMovement( 17, 8, 27 );
+   RequestMovement( 17, 8, 26.5 );
    break;
  }
  return true;

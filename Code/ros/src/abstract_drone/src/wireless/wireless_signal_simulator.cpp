@@ -25,43 +25,40 @@ private:
  bool send_message( abstract_drone::WirelessMessage::Request &req,
                     abstract_drone::WirelessMessage::Response &res )
  {
-  auto to = Network.find( req.to );
+  auto to = Network.find( req.message.to );
 
-  auto from = Network.find( req.from );
+  auto from = Network.find( req.message.from );
 
   if ( from != Network.end( ) &&
        to != Network.end( ) )  // Already exists in the Network UpdateLocation
   {
-   if ( !from->second->on ) {
+   if ( !from->second->on || !to->second->on ) {
     res.succes = false;
-    return false;
-   }
-   if ( !to->second->on ) {
-    res.succes = false;
-    return false;
-   }
-   float distance =
-       from->second->getPosition( ).Distance( to->second->getPosition( ) );
-   // using pythgoras in the function Vector3 to get the distance between to
-   // nodes
-   if ( distance < maxComDistance ) {
-    to->second->recieveMessage( req.message );
-    res.succes = true;
+
    } else {
-    res.succes = false;
+    float distance =
+        from->second->getPosition( ).Distance( to->second->getPosition( ) );
+    // using pythgoras in the function Vector3 to get the distance between to
+    // nodes
+    if ( distance < maxComDistance ) {
+     to->second->recieveMessage( req.message );
+     res.succes = true;
+    } else {
+     res.succes = false;
+    }
    }
   } else {
    if ( from == Network.end( ) ) {
-    ROS_ERROR( "Sender %d doesnt exist in Network", ( int )req.from );
+    ROS_ERROR( "Sender %d doesnt exist in Network", ( int )req.message.from );
     res.succes = false;
    }
    if ( to == Network.end( ) ) {
-    ROS_ERROR( "reciever %d doesnt exist in Network", ( int )req.to );
+    ROS_ERROR( "reciever %d doesnt exist in Network", ( int )req.message.to );
     res.succes = false;
    }
    res.succes = false;
   }
-  return res.succes;
+  return true;
  }
 
 private:

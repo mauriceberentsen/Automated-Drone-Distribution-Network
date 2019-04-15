@@ -11,8 +11,8 @@ public:
  ChildTableTree( );
  ~ChildTableTree( );
  uint8_t getDirectionToNode( const uint8_t node );
- void proofOfLive(uint8_t teller, uint8_t child);
- uint8_t proofOfDeceased( uint8_t teller, uint8_t child );
+ void proofOfAvailability(uint8_t teller, uint8_t child);
+ uint8_t proofOfMissing( uint8_t teller, uint8_t child );
  std::map<uint8_t,std::set<uint8_t>> getFamily() {return family;}
  bool empty(){return family.empty();};
  uint16_t familysize();
