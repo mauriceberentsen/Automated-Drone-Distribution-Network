@@ -1,0 +1,32 @@
+@startuml
+|MeshCommunicator|
+start
+:processMessage;
+if (case: LOCATION) then ([true])
+:processLocation;
+elseif (case: REQUESTLOCATION) then ([true])
+:processRequestLocation;
+elseif (case: PRESENT) then ([true])
+:processIntroduction;
+elseif (case: DECEASED) then ([true])
+:processDeceased;
+elseif (case: HEARTBEAT) then ([true])
+:processHeartbeat;
+elseif (case: MOVE_TO_LOCATION) then ([true])
+:sendGoalToEngine;
+elseif (case: MOVEMENT_NEGOTIATION) then ([true])
+:processMovementNegotiationMessage;
+else
+:Print unknown message;
+
+endif
+
+
+
+stop
+
+
+
+
+
+@enduml

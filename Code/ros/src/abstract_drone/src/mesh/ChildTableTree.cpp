@@ -30,7 +30,7 @@ uint8_t ChildTableTree::proofOfMissing( uint8_t teller, uint8_t child )
 {
  // teller claims that he lost a child, check if he is talking about himself
  if ( teller == child ) {
-  // Disable the route to this child;
+  // delete the teller;
   return family.erase( child );
 
  } else {

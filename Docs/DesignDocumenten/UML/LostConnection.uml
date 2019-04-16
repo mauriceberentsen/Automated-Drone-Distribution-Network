@@ -1,0 +1,25 @@
+@startuml
+
+
+start
+
+:lostConnection;
+if (connectedToGateway) then ([true])
+	:timerStarted = false;
+    stop
+else ([false])
+	if(timerStarted) then ([false])
+    	:Remove gateway from \nknown connections;
+       	:Inform children about \nlost connection;
+		:Set Time went offline;
+        :Start Timer;
+    else ([true])    
+		if (lastTimeOnline < currentTime - waitTime) then ([true])
+        	:StartEmergencyProtocol;
+			:timerStarted = false;
+            else ([false])
+        endif
+    endif
+endif
+stop
+@enduml

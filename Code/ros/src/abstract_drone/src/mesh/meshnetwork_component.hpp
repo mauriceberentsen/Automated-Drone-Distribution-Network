@@ -46,7 +46,7 @@ public:
  void sendGoalToDrone( const uint8_t ID, const float longitude,
                        const float latitude, const uint16_t height );
  void sendGoalToEngine( const abstract_drone::NRF24ConstPtr &_msg );
- void sendGoalToEngine( const locationMessage &_msg );
+ void sendGoalToEngine( const LocationMessage &_msg );
  bool switchPower( std_srvs::TriggerRequest &request,
                    std_srvs::TriggerResponse &response );
  virtual void lostConnection( ) = 0;
@@ -54,14 +54,16 @@ public:
  void processRequestLocation( const abstract_drone::NRF24ConstPtr &_msg );
  void sendLocation( const uint8_t other );
  void processLocation( const abstract_drone::NRF24ConstPtr &_msg );
- float distanceBetweenMeAndLocation( const locationMessage &A );
+ float distanceBetweenMeAndLocation( const LocationMessage &A );
  // Called by the world update start event
  /// \brief ROS helper function that processes messages
 protected:
  void QueueThread( );
  virtual void CheckConnection( ) = 0;
+ /// \brief A ROS subscriber
+ bool sendMessage(abstract_drone::WirelessMessage &message );
 
- uint8_t NodeID;
+ uint8_t nodeID;
  bool init = false;
  uint16_t droneID;
 
@@ -84,13 +86,10 @@ protected:
  /// \brief A ROS publisher
 
  ros::Publisher rosPub;
- ros::Publisher NodeDebugTopic;
+ ros::Publisher nodeDebugTopic;
  ros::ServiceServer switchPowerService;
 
  ros::Publisher droneEnginePublisher;
- /// \brief A ROS subscriber
- bool sendMessage( const uint8_t other,
-                   abstract_drone::WirelessMessage &message );
  ros::Subscriber rosSub;
  /// \brief A ROS callbackqueue that helps process messages
 
@@ -100,10 +99,10 @@ protected:
  std::thread rosQueueThread;
  std::thread heartbeatThread;
  std::thread NodeInfoThread;
- locationMessage lastGoodKnownLocation = locationMessage( 0, 0, 0, 0, 0 );
+ LocationMessage lastGoodKnownLocation = LocationMessage( 0, 0, 0, 0, 0 );
  bool knowPrefferedGatewayLocation = false;
- locationMessage prefferedGateWayLocation = locationMessage( 0, 0, 0, 0, 0 );
- ChildTableTree NodeTable;
+ LocationMessage prefferedGateWayLocation = LocationMessage( 0, 0, 0, 0, 0 );
+ ChildTableTree nodeTable;
  bool on = true;
  bool connectedToGateway = false;
  bool isGateway = false;

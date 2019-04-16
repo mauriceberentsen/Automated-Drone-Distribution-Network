@@ -41,8 +41,8 @@ private:
               </visual>\
             </link>\
             <plugin name=\"meshnetworkCom\" filename=\"libmeshnetworkCom.so\">\
-            <NodeID>"
-     << std::to_string( droneID ) << "</NodeID>\
+            <nodeID>"
+     << std::to_string( droneID ) << "</nodeID>\
               <DroneID>"
      << std::to_string( droneID ) << "</DroneID>\
             </plugin>\

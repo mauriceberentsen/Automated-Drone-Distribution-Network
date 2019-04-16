@@ -6,15 +6,15 @@
 
 enum Messagetype : uint8_t {
  NOTDEFINED = 0,
- LOCATION, // 1
- REQUESTLOCATION, // 2
- GIVEID, // 3
- PRESENT, // 4
- HEARTBEAT, // 5
- DECEASED, // 6
- FLOOD, // 7
- MOVE_TO_LOCATION, // 8
- MOVEMENT_NEGOTIATION, // 9
+ LOCATION,              // 1
+ REQUESTLOCATION,       // 2
+ GIVEID,                // 3
+ PRESENT,               // 4
+ HEARTBEAT,             // 5
+ DECEASED,              // 6
+ FLOOD,                 // 7
+ MOVE_TO_LOCATION,      // 8
+ MOVEMENT_NEGOTIATION,  // 9
  SIGNON = 255
 };
 
@@ -41,18 +41,19 @@ protected:
  uint8_t type;
 };
 
-class locationMessage : public Message
+class LocationMessage : public Message
 {
 public:
- locationMessage( uint8_t _ID, float latitude, float longitude, int16_t height,
+ LocationMessage( uint8_t _ID, float latitude, float longitude, int16_t height,
                   uint32_t timeSincePosix );
- locationMessage( const uint8_t *payload );
- ~locationMessage( );
+ LocationMessage( const uint8_t *payload );
+ ~LocationMessage( );
  std::string toString( );
  void toPayload( uint8_t *payload );
 
  float latitude, longitude;
  int16_t height;
+
 private:
  uint32_t timeSincePosix;
 };
@@ -71,12 +72,13 @@ public:
 class IntroduceMessage : public Message
 {
 public:
- IntroduceMessage( const uint8_t _ID,const uint8_t _hopsUntilsGateway, const bool _knowGateway );
+ IntroduceMessage( const uint8_t _ID, const uint8_t _hopsUntilsGateway,
+                   const bool _knowGateway );
  IntroduceMessage( const uint8_t *payload );
  ~IntroduceMessage( );
  std::string toString( );
  void toPayload( uint8_t *payload );
-  bool getKnowGateway( );
+ bool getKnowGateway( );
  uint8_t getHopsUntilsGateway( );
 
 private:
@@ -87,24 +89,32 @@ private:
 class HeartbeatMessage : public Message
 {
 public:
- HeartbeatMessage( const uint8_t _ID, const bool _knowGateway, const uint8_t _prefferedGateWay, uint8_t _hops = 0 );
+ HeartbeatMessage( const uint8_t _ID, const bool _knowGateway,
+                   const uint8_t _prefferedGateWay, uint8_t _hops = 0 );
  HeartbeatMessage( const uint8_t *payload );
  ~HeartbeatMessage( );
  std::string toString( );
  void toPayload( uint8_t *payload );
  bool getKnowGateway( );
- uint8_t getPrefferedGateway();
+ uint8_t getPrefferedGateway( );
  bool getIsGateway( );
  uint8_t hops;
- uint8_t getHops(){return hops;};
- void makeHop() {++hops;};
+ uint8_t getHops( )
+ {
+  return hops;
+ };
+ void makeHop( )
+ {
+  ++hops;
+ };
+
 private:
  bool knowGateway;
  uint8_t prefferedGateWay;
 };
 
 class DeceasedMessage : public Message
-{ 
+{
 public:
  DeceasedMessage( const uint8_t _ID, const uint8_t _deceased );
  DeceasedMessage( const uint8_t *payload );

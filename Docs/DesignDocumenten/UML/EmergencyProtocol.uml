@@ -1,0 +1,34 @@
+@startuml
+
+
+start
+:StartEmergencyProtocol;
+if (connectedToGateway) then ([true])
+	:clear negotiationList;
+    stop
+else ([false])
+	if(nodeTable.empty) then ([true])
+    	:sendGoalToEngine\n(lastGoodKnownLocation);
+       	:clear nodeTable;
+		:lastGoodKnownLocation = \nprefferedGateWayLocation;
+    else ([false]) 
+    	if(waiting for others) then ([false])
+			:startMovementNegotiation;
+        	:Calculate cost\n of movement;
+        	:inform childern about cost;
+            else([true])
+            endif
+        	if(Know cost of all childern)  then ([true])
+        		:insert self to list;
+        		if(Own cost is highest) then ([true])
+            		:sendGoalToEngine( lastGoodKnownLocation );
+  					:clear nodeTable;
+					:lastGoodKnownLocation = \nprefferedGateWayLocation;
+				endif
+  			:clear negotiation list;
+            else ([false])
+            stop
+    endif
+endif
+stop
+@enduml

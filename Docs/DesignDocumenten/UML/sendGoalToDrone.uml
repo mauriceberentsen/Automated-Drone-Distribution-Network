@@ -1,0 +1,28 @@
+@startuml
+
+autonumber
+
+actor "DroneManger" as DM
+box "drone0"
+participant "Node0:MeshnetworkGateway" as GW
+end box
+participant "WirelessSignalSimulator" as WSS
+box "drone1"
+participant "Node1:MeshnetworkComunicator" as 1
+participant ":DroneEngine" as 1E
+
+end box
+
+DM --> GW ++ : sendGoalToDrone(ID = 1,\n longitude,latitude, height) 
+GW -> GW: msg = CreateGoToLocationMessage(\n\t\t\tnodeID,longitude,\n\t\t\tlatitude,height)
+GW -> WSS ++: sendMessage(msg)
+deactivate GW
+WSS --> 1 ++:onRosMsg(msg)
+deactivate WSS
+1 -> 1 ++: sendGoalToEngine(msg)
+1 -> 1 : Location = deserializeMessage(msg)
+1 --> 1E : setGoal(Location)
+deactivate 1
+deactivate 1
+
+@enduml

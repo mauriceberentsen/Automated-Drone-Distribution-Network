@@ -48,7 +48,7 @@ void Message::CopyFromCharArray( uint8_t *value, uint16_t size,
  }
 }
 
-locationMessage::locationMessage( uint8_t _ID, float _latitude,
+LocationMessage::LocationMessage( uint8_t _ID, float _latitude,
                                   float _longitude, int16_t _height,
                                   uint32_t _timeSincePosix )
     : Message( _ID, LOCATION )
@@ -59,7 +59,7 @@ locationMessage::locationMessage( uint8_t _ID, float _latitude,
 {
 }
 
-locationMessage::locationMessage( const uint8_t *payload )
+LocationMessage::LocationMessage( const uint8_t *payload )
     : Message( payload[0], LOCATION )
 {
  int counter = 0;
@@ -77,11 +77,11 @@ locationMessage::locationMessage( const uint8_t *payload )
                     payload, counter );
 }
 
-locationMessage::~locationMessage( )
+LocationMessage::~LocationMessage( )
 {
 }
 
-void locationMessage::toPayload( uint8_t *payload )
+void LocationMessage::toPayload( uint8_t *payload )
 {
  int counter = 0;
  CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
@@ -100,7 +100,7 @@ void locationMessage::toPayload( uint8_t *payload )
                   payload, counter );
 }
 
-std::string locationMessage::toString( )
+std::string LocationMessage::toString( )
 {
  std::stringstream ss;
  ss << std::setprecision( 8 ) << std::dec << "ID[" << ( int )ID << "] Type["

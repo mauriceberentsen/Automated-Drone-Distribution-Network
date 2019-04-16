@@ -1,0 +1,43 @@
+@startuml
+
+autonumber
+box "drone1"
+participant "Node1:MeshnetworkComponent" as 1
+
+end box
+participant ":WirelessSignalSimulator" as WSS
+box "drone2"
+participant "Node2:MeshnetworkComponent" as 2
+participant ":DroneEngine" as DE
+end box
+
+
+
+[-> 1 : requestLocation(other = 2)
+activate 1
+1 -> 1 ++: msg = createRequest
+1 -> WSS : SendMessage(msg)
+WSS --> 2 : onRosMsg(msg)
+deactivate 1
+deactivate 1
+activate 2
+2 -> 2 ++:processRequestLocation(msg)
+2 -> DE ++: GetGPSCoordinates
+DE -> DE : determineLocation
+return loc
+2 -> 2 : msg = \nCreateLocationMessage\n(requester.ID, loc)
+2 -> WSS : SendMessage(msg)
+deactivate 2
+deactivate 2
+WSS --> 1 : onRosMsg(msg)
+activate 1
+1 -> 1 ++:processRequestLocation(_msg)
+alt msg.getID == PrefferedGateway
+1 -> 1 : saveLocationOfGateway
+else msg.getID != PrefferedGateway
+1-> 1: saveLastGoodKnownLocation
+end
+deactivate 1
+deactivate 1
+
+@enduml

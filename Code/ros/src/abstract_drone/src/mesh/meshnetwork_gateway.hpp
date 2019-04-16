@@ -15,7 +15,6 @@ public:
 private:
  ros::Subscriber gatewaySub;
 
- void floodMessage(const abstract_drone::NRF24ConstPtr &_msg);
  /**INTERFACE FUNCTIONS**/
  void gatewayQueue(const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg);
  void OnUpdate( );
@@ -24,9 +23,7 @@ private:
  void CheckConnection( );
  void lostConnection( ){};
  /**GATEWAY FUNCTIONS**/
- void processHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
- void registerNode( const abstract_drone::NRF24ConstPtr &_msg );
- void handOutNewID( const abstract_drone::NRF24ConstPtr &_msg );
+ void ProcessHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
 };
 
 // Register this plugin with the simulator

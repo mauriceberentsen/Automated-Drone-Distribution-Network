@@ -11,7 +11,7 @@ void MeshnetworkGateway::OnUpdate( )
  if ( !init ) {
   connectedToGateway = true;
   isGateway = true;
-  prefferedGateWay = this->NodeID;
+  prefferedGateWay = this->nodeID;
 
   ros::SubscribeOptions so = ros::SubscribeOptions::create<
       abstract_drone::RequestGatewayDroneFlight >(
@@ -27,7 +27,7 @@ void MeshnetworkGateway::OnUpdate( )
 void MeshnetworkGateway::gatewayQueue(
     const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg )
 {
- sendGoalToDrone( _msg->ID, _msg->latitude, _msg->longitude, _msg->height );
+ sendGoalToDrone( _msg->ID, _msg->longitude,_msg->latitude, _msg->height );
 }
 
 void MeshnetworkGateway::processIntroduction(
@@ -40,7 +40,7 @@ void MeshnetworkGateway::CheckConnection( )
  while ( this->rosNode->ok( ) ) {
   common::Time::Sleep( 10 );  // check every 10 seconds
   // if ( !this->on ) continue;
-  for ( auto &node : NodeTable.getFamily( ) )
+  for ( auto &node : nodeTable.getFamily( ) )
    sendHeartbeat( node.first );
  }
 }
@@ -75,7 +75,7 @@ void MeshnetworkGateway::processMessage(
    break;
   case HEARTBEAT:
    //ROS_WARN( "HEARTBEAT message recieved" );
-   processHeartbeat( _msg );
+   ProcessHeartbeat( _msg );
    break;
   case GIVEID:
    ROS_WARN( "GIVEID message recieved" );
@@ -86,33 +86,8 @@ void MeshnetworkGateway::processMessage(
  }
 }
 
-void MeshnetworkGateway::floodMessage(
-    const abstract_drone::NRF24ConstPtr &_msg )
-{
- abstract_drone::WirelessMessage WM;
- for ( auto &other : NodeTable.getFamily( ) ) {
-  if ( _msg->from == other.first ) continue;
-  uint8_t towards = NodeTable.getDirectionToNode( other.first );
-  if ( towards == 255 ) continue;
-  WM.request.from = this->NodeID;
-  WM.request.to = towards;
-  WM.request.message = *( _msg );
-  WM.request.message.to = towards;
 
-  ++totalMessageSent;
-  if ( publishService.call( WM ) ) {
-   if ( !WM.response.succes ) {
-    NodeTable.proofOfMissing( towards, towards );
-   } else {
-    NodeTable.proofOfAvailability( towards, towards );
-   }
-  } else {
-   NodeTable.proofOfMissing( towards, towards );
-  }
- }
-}
-
-void MeshnetworkGateway::processHeartbeat(
+void MeshnetworkGateway::ProcessHeartbeat(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
  HeartbeatMessage msg( _msg->payload.data( ) );
@@ -120,16 +95,5 @@ void MeshnetworkGateway::processHeartbeat(
  sendHeartbeat( msg.getID( ) );
 }
 
-void MeshnetworkGateway::registerNode(
-    const abstract_drone::NRF24ConstPtr &_msg )
-{
- ROS_WARN( "NODE REGISTERED" );
-}
-
-void MeshnetworkGateway::handOutNewID(
-    const abstract_drone::NRF24ConstPtr &_msg )
-{
- ROS_WARN( "ASSIGNING NEW ID: not working" );
-}
 
 }  // namespace gazebo

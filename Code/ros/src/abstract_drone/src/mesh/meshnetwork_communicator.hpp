@@ -17,8 +17,8 @@ private:
  uint8_t getNodePath( uint8_t other );
  void sendHeartbeatToGateway( );
  void lostConnection( );
- void processHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
- void startEmergencyProtocol( );
+ void ProcessHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
+ void StartEmergencyProtocol( );
  void startMovementNegotiation( );
  void informOthersAboutDistance(float distance);
  void processMovementNegotiationMessage (const abstract_drone::NRF24ConstPtr &_msg );

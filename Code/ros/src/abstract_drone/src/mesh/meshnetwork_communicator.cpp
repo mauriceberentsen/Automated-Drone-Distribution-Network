@@ -39,7 +39,7 @@ void MeshnetworkCommunicator::processMessage(
    break;
   case GIVEID:
    ROS_WARN( "GIVEID message recieved" );
-   reassignID( _msg->payload[2] );
+   // reassignID( _msg->payload[2] );
    break;
   case PRESENT:
    processIntroduction( _msg );
@@ -48,7 +48,7 @@ void MeshnetworkCommunicator::processMessage(
    processDeceased( _msg );
    break;
   case HEARTBEAT:
-   processHeartbeat( _msg );
+   ProcessHeartbeat( _msg );
    break;
   case MOVE_TO_LOCATION:
    ROS_WARN( "MOVE_TO_LOCATION message recieved" );
@@ -65,7 +65,7 @@ void MeshnetworkCommunicator::processMessage(
    break;
  }
 }
-void MeshnetworkCommunicator::processHeartbeat(
+void MeshnetworkCommunicator::ProcessHeartbeat(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
  HeartbeatMessage msg( _msg->payload.data( ) );
@@ -82,7 +82,7 @@ void MeshnetworkCommunicator::processHeartbeat(
  }
  // if sender knows gateway and we don't try pinging gateway again
  else if ( msg.getKnowGateway( ) && !connectedToGateway ) {
-  NodeTable.proofOfAvailability( msg.getID( ), msg.getPrefferedGateway( ) );
+  nodeTable.proofOfAvailability( msg.getID( ), msg.getPrefferedGateway( ) );
   // aks him where he lives in case we lose him
   // requestLocation( msg.getID( ) );
   prefferedGateWay = msg.getPrefferedGateway( );
@@ -93,12 +93,12 @@ void MeshnetworkCommunicator::processHeartbeat(
 void MeshnetworkCommunicator::CheckConnection( )
 {
  while ( this->rosNode->ok( ) ) {
-  common::Time::Sleep( 10 );  // check every 10 seconds
   if ( !this->on ) {
    connectedToGateway = false;
    continue;
   }
-  for ( auto &node : NodeTable.getFamily( ) ) {
+  common::Time::Sleep( 10 );  // check every 10 seconds
+  for ( auto &node : nodeTable.getFamily( ) ) {
    sendHeartbeat( node.first );
   }
   searchOtherNodesInRange( );  // maybe there is someone close
@@ -123,27 +123,27 @@ void MeshnetworkCommunicator::lostConnection( )
   return;
  }
  if ( !timerStarted ) {
-  NodeTable.proofOfMissing( prefferedGateWay, prefferedGateWay );
-  informAboutMissingChild( this->NodeID, prefferedGateWay );
+  nodeTable.proofOfMissing( prefferedGateWay, prefferedGateWay );
+  informAboutMissingChild( this->nodeID, prefferedGateWay );
   this->lastTimeOnline = this->model->GetWorld( )->SimTime( );
   timerStarted = true;
  } else if ( lastTimeOnline < this->model->GetWorld( )->SimTime( ) - 30 ) {
   ROS_WARN( "30 seconds since no connection" );
-  startEmergencyProtocol( );
+  StartEmergencyProtocol( );
   timerStarted = false;
  }
 }
 
-void MeshnetworkCommunicator::startEmergencyProtocol( )
+void MeshnetworkCommunicator::StartEmergencyProtocol( )
 {
  if ( connectedToGateway )  // in case we meanwhile found a connectetion
  {
   negotiationList.clear( );
   return;
  }
- if ( NodeTable.empty( ) ) {
+ if ( nodeTable.empty( ) ) {
   sendGoalToEngine( lastGoodKnownLocation );
-  NodeTable.getFamily( ).clear( );
+  nodeTable.getFamily( ).clear( );
   lastGoodKnownLocation = prefferedGateWayLocation;
  } else {
   // start negotiation about who needs to move
@@ -153,68 +153,69 @@ void MeshnetworkCommunicator::startEmergencyProtocol( )
 
 void MeshnetworkCommunicator::startMovementNegotiation( )
 {
+ static bool waiting = false;
+ static float myDistance;
  // Find out which who the greatest distance from the GATEWAY. He shall be
  // choosen to replace the missing node
  // before we go to action we first make a list of everybody disconnected
+
  ROS_INFO( "LOST AS A GROUP LETS PICK SOMEONE TO MOVE" );
  // First find out how far away you are
- float myDistance = -1;
- if ( NodeTable.getDirectionToNode( lastGoodKnownLocation.getID( ) ) == 255 ) {
+ if ( nodeTable.getDirectionToNode( lastGoodKnownLocation.getID( ) ) == 255 ) {
   myDistance = distanceBetweenMeAndLocation( prefferedGateWayLocation );
+ } else {
+  myDistance = -1;
  }
+
  // add ourself to the list
  // tell others how far away we are
  informOthersAboutDistance( myDistance );
- if ( negotiationList.size( ) < NodeTable.getFamily( ).size( ) ) {
+ if ( negotiationList.size( ) < nodeTable.getFamily( ).size( ) ) {
   // wait another round
   return;
  }
+ if ( !waiting ) {
+  negotiationList.insert( std::make_pair( myDistance, this->nodeID ) );
+  waiting = true;
+ }
+ waiting = false;
  // now it is time for action
 
- negotiationList.insert( std::make_pair( myDistance, this->NodeID ) );
  for ( auto &i : negotiationList ) {
   std::cout << this->model->GetName( ) + " " << ( int )i.second << "--"
             << i.first << std::endl;
  }
  ROS_INFO( "%s Node %u has the greatest cost", this->model->GetName( ).c_str( ),
            negotiationList.rbegin( )->second );
- if ( myDistance >= 0 && negotiationList.rbegin( )->second == this->NodeID ) {
+ if ( myDistance >= 0 && negotiationList.rbegin( )->second == this->nodeID ) {
   ROS_INFO( "%s: i'm the one who need to move ",
             this->model->GetName( ).c_str( ) );
   sendGoalToEngine( lastGoodKnownLocation );
-  NodeTable.getFamily( ).clear( );
+  nodeTable.getFamily( ).clear( );
 
   lastGoodKnownLocation = prefferedGateWayLocation;
+  negotiationList.clear( );
+ } else {
+  negotiationList.clear( );
  }
- negotiationList.clear( );
 }
 
 void MeshnetworkCommunicator::informOthersAboutDistance( float distance )
 {
- MovementNegotiationMessage NegoMSG( this->NodeID, distance );
+ MovementNegotiationMessage NegoMSG( this->nodeID, distance );
  abstract_drone::WirelessMessage WM;
- abstract_drone::NRF24 nrfmsg;
- for ( auto &other : NodeTable.getFamily( ) ) {
-  uint8_t towards = NodeTable.getDirectionToNode( other.first );
+ for ( auto &other : nodeTable.getFamily( ) ) {
+  uint8_t towards = nodeTable.getDirectionToNode( other.first );
   if ( towards == 255 ) continue;
-  WM.request.from = this->NodeID;
+  WM.request.from = this->nodeID;
   WM.request.to = towards;
-  nrfmsg.from = this->NodeID;
-  nrfmsg.to = towards;
-  nrfmsg.forward = other.first;
-  nrfmsg.ack = 0;
-  NegoMSG.toPayload( nrfmsg.payload.data( ) );
-  WM.request.message = nrfmsg;
+  WM.request.message.from = this->nodeID;
+  WM.request.message.to = towards;
+  WM.request.message.forward = other.first;
+  WM.request.message.ack = 0;
+  NegoMSG.toPayload( WM.request.message.payload.data( ) );
   ++totalMessageSent;
-  if ( publishService.call( WM ) ) {
-   if ( !WM.response.succes ) {
-    NodeTable.proofOfMissing( towards, towards );
-   } else {
-    NodeTable.proofOfAvailability( towards, towards );
-   }
-  } else {
-   NodeTable.proofOfMissing( towards, towards );
-  }
+  sendMessage( WM );
  }
 }
 

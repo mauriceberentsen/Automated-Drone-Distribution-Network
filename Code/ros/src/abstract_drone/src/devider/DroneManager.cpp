@@ -1,8 +1,8 @@
 #include "DroneManager.hpp"
 #include "abstract_drone/RequestGatewayDroneFlight.h"
 
-DroneManager::DroneManager( std::shared_ptr< ros::NodeHandle > _rosNode,
-                            std::string GatewayTopicName )
+DroneManager::DroneManager( std::shared_ptr< ros::NodeHandle >& _rosNode,
+                            std::string& GatewayTopicName )
     : nodeHandle( _rosNode ), GatewayTopic( GatewayTopicName )
 {
  rosPub =
@@ -108,7 +108,14 @@ bool DroneManager::setDronesToCasus(
    RequestMovement( 17, 8, 27 );
 
    break;
+  case 100:
+   for ( int i = 1; i < 11; i++ ) {
+    for ( int j = 0; j < 10; j++ ) {
+       RequestMovement( i+j, i*5,j*5 );
+    }
+   }
 
+   break;
   default:
    RequestMovement( 1, -13, 24 );
 

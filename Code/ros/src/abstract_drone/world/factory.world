@@ -41,7 +41,7 @@
       </link>
       <plugin name="meshnetworkGateway" filename="libmeshnetworkGateway.so">
         <DroneID>0</DroneID>
-        <NodeID>0</NodeID>
+        <nodeID>0</nodeID>
       </plugin>
       <plugin filename='libdroneEngine.so' name='droneEngine'>
         <DroneID>0</DroneID>
