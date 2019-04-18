@@ -1,6 +1,6 @@
 #include "ChildTableTree.hpp"
 #include <iostream>
-namespace gazebo
+namespace RoutingTechnique
 {
 ChildTableTree::ChildTableTree( )
 {
@@ -14,8 +14,7 @@ uint8_t ChildTableTree::getDirectionToNode( const uint8_t node )
 {
  // is it one of our own childeren?
  auto it = family.find( node );
- if ( it != family.end( ) )
- {
+ if ( it != family.end( ) ) {
   return it->first;
  } else  // is it one of the grandchilderen? Direct them that way
  {
@@ -86,4 +85,4 @@ uint16_t ChildTableTree::familysize( )
  }
  return size;
 }
-}  // namespace gazebo
+}  // namespace RoutingTechnique

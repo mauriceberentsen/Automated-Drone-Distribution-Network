@@ -1,105 +1,39 @@
-#include <ignition/math/Pose3.hh>
 #include "gazebo/physics/physics.hh"
 #include "gazebo/common/common.hh"
 #include "gazebo/gazebo.hh"
-#include <sstream>
-#include <iostream>
+#include "Drone.hpp"
 
 namespace gazebo
 {
-class DroneFactory : public WorldPlugin
+namespace DroneSimulation
 {
-private:
- std::string createDroneSDFstring( uint8_t droneID, float x, float y, float z )
+ class DroneFactory : public WorldPlugin
  {
-  std::stringstream ss;
-  ss << "<sdf version ='1.4'>\
-          <model name ='drone'>\
-           <static>1</static>\
-            <pose>0 0 0.5 0 0 0</pose>\
-            <link name ='link'>\
-              <inertial>\
-              <pose>"
-     << x << " " << y << " " << z + 0.5 << " "
-     << "0 0 0</pose>\
-              </inertial>\
-              <collision name ='collision'>\
-                <geometry>\
-                  <box><size>0.5 0.5 0.5</size></box>\
-                </geometry>\
-              </collision>\
-              <visual name ='visual'>\
-                <geometry>\
-                  <box><size>0.5 0.5 0.5</size></box>\
-                </geometry>\
-                <material>\
-            <script>\
-              <uri>file://media/materials/scripts/gazebo.material</uri>\
-              <name>Gazebo/Green</name>\
-            </script>\
-          </material>\
-              </visual>\
-            </link>\
-            <plugin name=\"meshnetworkCom\" filename=\"libmeshnetworkCom.so\">\
-            <nodeID>"
-     << std::to_string( droneID ) << "</nodeID>\
-              <DroneID>"
-     << std::to_string( droneID ) << "</DroneID>\
-            </plugin>\
-            <plugin filename='libdroneEngine.so' name='droneEngine'>\
-             <DroneID>"
-     << std::to_string( droneID ) << "</DroneID>\
-            </plugin>\
-          </model>\
-        </sdf>";
-  return ss.str( );
- }
+ public:
+  void Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf )
+  {
+   int amountOfRouters = 0;
+   int amountOfGateways = 0;
 
-  private: int ID = 1;
-public:
- void createDrone( float x, float y, float z, physics::WorldPtr _parent )
- {
-  sdf::SDF boxSDF;
-  boxSDF.SetFromString( createDroneSDFstring( ID, x, y, z ) );
-  // Demonstrate using a custom model name.
-  sdf::ElementPtr model = boxSDF.Root( )->GetElement( "model" );
-  model->GetAttribute( "name" )->SetFromString( "drone" +
-                                                std::to_string( ID ) );
-  _parent->InsertModelSDF( boxSDF );
-  ++this->ID;
- }
-
-public:
- void Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf )
- {
-  int amount = 0;
-
-  if ( _sdf->HasElement( "amountOfDrones" ) ) {
-   amount = _sdf->Get< int >( "amountOfDrones" );
-  }
-  if ( amount < 100 ) {
-   for ( int i = 1; i < amount + 1; i++ ) {
-    // start with 1 since the gateway already is number 0
-    createDrone( 0, 0, 0, _parent );
-   }
-  } else {
-   int rows, left;
-   rows = std::floor( amount / 10 );
-   left = ( amount % 10 ) + 1;
-   for ( int i = 0; i < rows; i++ ) {
-    for ( int j = 0; j < 10; j++ ) {
-     if ( i + j == 0 ) continue;
-     createDrone( i * 5, j * 5, 0.5, _parent );
+   if ( _sdf->HasElement( "amountOfGatewayDrones" ) ) {
+    amountOfGateways = _sdf->Get< int >( "amountOfGatewayDrones" );
+    for ( int i = 0; i < amountOfGateways; i++ ) {
+     // the new class will inject sdf information needed in Gazebo
+     new GatewayDrone( 1, i, 0, _parent );
     }
    }
-   //  for(int i = amount - left; i <= amount; i++)
-   //  {
-   //   createDrone( i, rows*5+1,i*5 , 0.5, _parent );
-   //  }
+
+   if ( _sdf->HasElement( "amountOfRouterDrones" ) ) {
+    amountOfRouters = _sdf->Get< int >( "amountOfRouterDrones" );
+    for ( int i = 0; i < amountOfRouters; i++ ) {
+     // the new class will inject sdf information needed in Gazebo
+     new RouterDrone( i, 0, 0, _parent );
+    }
+   }
   }
- }
-};
+ };
+}  // namespace DroneSimulation
 
 // Register this plugin with the simulator
-GZ_REGISTER_WORLD_PLUGIN( DroneFactory )
+GZ_REGISTER_WORLD_PLUGIN( DroneSimulation::DroneFactory )
 }  // namespace gazebo

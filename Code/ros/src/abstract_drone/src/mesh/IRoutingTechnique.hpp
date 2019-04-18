@@ -2,16 +2,13 @@
 #define IROUTINGTECHNIQUE
 #include <inttypes.h>
 
-namespace gazebo
+namespace RoutingTechnique
 {
 class IRoutingTechnique
 {
-
 public:
  virtual uint8_t getDirectionToNode( const uint8_t node ) = 0;
-
-
 };
-}  // namespace gazebo
+}  // namespace RoutingTechnique
 
 #endif  // IROUTINGTECHNIQUE

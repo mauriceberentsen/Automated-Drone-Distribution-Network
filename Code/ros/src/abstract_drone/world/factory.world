@@ -11,46 +11,10 @@
       <CommunicationDistance>9</CommunicationDistance>
     </plugin>
 
-    <model name ='gateway_drone'>
-      <static>1</static>
-      <pose>0 0 0 0 0 0</pose>
-      <link name ='link'>
-        <inertial>
-          <pose>0 0 0 0 0 0</pose>
-        </inertial>
-        <collision name ='collision'>
-          <geometry>
-            <box>
-              <size>0.5 0.5 0.5</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name ='visual'>
-          <geometry>
-            <box>
-              <size>0.5 0.5 0.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Purple</name>
-            </script>
-          </material>
-        </visual>
-      </link>
-      <plugin name="meshnetworkGateway" filename="libmeshnetworkGateway.so">
-        <DroneID>0</DroneID>
-        <nodeID>0</nodeID>
-      </plugin>
-      <plugin filename='libdroneEngine.so' name='droneEngine'>
-        <DroneID>0</DroneID>
-      </plugin>
-    </model>
-
 
     <plugin name="dronefactory" filename="libdronefactory.so">
-      <amountOfDrones>17</amountOfDrones>
+      <amountOfRouterDrones>17</amountOfRouterDrones>
+      <amountOfGatewayDrones>2</amountOfGatewayDrones>
     </plugin>
   </world>
 </sdf>

@@ -12,8 +12,8 @@ class Node
 {
 public:
  Node( Vector3< float >& _position,
-       std::shared_ptr< ros::NodeHandle > _nodeHandle,
-       std::string _subtopicname );
+       std::shared_ptr< ros::NodeHandle >& _nodeHandle,
+       std::string& _subtopicname );
  ~Node( );
  const Vector3< float >& getPosition( );
  void setPosition( Vector3< float >& position );

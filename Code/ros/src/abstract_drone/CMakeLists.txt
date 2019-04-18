@@ -160,7 +160,7 @@ add_library(droneEngine SHARED src/drone/droneEngine.cpp)
 target_link_libraries(droneEngine ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(droneEngine abstract_drone_generate_messages_cpp)
 
-add_library(dronefactory SHARED src/drone/drone_factory.cpp)
+add_library(dronefactory SHARED src/drone/drone_factory.cpp src/drone/Drone.cpp)
 target_link_libraries(dronefactory  ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(dronefactory abstract_drone_generate_messages_cpp)
 

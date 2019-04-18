@@ -21,10 +21,10 @@
 #include "ChildTableTree.hpp"
 
 #include <random>
-
+using namespace Messages;
 namespace gazebo
 {
-class MeshnetworkCommponent : public ModelPlugin
+class MeshnetworkComponent : public ModelPlugin
 {
 public:
  void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf );
@@ -42,7 +42,7 @@ public:
  void IntroduceNode( uint8_t other );
  void reassignID( uint8_t ID );
  void informAboutMissingChild( uint8_t parent, uint8_t child );
- void processDeceased( const abstract_drone::NRF24ConstPtr &_msg );
+ void processMissing( const abstract_drone::NRF24ConstPtr &_msg );
  void sendGoalToDrone( const uint8_t ID, const float longitude,
                        const float latitude, const uint16_t height );
  void sendGoalToEngine( const abstract_drone::NRF24ConstPtr &_msg );
@@ -61,7 +61,7 @@ protected:
  void QueueThread( );
  virtual void CheckConnection( ) = 0;
  /// \brief A ROS subscriber
- bool sendMessage(abstract_drone::WirelessMessage &message );
+ bool sendMessage( abstract_drone::WirelessMessage &message );
 
  uint8_t nodeID;
  bool init = false;
@@ -102,7 +102,7 @@ protected:
  LocationMessage lastGoodKnownLocation = LocationMessage( 0, 0, 0, 0, 0 );
  bool knowPrefferedGatewayLocation = false;
  LocationMessage prefferedGateWayLocation = LocationMessage( 0, 0, 0, 0, 0 );
- ChildTableTree nodeTable;
+ RoutingTechnique::ChildTableTree nodeTable;
  bool on = true;
  bool connectedToGateway = false;
  bool isGateway = false;

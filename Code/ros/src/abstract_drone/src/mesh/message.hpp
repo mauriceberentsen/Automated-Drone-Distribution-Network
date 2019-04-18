@@ -3,35 +3,30 @@
 
 #include <inttypes.h>
 #include <string>
-
+namespace Messages
+{
 enum Messagetype : uint8_t {
  NOTDEFINED = 0,
  LOCATION,              // 1
  REQUESTLOCATION,       // 2
- GIVEID,                // 3
  PRESENT,               // 4
  HEARTBEAT,             // 5
- DECEASED,              // 6
- FLOOD,                 // 7
+ MISSING,               // 6
  MOVE_TO_LOCATION,      // 8
  MOVEMENT_NEGOTIATION,  // 9
- SIGNON = 255
 };
 
 class Message
 {
 public:
  Message( const uint8_t _ID, Messagetype _Messagetype );
- Message( const uint8_t *payload );
+ explicit Message( const uint8_t *payload );
  ~Message( );
  virtual void toPayload( uint8_t *payload );
  virtual std::string toString( );
  void CopyFromCharArray( uint8_t *value, uint16_t size, const uint8_t *arr,
                          uint16_t start );
- uint8_t getID( )
- {
-  return ID;
- }
+ const uint8_t getID( );
 
 protected:
  uint8_t ID;
@@ -46,7 +41,7 @@ class LocationMessage : public Message
 public:
  LocationMessage( uint8_t _ID, float latitude, float longitude, int16_t height,
                   uint32_t timeSincePosix );
- LocationMessage( const uint8_t *payload );
+ explicit LocationMessage( const uint8_t *payload );
  ~LocationMessage( );
  std::string toString( );
  void toPayload( uint8_t *payload );
@@ -58,23 +53,12 @@ private:
  uint32_t timeSincePosix;
 };
 
-class GiveIDMessage : public Message
-{
-public:
- GiveIDMessage( uint8_t _ID, uint8_t Give )
-     : Message( ID, GIVEID ), GiveID( Give ){};
- ~GiveIDMessage( ){};
- std::string toString( );
- void toPayload( uint8_t *payload );
- uint8_t GiveID;
-};
-
 class IntroduceMessage : public Message
 {
 public:
  IntroduceMessage( const uint8_t _ID, const uint8_t _hopsUntilsGateway,
                    const bool _knowGateway );
- IntroduceMessage( const uint8_t *payload );
+ explicit IntroduceMessage( const uint8_t *payload );
  ~IntroduceMessage( );
  std::string toString( );
  void toPayload( uint8_t *payload );
@@ -91,7 +75,7 @@ class HeartbeatMessage : public Message
 public:
  HeartbeatMessage( const uint8_t _ID, const bool _knowGateway,
                    const uint8_t _prefferedGateWay, uint8_t _hops = 0 );
- HeartbeatMessage( const uint8_t *payload );
+ explicit HeartbeatMessage( const uint8_t *payload );
  ~HeartbeatMessage( );
  std::string toString( );
  void toPayload( uint8_t *payload );
@@ -113,12 +97,12 @@ private:
  uint8_t prefferedGateWay;
 };
 
-class DeceasedMessage : public Message
+class MissingMessage : public Message
 {
 public:
- DeceasedMessage( const uint8_t _ID, const uint8_t _deceased );
- DeceasedMessage( const uint8_t *payload );
- ~DeceasedMessage( );
+ MissingMessage( const uint8_t _ID, const uint8_t _deceased );
+ explicit MissingMessage( const uint8_t *payload );
+ ~MissingMessage( );
  std::string toString( );
  void toPayload( uint8_t *payload );
  uint8_t getDeceased( );
@@ -132,7 +116,7 @@ class GoToLocationMessage : public Message
 public:
  GoToLocationMessage( uint8_t _ID, float latitude, float longitude,
                       int16_t height );
- GoToLocationMessage( const uint8_t *payload );
+ explicit GoToLocationMessage( const uint8_t *payload );
  ~GoToLocationMessage( ){};
  std::string toString( );
  void toPayload( uint8_t *payload );
@@ -144,7 +128,7 @@ class MovementNegotiationMessage : public Message
 {
 public:
  MovementNegotiationMessage( const uint8_t _ID, const float _distance );
- MovementNegotiationMessage( const uint8_t *payload );
+ explicit MovementNegotiationMessage( const uint8_t *payload );
  ~MovementNegotiationMessage( );
  std::string toString( );
  void toPayload( uint8_t *payload );
@@ -153,5 +137,5 @@ public:
 private:
  float distance;
 };
-
+}  // namespace Messages
 #endif  // MESSAGEHPP

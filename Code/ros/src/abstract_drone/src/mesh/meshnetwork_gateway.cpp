@@ -21,13 +21,14 @@ void MeshnetworkGateway::OnUpdate( )
   this->gatewaySub = this->rosNode->subscribe( so );
 
   init = true;
+  searchOtherNodesInRange( );
  }
 }
 
 void MeshnetworkGateway::gatewayQueue(
     const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg )
 {
- sendGoalToDrone( _msg->ID, _msg->longitude,_msg->latitude, _msg->height );
+ sendGoalToDrone( _msg->ID, _msg->longitude, _msg->latitude, _msg->height );
 }
 
 void MeshnetworkGateway::processIntroduction(
@@ -59,26 +60,21 @@ void MeshnetworkGateway::processMessage(
    ROS_WARN( "Location message recieved" );
    break;
   case PRESENT:
-   //ROS_INFO( "%s Recieved PRESENT", this->model->GetName( ).c_str( ) );
-   // processIntroduction( _msg );
    break;
   case REQUESTLOCATION:
    processRequestLocation( _msg );
    break;
-  case DECEASED:
-   ROS_WARN( "%s DECEASED message recieved", this->model->GetName( ).c_str( ) );
-   processDeceased( _msg );
-   break;
-  case SIGNON:
-   ROS_WARN( "%s SIGNON message recieved", this->model->GetName( ).c_str( ) );
-   //_msg->from == 255 ? handOutNewID( _msg ) : registerNode( _msg );
+  case MISSING:
+   ROS_WARN( "%s MISSING message recieved", this->model->GetName( ).c_str( ) );
+   processMissing( _msg );
    break;
   case HEARTBEAT:
-   //ROS_WARN( "HEARTBEAT message recieved" );
+   // ROS_WARN( "HEARTBEAT message recieved" );
    ProcessHeartbeat( _msg );
    break;
-  case GIVEID:
-   ROS_WARN( "GIVEID message recieved" );
+  case MOVE_TO_LOCATION:
+   ROS_WARN( "MOVE_TO_LOCATION message recieved" );
+   sendGoalToEngine( _msg );
    break;
   default:
    ROS_WARN( "UNKNOWN message recieved" );
@@ -86,14 +82,12 @@ void MeshnetworkGateway::processMessage(
  }
 }
 
-
 void MeshnetworkGateway::ProcessHeartbeat(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
  HeartbeatMessage msg( _msg->payload.data( ) );
- //ROS_INFO("RECIEVED A HEARTBEAT FROM %u", msg.getID( ));
+ // ROS_INFO("RECIEVED A HEARTBEAT FROM %u", msg.getID( ));
  sendHeartbeat( msg.getID( ) );
 }
-
 
 }  // namespace gazebo

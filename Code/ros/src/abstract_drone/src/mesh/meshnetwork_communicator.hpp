@@ -5,7 +5,7 @@
 
 namespace gazebo
 {
-class MeshnetworkCommunicator : public MeshnetworkCommponent
+class MeshnetworkCommunicator : public MeshnetworkComponent
 {
 private:
  /**INTERFACE FUNCTIONS**/
@@ -20,10 +20,11 @@ private:
  void ProcessHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
  void StartEmergencyProtocol( );
  void startMovementNegotiation( );
- void informOthersAboutDistance(float distance);
- void processMovementNegotiationMessage (const abstract_drone::NRF24ConstPtr &_msg );
+ void informOthersAboutDistance( float distance );
+ void processMovementNegotiationMessage(
+     const abstract_drone::NRF24ConstPtr &_msg );
  bool timerStarted = false;
- std::multimap<float, uint8_t> negotiationList;
+ std::multimap< float, uint8_t > negotiationList;
  common::Time lastTimeOnline;
 };  // namespace gazebo
 // Register this plugin with the simulator

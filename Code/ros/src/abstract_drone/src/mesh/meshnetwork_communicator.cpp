@@ -34,18 +34,11 @@ void MeshnetworkCommunicator::processMessage(
   case REQUESTLOCATION:
    processRequestLocation( _msg );
    break;
-  case SIGNON:
-   ROS_WARN( "%s SIGNON message recieved", this->model->GetName( ).c_str( ) );
-   break;
-  case GIVEID:
-   ROS_WARN( "GIVEID message recieved" );
-   // reassignID( _msg->payload[2] );
-   break;
   case PRESENT:
    processIntroduction( _msg );
    break;
-  case DECEASED:
-   processDeceased( _msg );
+  case MISSING:
+   processMissing( _msg );
    break;
   case HEARTBEAT:
    ProcessHeartbeat( _msg );

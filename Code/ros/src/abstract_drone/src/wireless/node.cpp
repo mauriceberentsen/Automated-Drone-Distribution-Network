@@ -3,8 +3,8 @@
 namespace wireless
 {
 Node::Node( Vector3< float >& _position,
-            std::shared_ptr< ros::NodeHandle > _nodeHandle,
-            std::string _subtopicname )
+            std::shared_ptr< ros::NodeHandle >& _nodeHandle,
+            std::string& _subtopicname )
     : moved( true )
     , position( _position )
     , nodeHandle( _nodeHandle )

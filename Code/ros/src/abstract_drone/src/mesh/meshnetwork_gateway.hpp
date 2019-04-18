@@ -7,7 +7,7 @@
 
 namespace gazebo
 {
-class MeshnetworkGateway : public MeshnetworkCommponent
+class MeshnetworkGateway : public MeshnetworkComponent
 {
 public:
  MeshnetworkGateway( );
