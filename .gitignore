@@ -83,3 +83,5 @@ Code/ros/src/abstract_drone/build/
 Docs/\.vscode/
 
 Docs/DesignDocumenten/UML/\.vscode/
+
+Code/ros/src/abstract_drone_workspace\.code-workspace
