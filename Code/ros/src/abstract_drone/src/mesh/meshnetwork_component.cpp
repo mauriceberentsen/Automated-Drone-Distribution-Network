@@ -112,9 +112,9 @@ void MeshnetworkComponent::publishDebugInfo( )
   common::Time::Sleep( 1 );  // 1hz refresh is enough
   msg.nodeID = this->nodeID;
   msg.ConnectedWithGateway = this->connectedToGateway;
-  msg.familySize = this->nodeTable.familysize( );
+  msg.familySize = this->nodeTable.getTableSize( );
   msg.totalMessages = this->totalMessageSent;
-  msg.connectedNodes = this->nodeTable.getFamily( ).size( );
+  msg.connectedNodes = this->nodeTable.getAmountOfChildren( );
   msg.prefferedGateWay = this->prefferedGateWay;
   msg.on = this->on;
   msg.hops = this->hopsFromGatewayAway;
@@ -127,7 +127,7 @@ void MeshnetworkComponent::OnRosMsg( const abstract_drone::NRF24ConstPtr &_msg )
 {
  ( _msg->forward == this->nodeID ) ? processMessage( _msg )
                                    : forwardMessage( _msg );
- nodeTable.proofOfAvailability( _msg->from, _msg->payload[0] );
+ nodeTable.OtherCanCommunicateWithNode( _msg->from, _msg->payload[0] );
  // TODO send ack message back
 }
 
@@ -191,7 +191,8 @@ void MeshnetworkComponent::processMissing(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
  Messages::MissingMessage msg( _msg->payload.data( ) );
- if ( nodeTable.proofOfMissing( msg.getID( ), msg.getDeceased( ) ) > 0 )
+ if ( nodeTable.OtherCantCommunicateWithNode( msg.getID( ),
+                                              msg.getDeceased( ) ) > 0 )
   informAboutMissingChild( msg.getID( ), msg.getDeceased( ) );
 }
 
@@ -201,13 +202,13 @@ void MeshnetworkComponent::informAboutMissingChild( uint8_t parent,
  Messages::MissingMessage deceased( this->nodeID, child );
  abstract_drone::WirelessMessage WM;
 
- for ( auto &child : nodeTable.getFamily( ) ) {
-  if ( parent == child.first ) continue;
-  uint8_t other = nodeTable.getDirectionToNode( child.first );
+ for ( auto &chi1d : nodeTable.getSetOfChildren( ) ) {
+  if ( parent == chi1d ) continue;
+  uint8_t other = nodeTable.getDirectionToNode( chi1d );
   if ( other == 255 ) continue;
   WM.request.message.from = this->nodeID;
   WM.request.message.to = other;
-  WM.request.message.forward = child.first;
+  WM.request.message.forward = chi1d;
   WM.request.message.ack = 0;
   deceased.toPayload( WM.request.message.payload.data( ) );
 
@@ -318,13 +319,11 @@ bool MeshnetworkComponent::sendMessage(
 {
  if ( publishService.call( message ) ) {
   if ( !message.response.succes ) {
-   if ( nodeTable.proofOfMissing( message.request.message.to,
-                                  message.request.message.to ) > 0 )
+   if ( nodeTable.cantCommunicateWithNode( message.request.message.to ) > 0 )
     informAboutMissingChild( this->nodeID, message.request.message.to );
    return false;
   } else {
-   nodeTable.proofOfAvailability( message.request.message.to,
-                                  message.request.message.to );
+   nodeTable.canCommunicateWithNode( message.request.message.to );
    ++totalMessageSent;
    return true;
   }
