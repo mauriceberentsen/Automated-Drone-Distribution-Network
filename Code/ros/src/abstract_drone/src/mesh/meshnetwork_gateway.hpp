@@ -16,7 +16,8 @@ private:
  ros::Subscriber gatewaySub;
 
  /**INTERFACE FUNCTIONS**/
- void gatewayQueue(const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg);
+ void gatewayQueue(
+     const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg );
  void OnUpdate( );
  void processMessage( const abstract_drone::NRF24ConstPtr &_msg );
  void processIntroduction( const abstract_drone::NRF24ConstPtr &_msg );
@@ -25,8 +26,7 @@ private:
  /**GATEWAY FUNCTIONS**/
  void ProcessHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
 };
-
-// Register this plugin with the simulator
 GZ_REGISTER_MODEL_PLUGIN( MeshnetworkGateway )
+// Register this plugin with the simulator
 }  // namespace gazebo
 #endif  // MESHNETWORKGATEWAY

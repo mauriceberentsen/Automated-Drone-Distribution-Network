@@ -27,7 +27,8 @@ private:
  std::multimap< float, uint8_t > negotiationList;
  common::Time lastTimeOnline;
 };  // namespace gazebo
-// Register this plugin with the simulator
 GZ_REGISTER_MODEL_PLUGIN( MeshnetworkCommunicator )
+
+// Register this plugin with the simulator
 }  // namespace gazebo
 #endif  // MESHNETWORKCOMMUNICATOR

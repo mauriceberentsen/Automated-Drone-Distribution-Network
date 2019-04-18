@@ -21,7 +21,7 @@
 #include "ChildTableTree.hpp"
 
 #include <random>
-using namespace Messages;
+
 namespace gazebo
 {
 class MeshnetworkComponent : public ModelPlugin
@@ -46,7 +46,7 @@ public:
  void sendGoalToDrone( const uint8_t ID, const float longitude,
                        const float latitude, const uint16_t height );
  void sendGoalToEngine( const abstract_drone::NRF24ConstPtr &_msg );
- void sendGoalToEngine( const LocationMessage &_msg );
+ void sendGoalToEngine( const Messages::LocationMessage &_msg );
  bool switchPower( std_srvs::TriggerRequest &request,
                    std_srvs::TriggerResponse &response );
  virtual void lostConnection( ) = 0;
@@ -54,7 +54,7 @@ public:
  void processRequestLocation( const abstract_drone::NRF24ConstPtr &_msg );
  void sendLocation( const uint8_t other );
  void processLocation( const abstract_drone::NRF24ConstPtr &_msg );
- float distanceBetweenMeAndLocation( const LocationMessage &A );
+ float distanceBetweenMeAndLocation( const Messages::LocationMessage &A );
  // Called by the world update start event
  /// \brief ROS helper function that processes messages
 protected:
@@ -99,17 +99,18 @@ protected:
  std::thread rosQueueThread;
  std::thread heartbeatThread;
  std::thread NodeInfoThread;
- LocationMessage lastGoodKnownLocation = LocationMessage( 0, 0, 0, 0, 0 );
+ Messages::LocationMessage lastGoodKnownLocation =
+     Messages::LocationMessage( 0, 0, 0, 0, 0 );
  bool knowPrefferedGatewayLocation = false;
- LocationMessage prefferedGateWayLocation = LocationMessage( 0, 0, 0, 0, 0 );
+ Messages::LocationMessage prefferedGateWayLocation =
+     Messages::LocationMessage( 0, 0, 0, 0, 0 );
  RoutingTechnique::ChildTableTree nodeTable;
  bool on = true;
  bool connectedToGateway = false;
  bool isGateway = false;
  uint8_t prefferedGateWay = 0;
  uint8_t hopsFromGatewayAway = 0;
-
-};  // namespace gazebo
+};
 }  // namespace gazebo
 
 #endif  // MESHNETWORKCOMPONENT

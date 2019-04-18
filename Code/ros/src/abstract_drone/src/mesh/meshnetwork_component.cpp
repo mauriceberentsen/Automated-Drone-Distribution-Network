@@ -136,8 +136,8 @@ void MeshnetworkComponent::forwardMessage(
 {
  abstract_drone::WirelessMessage WM;
  WM.request.message = *( _msg );
- if ( _msg->payload[1] == HEARTBEAT ) {
-  HeartbeatMessage msg( _msg->payload.data( ) );
+ if ( _msg->payload[1] == Messages::HEARTBEAT ) {
+  Messages::HeartbeatMessage msg( _msg->payload.data( ) );
   msg.makeHop( );
   if ( msg.getHops( ) > 255 ) return;
 
@@ -156,8 +156,8 @@ bool MeshnetworkComponent::sendHeartbeat( uint8_t other )
  uint8_t towards = nodeTable.getDirectionToNode( other );
  if ( towards == 255 ) return false;
  // create a Message to introduce yourself to others
- HeartbeatMessage heartbeat( this->nodeID, connectedToGateway,
-                             prefferedGateWay );
+ Messages::HeartbeatMessage heartbeat( this->nodeID, connectedToGateway,
+                                       prefferedGateWay );
  abstract_drone::WirelessMessage WM;
 
  WM.request.message.from = this->nodeID;
@@ -173,7 +173,8 @@ void MeshnetworkComponent::sendGoalToDrone( const uint8_t ID,
                                             const float latitude,
                                             const uint16_t height )
 {
- GoToLocationMessage GTLmsg( this->nodeID, longitude, latitude, height );
+ Messages::GoToLocationMessage GTLmsg( this->nodeID, longitude, latitude,
+                                       height );
 
  abstract_drone::WirelessMessage WM;
 
@@ -189,7 +190,7 @@ void MeshnetworkComponent::sendGoalToDrone( const uint8_t ID,
 void MeshnetworkComponent::processMissing(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- MissingMessage msg( _msg->payload.data( ) );
+ Messages::MissingMessage msg( _msg->payload.data( ) );
  if ( nodeTable.proofOfMissing( msg.getID( ), msg.getDeceased( ) ) > 0 )
   informAboutMissingChild( msg.getID( ), msg.getDeceased( ) );
 }
@@ -197,7 +198,7 @@ void MeshnetworkComponent::processMissing(
 void MeshnetworkComponent::informAboutMissingChild( uint8_t parent,
                                                     uint8_t child )
 {
- MissingMessage deceased( this->nodeID, child );
+ Messages::MissingMessage deceased( this->nodeID, child );
  abstract_drone::WirelessMessage WM;
 
  for ( auto &child : nodeTable.getFamily( ) ) {
@@ -234,7 +235,7 @@ void MeshnetworkComponent::searchOtherNodesInRange( )
 
 void MeshnetworkComponent::requestLocation( const uint8_t other )
 {
- Message msg( this->nodeID, REQUESTLOCATION );
+ Messages::Message msg( this->nodeID, Messages::REQUESTLOCATION );
  abstract_drone::WirelessMessage WM;
  WM.request.message.from = this->nodeID;
  WM.request.message.to = other;
@@ -248,7 +249,7 @@ void MeshnetworkComponent::requestLocation( const uint8_t other )
 void MeshnetworkComponent::processRequestLocation(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- Message msg( _msg->payload.data( ) );
+ Messages::Message msg( _msg->payload.data( ) );
  sendLocation( msg.getID( ) );
 }
 void MeshnetworkComponent::sendLocation( const uint8_t other )
@@ -256,8 +257,9 @@ void MeshnetworkComponent::sendLocation( const uint8_t other )
  abstract_drone::RequestGPS GPS;
  GPS.request.ID = this->nodeID;
  if ( GPSLink.call( GPS ) ) {
-  LocationMessage msg( this->nodeID, GPS.response.latitude,
-                       GPS.response.longitude, GPS.response.height, 0 );
+  Messages::LocationMessage msg( this->nodeID, GPS.response.latitude,
+                                 GPS.response.longitude, GPS.response.height,
+                                 0 );
   abstract_drone::WirelessMessage WM;
   WM.request.message.from = this->nodeID;
   WM.request.message.to = other;
@@ -270,7 +272,7 @@ void MeshnetworkComponent::sendLocation( const uint8_t other )
 void MeshnetworkComponent::processLocation(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- LocationMessage msg( _msg->payload.data( ) );
+ Messages::LocationMessage msg( _msg->payload.data( ) );
  if ( msg.getID( ) == prefferedGateWay ) {
   prefferedGateWayLocation = msg;
   knowPrefferedGatewayLocation = true;
@@ -280,7 +282,7 @@ void MeshnetworkComponent::processLocation(
 }
 
 float MeshnetworkComponent::distanceBetweenMeAndLocation(
-    const LocationMessage &A )
+    const Messages::LocationMessage &A )
 {
  abstract_drone::RequestGPS GPS;
 
@@ -298,8 +300,8 @@ float MeshnetworkComponent::distanceBetweenMeAndLocation(
 void MeshnetworkComponent::IntroduceNode( const uint8_t other )
 {
  // create a Message to introduce yourself to others
- IntroduceMessage introduce( this->nodeID, this->hopsFromGatewayAway,
-                             this->connectedToGateway );
+ Messages::IntroduceMessage introduce( this->nodeID, this->hopsFromGatewayAway,
+                                       this->connectedToGateway );
  abstract_drone::WirelessMessage WM;
 
  WM.request.message.from = this->nodeID;
@@ -349,7 +351,7 @@ void MeshnetworkComponent::reassignID( uint8_t ID )
 void MeshnetworkComponent::sendGoalToEngine(
     const abstract_drone::NRF24ConstPtr &_msg )
 {
- LocationMessage locmsg( _msg->payload.data( ) );
+ Messages::LocationMessage locmsg( _msg->payload.data( ) );
  abstract_drone::Location msg;
  msg.latitude = locmsg.latitude;
  msg.longitude = locmsg.longitude;
@@ -358,7 +360,8 @@ void MeshnetworkComponent::sendGoalToEngine(
  droneEnginePublisher.publish( msg );
 }
 
-void MeshnetworkComponent::sendGoalToEngine( const LocationMessage &_msg )
+void MeshnetworkComponent::sendGoalToEngine(
+    const Messages::LocationMessage &_msg )
 {
  abstract_drone::Location msg;
  msg.latitude = _msg.latitude;
@@ -376,5 +379,4 @@ void MeshnetworkComponent::QueueThread( )
   this->rosQueue.callAvailable( ros::WallDuration( timeout ) );
  }
 }
-
 }  // namespace gazebo
