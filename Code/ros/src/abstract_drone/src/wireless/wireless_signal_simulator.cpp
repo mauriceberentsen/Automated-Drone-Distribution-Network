@@ -89,7 +89,7 @@ private:
 public:
  void Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf )
  {
-  std::string Node_TopicName = "/postMaster";
+  std::string Node_TopicName = "/WirelessSignalSimulator";
   // Initialize ros, if it has not already been initialized.
   if ( !ros::isInitialized( ) ) {
    int argc = 0;

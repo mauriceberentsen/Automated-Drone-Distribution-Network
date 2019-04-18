@@ -17,7 +17,7 @@ namespace DroneSimulation
  class DroneEngine : public ModelPlugin
  {
  public:
-  DroneEngine( ) : drone_id( 255 ){};
+  DroneEngine( ) : drone_id( UINT8_MAX ){};
   void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf )
   {
    // Store the pointer to the model
@@ -64,8 +64,8 @@ namespace DroneSimulation
    this->rosSub = this->rosNode->subscribe( so );
 
    this->rosPostmasterPub =
-       this->rosNode->advertise< abstract_drone::nodeInfo >( "/postMaster",
-                                                             100 );
+       this->rosNode->advertise< abstract_drone::nodeInfo >(
+           "/WirelessSignalSimulator", 100 );
    // Spin up the queue helper thread.
    this->rosQueueThread =
        std::thread( std::bind( &DroneEngine::QueueThread, this ) );

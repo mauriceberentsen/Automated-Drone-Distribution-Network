@@ -1,8 +1,10 @@
 #include "ChildTableTree.hpp"
 #include <iostream>
+#include "meshnetwork_component.hpp"
 namespace RoutingTechnique
 {
-ChildTableTree::ChildTableTree( )
+ChildTableTree::ChildTableTree( gazebo::Meshnetwork::MeshnetworkComponent& MC )
+    : meshnetworkComponent( MC )
 {
 }
 
@@ -12,11 +14,13 @@ ChildTableTree::~ChildTableTree( )
 
 /*virtual */ void ChildTableTree::startRouting( )
 {
- // Do nothing
+ meshnetworkComponent.searchOtherNodesInRange( );
 }
 /*virtual */ void ChildTableTree::maintainRouting( )
 {
- // Do nothing
+ meshnetworkComponent.searchOtherNodesInRange( );
+ for ( auto& node : getSetOfChildren( ) )
+  meshnetworkComponent.sendHeartbeat( node );
 }
 /*virtual */ void ChildTableTree::canCommunicateWithNode( const uint8_t node )
 {
@@ -50,7 +54,7 @@ ChildTableTree::~ChildTableTree( )
    if ( child.second.find( node ) != child.second.end( ) ) return child.first;
   }
  }
- return 255;
+ return UINT8_MAX;
 }
 
 /*virtual */ const uint16_t ChildTableTree::getAmountOfChildren( )

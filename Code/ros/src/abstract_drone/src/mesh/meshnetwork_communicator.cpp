@@ -4,14 +4,11 @@ namespace gazebo
 {
 namespace Meshnetwork
 {
- // Called by the world update start event
- void MeshnetworkCommunicator::OnUpdate( )
+ // Called after load
+ void MeshnetworkCommunicator::Init( )
  {
-  if ( !this->init )  // we want this to happen once after all nodes are loaded
-  {
-   searchOtherNodesInRange( );
-   init = true;
-  }
+  common::Time::Sleep( initTime );
+  routerTech->startRouting( );
  }
 
  void MeshnetworkCommunicator::processIntroduction(
@@ -25,41 +22,6 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkCommunicator::processMessage(
-     const abstract_drone::NRF24ConstPtr &_msg )
- {
-  const uint8_t msgType = _msg->payload[1];
-  switch ( msgType ) {
-   case Messages::LOCATION:
-    processLocation( _msg );
-    break;
-   case Messages::REQUESTLOCATION:
-    processRequestLocation( _msg );
-    break;
-   case Messages::PRESENT:
-    processIntroduction( _msg );
-    break;
-   case Messages::MISSING:
-    processMissing( _msg );
-    break;
-   case Messages::HEARTBEAT:
-    ProcessHeartbeat( _msg );
-    break;
-   case Messages::MOVE_TO_LOCATION:
-    ROS_WARN( "MOVE_TO_LOCATION message recieved" );
-    sendGoalToEngine( _msg );
-    break;
-   case Messages::MOVEMENT_NEGOTIATION:
-    ROS_WARN( "%s MOVEMENT_NEGOTIATION message recieved %u",
-              this->model->GetName( ).c_str( ) );
-    processMovementNegotiationMessage( _msg );
-    break;
-   default:
-    ROS_WARN( "%s UNKOWN message recieved %u", this->model->GetName( ).c_str( ),
-              msgType );
-    break;
-  }
- }
  void MeshnetworkCommunicator::ProcessHeartbeat(
      const abstract_drone::NRF24ConstPtr &_msg )
  {
@@ -71,16 +33,16 @@ namespace Meshnetwork
    hopsFromGatewayAway = msg.hops + 1;  // count our own hop towards gateway
    return;
   }
-  // if sender doesn't know gateway but we do tell him
+  // if sender doesn't know gateway but we do
   if ( !msg.getKnowGateway( ) && connectedToGateway ) {
+   // send a heartbeat back to inform him we know a gateway
    sendHeartbeat( msg.getID( ) );
   }
-  // if sender knows gateway and we don't try pinging gateway again
+  // if sender knows gateway and we don't
   else if ( msg.getKnowGateway( ) && !connectedToGateway ) {
-   nodeTable.OtherCanCommunicateWithNode( msg.getID( ),
-                                          msg.getPrefferedGateway( ) );
-   // aks him where he lives in case we lose him
-   // requestLocation( msg.getID( ) );
+   routerTech->OtherCanCommunicateWithNode( msg.getID( ),
+                                            msg.getPrefferedGateway( ) );
+   // Set his gateway as prefferedGateWay and try to contact that gateway
    prefferedGateWay = msg.getPrefferedGateway( );
    sendHeartbeatToGateway( );
   }
@@ -93,10 +55,8 @@ namespace Meshnetwork
     connectedToGateway = false;
     continue;
    }
-   common::Time::Sleep( 10 );  // check every 10 seconds
-   for ( auto &node : nodeTable.getSetOfChildren( ) ) {
-    sendHeartbeat( node );
-   }
+   common::Time::Sleep( CheckConnectionTime );  // check every 10 seconds
+   routerTech->maintainRouting( );
    searchOtherNodesInRange( );  // maybe there is someone close
    if ( connectedToGateway ) {
     if ( !knowPrefferedGatewayLocation ) {
@@ -121,12 +81,13 @@ namespace Meshnetwork
    return;
   }
   if ( !timerStarted ) {
-   nodeTable.cantCommunicateWithNode( prefferedGateWay );
+   routerTech->cantCommunicateWithNode( prefferedGateWay );
    informAboutMissingChild( this->nodeID, prefferedGateWay );
    this->lastTimeOnline = this->model->GetWorld( )->SimTime( );
    timerStarted = true;
-  } else if ( lastTimeOnline < this->model->GetWorld( )->SimTime( ) - 30 ) {
-   ROS_WARN( "30 seconds since no connection" );
+  } else if ( lastTimeOnline <
+              this->model->GetWorld( )->SimTime( ) - timeUntilConnectionLost ) {
+   ROS_WARN( "%f seconds since no connection", timeUntilConnectionLost );
    StartEmergencyProtocol( );
    timerStarted = false;
   }
@@ -134,14 +95,14 @@ namespace Meshnetwork
 
  void MeshnetworkCommunicator::StartEmergencyProtocol( )
  {
-  if ( connectedToGateway )  // in case we meanwhile found a connectetion
+  if ( connectedToGateway )  // in case we meanwhile found a connection
   {
    negotiationList.clear( );
    return;
   }
-  if ( nodeTable.empty( ) ) {
+  if ( routerTech->empty( ) ) {
    sendGoalToEngine( lastGoodKnownLocation );
-   nodeTable.NodeMovedLocation( );
+   routerTech->NodeMovedLocation( );
    lastGoodKnownLocation = prefferedGateWayLocation;
   } else {
    // start negotiation about who needs to move
@@ -151,32 +112,30 @@ namespace Meshnetwork
 
  void MeshnetworkCommunicator::startMovementNegotiation( )
  {
-  static bool waiting = false;
   static float myDistance;
   // Find out which who the greatest distance from the GATEWAY. He shall be
-  // choosen to replace the missing node
-  // before we go to action we first make a list of everybody disconnected
+  // choosen to replace the missing node.
+  // Before we go to action we first make a list of everybody near that is
+  // disconnected
 
   ROS_INFO( "LOST AS A GROUP LETS PICK SOMEONE TO MOVE" );
   // First find out how far away you are
-  if ( nodeTable.getDirectionToNode( lastGoodKnownLocation.getID( ) ) == 255 ) {
+  if ( routerTech->getDirectionToNode( lastGoodKnownLocation.getID( ) ) ==
+       UINT8_MAX ) {
    myDistance = distanceBetweenMeAndLocation( prefferedGateWayLocation );
   } else {
    myDistance = -1;
   }
+  negotiationList.insert( std::make_pair( myDistance, this->nodeID ) );
 
   // add ourself to the list
   // tell others how far away we are
   informOthersAboutDistance( myDistance );
-  if ( negotiationList.size( ) < nodeTable.getAmountOfChildren( ) ) {
-   // wait another round
-   return;
+  while ( negotiationList.size( ) - 1 < routerTech->getAmountOfChildren( ) ) {
+   // wait for others to respond
+   continue;
   }
-  if ( !waiting ) {
-   negotiationList.insert( std::make_pair( myDistance, this->nodeID ) );
-   waiting = true;
-  }
-  waiting = false;
+
   // now it is time for action
 
   for ( auto &i : negotiationList ) {
@@ -190,7 +149,7 @@ namespace Meshnetwork
    ROS_INFO( "%s: i'm the one who need to move ",
              this->model->GetName( ).c_str( ) );
    sendGoalToEngine( lastGoodKnownLocation );
-   nodeTable.NodeMovedLocation( );
+   routerTech->NodeMovedLocation( );
 
    lastGoodKnownLocation = prefferedGateWayLocation;
    negotiationList.clear( );
@@ -201,16 +160,17 @@ namespace Meshnetwork
 
  void MeshnetworkCommunicator::informOthersAboutDistance( float distance )
  {
-  Messages::MovementNegotiationMessage NegoMSG( this->nodeID, distance );
+  Messages::MovementNegotiationMessage MovNegotiationMsg( this->nodeID,
+                                                          distance );
   abstract_drone::WirelessMessage WM;
-  for ( auto &other : nodeTable.getSetOfChildren( ) ) {
-   uint8_t towards = nodeTable.getDirectionToNode( other );
-   if ( towards == 255 ) continue;
+  for ( auto &other : routerTech->getSetOfChildren( ) ) {
+   uint8_t towards = routerTech->getDirectionToNode( other );
+   if ( towards == UINT8_MAX ) continue;
    WM.request.message.from = this->nodeID;
    WM.request.message.to = towards;
    WM.request.message.forward = other;
    WM.request.message.ack = 0;
-   NegoMSG.toPayload( WM.request.message.payload.data( ) );
+   MovNegotiationMsg.toPayload( WM.request.message.payload.data( ) );
    ++totalMessageSent;
    sendMessage( WM );
   }

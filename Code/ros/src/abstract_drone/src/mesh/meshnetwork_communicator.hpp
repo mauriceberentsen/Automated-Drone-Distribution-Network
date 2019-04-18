@@ -11,8 +11,9 @@ namespace Meshnetwork
  {
  private:
   /**INTERFACE FUNCTIONS**/
-  void OnUpdate( );
-  void processMessage( const abstract_drone::NRF24ConstPtr &_msg );
+  // void OnUpdate( );
+  void Init( );
+
   void processIntroduction( const abstract_drone::NRF24ConstPtr &_msg );
   void CheckConnection( );
   /**COMMUNICATOR FUNCTIONS**/
@@ -28,6 +29,7 @@ namespace Meshnetwork
   bool timerStarted = false;
   std::multimap< float, uint8_t > negotiationList;
   common::Time lastTimeOnline;
+  const float timeUntilConnectionLost = 30.0;
  };
 }  // namespace Meshnetwork
 GZ_REGISTER_MODEL_PLUGIN( Meshnetwork::MeshnetworkCommunicator )

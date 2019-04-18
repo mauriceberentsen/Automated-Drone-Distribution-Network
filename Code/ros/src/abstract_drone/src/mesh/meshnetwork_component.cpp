@@ -6,13 +6,17 @@ namespace gazebo
 {
 namespace Meshnetwork
 {
+ MeshnetworkComponent::MeshnetworkComponent( )
+     : routerTech( new RoutingTechnique::ChildTableTree( *this ) )
+ {
+ }
  void MeshnetworkComponent::Load( physics::ModelPtr _parent,
                                   sdf::ElementPtr _sdf )
  {
   // Store the pointer to the model
   this->model = _parent;
-  this->nodeID = 255;   // unkown nodes are number 255
-  this->droneID = 666;  // Drones need unique id's to connect the motor
+  this->nodeID = UINT8_MAX;    // unkown nodes are number UINT8_MAX
+  this->droneID = UINT16_MAX;  // Drones need unique id's to connect the motor
 
   if ( _sdf->HasElement( "nodeID" ) ) {
    this->nodeID = _sdf->Get< int >( "nodeID" );
@@ -23,15 +27,13 @@ namespace Meshnetwork
    ROS_ERROR(
        "Drone com being used without a droneid, set up using the tag \
     <DroneID> unique <DroneID> \n  Restart ussing droneID's else drone \
-    movement will be messy" );
+    movement will be a mess" );
   }
-  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-      std::bind( &MeshnetworkComponent::OnUpdate, this ) );
   std::string Node_TopicName;
   std::string WirelessSignalSimulatorName;
   // Check that the velocity element exists, then read the value
   Node_TopicName = "/Node/" + std::to_string( nodeID );
-  WirelessSignalSimulatorName = "/postMaster";
+  WirelessSignalSimulatorName = "/WirelessSignalSimulator";
   std::string connectedEngine =
       "/Drones/" + std::to_string( this->droneID ) + "/goal";
   std::string DebugInfoName =
@@ -114,9 +116,9 @@ namespace Meshnetwork
    common::Time::Sleep( 1 );  // 1hz refresh is enough
    msg.nodeID = this->nodeID;
    msg.ConnectedWithGateway = this->connectedToGateway;
-   msg.familySize = this->nodeTable.getTableSize( );
+   msg.familySize = this->routerTech->getTableSize( );
    msg.totalMessages = this->totalMessageSent;
-   msg.connectedNodes = this->nodeTable.getAmountOfChildren( );
+   msg.connectedNodes = this->routerTech->getAmountOfChildren( );
    msg.prefferedGateWay = this->prefferedGateWay;
    msg.on = this->on;
    msg.hops = this->hopsFromGatewayAway;
@@ -130,7 +132,7 @@ namespace Meshnetwork
  {
   ( _msg->forward == this->nodeID ) ? processMessage( _msg )
                                     : forwardMessage( _msg );
-  nodeTable.OtherCanCommunicateWithNode( _msg->from, _msg->payload[0] );
+  routerTech->OtherCanCommunicateWithNode( _msg->from, _msg->payload[0] );
   // TODO send ack message back
  }
 
@@ -142,13 +144,13 @@ namespace Meshnetwork
   if ( _msg->payload[1] == Messages::HEARTBEAT ) {
    Messages::HeartbeatMessage msg( _msg->payload.data( ) );
    msg.makeHop( );
-   if ( msg.getHops( ) > 255 ) return;
+   if ( msg.getHops( ) > UINT8_MAX ) return;
 
    msg.toPayload( WM.request.message.payload.data( ) );
   }
 
-  uint8_t other = nodeTable.getDirectionToNode( _msg->forward );
-  if ( other == 255 ) return;
+  uint8_t other = routerTech->getDirectionToNode( _msg->forward );
+  if ( other == UINT8_MAX ) return;
   WM.request.message.from = this->nodeID;
   WM.request.message.to = other;
   sendMessage( WM );
@@ -156,8 +158,8 @@ namespace Meshnetwork
 
  bool MeshnetworkComponent::sendHeartbeat( uint8_t other )
  {
-  uint8_t towards = nodeTable.getDirectionToNode( other );
-  if ( towards == 255 ) return false;
+  uint8_t towards = routerTech->getDirectionToNode( other );
+  if ( towards == UINT8_MAX ) return false;
   // create a Message to introduce yourself to others
   Messages::HeartbeatMessage heartbeat( this->nodeID, connectedToGateway,
                                         prefferedGateWay );
@@ -181,7 +183,7 @@ namespace Meshnetwork
 
   abstract_drone::WirelessMessage WM;
 
-  uint8_t other = nodeTable.getDirectionToNode( ID );
+  uint8_t other = routerTech->getDirectionToNode( ID );
   WM.request.message.from = this->nodeID;
   WM.request.message.to = other;
   WM.request.message.forward = ID;
@@ -194,8 +196,8 @@ namespace Meshnetwork
      const abstract_drone::NRF24ConstPtr &_msg )
  {
   Messages::MissingMessage msg( _msg->payload.data( ) );
-  if ( nodeTable.OtherCantCommunicateWithNode( msg.getID( ),
-                                               msg.getDeceased( ) ) > 0 )
+  if ( routerTech->OtherCantCommunicateWithNode( msg.getID( ),
+                                                 msg.getDeceased( ) ) > 0 )
    informAboutMissingChild( msg.getID( ), msg.getDeceased( ) );
  }
 
@@ -205,10 +207,10 @@ namespace Meshnetwork
   Messages::MissingMessage deceased( this->nodeID, child );
   abstract_drone::WirelessMessage WM;
 
-  for ( auto &chi1d : nodeTable.getSetOfChildren( ) ) {
+  for ( auto &chi1d : routerTech->getSetOfChildren( ) ) {
    if ( parent == chi1d ) continue;
-   uint8_t other = nodeTable.getDirectionToNode( chi1d );
-   if ( other == 255 ) continue;
+   uint8_t other = routerTech->getDirectionToNode( chi1d );
+   if ( other == UINT8_MAX ) continue;
    WM.request.message.from = this->nodeID;
    WM.request.message.to = other;
    WM.request.message.forward = chi1d;
@@ -234,6 +236,42 @@ namespace Meshnetwork
    }
   } else {
    ROS_ERROR( "Failed to call service othersInRange" );
+  }
+ }
+
+ void MeshnetworkComponent::processMessage(
+     const abstract_drone::NRF24ConstPtr &_msg )
+ {
+  const uint8_t msgType = _msg->payload[1];
+  switch ( msgType ) {
+   case Messages::LOCATION:
+    processLocation( _msg );
+    break;
+   case Messages::REQUESTLOCATION:
+    processRequestLocation( _msg );
+    break;
+   case Messages::PRESENT:
+    processIntroduction( _msg );
+    break;
+   case Messages::MISSING:
+    processMissing( _msg );
+    break;
+   case Messages::HEARTBEAT:
+    ProcessHeartbeat( _msg );
+    break;
+   case Messages::MOVE_TO_LOCATION:
+    ROS_WARN( "MOVE_TO_LOCATION message recieved" );
+    sendGoalToEngine( _msg );
+    break;
+   case Messages::MOVEMENT_NEGOTIATION:
+    ROS_WARN( "%s MOVEMENT_NEGOTIATION message recieved %u",
+              this->model->GetName( ).c_str( ) );
+    processMovementNegotiationMessage( _msg );
+    break;
+   default:
+    ROS_WARN( "%s UNKOWN message recieved %u", this->model->GetName( ).c_str( ),
+              msgType );
+    break;
   }
  }
 
@@ -322,11 +360,11 @@ namespace Meshnetwork
  {
   if ( publishService.call( message ) ) {
    if ( !message.response.succes ) {
-    if ( nodeTable.cantCommunicateWithNode( message.request.message.to ) > 0 )
+    if ( routerTech->cantCommunicateWithNode( message.request.message.to ) > 0 )
      informAboutMissingChild( this->nodeID, message.request.message.to );
     return false;
    } else {
-    nodeTable.canCommunicateWithNode( message.request.message.to );
+    routerTech->canCommunicateWithNode( message.request.message.to );
     ++totalMessageSent;
     return true;
    }

@@ -12,11 +12,9 @@ namespace DroneSimulation
  public:
   void Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf )
   {
-   int amountOfRouters = 0;
-   int amountOfGateways = 0;
 
    if ( _sdf->HasElement( "amountOfGatewayDrones" ) ) {
-    amountOfGateways = _sdf->Get< int >( "amountOfGatewayDrones" );
+    int amountOfGateways = _sdf->Get< int >( "amountOfGatewayDrones" );
     for ( int i = 0; i < amountOfGateways; i++ ) {
      // the new class will inject sdf information needed in Gazebo
      new GatewayDrone( 1, i, 0, _parent );
@@ -24,7 +22,7 @@ namespace DroneSimulation
    }
 
    if ( _sdf->HasElement( "amountOfRouterDrones" ) ) {
-    amountOfRouters = _sdf->Get< int >( "amountOfRouterDrones" );
+    int amountOfRouters = _sdf->Get< int >( "amountOfRouterDrones" );
     for ( int i = 0; i < amountOfRouters; i++ ) {
      // the new class will inject sdf information needed in Gazebo
      new RouterDrone( i, 0, 0, _parent );

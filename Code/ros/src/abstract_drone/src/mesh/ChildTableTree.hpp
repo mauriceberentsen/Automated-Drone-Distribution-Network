@@ -1,15 +1,22 @@
 #ifndef CHILDTABLETREE
 #define CHILDTABLETREE
-//#include "IRoutingTechnique.hpp"
 #include <map>
 #include <set>
+#include "IRoutingTechnique.hpp"
 
+namespace gazebo
+{
+namespace Meshnetwork
+{
+ class MeshnetworkComponent;
+}
+}  // namespace gazebo
 namespace RoutingTechnique
 {
-class ChildTableTree  //: public IRoutingTechnique
+class ChildTableTree : public IRoutingTechnique
 {
 public:
- ChildTableTree( );
+ explicit ChildTableTree( gazebo::Meshnetwork::MeshnetworkComponent& MC );
  ~ChildTableTree( );
 
  /*virtual */ uint8_t getDirectionToNode( const uint8_t node );
@@ -32,7 +39,7 @@ private:
  uint8_t proofOfMissing( uint8_t teller, uint8_t child );
  void RegisterChild( uint8_t child );
  void RegisterGrandChildOfChild( uint8_t child, uint8_t grandChild );
-
+ gazebo::Meshnetwork::MeshnetworkComponent& meshnetworkComponent;
  std::map< uint8_t, std::set< uint8_t > > family;
 };
 }  // namespace RoutingTechnique

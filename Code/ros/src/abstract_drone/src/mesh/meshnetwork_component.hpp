@@ -19,7 +19,7 @@
 #include "abstract_drone/AreaScan.h"
 #include "abstract_drone/NodeDebugInfo.h"
 #include "ChildTableTree.hpp"
-
+#include "IRoutingTechnique.hpp"
 #include <random>
 
 namespace gazebo
@@ -29,12 +29,14 @@ namespace Meshnetwork
  class MeshnetworkComponent : public ModelPlugin
  {
  public:
+  MeshnetworkComponent( );
+  virtual void Init( ) = 0;
   void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf );
+
   void forwardMessage( const abstract_drone::NRF24ConstPtr &_msg );
   void OnRosMsg( const abstract_drone::NRF24ConstPtr &_msg );
 
-  virtual void OnUpdate( ) = 0;
-  virtual void processMessage( const abstract_drone::NRF24ConstPtr &_msg ) = 0;
+  void processMessage( const abstract_drone::NRF24ConstPtr &_msg );
   virtual void processIntroduction(
       const abstract_drone::NRF24ConstPtr &_msg ) = 0;
 
@@ -57,16 +59,17 @@ namespace Meshnetwork
   void sendLocation( const uint8_t other );
   void processLocation( const abstract_drone::NRF24ConstPtr &_msg );
   float distanceBetweenMeAndLocation( const Messages::LocationMessage &A );
-  // Called by the world update start event
-  /// \brief ROS helper function that processes messages
+  virtual void processMovementNegotiationMessage(
+      const abstract_drone::NRF24ConstPtr &_msg ) = 0;
+  virtual void ProcessHeartbeat(
+      const abstract_drone::NRF24ConstPtr &_msg ) = 0;
+
  protected:
   void QueueThread( );
   virtual void CheckConnection( ) = 0;
-  /// \brief A ROS subscriber
   bool sendMessage( abstract_drone::WirelessMessage &message );
 
   uint8_t nodeID;
-  bool init = false;
   uint16_t droneID;
 
   std::map< uint8_t, uint8_t > connectedNodes;  // ID and hop route;
@@ -106,12 +109,14 @@ namespace Meshnetwork
   bool knowPrefferedGatewayLocation = false;
   Messages::LocationMessage prefferedGateWayLocation =
       Messages::LocationMessage( 0, 0, 0, 0, 0 );
-  RoutingTechnique::ChildTableTree nodeTable;
+  std::unique_ptr< RoutingTechnique::IRoutingTechnique > routerTech;
   bool on = true;
   bool connectedToGateway = false;
   bool isGateway = false;
   uint8_t prefferedGateWay = 0;
   uint8_t hopsFromGatewayAway = 0;
+  const float initTime = 0.001;
+  const float CheckConnectionTime = 10.0;
  };
 }  // namespace Meshnetwork
 }  // namespace gazebo
