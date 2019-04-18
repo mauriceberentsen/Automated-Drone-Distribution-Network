@@ -6,13 +6,13 @@ start
 :checkConnection;
 while (rosnode -> ok() ) is (true)
 	if (on) then ([false])
-    elseif ([true])
-    	:sendHeartbeatToAllChilderen;
-    	:searchOtherNodesInRange;
-    else ([false])
-    	if (connectedToGateway) then ([true])
-    		if(knowPrefferedGatewayLocation) then ([false])
-    			:requestLocation(prefferedGateway);
+		elseif ([true])
+			:sendHeartbeatToAllChilderen;
+			:searchOtherNodesInRange;
+		else ([false])
+			if (connectedToGateway) then ([true])
+				if(knowPrefferedGatewayLocation) then ([false])
+					:requestLocation(prefferedGateway);
 			endif
     	:sendHeartbeatToGateway;
     	else (false)

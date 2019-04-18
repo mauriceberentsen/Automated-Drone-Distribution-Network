@@ -79,3 +79,7 @@ Code/ros/install/
 Code/ros/src/abstract_drone/\.vscode/
 
 Code/ros/src/abstract_drone/build/
+
+Docs/\.vscode/
+
+Docs/DesignDocumenten/UML/\.vscode/

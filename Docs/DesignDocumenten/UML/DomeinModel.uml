@@ -1,0 +1,103 @@
+@startuml
+
+package gazebo
+{
+    class WorldPlugin
+    class ModelPlugin
+
+    package Wireless
+    {
+        class WirelessSignalSimulator
+        class Node
+        WirelessSignalSimulator "1" - "*" Node
+        
+    }
+
+
+    package DroneSimulation
+    {
+        class DroneEngine
+        class Drone
+        class RouterDrone
+        class GatewayDrone
+        class DroneFactory
+        DroneFactory"1" o-- "*"RouterDrone : creates >
+        DroneFactory"1" o-- "*"GatewayDrone : creates >
+        Drone - DroneEngine
+        Drone <|-down- RouterDrone
+        Drone <|-down- GatewayDrone
+
+
+    }
+
+    package MeshNetwork
+    {
+        class MeshnetworkCommunicator
+        class MeshnetworkGateway
+        class MeshnetworkComponent
+
+        MeshnetworkCommunicator --|> MeshnetworkComponent
+        MeshnetworkGateway --|> MeshnetworkComponent
+        MeshnetworkComponent --|> ModelPlugin
+
+
+    }
+    MeshnetworkComponent ..> WirelessSignalSimulator : send messages with >
+    WirelessSignalSimulator --|> WorldPlugin
+    DroneFactory --|> WorldPlugin
+    DroneEngine --|> ModelPlugin 
+
+}
+
+package RoutingTechnique
+{
+    class IRoutingTechnique
+    class ChildTableTree
+    ChildTableTree ..|> IRoutingTechnique
+}
+package Messages
+{
+    class Message
+
+    enum Messagetype {
+        NOTDEFINED
+        LOCATION              
+        REQUESTLOCATION
+        PRESENT             
+        HEARTBEAT            
+        MISSING                         
+        MOVE_TO_LOCATION     
+        MOVEMENT_NEGOTIATION 
+    }
+    Message  .up.> Messagetype
+
+    class LocationMessage
+    class IntroduceMessage
+    class HeartbeatMessage
+    class MissingMessage
+    class GoToLocationMessage
+    class MovementNegotiationMessage
+
+    Message <|-- LocationMessage
+    Message <|-- IntroduceMessage
+    Message <|-- HeartbeatMessage
+    Message <|-up- MissingMessage
+    Message <|-left- GoToLocationMessage
+    Message <|-left- MovementNegotiationMessage
+
+}
+
+
+package DroneManagerService
+{
+    class DroneManager
+    class DroneManagerService
+    DroneManagerService --> DroneManager
+}
+ DroneManager ..> GatewayDrone : Sends Commands to >
+ MeshnetworkComponent ..> Message : <<use>>
+ MeshnetworkComponent -right- ChildTableTree
+ RouterDrone o--o MeshnetworkCommunicator
+ GatewayDrone o--o MeshnetworkGateway
+
+@enduml
