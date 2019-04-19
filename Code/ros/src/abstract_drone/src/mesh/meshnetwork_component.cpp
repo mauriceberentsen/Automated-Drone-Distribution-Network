@@ -6,12 +6,12 @@ namespace gazebo
 {
 namespace Meshnetwork
 {
- MeshnetworkComponent::MeshnetworkComponent( )
+ /*public*/ MeshnetworkComponent::MeshnetworkComponent( )
      : routerTech( new RoutingTechnique::ChildTableTree( *this ) )
  {
  }
- void MeshnetworkComponent::Load( physics::ModelPtr _parent,
-                                  sdf::ElementPtr _sdf )
+ /*protected*/ void MeshnetworkComponent::Load( physics::ModelPtr _parent,
+                                                sdf::ElementPtr _sdf )
  {
   // Store the pointer to the model
   this->model = _parent;
@@ -97,37 +97,7 @@ namespace Meshnetwork
   rosPub.publish( nodeinf );
  }
 
- bool MeshnetworkComponent::switchPower( std_srvs::TriggerRequest &request,
-                                         std_srvs::TriggerResponse &response )
- {
-  this->on = !this->on;
-  if ( !this->on ) lostConnection( );
-  abstract_drone::nodeInfo nodeinf;
-  nodeinf.nodeID = this->nodeID;
-  nodeinf.on = this->on;
-  rosPub.publish( nodeinf );
-  return true;
- }
-
- void MeshnetworkComponent::publishDebugInfo( )
- {
-  abstract_drone::NodeDebugInfo msg;
-  while ( this->rosNode->ok( ) ) {
-   common::Time::Sleep( 1 );  // 1hz refresh is enough
-   msg.nodeID = this->nodeID;
-   msg.ConnectedWithGateway = this->connectedToGateway;
-   msg.familySize = this->routerTech->getTableSize( );
-   msg.totalMessages = this->totalMessageSent;
-   msg.connectedNodes = this->routerTech->getAmountOfChildren( );
-   msg.prefferedGateWay = this->prefferedGateWay;
-   msg.on = this->on;
-   msg.hops = this->hopsFromGatewayAway;
-   msg.prefLoc = this->lastGoodKnownLocation.getID( );
-   nodeDebugTopic.publish( msg );
-  }
- }
-
- void MeshnetworkComponent::OnRosMsg(
+ /*protected*/ void MeshnetworkComponent::OnRosMsg(
      const abstract_drone::NRF24ConstPtr &_msg )
  {
   ( _msg->forward == this->nodeID ) ? processMessage( _msg )
@@ -156,7 +126,96 @@ namespace Meshnetwork
   sendMessage( WM );
  }
 
- bool MeshnetworkComponent::sendHeartbeat( uint8_t other )
+ void MeshnetworkComponent::processMessage(
+     const abstract_drone::NRF24ConstPtr &_msg )
+ {
+  const uint8_t msgType = _msg->payload[1];
+  switch ( msgType ) {
+   case Messages::LOCATION:
+    processLocation( _msg );
+    break;
+   case Messages::MISSING:
+    processMissing( _msg );
+    break;
+   case Messages::MOVE_TO_LOCATION:
+    processSendGoalToEngine( _msg );
+    break;
+   case Messages::PRESENT:
+    processIntroduction( _msg );
+    break;
+   case Messages::HEARTBEAT:
+    ProcessHeartbeat( _msg );
+    break;
+   case Messages::REQUESTLOCATION:
+    processRequestLocation( _msg );
+    break;
+   case Messages::MOVEMENT_NEGOTIATION:
+    processMovementNegotiationMessage( _msg );
+    break;
+   default:
+    ROS_WARN( "%s UNKOWN message recieved %u", this->model->GetName( ).c_str( ),
+              msgType );
+    break;
+  }
+ }
+ /*public*/ void MeshnetworkComponent::processLocation(
+     const abstract_drone::NRF24ConstPtr &_msg )
+ {
+  Messages::LocationMessage msg( _msg->payload.data( ) );
+  if ( msg.getID( ) == prefferedGateWay ) {
+   prefferedGateWayLocation = msg;
+   knowPrefferedGatewayLocation = true;
+  } else {
+   lastGoodKnownLocation = msg;
+  }
+ }
+
+ void MeshnetworkComponent::requestLocation( const uint8_t other )
+ {
+  Messages::Message msg( this->nodeID, Messages::REQUESTLOCATION );
+  abstract_drone::WirelessMessage WM;
+  WM.request.message.from = this->nodeID;
+  WM.request.message.to = other;
+  WM.request.message.forward = other;
+  WM.request.message.ack = 0;
+  msg.toPayload( WM.request.message.payload.data( ) );
+
+  sendMessage( WM );
+ }
+
+ void MeshnetworkComponent::processMissing(
+     const abstract_drone::NRF24ConstPtr &_msg )
+ {
+  Messages::MissingMessage msg( _msg->payload.data( ) );
+  if ( routerTech->OtherCantCommunicateWithNode( msg.getID( ),
+                                                 msg.getDeceased( ) ) > 0 )
+   informAboutMissingChild( msg.getID( ), msg.getDeceased( ) );
+ }
+
+ void MeshnetworkComponent::processSendGoalToEngine(
+     const abstract_drone::NRF24ConstPtr &_msg )
+ {
+  Messages::LocationMessage locmsg( _msg->payload.data( ) );
+  abstract_drone::Location msg;
+  msg.latitude = locmsg.latitude;
+  msg.longitude = locmsg.longitude;
+  msg.height = locmsg.height;
+
+  droneEnginePublisher.publish( msg );
+ }
+
+ void MeshnetworkComponent::sendGoalToEngine(
+     const Messages::LocationMessage &_msg )
+ {
+  abstract_drone::Location msg;
+  msg.latitude = _msg.latitude;
+  msg.longitude = _msg.longitude;
+  msg.height = _msg.height;
+
+  droneEnginePublisher.publish( msg );
+ }
+
+ /*public*/ bool MeshnetworkComponent::sendHeartbeat( uint8_t other )
  {
   uint8_t towards = routerTech->getDirectionToNode( other );
   if ( towards == UINT8_MAX ) return false;
@@ -192,15 +251,6 @@ namespace Meshnetwork
   sendMessage( WM );
  }
 
- void MeshnetworkComponent::processMissing(
-     const abstract_drone::NRF24ConstPtr &_msg )
- {
-  Messages::MissingMessage msg( _msg->payload.data( ) );
-  if ( routerTech->OtherCantCommunicateWithNode( msg.getID( ),
-                                                 msg.getDeceased( ) ) > 0 )
-   informAboutMissingChild( msg.getID( ), msg.getDeceased( ) );
- }
-
  void MeshnetworkComponent::informAboutMissingChild( uint8_t parent,
                                                      uint8_t child )
  {
@@ -221,7 +271,7 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkComponent::searchOtherNodesInRange( )
+ /*public*/ void MeshnetworkComponent::searchOtherNodesInRange( )
  {
   abstract_drone::AreaScan scanMsg;
   scanMsg.request.id = this->nodeID;
@@ -237,55 +287,6 @@ namespace Meshnetwork
   } else {
    ROS_ERROR( "Failed to call service othersInRange" );
   }
- }
-
- void MeshnetworkComponent::processMessage(
-     const abstract_drone::NRF24ConstPtr &_msg )
- {
-  const uint8_t msgType = _msg->payload[1];
-  switch ( msgType ) {
-   case Messages::LOCATION:
-    processLocation( _msg );
-    break;
-   case Messages::REQUESTLOCATION:
-    processRequestLocation( _msg );
-    break;
-   case Messages::PRESENT:
-    processIntroduction( _msg );
-    break;
-   case Messages::MISSING:
-    processMissing( _msg );
-    break;
-   case Messages::HEARTBEAT:
-    ProcessHeartbeat( _msg );
-    break;
-   case Messages::MOVE_TO_LOCATION:
-    ROS_WARN( "MOVE_TO_LOCATION message recieved" );
-    sendGoalToEngine( _msg );
-    break;
-   case Messages::MOVEMENT_NEGOTIATION:
-    ROS_WARN( "%s MOVEMENT_NEGOTIATION message recieved %u",
-              this->model->GetName( ).c_str( ) );
-    processMovementNegotiationMessage( _msg );
-    break;
-   default:
-    ROS_WARN( "%s UNKOWN message recieved %u", this->model->GetName( ).c_str( ),
-              msgType );
-    break;
-  }
- }
-
- void MeshnetworkComponent::requestLocation( const uint8_t other )
- {
-  Messages::Message msg( this->nodeID, Messages::REQUESTLOCATION );
-  abstract_drone::WirelessMessage WM;
-  WM.request.message.from = this->nodeID;
-  WM.request.message.to = other;
-  WM.request.message.forward = other;
-  WM.request.message.ack = 0;
-  msg.toPayload( WM.request.message.payload.data( ) );
-
-  sendMessage( WM );
  }
 
  void MeshnetworkComponent::processRequestLocation(
@@ -311,17 +312,6 @@ namespace Meshnetwork
    sendMessage( WM );
   }
  }
- void MeshnetworkComponent::processLocation(
-     const abstract_drone::NRF24ConstPtr &_msg )
- {
-  Messages::LocationMessage msg( _msg->payload.data( ) );
-  if ( msg.getID( ) == prefferedGateWay ) {
-   prefferedGateWayLocation = msg;
-   knowPrefferedGatewayLocation = true;
-  } else {
-   lastGoodKnownLocation = msg;
-  }
- }
 
  float MeshnetworkComponent::distanceBetweenMeAndLocation(
      const Messages::LocationMessage &A )
@@ -339,7 +329,7 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkComponent::IntroduceNode( const uint8_t other )
+ /*public*/ void MeshnetworkComponent::IntroduceNode( const uint8_t other )
  {
   // create a Message to introduce yourself to others
   Messages::IntroduceMessage introduce( this->nodeID, this->hopsFromGatewayAway,
@@ -374,49 +364,41 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkComponent::reassignID( uint8_t ID )
- {
-  std::string Node_TopicName = "/Node/" + std::to_string( ID );
-  ROS_WARN( "Reassign to ID %d", ID );
-  this->rosNode.reset( new ros::NodeHandle( "node" ) );
-  this->nodeID = ID;
-  ros::SubscribeOptions so =
-      ros::SubscribeOptions::create< abstract_drone::NRF24 >(
-          Node_TopicName, 1000,
-          boost::bind( &MeshnetworkComponent::OnRosMsg, this, _1 ),
-          ros::VoidPtr( ), &this->rosQueue );
-  this->rosSub = this->rosNode->subscribe( so );
- }
-
- void MeshnetworkComponent::sendGoalToEngine(
-     const abstract_drone::NRF24ConstPtr &_msg )
- {
-  Messages::LocationMessage locmsg( _msg->payload.data( ) );
-  abstract_drone::Location msg;
-  msg.latitude = locmsg.latitude;
-  msg.longitude = locmsg.longitude;
-  msg.height = locmsg.height;
-
-  droneEnginePublisher.publish( msg );
- }
-
- void MeshnetworkComponent::sendGoalToEngine(
-     const Messages::LocationMessage &_msg )
- {
-  abstract_drone::Location msg;
-  msg.latitude = _msg.latitude;
-  msg.longitude = _msg.longitude;
-  msg.height = _msg.height;
-
-  droneEnginePublisher.publish( msg );
- }
-
- /// \brief ROS helper function that processes messages
  void MeshnetworkComponent::QueueThread( )
  {
   static const double timeout = 0.01;
   while ( this->rosNode->ok( ) ) {
    this->rosQueue.callAvailable( ros::WallDuration( timeout ) );
+  }
+ }
+
+ bool MeshnetworkComponent::switchPower( std_srvs::TriggerRequest &request,
+                                         std_srvs::TriggerResponse &response )
+ {
+  this->on = !this->on;
+  if ( !this->on ) lostConnection( );
+  abstract_drone::nodeInfo nodeinf;
+  nodeinf.nodeID = this->nodeID;
+  nodeinf.on = this->on;
+  rosPub.publish( nodeinf );
+  return true;
+ }
+
+ void MeshnetworkComponent::publishDebugInfo( )
+ {
+  abstract_drone::NodeDebugInfo msg;
+  while ( this->rosNode->ok( ) ) {
+   common::Time::Sleep( 1 );  // 1hz refresh is enough
+   msg.nodeID = this->nodeID;
+   msg.ConnectedWithGateway = this->connectedToGateway;
+   msg.familySize = this->routerTech->getTableSize( );
+   msg.totalMessages = this->totalMessageSent;
+   msg.connectedNodes = this->routerTech->getAmountOfChildren( );
+   msg.prefferedGateWay = this->prefferedGateWay;
+   msg.on = this->on;
+   msg.hops = this->hopsFromGatewayAway;
+   msg.prefLoc = this->lastGoodKnownLocation.getID( );
+   nodeDebugTopic.publish( msg );
   }
  }
 }  // namespace Meshnetwork

@@ -9,11 +9,11 @@ enum Messagetype : uint8_t {
  NOTDEFINED = 0,
  LOCATION,              // 1
  REQUESTLOCATION,       // 2
- PRESENT,               // 4
- HEARTBEAT,             // 5
- MISSING,               // 6
- MOVE_TO_LOCATION,      // 8
- MOVEMENT_NEGOTIATION,  // 9
+ PRESENT,               // 3
+ HEARTBEAT,             // 4
+ MISSING,               // 5
+ MOVE_TO_LOCATION,      // 6
+ MOVEMENT_NEGOTIATION,  // 7
 };
 
 class Message
