@@ -1,9 +1,22 @@
+/**
+ * @file meshnetwork_communicator.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief source file for MeshnetworkCommunicator
+ * @version 1.0
+ * @date 2019-04-19
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "meshnetwork_communicator.hpp"
 
 namespace gazebo
 {
 namespace Meshnetwork
 {
+ MeshnetworkCommunicator::MeshnetworkCommunicator( )
+ {
+ }
  // Called after load
  void MeshnetworkCommunicator::Init( )
  {
@@ -16,7 +29,7 @@ namespace Meshnetwork
  {
   Messages::IntroduceMessage introduce( _msg->payload.data( ) );
   if ( introduce.getKnowGateway( ) &&
-       introduce.getHopsUntilsGateway( ) < this->hopsFromGatewayAway &&
+       introduce.getHopsUntilGateway( ) < this->hopsFromGatewayAway &&
        introduce.getID( ) != lastGoodKnownLocation.getID( ) ) {
    requestLocation( introduce.getID( ) );
   }
@@ -30,7 +43,8 @@ namespace Meshnetwork
   if ( msg.getIsGateway( ) ) {
    prefferedGateWay = msg.getPrefferedGateway( );
    connectedToGateway = true;
-   hopsFromGatewayAway = msg.hops + 1;  // count our own hop towards gateway
+   hopsFromGatewayAway =
+       msg.getHops( ) + 1;  // count our own hop towards gateway
    return;
   }
   // if sender doesn't know gateway but we do
@@ -97,7 +111,6 @@ namespace Meshnetwork
  {
   if ( connectedToGateway )  // in case we meanwhile found a connection
   {
-   negotiationList.clear( );
    return;
   }
   if ( routerTech->empty( ) ) {
@@ -116,7 +129,7 @@ namespace Meshnetwork
   // Find out which who the greatest distance from the GATEWAY. He shall be
   // choosen to replace the missing node.
   // Before we go to action we first make a list of everybody near that is
-  // disconnected
+  // disconnected.
 
   ROS_INFO( "LOST AS A GROUP LETS PICK SOMEONE TO MOVE" );
   // First find out how far away you are
@@ -126,11 +139,11 @@ namespace Meshnetwork
   } else {
    myDistance = -1;
   }
-  negotiationList.insert( std::make_pair( myDistance, this->nodeID ) );
+  SafeAddToNegotiationList( std::make_pair( myDistance, this->nodeID ) );
 
   // add ourself to the list
   // tell others how far away we are
-  informOthersAboutDistance( myDistance );
+  informOthersAboutCost( myDistance );
   while ( negotiationList.size( ) - 1 < routerTech->getAmountOfChildren( ) ) {
    // wait for others to respond
    continue;
@@ -157,15 +170,21 @@ namespace Meshnetwork
    negotiationList.clear( );
   }
  }
-
- void MeshnetworkCommunicator::informOthersAboutDistance( float distance )
+ void MeshnetworkCommunicator::SafeAddToNegotiationList(
+     const std::pair< float, uint8_t > &val )
  {
-  Messages::MovementNegotiationMessage MovNegotiationMsg( this->nodeID,
-                                                          distance );
+  mtx.lock( );
+  negotiationList.insert( val );
+  mtx.unlock( );
+ }
+
+ void MeshnetworkCommunicator::informOthersAboutCost( float cost )
+ {
+  Messages::MovementNegotiationMessage MovNegotiationMsg( this->nodeID, cost );
   abstract_drone::WirelessMessage WM;
   for ( auto &other : routerTech->getSetOfChildren( ) ) {
    uint8_t towards = routerTech->getDirectionToNode( other );
-   if ( towards == UINT8_MAX ) continue;
+   if ( towards == UINT8_MAX ) { continue; }
    WM.request.message.from = this->nodeID;
    WM.request.message.to = towards;
    WM.request.message.forward = other;
@@ -180,7 +199,7 @@ namespace Meshnetwork
      const abstract_drone::NRF24ConstPtr &_msg )
  {
   Messages::MovementNegotiationMessage msg( _msg->payload.data( ) );
-  negotiationList.insert( std::make_pair( msg.getDistance( ), msg.getID( ) ) );
+  SafeAddToNegotiationList( std::make_pair( msg.getCost( ), msg.getID( ) ) );
  }
 }  // namespace Meshnetwork
 }  // namespace gazebo

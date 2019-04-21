@@ -1,6 +1,23 @@
-#include "meshnetwork_component.hpp"
-#include "abstract_drone/RequestGPS.h"
+/**
+ * @file meshnetwork_component.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file of abstract class MeshnetworkComponent
+ * @version 1.0
+ * @date 2019-04-02
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
+
 #include <math.h>
+#include <thread>
+
+#include "abstract_drone/RequestGPS.h"
+#include "abstract_drone/AreaScan.h"
+#include "abstract_drone/nodeInfo.h"
+#include "abstract_drone/Location.h"
+
+#include "meshnetwork_component.hpp"
 
 namespace gazebo
 {
@@ -188,8 +205,8 @@ namespace Meshnetwork
  {
   Messages::MissingMessage msg( _msg->payload.data( ) );
   if ( routerTech->OtherCantCommunicateWithNode( msg.getID( ),
-                                                 msg.getDeceased( ) ) > 0 )
-   informAboutMissingChild( msg.getID( ), msg.getDeceased( ) );
+                                                 msg.getMissing( ) ) > 0 )
+   informAboutMissingChild( msg.getID( ), msg.getMissing( ) );
  }
 
  void MeshnetworkComponent::processSendGoalToEngine(
@@ -197,9 +214,9 @@ namespace Meshnetwork
  {
   Messages::LocationMessage locmsg( _msg->payload.data( ) );
   abstract_drone::Location msg;
-  msg.latitude = locmsg.latitude;
-  msg.longitude = locmsg.longitude;
-  msg.height = locmsg.height;
+  msg.latitude = locmsg.getLatitude( );
+  msg.longitude = locmsg.getLongitude( );
+  msg.height = locmsg.getHeight( );
 
   droneEnginePublisher.publish( msg );
  }
@@ -208,9 +225,9 @@ namespace Meshnetwork
      const Messages::LocationMessage &_msg )
  {
   abstract_drone::Location msg;
-  msg.latitude = _msg.latitude;
-  msg.longitude = _msg.longitude;
-  msg.height = _msg.height;
+  msg.latitude = _msg.getLatitude( );
+  msg.longitude = _msg.getLongitude( );
+  msg.height = _msg.getHeight( );
 
   droneEnginePublisher.publish( msg );
  }
@@ -254,7 +271,7 @@ namespace Meshnetwork
  void MeshnetworkComponent::informAboutMissingChild( uint8_t parent,
                                                      uint8_t child )
  {
-  Messages::MissingMessage deceased( this->nodeID, child );
+  Messages::MissingMessage missing( this->nodeID, child );
   abstract_drone::WirelessMessage WM;
 
   for ( auto &chi1d : routerTech->getSetOfChildren( ) ) {
@@ -265,7 +282,7 @@ namespace Meshnetwork
    WM.request.message.to = other;
    WM.request.message.forward = chi1d;
    WM.request.message.ack = 0;
-   deceased.toPayload( WM.request.message.payload.data( ) );
+   missing.toPayload( WM.request.message.payload.data( ) );
 
    sendMessage( WM );
   }
@@ -320,9 +337,10 @@ namespace Meshnetwork
 
   GPS.request.ID = this->nodeID;
   if ( GPSLink.call( GPS ) ) {
-   float a = A.longitude - GPS.response.longitude;
-   float b = A.latitude - GPS.response.latitude;
-   float c = A.height - GPS.response.height;
+   float a, b, c;
+   a = A.getLongitude( ) - GPS.response.longitude;
+   b = A.getLatitude( ) - GPS.response.latitude;
+   c = A.getHeight( ) - GPS.response.height;
    return std::sqrt( std::pow( a, 2 ) + std::pow( b, 2 ) + std::pow( c, 2 ) );
   } else {
    return 0;

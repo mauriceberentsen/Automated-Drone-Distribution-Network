@@ -1,37 +1,37 @@
 /**
  * @file meshnetwork_component.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief contains the class MeshnetworkComponent,
+ * @brief header for the abstract class MeshnetworkComponent,
  * generalisation for communication parts in a Meshnetwork
  * @version 1.0
- * @date 2019-04-19
+ * @date 2019-04-02
  *
  * @copyright Copyright (c) 2019
  *
  */
 #ifndef MESHNETWORKCOMPONENT
 #define MESHNETWORKCOMPONENT
-
-#include <functional>
+// system
+#include <map>
+// libary
+// ros
+#include "ros/ros.h"
+#include "std_srvs/Trigger.h"
+#include "ros/callback_queue.h"
+// gazebo
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/common.hh>
-#include <thread>
-#include <map>
-#include "message.hpp"
-#include "ros/ros.h"
-#include "ros/callback_queue.h"
-#include "ros/subscribe_options.h"
-#include "std_srvs/Trigger.h"
-#include "abstract_drone/Location.h"
-#include "abstract_drone/NRF24.h"
-#include "abstract_drone/nodeInfo.h"
+// local
+// ros generated messages
 #include "abstract_drone/WirelessMessage.h"
-#include "abstract_drone/AreaScan.h"
+#include "abstract_drone/NRF24.h"
 #include "abstract_drone/NodeDebugInfo.h"
-#include "ChildTableTree.hpp"
+// interfaces
 #include "IRoutingTechnique.hpp"
-#include <random>
+// classes
+#include "ChildTableTree.hpp"
+#include "message.hpp"
 
 namespace gazebo
 {

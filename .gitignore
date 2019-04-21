@@ -85,3 +85,5 @@ Docs/\.vscode/
 Docs/DesignDocumenten/UML/\.vscode/
 
 Code/ros/src/abstract_drone_workspace\.code-workspace
+
+Code/ros/src/abstract_drone/doxygen/html/

@@ -1,9 +1,22 @@
+/**
+ * @file meshnetwork_gateway.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief
+ * @version 1.0
+ * @date 2019-04-02
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "meshnetwork_gateway.hpp"
 
 namespace gazebo
 {
 namespace Meshnetwork
 {
+ MeshnetworkGateway::MeshnetworkGateway( ){
+
+ };
  void MeshnetworkGateway::Init( )
  {
   connectedToGateway = true;
@@ -40,6 +53,10 @@ namespace Meshnetwork
   }
  }
 
+ void MeshnetworkGateway::lostConnection( )
+ {
+ }
+
  void MeshnetworkGateway::ProcessHeartbeat(
      const abstract_drone::NRF24ConstPtr &_msg )
  {
@@ -51,8 +68,6 @@ namespace Meshnetwork
  void MeshnetworkGateway::processMovementNegotiationMessage(
      const abstract_drone::NRF24ConstPtr &_msg )
  {
-  // Our gateway stay where he is. Maybe in the future we need to move the
-  // gateway?
  }
 }  // namespace Meshnetwork
 }  // namespace gazebo

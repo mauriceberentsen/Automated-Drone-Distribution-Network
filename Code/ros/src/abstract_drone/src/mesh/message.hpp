@@ -6,7 +6,7 @@
 namespace Messages
 {
 enum Messagetype : uint8_t {
- NOTDEFINED = 0,
+ NOTDEFINED = 0,        // 0
  LOCATION,              // 1
  REQUESTLOCATION,       // 2
  PRESENT,               // 3
@@ -22,77 +22,161 @@ public:
  Message( const uint8_t _ID, Messagetype _Messagetype );
  explicit Message( const uint8_t *payload );
  ~Message( );
- virtual void toPayload( uint8_t *payload );
- virtual std::string toString( );
- void CopyFromCharArray( uint8_t *value, uint16_t size, const uint8_t *arr,
-                         uint16_t start );
- const uint8_t getID( );
+ /**
+  * @brief Copies the the content of a message to the given payload
+  *
+  * @param payload array that will be filled with the message
+  */
+ virtual void toPayload( uint8_t *payload ) const;
+ /**
+  * @brief contruct a descriptive string of a message
+  *
+  * @return std::string string of the message object
+  */
+ virtual const std::string toString( ) const;
+
+ const uint8_t getID( ) const;
 
 protected:
- uint8_t ID;
-
+ /**
+  * @brief Copies the content of an array back to a value
+  *
+  * @param value to copy
+  * @param size of the value
+  * @param arr array to copy from
+  * @param start place in the array to start
+  */
+ void CopyFromCharArray( uint8_t *value, uint16_t size, const uint8_t *arr,
+                         uint16_t start );
+ /**
+  * @brief Copies the value to a char array
+  *
+  * @param value to copy to a char array
+  * @param size of the value
+  * @param arr array to copy to
+  * @param start place in the array to begin copying
+  */
  void CopyToCharArray( uint8_t *value, uint16_t size, uint8_t *arr,
-                       uint16_t start );
+                       uint16_t start ) const;
+ uint8_t ID;
  uint8_t type;
 };
 
 class LocationMessage : public Message
 {
 public:
+ /**
+  * @brief Construct a new Location Message object
+  *        Location messages are used to inform others about your location
+  * @param _ID The ID  of this node
+  * @param latitude The latitude of this node
+  * @param longitude The longitude of this node
+  * @param height The height of this node
+  * @param timeSincePosix The moment in time this was measured
+  */
  LocationMessage( uint8_t _ID, float latitude, float longitude, int16_t height,
                   uint32_t timeSincePosix );
+ /**
+  * @brief Construct a new Location Message object from a NRF24 payload
+  *
+  * @param payload An Array that holds all variables of this message
+  */
  explicit LocationMessage( const uint8_t *payload );
  ~LocationMessage( );
- std::string toString( );
- void toPayload( uint8_t *payload );
-
- float latitude, longitude;
- int16_t height;
+ const std::string toString( ) const;
+ void toPayload( uint8_t *payload ) const;
+ const float getLatitude( ) const;
+ const float getLongitude( ) const;
+ const int16_t getHeight( ) const;
+ const int16_t gettimeSincePosix( ) const;
 
 private:
+ float latitude;
+ float longitude;
+ int16_t height;
+
  uint32_t timeSincePosix;
 };
 
 class IntroduceMessage : public Message
 {
 public:
+ /**
+  * @brief Construct a new Introduce Message object
+  *        This message is used to introduce yourself to others.
+  *        It tells others who you are, if you are connected to the gateway.
+  *        And how many hops it take you to talk with the gateway.
+  *
+  * @param _ID of this Node
+  * @param _hopsUntilsGateway How many hops it takes you to get to the gateway
+  * @param _knowGateway If you are connected to a gateway
+  */
  IntroduceMessage( const uint8_t _ID, const uint8_t _hopsUntilsGateway,
                    const bool _knowGateway );
+ /**
+  * @brief Construct a new Introduce Message objectfrom a NRF24 payload
+  *
+  * @param payload An Array that holds all variables of this message
+  */
  explicit IntroduceMessage( const uint8_t *payload );
  ~IntroduceMessage( );
- std::string toString( );
- void toPayload( uint8_t *payload );
- bool getKnowGateway( );
- uint8_t getHopsUntilsGateway( );
+ const std::string toString( ) const;
+ void toPayload( uint8_t *payload ) const;
+
+ const bool getKnowGateway( ) const;
+ const uint8_t getHopsUntilGateway( ) const;
 
 private:
- uint8_t hopsUntilsGateway;
+ uint8_t hopsUntilGateway;
  bool knowGateway;
 };
 
 class HeartbeatMessage : public Message
 {
 public:
+ /**
+  * @brief Construct a new Heartbeat Message object
+  *        This message is used to enssure connectivity.
+  *        It tells others who you are, if you are connected to the gateway.
+  *        Who your preffere.dGateWay is and how many hops it take you to talk
+  *         with the gateway. If this meesage is forwared it makes a hop.
+  *
+  * @param _ID of this Node.
+  * @param _knowGateway If you are connected to a gateway.
+  * @param _prefferedGateWay The gateway this node communicates with.
+  * @param _hops How many hops it takes you to get to the gateway.
+  */
  HeartbeatMessage( const uint8_t _ID, const bool _knowGateway,
                    const uint8_t _prefferedGateWay, uint8_t _hops = 0 );
+ /**
+  * @brief Construct a new Heartbeat Message objectfrom a NRF24 payload.
+  *
+  * @param payload An Array that holds all variables of this message.
+  */
  explicit HeartbeatMessage( const uint8_t *payload );
  ~HeartbeatMessage( );
- std::string toString( );
- void toPayload( uint8_t *payload );
- bool getKnowGateway( );
- uint8_t getPrefferedGateway( );
- bool getIsGateway( );
- uint8_t hops;
- uint8_t getHops( )
- {
-  return hops;
- };
- void makeHop( )
- {
-  ++hops;
- };
+ const std::string toString( ) const;
+ void toPayload( uint8_t *payload ) const;
+ /**
+  * @brief Adds a hop to the message.
+  *
+  */
+ void makeHop( );
+ /**
+  * @brief Compare the ID with the prefferedGateWay. If it's equal the node is a
+  * gateway
+  *
+  * @return true Is a Gateway
+  * @return false Is a Node
+  */
+ const bool getIsGateway( ) const;
+
+ const bool getKnowGateway( ) const;
+ const uint8_t getPrefferedGateway( ) const;
+ const uint8_t getHops( ) const;
 
 private:
+ uint8_t hops;
  bool knowGateway;
  uint8_t prefferedGateWay;
 };
@@ -100,27 +184,60 @@ private:
 class MissingMessage : public Message
 {
 public:
- MissingMessage( const uint8_t _ID, const uint8_t _deceased );
+ /**
+  * @brief Construct a new Missing Message object
+  *         Used to inform others about a missing Node in the network
+  *
+  * @param _ID The ID of the current Node.
+  * @param _missing The ID of the Node that went missing.
+  */
+ MissingMessage( const uint8_t _ID, const uint8_t _missing );
+ /**
+  * @brief Construct a new Missing Message objectfrom a NRF24 payload
+  *
+  * @param payload An Array that holds all variables of this message
+  */
  explicit MissingMessage( const uint8_t *payload );
+
  ~MissingMessage( );
- std::string toString( );
- void toPayload( uint8_t *payload );
- uint8_t getDeceased( );
+ void toPayload( uint8_t *payload ) const;
+ const std::string toString( ) const;
+ const uint8_t getMissing( ) const;
 
 private:
- uint8_t deceased;
+ uint8_t missing;
 };
 
 class GoToLocationMessage : public Message
 {
 public:
+ /**
+  * @brief Construct a new Go To Location Message object
+  *        Used to tell other to go to a specific location
+  *
+  * @param _ID The ID of the current Node
+  * @param latitude The target latitude to go to
+  * @param longitude The target longitude to go to
+  * @param height The target height to go to
+  */
  GoToLocationMessage( uint8_t _ID, float latitude, float longitude,
                       int16_t height );
+ /**
+  * @brief Construct a new Go To Location Message objectfrom a NRF24 payload
+  *
+  * @param payload An Array that holds all variables of this message
+  */
  explicit GoToLocationMessage( const uint8_t *payload );
  ~GoToLocationMessage( ){};
- std::string toString( );
- void toPayload( uint8_t *payload );
- float latitude, longitude;
+ const std::string toString( ) const;
+ void toPayload( uint8_t *payload ) const;
+ const float getLatitude( ) const;
+ const float getLongitude( ) const;
+ const int16_t getHeight( ) const;
+
+private:
+ float latitude;
+ float longitude;
  int16_t height;
 };
 
@@ -128,14 +245,20 @@ class MovementNegotiationMessage : public Message
 {
 public:
  MovementNegotiationMessage( const uint8_t _ID, const float _distance );
+ /**
+  * @brief Construct a new Movement Negotiation Message objectfrom a NRF24
+  * payload
+  *
+  * @param payload An Array that holds all variables of this message
+  */
  explicit MovementNegotiationMessage( const uint8_t *payload );
  ~MovementNegotiationMessage( );
- std::string toString( );
- void toPayload( uint8_t *payload );
- float getDistance( );
+ const std::string toString( ) const;
+ void toPayload( uint8_t *payload ) const;
+ const float getCost( ) const;
 
 private:
- float distance;
+ float cost;
 };
 }  // namespace Messages
 #endif  // MESSAGEHPP
