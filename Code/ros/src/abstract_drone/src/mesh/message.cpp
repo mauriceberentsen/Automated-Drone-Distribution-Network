@@ -1,7 +1,19 @@
-#include "message.hpp"
+/**
+ * @file message.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file for all messages
+ * @version 1.0
+ * @date 2019-04-02
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include <sstream>
 #include <iomanip>
 #include <iostream>
+
+#include "message.hpp"
+
 namespace Messages
 {
 Message::Message( const uint8_t _ID, Messagetype _Messagetype )
@@ -384,8 +396,8 @@ const int16_t GoToLocationMessage::getHeight( ) const
 }
 
 MovementNegotiationMessage::MovementNegotiationMessage( const uint8_t _ID,
-                                                        const float _distance )
-    : Message( _ID, MOVEMENT_NEGOTIATION ), cost( _distance )
+                                                        const float _cost )
+    : Message( _ID, MOVEMENT_NEGOTIATION ), cost( _cost )
 {
 }
 

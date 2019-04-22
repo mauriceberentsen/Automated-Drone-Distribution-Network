@@ -1,3 +1,13 @@
+/**
+ * @file message.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Header file for all Messages
+ * @version 1.0
+ * @date 2019-04-02
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef MESSAGEHPP
 #define MESSAGEHPP
 
@@ -244,7 +254,14 @@ private:
 class MovementNegotiationMessage : public Message
 {
 public:
- MovementNegotiationMessage( const uint8_t _ID, const float _distance );
+ /**
+  * @brief Construct a new Movement Negotiation Message object
+  *        Used to negotiate with others about who should move.
+  *
+  * @param _ID the ID of the current Node
+  * @param _cost the calculated cost.
+  */
+ MovementNegotiationMessage( const uint8_t _ID, const float _cost );
  /**
   * @brief Construct a new Movement Negotiation Message objectfrom a NRF24
   * payload
