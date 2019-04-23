@@ -1,29 +1,24 @@
-#include <map>
-
-#include "gazebo/physics/physics.hh"
-#include "gazebo/common/common.hh"
-#include "gazebo/gazebo.hh"
-
-#include "ros/ros.h"
-#include "ros/callback_queue.h"
+/**
+ * @file wireless_signal_simulator.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file for the WirelessSignalSimulator
+ * @version 1.0
+ * @date 2019-04-02
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "ros/subscribe_options.h"
-#include "abstract_drone/nodeInfo.h"
-#include "abstract_drone/WirelessMessage.h"
-#include "abstract_drone/AreaScan.h"
 
-#include "node.hpp"
-#include <iostream>
+#include "wireless_signal_simulator.hpp"
 
 namespace gazebo
 {
-class WirelessSignalSimulator : public WorldPlugin
+namespace Wireless
 {
-private:
- std::map< uint8_t, wireless::Node * > Network;
-
-private:
- bool send_message( abstract_drone::WirelessMessage::Request &req,
-                    abstract_drone::WirelessMessage::Response &res )
+ bool WirelessSignalSimulator::send_message(
+     abstract_drone::WirelessMessage::Request &req,
+     abstract_drone::WirelessMessage::Response &res )
  {
   auto to = Network.find( req.message.to );
 
@@ -32,7 +27,7 @@ private:
   if ( from != Network.end( ) &&
        to != Network.end( ) )  // Already exists in the Network UpdateLocation
   {
-   if ( !from->second->on || !to->second->on ) {
+   if ( !from->second->getOn( ) || !to->second->getOn( ) ) {
     res.succes = false;
 
    } else {
@@ -61,16 +56,16 @@ private:
   return true;
  }
 
-private:
- bool getNodesInRange( abstract_drone::AreaScan::Request &req,
-                       abstract_drone::AreaScan::Response &res )
+ bool WirelessSignalSimulator::getNodesInRange(
+     abstract_drone::AreaScan::Request &req,
+     abstract_drone::AreaScan::Response &res )
  {
   auto from = Network.find( req.id );
   res.near.clear( );
   if ( from != Network.end( ) ) {
-   for ( std::pair< uint8_t, wireless::Node * > other : Network ) {
+   for ( std::pair< uint8_t, Wireless::Node * > other : Network ) {
     if ( other.first == from->first ) continue;  // not interrested in ourself
-    if ( !other.second->on ) continue;
+    if ( !other.second->getOn( ) ) continue;
     float distance =
         from->second->getPosition( ).Distance( other.second->getPosition( ) );
     // using pythgoras in the function Vector3 to get the distance between to
@@ -86,8 +81,8 @@ private:
   }
  }
 
-public:
- void Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf )
+ void WirelessSignalSimulator::Load( physics::WorldPtr _parent,
+                                     sdf::ElementPtr _sdf )
  {
   std::string Node_TopicName = "/WirelessSignalSimulator";
   // Initialize ros, if it has not already been initialized.
@@ -100,6 +95,9 @@ public:
 
   if ( _sdf->HasElement( "CommunicationDistance" ) ) {
    this->maxComDistance = _sdf->Get< float >( "CommunicationDistance" );
+  } else {
+   ROS_WARN( "No CommunicationDistance is set using the default [%f]",
+             this->maxComDistance );
   }
 
   // CreateROS node.
@@ -120,25 +118,23 @@ public:
       std::thread( std::bind( &WirelessSignalSimulator::QueueThread, this ) );
  }
 
-public:
- void OnRosMsg( const abstract_drone::nodeInfoConstPtr &_msg )
+ void WirelessSignalSimulator::OnRosMsg(
+     const abstract_drone::nodeInfoConstPtr &_msg )
  {
   auto it = Network.find( _msg->nodeID );
-  if ( it != Network.end( ) )  // Already exists in the Network UpdateLocation
+  if ( it !=
+       Network.end( ) )  // Already exists in the Network so update location
   {
-   if ( it->second->on == _msg->on ) {
+   if ( it->second->getOn( ) == _msg->on ) {
     float x = _msg->position[0];
     float y = _msg->position[1];
     float z = _msg->position[2];
     Vector3< float > vec( x, y, z );
     it->second->setPosition( vec );
    } else {
-    it->second->on = _msg->on;
+    it->second->setOn( _msg->on );
    }
-
-  }
-
-  else  // new node addNodeToNetwork
+  } else  // new node addNodeToNetwork
   {
    if ( _msg->sub == "" ) {
     ROS_ERROR( "NO TOPIC NAME" );
@@ -152,9 +148,7 @@ public:
   }
  }
 
- /// \brief ROS helper function that processes messages
-private:
- void QueueThread( )
+ void WirelessSignalSimulator::QueueThread( )
  {
   static const double timeout = 0.01;
   while ( this->rosNode->ok( ) ) {
@@ -162,37 +156,16 @@ private:
   }
  }
 
-private:
- void addNodeToNetwork( uint8_t id, Vector3< float > &pos,
-                        std::string pubtopicname )
+ void WirelessSignalSimulator::addNodeToNetwork( uint8_t id,
+                                                 Vector3< float > &pos,
+                                                 std::string pubtopicname )
  {
   this->Network.insert(
-      std::make_pair( id, new wireless::Node( pos, rosNode, pubtopicname ) ) );
+      std::make_pair( id, new Node( pos, rosNode, pubtopicname ) ) );
   ROS_INFO( "added node [%d] on position [%f] [%f] [%f] with name %s ", id,
             pos.X( ), pos.Y( ), pos.Z( ), pubtopicname.c_str( ) );
  }
 
-private:
- float maxComDistance = 30.0;  // meters
-
-private:
- ros::ServiceServer service;
- ros::ServiceServer messageservice;
-
- /// \brief A node use for ROS transport
-private:
- std::shared_ptr< ros::NodeHandle > rosNode;
- /// \brief A ROS subscriber
-private:
- ros::Subscriber rosSub;
- /// \brief A ROS callbackqueue that helps process messages
-private:
- ros::CallbackQueue rosQueue;
- /// \brief A thread the keeps running the rosQueue
-private:
- std::thread rosQueueThread;
-};
-
+}  // namespace Wireless
 // Register this plugin with the simulator
-GZ_REGISTER_WORLD_PLUGIN( WirelessSignalSimulator )
 }  // namespace gazebo

@@ -1,3 +1,13 @@
+/**
+ * @file ChildTableTree.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief source file for the class ChildTableTree
+ * @version 1.0
+ * @date 2019-04-04
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "ChildTableTree.hpp"
 #include <iostream>
 #include "meshnetwork_component.hpp"

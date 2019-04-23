@@ -1,0 +1,34 @@
+/**
+ * @file drone_factory.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Header file for the drone DroneFactory
+ * @version 1.0
+ * @date 2019-04-02
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
+#ifndef DRONEFACTORY
+#define DRONEFACTORY
+
+#include "gazebo/physics/physics.hh"
+#include "gazebo/common/common.hh"
+#include "gazebo/gazebo.hh"
+
+namespace gazebo
+{
+namespace DroneSimulation
+{
+ class DroneFactory : public WorldPlugin
+ {
+ public:
+  void Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf );
+
+ protected:
+ private:
+ };
+}  // namespace DroneSimulation
+// Register this plugin with the simulator
+GZ_REGISTER_WORLD_PLUGIN( DroneSimulation::DroneFactory )
+}  // namespace gazebo
+#endif  // DRONEFACTORY

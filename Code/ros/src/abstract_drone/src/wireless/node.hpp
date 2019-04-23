@@ -1,3 +1,13 @@
+/**
+ * @file node.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Header file for Node
+ * @version 1.0
+ * @date 2019-04-02
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef NODEHPP
 #define NODEHPP
 
@@ -6,29 +16,50 @@
 #include "abstract_drone/NRF24.h"
 
 using namespace ignition::math;
-namespace wireless
+namespace gazebo
 {
-class Node
+namespace Wireless
 {
-public:
- Node( Vector3< float >& _position,
-       std::shared_ptr< ros::NodeHandle >& _nodeHandle,
-       std::string& _subtopicname );
- ~Node( );
- const Vector3< float >& getPosition( );
- void setPosition( Vector3< float >& position );
- void isMoved( bool moved );
- bool getMoved( );
- void recieveMessage( abstract_drone::NRF24& msg );
- bool on;
+ class Node
+ {
+ public:
+  /**
+   * @brief Construct a new Node used for administration of the the
+   * WirelessSignalSimulator. Advertises the topic the node is listing to
+   *
+   * @param _position The current position of the Node
+   * @param _nodeHandle The Nodehandler of the WirelessSignalSimulator
+   * @param _subtopicname The name the of the topic
+   */
+  Node( const Vector3< float >& _position,
+        const std::shared_ptr< ros::NodeHandle >& _nodeHandle,
+        const std::string& _subtopicname );
+  ~Node( );
+  /**
+   * @brief Used for sending NRF24 messages to this node
+   *
+   * @param msg THe NRF24 message
+   */
+  void recieveMessage( const abstract_drone::NRF24& msg ) const;
 
-private:
- ros::Publisher rosPub;
- std::shared_ptr< ros::NodeHandle > nodeHandle;
- Vector3< float > position;
- std::string subtopicname;
- bool moved;
-};
+  const Vector3< float >& getPosition( ) const;
+  void setPosition( const Vector3< float >& position );
+  const bool getOn( ) const;
+  void setOn( const bool on );
 
-}  // namespace wireless
+ private:
+  /// \brief ON/OFF state for the node. If off its not allowed to recieve
+  /// any message
+  bool on;
+  /// \brief ROS Publisher to the topic of this node
+  ros::Publisher rosPub;
+  /// \brief Pointer towards the nodehandler to be ale to publish
+  std::shared_ptr< ros::NodeHandle > nodeHandle;
+  /// \brief the current position of this drone
+  Vector3< float > position;
+  /// \brief the name of the topic this node is publing towards.
+  const std::string subtopicname;
+ };
+}  // namespace Wireless
+}  // namespace gazebo
 #endif  // NODEHPP

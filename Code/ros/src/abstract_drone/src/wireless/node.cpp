@@ -1,47 +1,57 @@
+/**
+ * @file node.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file for Node
+ * @version 1.0
+ * @date 2019-04-02
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "node.hpp"
-
-namespace wireless
+namespace gazebo
 {
-Node::Node( Vector3< float >& _position,
-            std::shared_ptr< ros::NodeHandle >& _nodeHandle,
-            std::string& _subtopicname )
-    : moved( true )
-    , position( _position )
-    , nodeHandle( _nodeHandle )
-    , subtopicname( _subtopicname )
-    , on(true)
+namespace Wireless
 {
- rosPub =
-     nodeHandle->advertise< abstract_drone::NRF24 >( subtopicname, 100, true );
-}
+ Node::Node( const Vector3< float >& _position,
+             const std::shared_ptr< ros::NodeHandle >& _nodeHandle,
+             const std::string& _subtopicname )
+     : position( _position )
+     , nodeHandle( _nodeHandle )
+     , subtopicname( _subtopicname )
+     , on( true )
+ {
+  rosPub =
+      nodeHandle->advertise< abstract_drone::NRF24 >( subtopicname, 100, true );
+ }
 
-Node::~Node( )
-{
-}
+ Node::~Node( )
+ {
+ }
 
-void Node::recieveMessage( abstract_drone::NRF24& msg )
-{
- rosPub.publish( msg );
-}
+ void Node::recieveMessage( const abstract_drone::NRF24& msg ) const
+ {
+  rosPub.publish( msg );
+ }
 
-const Vector3< float >& Node::getPosition( )
-{
- return this->position;
-}
+ const Vector3< float >& Node::getPosition( ) const
+ {
+  return this->position;
+ }
 
-void Node::setPosition( Vector3< float >& position )
-{
- this->position = position;
-}
+ void Node::setPosition( const Vector3< float >& position )
+ {
+  this->position = position;
+ }
 
-bool Node::getMoved( )
-{
- return this->moved;
-}
+ const bool Node::getOn( ) const
+ {
+  return this->on;
+ }
+ void Node::setOn( const bool on )
+ {
+  this->on = on;
+ }
 
-void Node::isMoved( bool moved )
-{
- this->moved = moved;
-}
-
-}  // namespace wireless
+}  // namespace Wireless
+}  // namespace gazebo
