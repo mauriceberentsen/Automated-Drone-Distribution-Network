@@ -2,12 +2,8 @@
 |MeshComponent|
 start
 :load;
-fork
-	:OnUpdate;
-    if(init) then([false])
-    :searchOtherNodesInRange();
-    endif
-fork again
+:init;
+fork 
 	while (program running) is (new message)
 	:OnRosMsg;
     if(msg.forward == This.NodeID) then([true])

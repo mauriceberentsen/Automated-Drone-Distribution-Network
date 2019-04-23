@@ -21,8 +21,8 @@ package gazebo
         class RouterDrone
         class GatewayDrone
         class DroneFactory
-        DroneFactory"1" o-- "*"RouterDrone : creates >
-        DroneFactory"1" o-- "*"GatewayDrone : creates >
+        DroneFactory"1" o--> "*"RouterDrone : creates >
+        DroneFactory"1" o--> "*"GatewayDrone : creates >
         Drone - DroneEngine
         Drone <|-down- RouterDrone
         Drone <|-down- GatewayDrone
@@ -51,7 +51,7 @@ package gazebo
 
 package RoutingTechnique
 {
-    class IRoutingTechnique
+    interface IRoutingTechnique
     class ChildTableTree
     ChildTableTree ..|> IRoutingTechnique
 }
@@ -94,9 +94,11 @@ package DroneManagerService
     class DroneManagerService
     DroneManagerService --> DroneManager
 }
+
+ MeshnetworkComponent o--> "2" LocationMessage : Remembers\n locations with >   
  DroneManager ..> GatewayDrone : Sends Commands to >
  MeshnetworkComponent ..> Message : <<use>>
- MeshnetworkComponent -right- ChildTableTree
+ MeshnetworkComponent -- ChildTableTree : Routes with >
  RouterDrone o--o MeshnetworkCommunicator
  GatewayDrone o--o MeshnetworkGateway
 
