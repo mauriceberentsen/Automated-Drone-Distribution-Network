@@ -66,7 +66,6 @@ namespace Meshnetwork
  protected:
   /**
    * @brief Construct a new Meshnetwork Component object
-   * @author M.W.J. Berentsen
    */
   MeshnetworkComponent( );
   /**
