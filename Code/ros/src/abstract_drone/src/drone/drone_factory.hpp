@@ -1,5 +1,5 @@
 /**
- * @file drone_factory.cpp
+ * @file drone_factory.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Header file for the drone DroneFactory
  * @version 1.0
