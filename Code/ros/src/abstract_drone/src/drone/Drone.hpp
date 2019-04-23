@@ -35,11 +35,18 @@ namespace DroneSimulation
   explicit Drone( const float _x, const float _y, const float _z,
                   physics::WorldPtr _parent );
   ~Drone( );
+  /// \brief static Drone counter to give every drone an unique ID as long as
+  /// the same factory is used
   static int droneID;
+  /// \brief SDF string containing all information about the drone for gazebo
   std::string SdfString;
+  /// \brief X coordinate in the simulation
   const float x;
+  /// \brief Y coordinate in the simulation
   const float y;
+  /// \brief Z coordinate in the simulation
   const float z;
+  /// \brief Pointer to the World the drone will be placed in
   const physics::WorldPtr parent;
  };
 
