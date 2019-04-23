@@ -257,49 +257,67 @@ namespace Meshnetwork
  public:
   // No public vars
  protected:
+  /// \brief The time to wait at initialization
   const float initTime = 0.001;
+  /// \brief The time to wait before rechecking the Component
   const float CheckConnectionTime = 10.0;
-
+  /// \brief The ID of the current Node
   uint8_t nodeID;
+  /// \brief The ID of the prefferedGateWay
   uint8_t prefferedGateWay = 0;
+  /// \brief The amount of hops this node is away from the prefferedGateWay
   uint8_t hopsFromGatewayAway = 0;
-
+  /// \brief Boolean for enabling debug publishers
+  bool debug = false;
+  /// \brief The ON/OFF state of this Node
   bool on = true;
+  /// \brief Boolean if this node knows the location of his prefferedGateWay
   bool knowPrefferedGatewayLocation = false;
+  /// \brief boolean if this node is connected to a gateway
   bool connectedToGateway = false;
-  bool isGateway = false;
-
+  /// \brief The ID of the connected Drone
   uint16_t droneID;
+  /// \brief The amount of messages send by this node
   uint32_t totalMessageSent = 0;
-
+  /// \brief The last known location that was known to be a good location
   Messages::LocationMessage lastGoodKnownLocation =
       Messages::LocationMessage( 0, 0, 0, 0, 0 );
+  /// \brief The location of the prefferedGateWay
   Messages::LocationMessage prefferedGateWayLocation =
       Messages::LocationMessage( 0, 0, 0, 0, 0 );
-
+  /// \brief pointer to this model plugin
   physics::ModelPtr model;
-
+  /// \brief pointer to the used RoutingTechnique
   std::unique_ptr< RoutingTechnique::IRoutingTechnique > routerTech;
+  /// \brief Pointer to the Ros Node of this class
   std::unique_ptr< ros::NodeHandle > rosNode;
-
+  /// \brief rosQueue for handling messages
   ros::CallbackQueue rosQueue;
 
  private:
+  /// \brief Service to turn the communication on and off
   ros::ServiceServer switchPowerService;
-
+  /// \brief Service for requesting all nodes near
   ros::ServiceClient areaScanner;
+  /// \brief Service for requesting the current location
   ros::ServiceClient GPSLink;
+  /// \brief Service for sending messages using the WirelessSignalSimulator
   ros::ServiceClient publishService;
-
+  /// \brief Service for publishing information about this node to the
+  /// WirelessSignalSimulator
   ros::Publisher rosPub;
+  /// \brief Service for publishing information for debuging
   ros::Publisher nodeDebugTopic;
+  /// \brief Publisher towards the DroneEngine
   ros::Publisher droneEnginePublisher;
-
+  /// \brief Subscriber to recieve NRF24 messages
   ros::Subscriber rosSub;
-
+  /// \brief thread to keep an open line for receiving NRF24 messages
   std::thread rosQueueThread;
-  std::thread heartbeatThread;
-  std::thread NodeInfoThread;
+  /// \brief thread to check the connection every CheckConnectionTime seconds
+  std::thread checkConnectionThread;
+  /// \brief thread for publishing debug information at 1hz
+  std::thread NodeDebugInfoThread;
  };
 }  // namespace Meshnetwork
 }  // namespace gazebo

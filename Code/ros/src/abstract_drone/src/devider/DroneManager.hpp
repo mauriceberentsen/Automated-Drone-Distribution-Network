@@ -1,3 +1,13 @@
+/**
+ * @file DroneManager.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief header file for DroneManager
+ * @version 1.0
+ * @date 2019-04-05
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef DRONEMANAGER
 #define DRONEMANAGER
 

@@ -104,28 +104,36 @@ namespace DroneSimulation
   void BootDroneMovement( );
 
  private:
+  /// \brief The DroneID of this engine
   uint8_t drone_id;
+  /// \brief Pointer to this model plugin
   physics::ModelPtr model;
-
+  /// \brief Boolean if this engine has an active goal
   bool hasGoal = false;
+  /// \brief Boolean if this drone is moving
   bool moving = false;
-
+  /// \brief The speed this drone uses to move
   float speed = 2.0;
-
+  /// \brief Pointer to the NodeHandler of this plugin
   std::unique_ptr< ros::NodeHandle > rosNode;
-
+  /// \brief Pointer to the connection to Gazebo, used for iterating each
+  /// simulation cycle
   event::ConnectionPtr updateConnection;
+  /// \brief Service to request the location of this engine
   ros::ServiceServer gpsService;
-
+  /// \brief Thread to process the ros messages
   std::thread rosQueueThread;
+  /// \brief Queue for ros messages
   ros::CallbackQueue rosQueue;
-
+  /// \brief Publisher to the WirelessSignalSimulator for the whereabouts of
+  /// this drone
   ros::Publisher wirelessSimulatorPub;
-  ros::Publisher rosPub;
-
+  /// \brief Subscriber to recieve messages from the connected
+  /// MeshnetworkComponent
   ros::Subscriber rosSub;
-
+  /// \brief The goal for this engine to fly towards
   ignition::math::Pose3d goal;
+  /// \brief The current location of this engine
   ignition::math::Pose3d pose;
  };
 }  // namespace DroneSimulation

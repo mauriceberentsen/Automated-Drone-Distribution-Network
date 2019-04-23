@@ -46,6 +46,9 @@ namespace Meshnetwork
     <DroneID> unique <DroneID> \n  Restart ussing droneID's else drone \
     movement will be a mess" );
   }
+  if ( _sdf->HasElement( "Debug" ) ) {
+   this->debug = _sdf->Get< bool >( "Debug" );
+  }
   std::string Node_TopicName;
   std::string WirelessSignalSimulatorName;
   // Check that the velocity element exists, then read the value
@@ -100,11 +103,15 @@ namespace Meshnetwork
   // Spin up the queue helper thread.
   this->rosQueueThread =
       std::thread( std::bind( &MeshnetworkComponent::QueueThread, this ) );
-  this->heartbeatThread =
+  this->checkConnectionThread =
       std::thread( std::bind( &MeshnetworkComponent::CheckConnection, this ) );
-  this->NodeInfoThread =
-      std::thread( std::bind( &MeshnetworkComponent::publishDebugInfo, this ) );
-  ROS_WARN( "Loaded MeshnetworkComponent Plugin with parent...%s",
+  if ( debug ) {
+   this->NodeDebugInfoThread = std::thread(
+       std::bind( &MeshnetworkComponent::publishDebugInfo, this ) );
+   ROS_INFO( "Started publishing debug info for %s",
+             this->model->GetName( ).c_str( ) );
+  }
+  ROS_INFO( "Loaded MeshnetworkComponent Plugin with parent...%s",
             this->model->GetName( ).c_str( ) );
 
   abstract_drone::nodeInfo nodeinf;

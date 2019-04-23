@@ -136,10 +136,17 @@ namespace Meshnetwork
  public:
  protected:
  private:
+  /// \brief Mutex lock to prevent data corruption when adding information to
+  /// the negotiationList
   std::mutex mtx;
+  /// \brief Boolean for checking if the timer is running during connection loss
   bool timerStarted = false;
+  /// \brief multimap sorted on cost, used to determine which node should move
   std::multimap< float, uint8_t > negotiationList;
+  /// \brief Time variable to register that last moment that this node was
+  /// connected to a gateway
   common::Time lastTimeOnline;
+  /// \brief Allowed time that no connection is available
   const float timeUntilConnectionLost = 30.0;
  };
 }  // namespace Meshnetwork

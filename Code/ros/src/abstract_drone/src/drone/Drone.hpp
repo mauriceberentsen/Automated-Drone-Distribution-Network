@@ -1,7 +1,7 @@
 /**
  * @file Drone.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief header file for drone classes
+ * @brief header file for all drone classes
  * @version 1.0
  * @date 2019-04-18
  *

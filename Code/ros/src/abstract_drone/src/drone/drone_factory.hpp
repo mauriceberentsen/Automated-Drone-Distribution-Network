@@ -22,6 +22,14 @@ namespace DroneSimulation
  class DroneFactory : public WorldPlugin
  {
  public:
+  /**
+   * @brief This function is called when loading the plugin into gazebo. It's
+   * created the amount of Gateways given in the SDF <amountOfGatewayDrones> and
+   * the amount of routers given in <amountOfRouterDrones>
+   *
+   * @param _parent pointer to the World this plugin lives in
+   * @param _sdf pointer to the SDF of this plugin
+   */
   void Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf );
 
  protected:

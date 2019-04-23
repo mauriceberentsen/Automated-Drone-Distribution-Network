@@ -1,3 +1,13 @@
+/**
+ * @file DroneManagerService.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file booting a service to manage drones
+ * @version 1.0
+ * @date 2019-04-23
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
 #include "ros/subscribe_options.h"

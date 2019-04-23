@@ -91,7 +91,10 @@ private:
  void RegisterGrandChildOfChild( uint8_t child, uint8_t grandChild );
 
 private:
+ /// \brief The conneceted MeshnetworkComponent used for sending messages to
+ /// other nodes.
  gazebo::Meshnetwork::MeshnetworkComponent& meshnetworkComponent;
+ /// \brief The family with connected childeren and grandchildren.
  std::map< uint8_t, std::set< uint8_t > > family;
 };
 }  // namespace RoutingTechnique

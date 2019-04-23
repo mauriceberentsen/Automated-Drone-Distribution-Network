@@ -1,7 +1,7 @@
 /**
  * @file meshnetwork_gateway.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief
+ * @brief source file for the MeshnetworkGateway
  * @version 1.0
  * @date 2019-04-02
  *
@@ -20,7 +20,6 @@ namespace Meshnetwork
  void MeshnetworkGateway::Init( )
  {
   connectedToGateway = true;
-  isGateway = true;
   prefferedGateWay = this->nodeID;
 
   ros::SubscribeOptions so = ros::SubscribeOptions::create<

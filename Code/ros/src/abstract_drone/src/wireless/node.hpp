@@ -1,7 +1,7 @@
 /**
  * @file node.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief Header file for Node
+ * @brief Header file for Node class
  * @version 1.0
  * @date 2019-04-02
  *

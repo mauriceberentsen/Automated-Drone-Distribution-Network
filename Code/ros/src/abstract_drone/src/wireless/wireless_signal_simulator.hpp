@@ -1,7 +1,7 @@
 /**
  * @file wireless_signal_simulator.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief
+ * @brief Header file for the the WirelessSignalSimulator
  * @version 1.0
  * @date 2019-04-02
  *

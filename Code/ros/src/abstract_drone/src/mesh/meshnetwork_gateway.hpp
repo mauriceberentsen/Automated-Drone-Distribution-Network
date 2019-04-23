@@ -12,7 +12,6 @@
 #define MESHNETWORKGATEWAY
 
 #include "meshnetwork_component.hpp"
-#include "abstract_drone/SwitchBool.h"
 #include "abstract_drone/RequestGatewayDroneFlight.h"
 
 namespace gazebo
@@ -82,6 +81,7 @@ namespace Meshnetwork
  public:
  protected:
  private:
+  /// \brief Subscriber to the general gateway topic
   ros::Subscriber gatewaySub;
  };
  // Register this plugin with the simulator

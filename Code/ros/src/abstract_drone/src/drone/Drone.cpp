@@ -1,3 +1,13 @@
+/**
+ * @file Drone.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file for all drone classes
+ * @version 1.0
+ * @date 2019-04-18
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "Drone.hpp"
 
 namespace gazebo
@@ -53,7 +63,8 @@ namespace DroneSimulation
      << std::to_string( droneID ) << "</DroneID>\
             <nodeID>"
      << std::to_string( droneID ) << "</nodeID>\
-     </plugin>\
+            <Debug>true</Debug>\
+            </plugin>\
      <plugin filename = 'libdroneEngine.so' name ='droneEngine'>\
      <DroneID>"
      << std::to_string( droneID ) << " </DroneID> </plugin>\
@@ -111,6 +122,7 @@ namespace DroneSimulation
      << std::to_string( droneID ) << "</nodeID>\
               <DroneID>"
      << std::to_string( droneID ) << "</DroneID>\
+            <Debug>true</Debug>\
             </plugin>\
             <plugin filename='libdroneEngine.so' name='droneEngine'>\
              <DroneID>"
@@ -122,7 +134,6 @@ namespace DroneSimulation
 
   sdf::SDF boxSDF;
   boxSDF.SetFromString( SdfString );
-  // Demonstrate using a custom model name.
   sdf::ElementPtr model = boxSDF.Root( )->GetElement( "model" );
   model->GetAttribute( "name" )->SetFromString( "drone" +
                                                 std::to_string( droneID ) );

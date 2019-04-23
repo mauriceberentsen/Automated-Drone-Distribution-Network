@@ -15,6 +15,10 @@
 #include <string>
 namespace Messages
 {
+/**
+ * @brief Used for reconizing message types when parsed into a 32 byte array
+ *
+ */
 enum Messagetype : uint8_t {
  NOTDEFINED = 0,        // 0
  LOCATION,              // 1
@@ -68,7 +72,9 @@ protected:
   */
  void CopyToCharArray( uint8_t *value, uint16_t size, uint8_t *arr,
                        uint16_t start ) const;
+ /// \brief The ID of the node
  uint8_t ID;
+ /// \brief The type of the message
  uint8_t type;
 };
 
@@ -101,10 +107,13 @@ public:
  const int16_t gettimeSincePosix( ) const;
 
 private:
+ /// \brief The latitude of a location
  float latitude;
+ /// \brief The longitude of location
  float longitude;
+ /// \brief The height if a location
  int16_t height;
-
+ /// \brief The time this location was measured
  uint32_t timeSincePosix;
 };
 
@@ -137,7 +146,9 @@ public:
  const uint8_t getHopsUntilGateway( ) const;
 
 private:
+ /// \brief The amount of hops a node is away from a gateway
  uint8_t hopsUntilGateway;
+ /// \brief Boolean true if the node is connected to a gateway
  bool knowGateway;
 };
 
@@ -186,8 +197,11 @@ public:
  const uint8_t getHops( ) const;
 
 private:
+ /// \brief The amount of hops this heartbeat has taken
  uint8_t hops;
+ /// \brief Boolean true if the node is connected to a gateway
  bool knowGateway;
+ /// \brief The ID of prefferedGateWay
  uint8_t prefferedGateWay;
 };
 
@@ -215,6 +229,7 @@ public:
  const uint8_t getMissing( ) const;
 
 private:
+ /// \brief The ID of the Node that went missing
  uint8_t missing;
 };
 
@@ -246,8 +261,11 @@ public:
  const int16_t getHeight( ) const;
 
 private:
+ /// \brief The latitude of a location
  float latitude;
+ /// \brief The longitude of location
  float longitude;
+ /// \brief The height if a location
  int16_t height;
 };
 
@@ -275,6 +293,7 @@ public:
  const float getCost( ) const;
 
 private:
+ /// \brief The cost for this node for the movement
  float cost;
 };
 }  // namespace Messages

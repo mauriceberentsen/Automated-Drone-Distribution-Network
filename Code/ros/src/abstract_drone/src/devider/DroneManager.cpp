@@ -1,3 +1,13 @@
+/**
+ * @file DroneManager.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file for DroneManagerService
+ * @version 1.0
+ * @date 2019-04-05
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "DroneManager.hpp"
 #include "abstract_drone/RequestGatewayDroneFlight.h"
 namespace DroneManagerService

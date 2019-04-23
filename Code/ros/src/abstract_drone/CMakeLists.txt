@@ -63,7 +63,6 @@ add_service_files(
    FILES
   WirelessMessage.srv
   AreaScan.srv
-  SwitchBool.srv
   RequestDroneFlight.srv
   RequestGPS.srv
 )
