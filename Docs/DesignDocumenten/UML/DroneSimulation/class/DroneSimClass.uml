@@ -69,6 +69,6 @@ package gazebo{
     DroneFactory --|> WorldPlugin
     DroneEngine --|> ModelPlugin
 }
-DroneEngine -() IDroneEngine
+    DroneEngine -() IDroneEngine
 
 @enduml

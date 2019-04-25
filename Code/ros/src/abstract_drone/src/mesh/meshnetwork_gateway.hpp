@@ -82,7 +82,7 @@ namespace Meshnetwork
  protected:
  private:
   /// \brief Subscriber to the general gateway topic
-  ros::Subscriber gatewaySub;
+  // ros::Subscriber gatewaySub;
  };
  // Register this plugin with the simulator
 }  // namespace Meshnetwork

@@ -30,10 +30,18 @@ enum Messagetype : uint8_t {
  MOVEMENT_NEGOTIATION,  // 7
 };
 
+enum MessageHelper : uint8_t {
+ FROM = 0,    // 0
+ TYPE = 1,    // 1
+ TO = 2,      // 2
+ FORWARD = 3  // 3
+};
+
 class Message
 {
 public:
- Message( const uint8_t _ID, Messagetype _Messagetype );
+ Message( const uint8_t _ID, Messagetype _Messagetype, const uint8_t _to,
+          const uint8_t _forward );
  explicit Message( const uint8_t *payload );
  ~Message( );
  /**
@@ -76,6 +84,10 @@ protected:
  uint8_t ID;
  /// \brief The type of the message
  uint8_t type;
+ /// \brief send this message to
+ uint8_t to;
+ /// \brief forward this message to
+ uint8_t forward;
 };
 
 class LocationMessage : public Message
@@ -90,7 +102,8 @@ public:
   * @param height The height of this node
   * @param timeSincePosix The moment in time this was measured
   */
- LocationMessage( uint8_t _ID, float latitude, float longitude, int16_t height,
+ LocationMessage( uint8_t _ID, const uint8_t _to, const uint8_t _forward,
+                  float latitude, float longitude, int16_t height,
                   uint32_t timeSincePosix );
  /**
   * @brief Construct a new Location Message object from a NRF24 payload
@@ -130,8 +143,8 @@ public:
   * @param _hopsUntilsGateway How many hops it takes you to get to the gateway
   * @param _knowGateway If you are connected to a gateway
   */
- IntroduceMessage( const uint8_t _ID, const uint8_t _hopsUntilsGateway,
-                   const bool _knowGateway );
+ IntroduceMessage( const uint8_t _ID, const uint8_t _to, const uint8_t _forward,
+                   const uint8_t _hopsUntilsGateway, const bool _knowGateway );
  /**
   * @brief Construct a new Introduce Message objectfrom a NRF24 payload
   *
@@ -167,8 +180,9 @@ public:
   * @param _prefferedGateWay The gateway this node communicates with.
   * @param _hops How many hops it takes you to get to the gateway.
   */
- HeartbeatMessage( const uint8_t _ID, const bool _knowGateway,
-                   const uint8_t _prefferedGateWay, uint8_t _hops = 0 );
+ HeartbeatMessage( const uint8_t _ID, const uint8_t _to, const uint8_t _forward,
+                   const bool _knowGateway, const uint8_t _prefferedGateWay,
+                   uint8_t _hops = 0 );
  /**
   * @brief Construct a new Heartbeat Message objectfrom a NRF24 payload.
   *
@@ -215,7 +229,8 @@ public:
   * @param _ID The ID of the current Node.
   * @param _missing The ID of the Node that went missing.
   */
- MissingMessage( const uint8_t _ID, const uint8_t _missing );
+ MissingMessage( const uint8_t _ID, const uint8_t _to, const uint8_t _forward,
+                 const uint8_t _missing );
  /**
   * @brief Construct a new Missing Message objectfrom a NRF24 payload
   *
@@ -245,8 +260,8 @@ public:
   * @param longitude The target longitude to go to
   * @param height The target height to go to
   */
- GoToLocationMessage( uint8_t _ID, float latitude, float longitude,
-                      int16_t height );
+ GoToLocationMessage( uint8_t _ID, const uint8_t _to, const uint8_t _forward,
+                      float latitude, float longitude, int16_t height );
  /**
   * @brief Construct a new Go To Location Message objectfrom a NRF24 payload
   *
@@ -279,7 +294,8 @@ public:
   * @param _ID the ID of the current Node
   * @param _cost the calculated cost.
   */
- MovementNegotiationMessage( const uint8_t _ID, const float _cost );
+ MovementNegotiationMessage( const uint8_t _ID, const uint8_t _to,
+                             const uint8_t _forward, const float _cost );
  /**
   * @brief Construct a new Movement Negotiation Message objectfrom a NRF24
   * payload

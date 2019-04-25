@@ -27,10 +27,15 @@
 #include "abstract_drone/WirelessMessage.h"
 #include "abstract_drone/NRF24.h"
 #include "abstract_drone/NodeDebugInfo.h"
-// interfaces
+// Required interfaces
+#include "IWireless.hpp"
 #include "IRoutingTechnique.hpp"
-// classes
+#include "IDroneEngine.hpp"
+// implemented interfaces
+#include "VirtualNRF24.hpp"
 #include "ChildTableTree.hpp"
+#include "rosDroneEngineConnector.hpp"
+// classes
 #include "message.hpp"
 
 namespace gazebo
@@ -62,6 +67,18 @@ namespace Meshnetwork
    * @param other Node to introduce yourself to
    */
   void IntroduceNode( uint8_t other );
+  /**
+   * @brief Get the nodeID
+   *
+   * @return uint8_t this->nodeID
+   */
+  uint8_t getNodeID( );
+  /**
+   * @brief Called upon each received Ros Message.
+   *
+   * @param _msg The received Ros Message. We use NRF24 Message
+   */
+  void OnMsg( const abstract_drone::NRF24ConstPtr &_msg );
 
  protected:
   /**
@@ -141,11 +158,11 @@ namespace Meshnetwork
    * @brief Handover the message to be sending with the wireless signal
    * simulator
    *
-   * @param message WirelessMessage to be sending
+   * @param message Message to be sending
    * @return true Sending was succesfull
    * @return false Sending not succeeded
    */
-  bool sendMessage( abstract_drone::WirelessMessage &message );
+  bool SendMessage( uint8_t *message, uint8_t to );
   /**
    * @brief Process message with the type IntroduceMessage
    * called by case Messages::PRESENT
@@ -171,7 +188,7 @@ namespace Meshnetwork
    *
    * @param _msg NRF24 Message holding normal Message
    */
-  void processRequestLocation( const abstract_drone::NRF24ConstPtr &_msg );
+  void processRequestLocation( const uint8_t *payload );
   /**
    * @brief Process message with the type MovementNegotiationMessage
    * called by case Messages::MOVEMENT_NEGOTIATION
@@ -184,12 +201,6 @@ namespace Meshnetwork
       const abstract_drone::NRF24ConstPtr &_msg ) = 0;
 
  private:
-  /**
-   * @brief Called upon each received Ros Message.
-   *
-   * @param _msg The received Ros Message. We use NRF24 Message
-   */
-  void OnRosMsg( const abstract_drone::NRF24ConstPtr &_msg );
   /**
    * @brief Used for forwarding messages. HeartbeatMessage gets an extra hop
    *
@@ -230,32 +241,11 @@ namespace Meshnetwork
    */
   void processSendGoalToEngine( const abstract_drone::NRF24ConstPtr &_msg );
 
-  /**
-   * @brief Used to queue up and handle ros message
-   *
-   */
-  void QueueThread( );
-  /**
-   * @brief ROS service function to switch power on and off
-   *
-   * @param request NOT USED
-   * @param response NOT USED
-   * @return true Service call succesfull
-   * @return false Service call not succesfull
-   */
-  bool switchPower( std_srvs::TriggerRequest &request,
-                    std_srvs::TriggerResponse &response );
-  /**
-   * @brief Publishes information about the Component at 1hz
-   *
-   */
-  void publishDebugInfo( );
-
   /***************** Variables *************************/
 
  public:
   // No public vars
- protected:
+  // protected:
   /// \brief The time to wait at initialization
   const float initTime = 0.001;
   /// \brief The time to wait before rechecking the Component
@@ -268,8 +258,7 @@ namespace Meshnetwork
   uint8_t hopsFromGatewayAway = 0;
   /// \brief Boolean for enabling debug publishers
   bool debug = false;
-  /// \brief The ON/OFF state of this Node
-  bool on = true;
+
   /// \brief Boolean if this node knows the location of his prefferedGateWay
   bool knowPrefferedGatewayLocation = false;
   /// \brief boolean if this node is connected to a gateway
@@ -280,43 +269,23 @@ namespace Meshnetwork
   uint32_t totalMessageSent = 0;
   /// \brief The last known location that was known to be a good location
   Messages::LocationMessage lastGoodKnownLocation =
-      Messages::LocationMessage( 0, 0, 0, 0, 0 );
+      Messages::LocationMessage( 0, 0, 0, 0, 0, 0, 0 );
   /// \brief The location of the prefferedGateWay
   Messages::LocationMessage prefferedGateWayLocation =
-      Messages::LocationMessage( 0, 0, 0, 0, 0 );
+      Messages::LocationMessage( 0, 0, 0, 0, 0, 0, 0 );
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
   /// \brief pointer to the used RoutingTechnique
   std::unique_ptr< RoutingTechnique::IRoutingTechnique > routerTech;
-  /// \brief Pointer to the Ros Node of this class
-  std::unique_ptr< ros::NodeHandle > rosNode;
-  /// \brief rosQueue for handling messages
-  ros::CallbackQueue rosQueue;
+
+  /// \brief Connection towards the DroneEngine
+  std::unique_ptr< Drone::IDroneEngine > droneEngine;
+  /// \brief Wireless communication
+  std::unique_ptr< Wireless::IWirelessCommunication > communication;
 
  private:
-  /// \brief Service to turn the communication on and off
-  ros::ServiceServer switchPowerService;
-  /// \brief Service for requesting all nodes near
-  ros::ServiceClient areaScanner;
-  /// \brief Service for requesting the current location
-  ros::ServiceClient GPSLink;
-  /// \brief Service for sending messages using the WirelessSignalSimulator
-  ros::ServiceClient publishService;
-  /// \brief Service for publishing information about this node to the
-  /// WirelessSignalSimulator
-  ros::Publisher rosPub;
-  /// \brief Service for publishing information for debuging
-  ros::Publisher nodeDebugTopic;
-  /// \brief Publisher towards the DroneEngine
-  ros::Publisher droneEnginePublisher;
-  /// \brief Subscriber to recieve NRF24 messages
-  ros::Subscriber rosSub;
-  /// \brief thread to keep an open line for receiving NRF24 messages
-  std::thread rosQueueThread;
   /// \brief thread to check the connection every CheckConnectionTime seconds
   std::thread checkConnectionThread;
-  /// \brief thread for publishing debug information at 1hz
-  std::thread NodeDebugInfoThread;
  };
 }  // namespace Meshnetwork
 }  // namespace gazebo

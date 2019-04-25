@@ -147,11 +147,11 @@ find_package(gazebo REQUIRED)
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} include)
 
-add_library(meshnetworkCom SHARED src/mesh/meshnetwork_component.cpp src/mesh/meshnetwork_communicator.cpp src/mesh/ChildTableTree.cpp src/mesh/message.cpp)
+add_library(meshnetworkCom SHARED src/mesh/meshnetwork_component.cpp src/mesh/meshnetwork_communicator.cpp src/mesh/rosDroneEngineConnector.cpp src/mesh/ChildTableTree.cpp src/mesh/message.cpp src/mesh/VirtualNRF24.cpp)
 target_link_libraries(meshnetworkCom ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(meshnetworkCom abstract_drone_generate_messages_cpp)
 
-add_library(meshnetworkGateway SHARED src/mesh/meshnetwork_component.cpp src/mesh/meshnetwork_gateway.cpp src/mesh/ChildTableTree.cpp src/mesh/message.cpp)
+add_library(meshnetworkGateway SHARED src/mesh/meshnetwork_component.cpp src/mesh/meshnetwork_gateway.cpp src/mesh/rosDroneEngineConnector.cpp src/mesh/ChildTableTree.cpp src/mesh/message.cpp src/mesh/VirtualNRF24.cpp)
 target_link_libraries(meshnetworkGateway ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(meshnetworkGateway abstract_drone_generate_messages_cpp)
 

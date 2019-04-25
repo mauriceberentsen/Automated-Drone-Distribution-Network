@@ -22,12 +22,12 @@ namespace Meshnetwork
   connectedToGateway = true;
   prefferedGateWay = this->nodeID;
 
-  ros::SubscribeOptions so = ros::SubscribeOptions::create<
-      abstract_drone::RequestGatewayDroneFlight >(
-      "/gateway", 1000,
-      boost::bind( &MeshnetworkGateway::gatewayQueue, this, _1 ),
-      ros::VoidPtr( ), &this->rosQueue );
-  this->gatewaySub = this->rosNode->subscribe( so );
+  //   ros::SubscribeOptions so = ros::SubscribeOptions::create<
+  //       abstract_drone::RequestGatewayDroneFlight >(
+  //       "/gateway", 1000,
+  //       boost::bind( &MeshnetworkGateway::gatewayQueue, this, _1 ),
+  //       ros::VoidPtr( ), &this->rosQueue );
+  //   this->gatewaySub = this->rosNode->subscribe( so );
   common::Time::Sleep( 0.01 );
 
   routerTech->startRouting( );
@@ -46,7 +46,7 @@ namespace Meshnetwork
 
  void MeshnetworkGateway::CheckConnection( )
  {
-  while ( this->rosNode->ok( ) ) {
+  while ( true ) {                              // this->rosNode->ok( ) ) {
    common::Time::Sleep( CheckConnectionTime );  // check every 10 seconds
    routerTech->maintainRouting( );
   }

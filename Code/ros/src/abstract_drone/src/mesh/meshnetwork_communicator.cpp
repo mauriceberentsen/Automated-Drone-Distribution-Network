@@ -39,6 +39,8 @@ namespace Meshnetwork
      const abstract_drone::NRF24ConstPtr &_msg )
  {
   Messages::HeartbeatMessage msg( _msg->payload.data( ) );
+  ROS_WARN( "[%s] {%s}", this->model->GetName( ).c_str( ),
+            msg.toString( ).c_str( ) );
   // if sender is gateway flip bool and return
   if ( msg.getIsGateway( ) ) {
    prefferedGateWay = msg.getPrefferedGateway( );
@@ -64,8 +66,9 @@ namespace Meshnetwork
 
  void MeshnetworkCommunicator::CheckConnection( )
  {
-  while ( this->rosNode->ok( ) ) {
-   if ( !this->on ) {
+  while ( true )  // {this->rosNode->ok( ) )
+  {
+   if ( !communication->On( ) ) {
     connectedToGateway = false;
     continue;
    }
@@ -180,18 +183,16 @@ namespace Meshnetwork
 
  void MeshnetworkCommunicator::informOthersAboutCost( float cost )
  {
-  Messages::MovementNegotiationMessage MovNegotiationMsg( this->nodeID, cost );
-  abstract_drone::WirelessMessage WM;
   for ( auto &other : routerTech->getSetOfChildren( ) ) {
    uint8_t towards = routerTech->getDirectionToNode( other );
    if ( towards == UINT8_MAX ) { continue; }
-   WM.request.message.from = this->nodeID;
-   WM.request.message.to = towards;
-   WM.request.message.forward = other;
-   WM.request.message.ack = 0;
-   MovNegotiationMsg.toPayload( WM.request.message.payload.data( ) );
+
+   Messages::MovementNegotiationMessage MovNegotiationMsg(
+       this->nodeID, towards, towards, cost );
+   uint8_t buffer[32];
+   MovNegotiationMsg.toPayload( buffer );
+   SendMessage( buffer, towards );
    ++totalMessageSent;
-   sendMessage( WM );
   }
  }
 
