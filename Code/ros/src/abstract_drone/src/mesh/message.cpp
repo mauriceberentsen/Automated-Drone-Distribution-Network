@@ -16,13 +16,19 @@
 
 namespace Messages
 {
-Message::Message( const uint8_t _ID, Messagetype _Messagetype,
-                  const uint8_t _to, const uint8_t _forward )
-    : ID( _ID ), type( _Messagetype ), to( _to ), forward( _forward )
+Message::Message( const uint8_t _creator, const uint8_t _from,
+                  Messagetype _Messagetype, const uint8_t _to,
+                  const uint8_t _forward )
+    : creator( _creator )
+    , from( _from )
+    , type( _Messagetype )
+    , to( _to )
+    , forward( _forward )
 {
 }
 Message::Message( const uint8_t *payload )
-    : Message( payload[0], ( Messagetype )payload[1], payload[2], payload[3] )
+    : Message( payload[CREATOR], payload[FROM], ( Messagetype )payload[TYPE],
+               payload[TO], payload[FORWARD] )
 {
 }
 Message::~Message( )
@@ -32,7 +38,8 @@ Message::~Message( )
 const std::string Message::toString( ) const
 {
  std::stringstream ss;
- ss << "ID[" << ( int )ID << "] Type[" << ( int )type << "]" << std::endl;
+ ss << "creator[" << ( int )creator << "] Type[" << ( int )type << "]"
+    << std::endl;
 
  return ss.str( );
 }
@@ -40,10 +47,12 @@ const std::string Message::toString( ) const
 void Message::toPayload( uint8_t *payload ) const
 {
  int counter = 0;
- CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
- counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&creator, sizeof( creator ), payload, counter );
+ counter += sizeof( creator );
+ CopyToCharArray( ( uint8_t * )&from, sizeof( from ), payload, counter );
+ counter += sizeof( from );
  CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
- counter += sizeof( Messagetype );
+ counter += sizeof( type );
  CopyToCharArray( ( uint8_t * )&to, sizeof( to ), payload, counter );
  counter += sizeof( to );
  CopyToCharArray( ( uint8_t * )&forward, sizeof( forward ), payload, counter );
@@ -67,14 +76,14 @@ void Message::CopyFromCharArray( uint8_t *value, uint16_t size,
 
 const uint8_t Message::getID( ) const
 {
- return this->ID;
+ return this->creator;
 }
 
-LocationMessage::LocationMessage( uint8_t _ID, const uint8_t _to,
-                                  const uint8_t _forward, float _latitude,
-                                  float _longitude, int16_t _height,
-                                  uint32_t _timeSincePosix )
-    : Message( _ID, LOCATION, _to, _forward )
+LocationMessage::LocationMessage( const uint8_t _creator, const uint8_t _from,
+                                  const uint8_t _to, const uint8_t _forward,
+                                  float _latitude, float _longitude,
+                                  int16_t _height, uint32_t _timeSincePosix )
+    : Message( _creator, _from, LOCATION, _to, _forward )
     , latitude( _latitude )
     , longitude( _longitude )
     , height( _height )
@@ -83,10 +92,12 @@ LocationMessage::LocationMessage( uint8_t _ID, const uint8_t _to,
 }
 
 LocationMessage::LocationMessage( const uint8_t *payload )
-    : Message( payload[0], LOCATION, payload[2], payload[3] )
+    : Message( payload[CREATOR], payload[FROM], LOCATION, payload[TO],
+               payload[FORWARD] )
 {
  int counter = 0;
- counter += sizeof( ID );
+ counter += sizeof( creator );
+ counter += sizeof( from );
  counter += sizeof( type );
  counter += sizeof( to );
  counter += sizeof( forward );
@@ -109,8 +120,10 @@ LocationMessage::~LocationMessage( )
 void LocationMessage::toPayload( uint8_t *payload ) const
 {
  int counter = 0;
- CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
- counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&creator, sizeof( creator ), payload, counter );
+ counter += sizeof( creator );
+ CopyToCharArray( ( uint8_t * )&from, sizeof( from ), payload, counter );
+ counter += sizeof( from );
  CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
  counter += sizeof( type );
  CopyToCharArray( ( uint8_t * )&to, sizeof( to ), payload, counter );
@@ -132,8 +145,8 @@ void LocationMessage::toPayload( uint8_t *payload ) const
 const std::string LocationMessage::toString( ) const
 {
  std::stringstream ss;
- ss << std::setprecision( 8 ) << std::dec << "ID[" << ( int )ID << "] Type["
-    << ( int )type << "]" << std::endl
+ ss << std::setprecision( 8 ) << std::dec << "creator[" << ( int )creator
+    << "] Type[" << ( int )type << "]" << std::endl
     << "latitude[" << latitude << "] longitude[" << longitude << "] height["
     << height << "] timeSincePosix[" << timeSincePosix << "]" << std::endl;
 
@@ -157,11 +170,11 @@ const int16_t LocationMessage::gettimeSincePosix( ) const
  return this->timeSincePosix;
 }
 
-IntroduceMessage::IntroduceMessage( const uint8_t _ID, const uint8_t _to,
-                                    const uint8_t _forward,
+IntroduceMessage::IntroduceMessage( const uint8_t _creator, const uint8_t _from,
+                                    const uint8_t _to, const uint8_t _forward,
                                     const uint8_t _hopsUntilGateway,
                                     const bool _knowGateway )
-    : Message( _ID, PRESENT, _to, _forward )
+    : Message( _creator, _from, PRESENT, _to, _forward )
     , hopsUntilGateway( _hopsUntilGateway )
     , knowGateway( _knowGateway )
 {
@@ -172,10 +185,12 @@ IntroduceMessage::~IntroduceMessage( )
 }
 
 IntroduceMessage::IntroduceMessage( const uint8_t *payload )
-    : Message( payload[0], PRESENT, payload[2], payload[3] )
+    : Message( payload[CREATOR], payload[FROM], PRESENT, payload[2],
+               payload[3] )
 {
  int counter = 0;
- counter += sizeof( ID );
+ counter += sizeof( creator );
+ counter += sizeof( from );
  counter += sizeof( type );
  counter += sizeof( to );
  counter += sizeof( forward );
@@ -189,8 +204,10 @@ IntroduceMessage::IntroduceMessage( const uint8_t *payload )
 void IntroduceMessage::toPayload( uint8_t *payload ) const
 {
  int counter = 0;
- CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
- counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&creator, sizeof( creator ), payload, counter );
+ counter += sizeof( creator );
+ CopyToCharArray( ( uint8_t * )&from, sizeof( from ), payload, counter );
+ counter += sizeof( from );
  CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
  counter += sizeof( type );
  CopyToCharArray( ( uint8_t * )&to, sizeof( to ), payload, counter );
@@ -207,9 +224,10 @@ void IntroduceMessage::toPayload( uint8_t *payload ) const
 const std::string IntroduceMessage::toString( ) const
 {
  std::stringstream ss;
- ss << "ID[" << std::to_string( ID ) << "] Ty[" << std::to_string( type )
-    << "]To[" << std::to_string( to ) << "]for[" << std::to_string( forward )
-    << "]hopsUG[" << std::to_string( hopsUntilGateway ) << "]KG["
+ ss << "creator[" << std::to_string( creator ) << "] Ty["
+    << std::to_string( type ) << "]To[" << std::to_string( to ) << "]for["
+    << std::to_string( forward ) << "]hopsUG["
+    << std::to_string( hopsUntilGateway ) << "]KG["
     << std::to_string( knowGateway ) << std::endl;
 
  return ss.str( );
@@ -225,9 +243,10 @@ const bool IntroduceMessage::getKnowGateway( ) const
  return this->knowGateway;
 }
 
-MissingMessage::MissingMessage( const uint8_t _ID, const uint8_t _to,
-                                const uint8_t _forward, const uint8_t _missing )
-    : Message( _ID, MISSING, _to, _forward ), missing( _missing )
+MissingMessage::MissingMessage( const uint8_t _creator, const uint8_t _from,
+                                const uint8_t _to, const uint8_t _forward,
+                                const uint8_t _missing )
+    : Message( _creator, _from, MISSING, _to, _forward ), missing( _missing )
 {
 }
 
@@ -236,10 +255,12 @@ MissingMessage::~MissingMessage( )
 }
 
 MissingMessage::MissingMessage( const uint8_t *payload )
-    : Message( payload[0], MISSING, payload[2], payload[3] )
+    : Message( payload[CREATOR], payload[FROM], MISSING, payload[TO],
+               payload[FORWARD] )
 {
  int counter = 0;
- counter += sizeof( ID );
+ counter += sizeof( creator );
+ counter += sizeof( from );
  counter += sizeof( type );
  counter += sizeof( to );
  counter += sizeof( forward );
@@ -250,8 +271,10 @@ MissingMessage::MissingMessage( const uint8_t *payload )
 void MissingMessage::toPayload( uint8_t *payload ) const
 {
  int counter = 0;
- CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
- counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&creator, sizeof( creator ), payload, counter );
+ counter += sizeof( creator );
+ CopyToCharArray( ( uint8_t * )&from, sizeof( from ), payload, counter );
+ counter += sizeof( from );
  CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
  counter += sizeof( type );
  CopyToCharArray( ( uint8_t * )&to, sizeof( to ), payload, counter );
@@ -264,8 +287,8 @@ void MissingMessage::toPayload( uint8_t *payload ) const
 const std::string MissingMessage::toString( ) const
 {
  std::stringstream ss;
- ss << "ID[" << std::to_string( ID ) << "] Type[" << std::to_string( type )
-    << "]"
+ ss << "creator[" << std::to_string( creator ) << "] Type["
+    << std::to_string( type ) << "]"
     << "knowGateway[" << std::to_string( missing ) << "]" << std::endl;
 
  return ss.str( );
@@ -276,12 +299,12 @@ const uint8_t MissingMessage::getMissing( ) const
  return this->missing;
 }
 
-HeartbeatMessage::HeartbeatMessage( const uint8_t _ID, const uint8_t _to,
-                                    const uint8_t _forward,
+HeartbeatMessage::HeartbeatMessage( const uint8_t _creator, const uint8_t _from,
+                                    const uint8_t _to, const uint8_t _forward,
                                     const bool _knowGateway,
                                     const uint8_t _prefferedGateWay,
                                     uint8_t _hops )
-    : Message( _ID, HEARTBEAT, _to, _forward )
+    : Message( _creator, _from, HEARTBEAT, _to, _forward )
     , knowGateway( _knowGateway )
     , prefferedGateWay( _prefferedGateWay )
     , hops( _hops )
@@ -293,10 +316,12 @@ HeartbeatMessage::~HeartbeatMessage( )
 }
 
 HeartbeatMessage::HeartbeatMessage( const uint8_t *payload )
-    : Message( ( uint8_t )payload[0], HEARTBEAT, payload[2], payload[3] )
+    : Message( payload[CREATOR], payload[FROM], HEARTBEAT, payload[TO],
+               payload[FORWARD] )
 {
  int counter = 0;
- counter += sizeof( ID );
+ counter += sizeof( creator );
+ counter += sizeof( from );
  counter += sizeof( type );
  counter += sizeof( to );
  counter += sizeof( forward );
@@ -312,8 +337,10 @@ HeartbeatMessage::HeartbeatMessage( const uint8_t *payload )
 void HeartbeatMessage::toPayload( uint8_t *payload ) const
 {
  int counter = 0;
- CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
- counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&creator, sizeof( creator ), payload, counter );
+ counter += sizeof( creator );
+ CopyToCharArray( ( uint8_t * )&from, sizeof( from ), payload, counter );
+ counter += sizeof( from );
  CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
  counter += sizeof( type );
  CopyToCharArray( ( uint8_t * )&to, sizeof( to ), payload, counter );
@@ -332,11 +359,11 @@ void HeartbeatMessage::toPayload( uint8_t *payload ) const
 const std::string HeartbeatMessage::toString( ) const
 {
  std::stringstream ss;
- ss << "ID[" << std::to_string( ID ) << "] Ty[" << std::to_string( type )
-    << "]To[" << std::to_string( to ) << "]for[" << std::to_string( forward )
-    << "]KG[" << std::to_string( knowGateway ) << "]PG["
-    << std::to_string( prefferedGateWay ) << "]hops[" << std::to_string( hops )
-    << "]" << std::endl;
+ ss << "creator[" << std::to_string( creator ) << "] Ty["
+    << std::to_string( type ) << "]To[" << std::to_string( to ) << "]for["
+    << std::to_string( forward ) << "]KG[" << std::to_string( knowGateway )
+    << "]PG[" << std::to_string( prefferedGateWay ) << "]hops["
+    << std::to_string( hops ) << "]" << std::endl;
 
  return ss.str( );
 }
@@ -358,17 +385,17 @@ const uint8_t HeartbeatMessage::getHops( ) const
 
 const bool HeartbeatMessage::getIsGateway( ) const
 {
- return ID == prefferedGateWay;
+ return creator == prefferedGateWay;
 }
 const bool HeartbeatMessage::getKnowGateway( ) const
 {
  return this->knowGateway;
 }
 
-GoToLocationMessage::GoToLocationMessage( uint8_t _ID, uint8_t _to,
-                                          uint8_t _forward, float _latitude,
-                                          float _longitude, int16_t _height )
-    : Message( _ID, MOVE_TO_LOCATION, _to, _forward )
+GoToLocationMessage::GoToLocationMessage(
+    const uint8_t _creator, const uint8_t _from, const uint8_t _to,
+    const uint8_t _forward, float _latitude, float _longitude, int16_t _height )
+    : Message( _creator, _from, MOVE_TO_LOCATION, _to, _forward )
     , latitude( _latitude )
     , longitude( _longitude )
     , height( _height )
@@ -376,10 +403,12 @@ GoToLocationMessage::GoToLocationMessage( uint8_t _ID, uint8_t _to,
 }
 
 GoToLocationMessage::GoToLocationMessage( const uint8_t *payload )
-    : Message( payload[0], MOVE_TO_LOCATION, payload[2], payload[3] )
+    : Message( payload[CREATOR], payload[FROM], MOVE_TO_LOCATION, payload[TO],
+               payload[FORWARD] )
 {
  int counter = 0;
- counter += sizeof( ID );
+ counter += sizeof( creator );
+ counter += sizeof( from );
  counter += sizeof( type );
  counter += sizeof( to );
  counter += sizeof( forward );
@@ -395,8 +424,10 @@ GoToLocationMessage::GoToLocationMessage( const uint8_t *payload )
 void GoToLocationMessage::toPayload( uint8_t *payload ) const
 {
  int counter = 0;
- CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
- counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&creator, sizeof( creator ), payload, counter );
+ counter += sizeof( creator );
+ CopyToCharArray( ( uint8_t * )&from, sizeof( from ), payload, counter );
+ counter += sizeof( from );
  CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
  counter += sizeof( type );
  CopyToCharArray( ( uint8_t * )&to, sizeof( to ), payload, counter );
@@ -416,8 +447,8 @@ void GoToLocationMessage::toPayload( uint8_t *payload ) const
 const std::string GoToLocationMessage::toString( ) const
 {
  std::stringstream ss;
- ss << std::setprecision( 8 ) << std::dec << "ID[" << ( int )ID << "] Type["
-    << ( int )type << "]" << std::endl
+ ss << std::setprecision( 8 ) << std::dec << "creator[" << ( int )creator
+    << "] Type[" << ( int )type << "]" << std::endl
     << "latitude[" << latitude << "] longitude[" << longitude << "] height["
     << height << "]" << std::endl;
 
@@ -439,11 +470,13 @@ const int16_t GoToLocationMessage::getHeight( ) const
  return this->height;
 }
 
-MovementNegotiationMessage::MovementNegotiationMessage( const uint8_t _ID,
-                                                        uint8_t _to,
-                                                        uint8_t _forward,
+MovementNegotiationMessage::MovementNegotiationMessage( const uint8_t _creator,
+                                                        const uint8_t _from,
+                                                        const uint8_t _to,
+                                                        const uint8_t _forward,
                                                         const float _cost )
-    : Message( _ID, MOVEMENT_NEGOTIATION, _to, _forward ), cost( _cost )
+    : Message( _creator, _from, MOVEMENT_NEGOTIATION, _to, _forward )
+    , cost( _cost )
 {
 }
 
@@ -452,10 +485,12 @@ MovementNegotiationMessage::~MovementNegotiationMessage( )
 }
 
 MovementNegotiationMessage::MovementNegotiationMessage( const uint8_t *payload )
-    : Message( payload[0], MOVEMENT_NEGOTIATION, payload[2], payload[3] )
+    : Message( payload[CREATOR], payload[FROM], MOVEMENT_NEGOTIATION,
+               payload[TO], payload[FORWARD] )
 {
  int counter = 0;
- counter += sizeof( ID );
+ counter += sizeof( creator );
+ counter += sizeof( from );
  counter += sizeof( type );
  counter += sizeof( to );
  counter += sizeof( forward );
@@ -465,8 +500,10 @@ MovementNegotiationMessage::MovementNegotiationMessage( const uint8_t *payload )
 void MovementNegotiationMessage::toPayload( uint8_t *payload ) const
 {
  int counter = 0;
- CopyToCharArray( ( uint8_t * )&ID, sizeof( ID ), payload, counter );
- counter += sizeof( ID );
+ CopyToCharArray( ( uint8_t * )&creator, sizeof( creator ), payload, counter );
+ counter += sizeof( creator );
+ CopyToCharArray( ( uint8_t * )&from, sizeof( from ), payload, counter );
+ counter += sizeof( from );
  CopyToCharArray( ( uint8_t * )&type, sizeof( type ), payload, counter );
  counter += sizeof( type );
  CopyToCharArray( ( uint8_t * )&to, sizeof( to ), payload, counter );
@@ -479,8 +516,8 @@ void MovementNegotiationMessage::toPayload( uint8_t *payload ) const
 const std::string MovementNegotiationMessage::toString( ) const
 {
  std::stringstream ss;
- ss << "ID[" << std::to_string( ID ) << "] Type[" << std::to_string( type )
-    << "]"
+ ss << "creator[" << std::to_string( creator ) << "] Type["
+    << std::to_string( type ) << "]"
     << "knowGateway[" << std::to_string( cost ) << "]" << std::endl;
 
  return ss.str( );

@@ -33,14 +33,14 @@ namespace Meshnetwork
   routerTech->startRouting( );
  }
 
- void MeshnetworkGateway::gatewayQueue(
-     const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg )
- {
-  sendGoalToDrone( _msg->ID, _msg->longitude, _msg->latitude, _msg->height );
- }
+ //  void MeshnetworkGateway::gatewayQueue(
+ //      const abstract_drone::RequestGatewayDroneFlightConstPtr& _msg )
+ //  {
+ //   sendGoalToDrone( _msg->ID, _msg->longitude, _msg->latitude, _msg->height
+ //   );
+ //  }
 
- void MeshnetworkGateway::processIntroduction(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkGateway::processIntroduction( const uint8_t* message )
  {
  }
 
@@ -56,16 +56,15 @@ namespace Meshnetwork
  {
  }
 
- void MeshnetworkGateway::ProcessHeartbeat(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkGateway::ProcessHeartbeat( const uint8_t* message )
  {
-  Messages::HeartbeatMessage msg( _msg->payload.data( ) );
+  Messages::HeartbeatMessage msg( message );
   // ROS_INFO("RECIEVED A HEARTBEAT FROM %u", msg.getID( ));
   sendHeartbeat( msg.getID( ) );
  }
 
  void MeshnetworkGateway::processMovementNegotiationMessage(
-     const abstract_drone::NRF24ConstPtr &_msg )
+     const uint8_t* message )
  {
  }
 }  // namespace Meshnetwork

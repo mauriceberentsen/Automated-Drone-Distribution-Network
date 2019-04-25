@@ -78,7 +78,7 @@ namespace Meshnetwork
    *
    * @param _msg The received Ros Message. We use NRF24 Message
    */
-  void OnMsg( const abstract_drone::NRF24ConstPtr &_msg );
+  void OnMsg( const uint8_t *message );
 
  protected:
   /**
@@ -162,7 +162,7 @@ namespace Meshnetwork
    * @return true Sending was succesfull
    * @return false Sending not succeeded
    */
-  bool SendMessage( uint8_t *message, uint8_t to );
+  bool SendMessage( const uint8_t *message, const uint8_t to );
   /**
    * @brief Process message with the type IntroduceMessage
    * called by case Messages::PRESENT
@@ -170,8 +170,7 @@ namespace Meshnetwork
    *
    * @param _msg NRF24 Message holding Message of type IntroduceMessage
    */
-  virtual void processIntroduction(
-      const abstract_drone::NRF24ConstPtr &_msg ) = 0;
+  virtual void processIntroduction( const uint8_t *message ) = 0;
   /**
    * @brief Process message with the type HeartbeatMessage
    * called by case Messages::HEARTBEAT
@@ -179,8 +178,7 @@ namespace Meshnetwork
    *
    * @param _msg  NRF24 Message holding Message of type HeartbeatMessage
    */
-  virtual void ProcessHeartbeat(
-      const abstract_drone::NRF24ConstPtr &_msg ) = 0;
+  virtual void ProcessHeartbeat( const uint8_t *message ) = 0;
 
   /**
    * @brief Process message with the type requestLocation
@@ -197,8 +195,7 @@ namespace Meshnetwork
    * @param _msg  NRF24 Message holding Message of type
    * MovementNegotiationMessage
    */
-  virtual void processMovementNegotiationMessage(
-      const abstract_drone::NRF24ConstPtr &_msg ) = 0;
+  virtual void processMovementNegotiationMessage( const uint8_t *message ) = 0;
 
  private:
   /**
@@ -206,7 +203,7 @@ namespace Meshnetwork
    *
    * @param _msg The message to forward
    */
-  void forwardMessage( const abstract_drone::NRF24ConstPtr &_msg );
+  void forwardMessage( const uint8_t *message );
 
   /**
    * @brief Used for directing messages to the right functions of our own.
@@ -214,14 +211,14 @@ namespace Meshnetwork
    *
    * @param _msg The message received
    */
-  void processMessage( const abstract_drone::NRF24ConstPtr &_msg );
+  void processMessage( const uint8_t *message );
   /**
    * @brief Process message with the type Location
    * called by case Messages::LOCATION
    *
    * @param _msg NRF24 Message holding Location Message
    */
-  void processLocation( const abstract_drone::NRF24ConstPtr &_msg );
+  void processLocation( const uint8_t *message );
 
   /**
    * @brief Process message with the type MissingMessage
@@ -231,7 +228,7 @@ namespace Meshnetwork
    *
    * @param _msg  NRF24 Message holding Message of type MissingMessage
    */
-  void processMissing( const abstract_drone::NRF24ConstPtr &_msg );
+  void processMissing( const uint8_t *message );
   /**
    * @brief Process message with the type GoToLocationMessage
    * called by case Messages::MOVE_TO_LOCATION
@@ -239,7 +236,7 @@ namespace Meshnetwork
    *
    * @param _msg  NRF24 Message holding Message of type GoToLocationMessage
    */
-  void processSendGoalToEngine( const abstract_drone::NRF24ConstPtr &_msg );
+  void processSendGoalToEngine( const uint8_t *message );
 
   /***************** Variables *************************/
 
@@ -269,10 +266,10 @@ namespace Meshnetwork
   uint32_t totalMessageSent = 0;
   /// \brief The last known location that was known to be a good location
   Messages::LocationMessage lastGoodKnownLocation =
-      Messages::LocationMessage( 0, 0, 0, 0, 0, 0, 0 );
+      Messages::LocationMessage( 0, 0, 0, 0, 0, 0, 0, 0 );
   /// \brief The location of the prefferedGateWay
   Messages::LocationMessage prefferedGateWayLocation =
-      Messages::LocationMessage( 0, 0, 0, 0, 0, 0, 0 );
+      Messages::LocationMessage( 0, 0, 0, 0, 0, 0, 0, 0 );
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
   /// \brief pointer to the used RoutingTechnique

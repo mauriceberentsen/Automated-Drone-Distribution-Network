@@ -44,7 +44,7 @@ namespace Meshnetwork
    * @param _msg NRF24 Message holding Message of type IntroduceMessage
    */
 
-  void processIntroduction( const abstract_drone::NRF24ConstPtr &_msg );
+  void processIntroduction( const uint8_t *message );
   /**
    * @brief Handles heartbeat Messages
    * -possibilities:
@@ -62,7 +62,7 @@ namespace Meshnetwork
    *
    * @param _msg  NRF24 Message holding Message of type HeartbeatMessage.
    */
-  void ProcessHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
+  void ProcessHeartbeat( const uint8_t *message );
   /**
    * @brief Running in a thread this node preforms the following actions.
    * -actions:
@@ -130,8 +130,7 @@ namespace Meshnetwork
    *
    * @param _msg NRF24 MovementNegotiationMessage
    */
-  void processMovementNegotiationMessage(
-      const abstract_drone::NRF24ConstPtr &_msg );
+  void processMovementNegotiationMessage( const uint8_t *message );
 
  public:
  protected:

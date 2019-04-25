@@ -24,10 +24,9 @@ namespace Meshnetwork
   routerTech->startRouting( );
  }
 
- void MeshnetworkCommunicator::processIntroduction(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkCommunicator::processIntroduction( const uint8_t *message )
  {
-  Messages::IntroduceMessage introduce( _msg->payload.data( ) );
+  Messages::IntroduceMessage introduce( message );
   if ( introduce.getKnowGateway( ) &&
        introduce.getHopsUntilGateway( ) < this->hopsFromGatewayAway &&
        introduce.getID( ) != lastGoodKnownLocation.getID( ) ) {
@@ -35,12 +34,10 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkCommunicator::ProcessHeartbeat(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkCommunicator::ProcessHeartbeat( const uint8_t *message )
  {
-  Messages::HeartbeatMessage msg( _msg->payload.data( ) );
-  ROS_WARN( "[%s] {%s}", this->model->GetName( ).c_str( ),
-            msg.toString( ).c_str( ) );
+  Messages::HeartbeatMessage msg( message );
+  msg.toString( ).c_str( );
   // if sender is gateway flip bool and return
   if ( msg.getIsGateway( ) ) {
    prefferedGateWay = msg.getPrefferedGateway( );
@@ -58,7 +55,8 @@ namespace Meshnetwork
   else if ( msg.getKnowGateway( ) && !connectedToGateway ) {
    routerTech->OtherCanCommunicateWithNode( msg.getID( ),
                                             msg.getPrefferedGateway( ) );
-   // Set his gateway as prefferedGateWay and try to contact that gateway
+   // Set his gateway as prefferedGateWay and try to contact that
+   // gateway
    prefferedGateWay = msg.getPrefferedGateway( );
    sendHeartbeatToGateway( );
   }
@@ -188,18 +186,17 @@ namespace Meshnetwork
    if ( towards == UINT8_MAX ) { continue; }
 
    Messages::MovementNegotiationMessage MovNegotiationMsg(
-       this->nodeID, towards, towards, cost );
+       this->nodeID, this->nodeID, towards, towards, cost );
    uint8_t buffer[32];
    MovNegotiationMsg.toPayload( buffer );
    SendMessage( buffer, towards );
-   ++totalMessageSent;
   }
  }
 
  void MeshnetworkCommunicator::processMovementNegotiationMessage(
-     const abstract_drone::NRF24ConstPtr &_msg )
+     const uint8_t *message )
  {
-  Messages::MovementNegotiationMessage msg( _msg->payload.data( ) );
+  Messages::MovementNegotiationMessage msg( message );
   SafeAddToNegotiationList( std::make_pair( msg.getCost( ), msg.getID( ) ) );
  }
 }  // namespace Meshnetwork

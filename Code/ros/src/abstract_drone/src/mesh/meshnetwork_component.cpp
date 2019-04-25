@@ -48,9 +48,6 @@ namespace Meshnetwork
    this->debug = _sdf->Get< bool >( "Debug" );
   }
 
-  // Create our ROS node. This acts in a similar manner to
-  // the Gazebo node
-
   this->droneEngine.reset( new ros::rosDroneEngineConnector( this->droneID ) );
   this->communication->StartAntenna( );
   this->checkConnectionThread =
@@ -64,12 +61,12 @@ namespace Meshnetwork
             this->model->GetName( ).c_str( ) );
  }
 
- void MeshnetworkComponent::OnMsg( const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkComponent::OnMsg( const uint8_t *message )
  {
-  ( _msg->forward == this->nodeID ) ? processMessage( _msg )
-                                    : forwardMessage( _msg );
-  routerTech->OtherCanCommunicateWithNode( _msg->from, _msg->payload[0] );
-  // TODO send ack message back
+  ( message[Messages::FORWARD] == this->nodeID ) ? processMessage( message )
+                                                 : forwardMessage( message );
+  routerTech->OtherCanCommunicateWithNode( message[Messages::FROM],
+                                           message[Messages::CREATOR] );
  }
 
  uint8_t MeshnetworkComponent::getNodeID( )
@@ -77,52 +74,52 @@ namespace Meshnetwork
   return this->nodeID;
  }
 
- void MeshnetworkComponent::forwardMessage(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkComponent::forwardMessage( const uint8_t *message )
  {
-  abstract_drone::WirelessMessage WM;
-  WM.request.message = *( _msg );
-  if ( _msg->payload[1] == Messages::HEARTBEAT ) {
-   Messages::HeartbeatMessage msg( _msg->payload.data( ) );
+  const uint8_t other =
+      routerTech->getDirectionToNode( message[Messages::FORWARD] );
+  if ( other == UINT8_MAX ) { return; }
+
+  uint8_t buffer[32];
+  for ( int i = 0; i < 32; i++ ) {
+   buffer[i] = message[i];
+  }
+  buffer[Messages::FROM] = this->nodeID;
+  buffer[Messages::TO] = other;
+  if ( buffer[Messages::TYPE] == Messages::HEARTBEAT ) {
+   Messages::HeartbeatMessage msg( buffer );
    msg.makeHop( );
    if ( msg.getHops( ) > UINT8_MAX ) return;
-
-   msg.toPayload( WM.request.message.payload.data( ) );
+   msg.toPayload( buffer );
   }
-
-  uint8_t other = routerTech->getDirectionToNode( _msg->forward );
-  if ( other == UINT8_MAX ) return;
-  WM.request.message.from = this->nodeID;
-  WM.request.message.to = other;
-  SendMessage( WM.request.message.payload.data( ), other );
+  SendMessage( buffer, other );
  }
 
- void MeshnetworkComponent::processMessage(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkComponent::processMessage( const uint8_t *message )
  {
-  const uint8_t msgType = _msg->payload[1];
+  const uint8_t msgType = message[Messages::TYPE];
   ROS_INFO( "NODE[%u] recieved messagetype %u", nodeID, msgType );
   switch ( msgType ) {
    case Messages::LOCATION:
-    processLocation( _msg );
+    processLocation( message );
     break;
    case Messages::MISSING:
-    processMissing( _msg );
+    processMissing( message );
     break;
    case Messages::MOVE_TO_LOCATION:
-    processSendGoalToEngine( _msg );
+    processSendGoalToEngine( message );
     break;
    case Messages::PRESENT:
-    processIntroduction( _msg );
+    processIntroduction( message );
     break;
    case Messages::HEARTBEAT:
-    ProcessHeartbeat( _msg );
+    ProcessHeartbeat( message );
     break;
    case Messages::REQUESTLOCATION:
-    // processRequestLocation( _msg );
+    processRequestLocation( message );
     break;
    case Messages::MOVEMENT_NEGOTIATION:
-    processMovementNegotiationMessage( _msg );
+    processMovementNegotiationMessage( message );
     break;
    default:
     ROS_WARN( "%s UNKOWN message recieved %u", this->model->GetName( ).c_str( ),
@@ -130,10 +127,9 @@ namespace Meshnetwork
     break;
   }
  }
- /*public*/ void MeshnetworkComponent::processLocation(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ /*public*/ void MeshnetworkComponent::processLocation( const uint8_t *message )
  {
-  Messages::LocationMessage msg( _msg->payload.data( ) );
+  Messages::LocationMessage msg( message );
   if ( msg.getID( ) == prefferedGateWay ) {
    prefferedGateWayLocation = msg;
    knowPrefferedGatewayLocation = true;
@@ -144,26 +140,24 @@ namespace Meshnetwork
 
  void MeshnetworkComponent::requestLocation( const uint8_t other )
  {
-  Messages::Message msg( this->nodeID, Messages::REQUESTLOCATION, other,
-                         other );
+  Messages::Message msg( this->nodeID, this->nodeID, Messages::REQUESTLOCATION,
+                         other, other );
   uint8_t buffer[32];
   msg.toPayload( buffer );
   SendMessage( buffer, other );
  }
 
- void MeshnetworkComponent::processMissing(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkComponent::processMissing( const uint8_t *message )
  {
-  Messages::MissingMessage msg( _msg->payload.data( ) );
+  Messages::MissingMessage msg( message );
   if ( routerTech->OtherCantCommunicateWithNode( msg.getID( ),
                                                  msg.getMissing( ) ) > 0 )
    informAboutMissingChild( msg.getID( ), msg.getMissing( ) );
  }
 
- void MeshnetworkComponent::processSendGoalToEngine(
-     const abstract_drone::NRF24ConstPtr &_msg )
+ void MeshnetworkComponent::processSendGoalToEngine( const uint8_t *message )
  {
-  Messages::LocationMessage locmsg( _msg->payload.data( ) );
+  Messages::LocationMessage locmsg( message );
 
   droneEngine->setGoal( locmsg.getLongitude( ), locmsg.getLatitude( ),
                         locmsg.getHeight( ) );
@@ -181,8 +175,9 @@ namespace Meshnetwork
   uint8_t towards = routerTech->getDirectionToNode( other );
   if ( towards == UINT8_MAX ) return false;
   // create a Message to introduce yourself to others
-  Messages::HeartbeatMessage heartbeat( this->nodeID, towards, other,
-                                        connectedToGateway, prefferedGateWay );
+  Messages::HeartbeatMessage heartbeat( this->nodeID, this->nodeID, towards,
+                                        other, connectedToGateway,
+                                        prefferedGateWay );
   uint8_t buffer[32];
   heartbeat.toPayload( buffer );
   return SendMessage( buffer, towards );
@@ -194,8 +189,8 @@ namespace Meshnetwork
                                              const uint16_t height )
  {
   uint8_t other = routerTech->getDirectionToNode( ID );
-  Messages::GoToLocationMessage GTLmsg( this->nodeID, other, ID, longitude,
-                                        latitude, height );
+  Messages::GoToLocationMessage GTLmsg( this->nodeID, this->nodeID, other, ID,
+                                        longitude, latitude, height );
   uint8_t buffer[32];
   GTLmsg.toPayload( buffer );
   SendMessage( buffer, other );
@@ -209,7 +204,8 @@ namespace Meshnetwork
    uint8_t other = routerTech->getDirectionToNode( chi1d );
    if ( other == UINT8_MAX ) continue;
 
-   Messages::MissingMessage missingMSG( this->nodeID, other, chi1d, missing );
+   Messages::MissingMessage missingMSG( this->nodeID, this->nodeID, other,
+                                        chi1d, missing );
    uint8_t buffer[32];
    missingMSG.toPayload( buffer );
    SendMessage( buffer, other );
@@ -218,8 +214,9 @@ namespace Meshnetwork
 
  /*public*/ void MeshnetworkComponent::searchOtherNodesInRange( )
  {
-  Messages::IntroduceMessage introduce(
-      this->nodeID, 0, 0, this->hopsFromGatewayAway, this->connectedToGateway );
+  Messages::IntroduceMessage introduce( this->nodeID, this->nodeID, 0, 0,
+                                        this->hopsFromGatewayAway,
+                                        this->connectedToGateway );
   uint8_t buffer[32];
   introduce.toPayload( buffer );
 
@@ -236,8 +233,9 @@ namespace Meshnetwork
  {
   const ignition::math::Vector3< float > location = droneEngine->getLocation( );
 
-  Messages::LocationMessage msg( this->nodeID, other, other, location.X( ),
-                                 location.Y( ), location.Z( ), 0 );
+  Messages::LocationMessage msg( this->nodeID, this->nodeID, other, other,
+                                 location.X( ), location.Y( ), location.Z( ),
+                                 0 );
   uint8_t buffer[32];
   msg.toPayload( buffer );
   SendMessage( buffer, other );
@@ -258,15 +256,16 @@ namespace Meshnetwork
  /*public*/ void MeshnetworkComponent::IntroduceNode( const uint8_t other )
  {
   // create a Message to introduce yourself to others
-  Messages::IntroduceMessage introduce( this->nodeID, other, other,
-                                        this->hopsFromGatewayAway,
+  Messages::IntroduceMessage introduce( this->nodeID, this->nodeID, other,
+                                        other, this->hopsFromGatewayAway,
                                         this->connectedToGateway );
   uint8_t buffer[32];
   introduce.toPayload( buffer );
   SendMessage( buffer, other );
  }
 
- bool MeshnetworkComponent::SendMessage( uint8_t *message, uint8_t to )
+ bool MeshnetworkComponent::SendMessage( const uint8_t *message,
+                                         const uint8_t to )
  {
   if ( communication->SendMessageTo( message ) ) {
    routerTech->canCommunicateWithNode( to );

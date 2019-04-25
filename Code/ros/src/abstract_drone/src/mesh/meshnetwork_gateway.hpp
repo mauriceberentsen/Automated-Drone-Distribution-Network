@@ -34,8 +34,8 @@ namespace Meshnetwork
    *
    * @param _msg RequestGatewayDroneFlight messages
    */
-  void gatewayQueue(
-      const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg );
+  // void gatewayQueue(
+  //    const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg );
   /**
    * @brief Called after Load
    * -does the following
@@ -52,7 +52,7 @@ namespace Meshnetwork
    *
    * @param _msg
    */
-  void processIntroduction( const abstract_drone::NRF24ConstPtr &_msg );
+  void processIntroduction( const uint8_t* message );
   /**
    * @brief Every $CheckConnectionTime$ let the routerTech maintain routing
    *
@@ -69,14 +69,13 @@ namespace Meshnetwork
    *
    * @param _msg NRF24 Message containing a HeartbeatMessage
    */
-  void ProcessHeartbeat( const abstract_drone::NRF24ConstPtr &_msg );
+  void ProcessHeartbeat( const uint8_t* message );
   /**
    * @brief  Our gateway stay where he is. Maybe in the future we need to
    * move the gateway?
    * @param _msg Message containing a NegotiationMessage
    */
-  void processMovementNegotiationMessage(
-      const abstract_drone::NRF24ConstPtr &_msg );
+  void processMovementNegotiationMessage( const uint8_t* message );
 
  public:
  protected:

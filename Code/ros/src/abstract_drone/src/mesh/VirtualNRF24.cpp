@@ -77,19 +77,19 @@ const bool VirtualNRF24::On( )
 bool VirtualNRF24::SendMessageTo( const uint8_t* msg )
 {
  abstract_drone::WirelessMessage WM;
- WM.request.message.from = msg[0];
- WM.request.message.to = msg[2];
- WM.request.message.forward = msg[3];
+ WM.request.message.from = msg[Messages::FROM];
+ WM.request.message.to = msg[Messages::TO];
+ WM.request.message.forward = msg[Messages::FORWARD];
  WM.request.message.ack = 0;
  for ( int i = 0; i < 32; i++ ) {
   WM.request.message.payload[i] = msg[i];
  }
 
  if ( publishService.call( WM ) ) {
-  if ( !WM.response.succes ) {
-   return false;
-  } else {
+  if ( WM.response.succes ) {
    return true;
+  } else {
+   return false;
   }
  } else {
   ROS_ERROR( "SIGNAL SIMULATOR NOT AVAILABLE" );
@@ -114,8 +114,8 @@ void VirtualNRF24::BroadcastMessage( const uint8_t* msg )
     message[i] = msg[i];
    }
 
-   message[2] = n;
-   message[3] = n;
+   message[Messages::TO] = n;
+   message[Messages::FORWARD] = n;
 
    SendMessageTo( message );
   }
@@ -138,7 +138,7 @@ void VirtualNRF24::DebugingMode( const bool on )
 
 void VirtualNRF24::OnRosMsg( const abstract_drone::NRF24ConstPtr& _msg )
 {
- meshnetworkComponent.OnMsg( _msg );
+ meshnetworkComponent.OnMsg( _msg->payload.data( ) );
 }
 
 bool VirtualNRF24::switchPower( std_srvs::TriggerRequest& request,
