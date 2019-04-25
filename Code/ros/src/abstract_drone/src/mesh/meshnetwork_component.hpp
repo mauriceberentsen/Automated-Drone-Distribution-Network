@@ -14,19 +14,10 @@
 // system
 #include <map>
 // libary
-// ros
-#include "ros/ros.h"
-#include "std_srvs/Trigger.h"
-#include "ros/callback_queue.h"
 // gazebo
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/common.hh>
-// local
-// ros generated messages
-#include "abstract_drone/WirelessMessage.h"
-#include "abstract_drone/NRF24.h"
-#include "abstract_drone/NodeDebugInfo.h"
 // Required interfaces
 #include "IWireless.hpp"
 #include "IRoutingTechnique.hpp"
@@ -80,6 +71,17 @@ namespace Meshnetwork
    */
   void OnMsg( const uint8_t *message );
 
+  /**
+   * @brief Send a goal to fly towards to another drone
+   *
+   * @param ID Drone that needs to fly
+   * @param latitude
+   * @param longitude
+   * @param height
+   */
+  void sendGoalToDrone( const uint8_t ID, const float latitude,
+                        const float longitude, const uint16_t height );
+
  protected:
   /**
    * @brief Construct a new Meshnetwork Component object
@@ -105,17 +107,6 @@ namespace Meshnetwork
    * @param _msg LocationMessage with the location to fly towards
    */
   void sendGoalToEngine( const Messages::LocationMessage &_msg );
-
-  /**
-   * @brief Send a goal to fly towards to another drone
-   *
-   * @param ID Drone that needs to fly
-   * @param longitude
-   * @param latitude
-   * @param height
-   */
-  void sendGoalToDrone( const uint8_t ID, const float longitude,
-                        const float latitude, const uint16_t height );
 
   /**
    * @brief Start up protocol to follow when the connection is lost

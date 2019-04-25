@@ -149,7 +149,7 @@ namespace DroneSimulation
   wirelessSimulatorPub.publish( nI );
  }
 
- void DroneEngine::setGoal( const float longitude, const float latitude,
+ void DroneEngine::setGoal( const float latitude, const float longitude,
                             const float height )
  {
   goal.Pos( ).X( longitude );
@@ -160,7 +160,7 @@ namespace DroneSimulation
 
  void DroneEngine::OnRosMsg_Pos( const abstract_drone::LocationConstPtr &_msg )
  {
-  this->setGoal( _msg->longitude, _msg->latitude, _msg->height );
+  this->setGoal( _msg->latitude, _msg->longitude, _msg->height );
  }
 
  bool DroneEngine::get_location( abstract_drone::RequestGPS::Request &req,

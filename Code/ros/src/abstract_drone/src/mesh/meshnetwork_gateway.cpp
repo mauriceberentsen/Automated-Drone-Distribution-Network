@@ -14,31 +14,21 @@ namespace gazebo
 {
 namespace Meshnetwork
 {
- MeshnetworkGateway::MeshnetworkGateway( ){
+ MeshnetworkGateway::MeshnetworkGateway( )
+     : internet( new ros::RosInternetMock( *this ) )
+ {
+ }
 
- };
  void MeshnetworkGateway::Init( )
  {
   connectedToGateway = true;
   prefferedGateWay = this->nodeID;
 
-  //   ros::SubscribeOptions so = ros::SubscribeOptions::create<
-  //       abstract_drone::RequestGatewayDroneFlight >(
-  //       "/gateway", 1000,
-  //       boost::bind( &MeshnetworkGateway::gatewayQueue, this, _1 ),
-  //       ros::VoidPtr( ), &this->rosQueue );
-  //   this->gatewaySub = this->rosNode->subscribe( so );
   common::Time::Sleep( 0.01 );
 
+  internet->connect( );
   routerTech->startRouting( );
  }
-
- //  void MeshnetworkGateway::gatewayQueue(
- //      const abstract_drone::RequestGatewayDroneFlightConstPtr& _msg )
- //  {
- //   sendGoalToDrone( _msg->ID, _msg->longitude, _msg->latitude, _msg->height
- //   );
- //  }
 
  void MeshnetworkGateway::processIntroduction( const uint8_t* message )
  {
@@ -68,4 +58,5 @@ namespace Meshnetwork
  {
  }
 }  // namespace Meshnetwork
+GZ_REGISTER_MODEL_PLUGIN( Meshnetwork::MeshnetworkGateway )
 }  // namespace gazebo

@@ -98,7 +98,6 @@ namespace Meshnetwork
  void MeshnetworkComponent::processMessage( const uint8_t *message )
  {
   const uint8_t msgType = message[Messages::TYPE];
-  ROS_INFO( "NODE[%u] recieved messagetype %u", nodeID, msgType );
   switch ( msgType ) {
    case Messages::LOCATION:
     processLocation( message );
@@ -184,13 +183,13 @@ namespace Meshnetwork
  }
 
  void MeshnetworkComponent::sendGoalToDrone( const uint8_t ID,
-                                             const float longitude,
                                              const float latitude,
+                                             const float longitude,
                                              const uint16_t height )
  {
   uint8_t other = routerTech->getDirectionToNode( ID );
   Messages::GoToLocationMessage GTLmsg( this->nodeID, this->nodeID, other, ID,
-                                        longitude, latitude, height );
+                                        latitude, longitude, height );
   uint8_t buffer[32];
   GTLmsg.toPayload( buffer );
   SendMessage( buffer, other );

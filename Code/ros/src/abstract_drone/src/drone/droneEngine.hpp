@@ -36,11 +36,11 @@ namespace DroneSimulation
   /**
    * @brief Set the Goal for this drone to fly towards
    *
-   * @param longitude to fly to
    * @param latitude to fly to
+   * @param longitude to fly to
    * @param height to fly to
    */
-  void setGoal( const float longitude, const float latitude,
+  void setGoal( const float latitude, const float longitude,
                 const float height );
   /**
    * @brief Get the location of this drone, usable as a service

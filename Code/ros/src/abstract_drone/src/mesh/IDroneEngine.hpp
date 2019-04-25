@@ -20,11 +20,11 @@ public:
  /**
   * @brief Set the Goal for the drone to fly to
   *
-  * @param longitude
   * @param latitude
+  * @param longitude
   * @param height
   */
- virtual void setGoal( const float longitude, const float latitude,
+ virtual void setGoal( const float latitude, const float longitude,
                        const float height ) = 0;
  /**
   * @brief Get the Location of the drone

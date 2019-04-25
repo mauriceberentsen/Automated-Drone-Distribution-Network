@@ -31,20 +31,16 @@ public:
   * @brief function to publish a request a specific drone to a given location
   *
   * @param ID The Drone that needs to move
-  * @param longitude to go to
   * @param latitude to go to
+  * @param longitude to go to
   * @param height to go to
   * @return true always
   */
- bool RequestMovement( uint8_t ID, float longitude, float latitude,
+ bool RequestMovement( uint8_t ID, float latitude, float longitude,
                        uint16_t height = 0 );
  /**
   * @brief servicecall to publish a request a specific drone to a given location
   *
-  * @param ID The Drone that needs to move
-  * @param longitude to go to
-  * @param latitude to go to
-  * @param height to go to
   * @return true Service call succesfull
   * @return false Could not perform service
   */

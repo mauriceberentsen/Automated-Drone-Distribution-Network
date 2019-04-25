@@ -12,7 +12,9 @@
 #define MESHNETWORKGATEWAY
 
 #include "meshnetwork_component.hpp"
-#include "abstract_drone/RequestGatewayDroneFlight.h"
+#include "IInternetConnection.hpp"
+
+#include "RosInternetMock.hpp"
 
 namespace gazebo
 {
@@ -29,13 +31,6 @@ namespace Meshnetwork
 
  protected:
  private:
-  /**
-   * @brief Through a subscriber handle incoming gateway messages
-   *
-   * @param _msg RequestGatewayDroneFlight messages
-   */
-  // void gatewayQueue(
-  //    const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg );
   /**
    * @brief Called after Load
    * -does the following
@@ -80,11 +75,10 @@ namespace Meshnetwork
  public:
  protected:
  private:
-  /// \brief Subscriber to the general gateway topic
-  // ros::Subscriber gatewaySub;
+  std::unique_ptr< IInternetConnection > internet;
  };
  // Register this plugin with the simulator
 }  // namespace Meshnetwork
-GZ_REGISTER_MODEL_PLUGIN( Meshnetwork::MeshnetworkGateway )
+
 }  // namespace gazebo
 #endif  // MESHNETWORKGATEWAY

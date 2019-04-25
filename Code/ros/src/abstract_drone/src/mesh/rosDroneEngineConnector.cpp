@@ -34,14 +34,14 @@ rosDroneEngineConnector::rosDroneEngineConnector( uint16_t droneID )
      this->rosNode->advertise< abstract_drone::Location >( connectedEngine,
                                                            100 );
  ROS_INFO( "Loaded DroneEngineconnector connected to topicname:[%s]",
-           gps_ServiceName );
+           gps_ServiceName.c_str( ) );
  // Connect to the GPS service
  this->GPSLink = this->rosNode->serviceClient< abstract_drone::RequestGPS >(
      gps_ServiceName.c_str( ) );
 }
 
-void rosDroneEngineConnector::setGoal( const float longitude,
-                                       const float latitude,
+void rosDroneEngineConnector::setGoal( const float latitude,
+                                       const float longitude,
                                        const float height )
 {
  abstract_drone::Location msg;

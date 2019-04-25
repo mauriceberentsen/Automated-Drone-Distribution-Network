@@ -22,13 +22,13 @@ DroneManager::DroneManager( std::shared_ptr< ros::NodeHandle > &_rosNode,
 }
 DroneManager::~DroneManager( ){};
 
-bool DroneManager::RequestMovement( uint8_t ID, float longitude, float latitude,
+bool DroneManager::RequestMovement( uint8_t ID, float latitude, float longitude,
                                     uint16_t height )
 {
  abstract_drone::RequestGatewayDroneFlight msg;
  msg.ID = ID;
- msg.longitude = longitude;
  msg.latitude = latitude;
+ msg.longitude = longitude;
  msg.height = height;
  rosPub.publish( msg );
 }
@@ -39,8 +39,8 @@ bool DroneManager::RequestMovement(
 {
  abstract_drone::RequestGatewayDroneFlight msg;
  msg.ID = req.ID;
- msg.longitude = req.longitude;
  msg.latitude = req.latitude;
+ msg.longitude = req.longitude;
  msg.height = req.height;
  rosPub.publish( msg );
  return true;

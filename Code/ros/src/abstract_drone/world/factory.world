@@ -13,7 +13,7 @@
 
 
     <plugin name="dronefactory" filename="libdronefactory.so">
-      <amountOfRouterDrones>4</amountOfRouterDrones>
+      <amountOfRouterDrones>17</amountOfRouterDrones>
       <amountOfGatewayDrones>1</amountOfGatewayDrones>
     </plugin>
   </world>

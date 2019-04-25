@@ -13,11 +13,11 @@ public:
  /**
   * @brief Uses Ros transport to send a goal to the virtual engine
   *
-  * @param longitude
   * @param latitude
+  * @param longitude
   * @param height
   */
- void setGoal( const float longitude, const float latitude,
+ void setGoal( const float latitude, const float longitude,
                const float height );
  /**
   * @brief Get the Location of the drone
