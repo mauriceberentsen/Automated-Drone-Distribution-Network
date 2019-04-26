@@ -15,15 +15,15 @@
 #include <map>
 // libary
 // Required interfaces
-#include "IWirelessCommunication.hpp"
-#include "IRoutingTechnique.hpp"
-#include "IDroneEngine.hpp"
+#include "../RoutingTechnique/IRoutingTechnique.hpp"
+#include "../Wireless/IWirelessCommunication.hpp"
+#include "../../Drone/IDroneEngine.hpp"
 // implemented interfaces
-#include "VirtualNRF24.hpp"
-#include "ChildTableTree.hpp"
-#include "rosDroneEngineConnector.hpp"
+#include "../RoutingTechnique/ChildTableTree.hpp"
+#include "../../ros/WirelessSimulation/VirtualNRF24.hpp"
+#include "../../ros/rosDroneEngineConnector.hpp"
 // classes
-#include "Message.hpp"
+#include "../Messages/Message.hpp"
 namespace Communication
 {
 namespace Meshnetwork

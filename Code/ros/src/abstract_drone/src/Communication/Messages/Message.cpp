@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "Message.hpp"
+
 namespace Communication
 {
 namespace Messages

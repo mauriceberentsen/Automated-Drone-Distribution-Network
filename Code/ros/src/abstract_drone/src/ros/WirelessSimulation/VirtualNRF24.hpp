@@ -3,7 +3,7 @@
 
 #include <thread>
 
-#include "IWirelessCommunication.hpp"
+#include "../../Communication/Wireless/IWirelessCommunication.hpp"
 // ros
 #include "ros/ros.h"
 #include "std_srvs/Trigger.h"

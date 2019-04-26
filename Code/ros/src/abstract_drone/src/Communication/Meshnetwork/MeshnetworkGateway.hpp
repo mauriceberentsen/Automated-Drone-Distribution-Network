@@ -12,9 +12,9 @@
 #define MESHNETWORKGATEWAY
 
 #include "MeshnetworkComponent.hpp"
-#include "IInternetConnection.hpp"
+#include "../IInternetConnection.hpp"
 
-#include "RosInternetMock.hpp"
+#include "../../ros/RosInternetMock.hpp"
 namespace Communication
 {
 namespace Meshnetwork

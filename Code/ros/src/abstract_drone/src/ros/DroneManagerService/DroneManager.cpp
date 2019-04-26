@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "DroneManager.hpp"
 #include "abstract_drone/RequestGatewayDroneFlight.h"
+#include "DroneManager.hpp"
 namespace ros
 {
 namespace DroneManagerService

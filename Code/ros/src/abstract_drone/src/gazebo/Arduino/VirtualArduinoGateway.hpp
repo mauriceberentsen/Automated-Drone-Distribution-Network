@@ -1,18 +1,18 @@
-#ifndef VIRTUALARDUINOCOMMUNICATOR
-#define VIRTUALARDUINOCOMMUNICATOR
+#ifndef VIRTUALARDUINOGATEWAY
+#define VIRTUALARDUINOGATEWAY
 #include "VirtualArduino.hpp"
 
-#include "../mesh/MeshnetworkCommunicator.hpp"
+#include "../../Communication/Meshnetwork/MeshnetworkGateway.hpp"
 
 namespace gazebo
 {
 namespace Arduino
 {
- class VirtualArduinoCommunicator : public VirtualArduino
+ class VirtualArduinoGateway : public VirtualArduino
  {
  public:
-  VirtualArduinoCommunicator( );
-  ~VirtualArduinoCommunicator( );
+  VirtualArduinoGateway( );
+  ~VirtualArduinoGateway( );
   /**
    * @brief Called when a Plugin is first created, and after the World has been
    * loaded. This function should not be blocking
@@ -22,6 +22,7 @@ namespace Arduino
    */
   void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf );
 
+ private:
   void setup( );
   void loop( );
 
@@ -29,12 +30,11 @@ namespace Arduino
   uint8_t nodeID;
   uint8_t droneID;
   bool debug;
-  Communication::Meshnetwork::MeshnetworkCommunicator* meshnetworkCommunicator;
+  Communication::Meshnetwork::MeshnetworkGateway* meshnetworkGateway;
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
  };
 
 }  // namespace Arduino
-
 }  // namespace gazebo
-#endif  // VIRTUALARDUINOCOMMUNICATOR
+#endif  // VIRTUALARDUINOGATEWAY

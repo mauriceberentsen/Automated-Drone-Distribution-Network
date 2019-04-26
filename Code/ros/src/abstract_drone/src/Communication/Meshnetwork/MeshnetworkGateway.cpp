@@ -9,6 +9,7 @@
  *
  */
 #include "MeshnetworkGateway.hpp"
+
 namespace Communication
 {
 namespace Meshnetwork

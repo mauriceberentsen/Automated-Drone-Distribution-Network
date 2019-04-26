@@ -1,8 +1,8 @@
 #ifndef ROSDRONEENGINECONNECTOR
 #define ROSDRONEENGINECONNECTOR
-#include "IDroneEngine.hpp"
 #include "ros/ros.h"
 #include "abstract_drone/Location.h"
+#include "../Drone/IDroneEngine.hpp"
 namespace ros
 {
 class rosDroneEngineConnector : public Drone::IDroneEngine

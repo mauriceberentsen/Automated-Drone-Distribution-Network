@@ -8,9 +8,11 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "ChildTableTree.hpp"
 #include <iostream>
-#include "MeshnetworkComponent.hpp"
+
+#include "ChildTableTree.hpp"
+#include "../Meshnetwork/MeshnetworkComponent.hpp"
+
 namespace Communication
 {
 namespace RoutingTechnique

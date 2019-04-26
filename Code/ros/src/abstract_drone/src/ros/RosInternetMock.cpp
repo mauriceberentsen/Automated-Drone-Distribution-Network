@@ -1,5 +1,5 @@
 #include "RosInternetMock.hpp"
-#include "MeshnetworkGateway.hpp"
+#include "../Communication/Meshnetwork/MeshnetworkGateway.hpp"
 
 namespace ros
 {
@@ -40,7 +40,7 @@ void RosInternetMock::connect( )
          ros::VoidPtr( ), &this->rosQueue );
 
  this->gatewaySub = this->rosNode->subscribe( so );
- ROS_INFO( "%gateway connected to virtual internet" );
+ ROS_INFO( "gateway connected to virtual internet" );
 }
 void RosInternetMock::QueueThread( )
 {

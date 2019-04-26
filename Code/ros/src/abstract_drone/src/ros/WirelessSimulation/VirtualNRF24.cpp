@@ -2,7 +2,7 @@
 #include "abstract_drone/nodeInfo.h"
 
 #include "VirtualNRF24.hpp"
-#include "MeshnetworkComponent.hpp"
+#include "../../Communication/Meshnetwork/MeshnetworkComponent.hpp"
 
 using namespace Communication::Messages;
 

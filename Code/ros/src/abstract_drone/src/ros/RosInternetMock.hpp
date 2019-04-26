@@ -3,11 +3,12 @@
 
 #include <thread>
 
-#include "IInternetConnection.hpp"
-#include "abstract_drone/RequestGatewayDroneFlight.h"
-
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
+
+#include "abstract_drone/RequestGatewayDroneFlight.h"
+
+#include "../Communication/IInternetConnection.hpp"
 namespace Communication
 {
 namespace Meshnetwork

@@ -12,6 +12,7 @@
 #include <chrono>  // std::chrono::seconds
 
 #include "MeshnetworkCommunicator.hpp"
+
 namespace Communication
 {
 namespace Meshnetwork
