@@ -25,6 +25,9 @@ namespace Meshnetwork
   /**
    * @brief Construct a new Meshnetwork Gateway object
    *
+   * @param node The ID of the Node
+   * @param drone The ID of the connected Drone Engine
+   * @param developermode Debuging mode enabled
    */
   MeshnetworkGateway( const uint8_t node, const uint8_t drone,
                       bool developermode );
@@ -33,7 +36,7 @@ namespace Meshnetwork
    * @brief Called after Load
    * -does the following
    *    -# Set gateway parameters
-   *    -# Subscribe to the gateway topic
+   *    -# Open internet connection
    *    -# Give the node a small moment to settle
    *    -# let the routerTech start Routing
    *
@@ -46,7 +49,8 @@ namespace Meshnetwork
    * @brief Inherited function for introductions. As gateway we do nothing with
    * introductions
    *
-   * @param _msg
+   * @param message Pointer to char array[32] holding the message of type
+   * IntroductionMessage
    */
   void processIntroduction( const uint8_t* message );
   /**
@@ -63,13 +67,16 @@ namespace Meshnetwork
   /**
    * @brief Process HeartbeatMessage's. We always send a heartbeat back
    *
-   * @param _msg NRF24 Message containing a HeartbeatMessage
+   * @param message Pointer to char array[32] holding the message of type
+   * HeartbeatMessage
    */
   void ProcessHeartbeat( const uint8_t* message );
   /**
    * @brief  Our gateway stay where he is. Maybe in the future we need to
    * move the gateway?
-   * @param _msg Message containing a NegotiationMessage
+   *
+   * @param message Pointer to char array[32] holding the message of type
+   * NegotiationMessage
    */
   void processMovementNegotiationMessage( const uint8_t* message );
 

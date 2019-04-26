@@ -38,28 +38,27 @@ namespace RoutingTechnique
   explicit ChildTableTree( Meshnetwork::MeshnetworkComponent& MC );
   ~ChildTableTree( );
 
-  /*virtual */ uint8_t getDirectionToNode( const uint8_t node );
+  uint8_t getDirectionToNode( const uint8_t node );
   /**
    * @brief We search for others in range
    *
    */
-  /*virtual */ void startRouting( );
+  void startRouting( );
   /**
    * @brief We search for others in range and send them a heartbeat
    *
    */
-  /*virtual */ void maintainRouting( );
-  /*virtual */ void canCommunicateWithNode( const uint8_t node );
-  /*virtual */ uint8_t cantCommunicateWithNode( const uint8_t node );
-  /*virtual */ uint8_t OtherCantCommunicateWithNode( const uint8_t other,
-                                                     const uint8_t node );
-  /*virtual */ void OtherCanCommunicateWithNode( const uint8_t other,
-                                                 const uint8_t node );
-  /*virtual */ const uint16_t getAmountOfChildren( );
-  /*virtual */ const uint16_t getTableSize( );
-  /*virtual */ const bool empty( );
-  /*virtual */ const std::set< uint8_t > getSetOfChildren( );
-  /*virtual */ void NodeMovedLocation( );
+  void maintainRouting( );
+  void canCommunicateWithNode( const uint8_t node );
+  uint8_t cantCommunicateWithNode( const uint8_t node );
+  uint8_t OtherCantCommunicateWithNode( const uint8_t other,
+                                        const uint8_t node );
+  void OtherCanCommunicateWithNode( const uint8_t other, const uint8_t node );
+  const uint16_t getAmountOfChildren( );
+  const uint16_t getTableSize( );
+  const bool empty( );
+  const std::set< uint8_t > getSetOfChildren( );
+  void NodeMovedLocation( );
 
  private:
   /**

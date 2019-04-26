@@ -31,13 +31,13 @@ namespace Arduino
   if ( _sdf->HasElement( "Debug" ) ) {
    this->debug = _sdf->Get< bool >( "Debug" );
   }
-  meshnetworkGateway = new Communication::Meshnetwork::MeshnetworkGateway(
-      nodeID, droneID, debug );
   setup( );
  }
 
  void VirtualArduinoGateway::setup( )
  {
+  meshnetworkGateway = new Communication::Meshnetwork::MeshnetworkGateway(
+      nodeID, droneID, debug );
   meshnetworkGateway->Init( );
  }
 

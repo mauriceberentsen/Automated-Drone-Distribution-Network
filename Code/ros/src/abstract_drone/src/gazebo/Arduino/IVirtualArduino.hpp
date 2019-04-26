@@ -10,9 +10,17 @@ namespace gazebo
 {
 namespace Arduino
 {
- class VirtualArduino : public ModelPlugin
+ class IVirtualArduino : public ModelPlugin
  {
+  /**
+   * @brief Should be called at start up
+   *
+   */
   virtual void setup( ) = 0;
+  /**
+   * @brief Should be filled with code that loops
+   *
+   */
   virtual void loop( ) = 0;
  };
 

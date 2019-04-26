@@ -44,8 +44,17 @@ namespace Messages
  class Message
  {
  public:
-  Message( const uint8_t creator, const uint8_t _from, Messagetype _Messagetype,
-           const uint8_t _to, const uint8_t _forward );
+  /**
+   * @brief Construct a new Message object
+   *
+   * @param creator The ID  of the creator node
+   * @param from Who is sending this message
+   * @param messagetype The type of message
+   * @param to To who this message will be send
+   * @param forward To who this messages is destined
+   */
+  Message( const uint8_t creator, const uint8_t from, Messagetype messagetype,
+           const uint8_t to, const uint8_t forward );
   explicit Message( const uint8_t *payload );
   ~Message( );
   /**
@@ -102,14 +111,17 @@ namespace Messages
   /**
    * @brief Construct a new Location Message object
    *        Location messages are used to inform others about your location
-   * @param _ID The ID  of this node
+   * @param creator The ID  of the creator node
+   * @param from Who is sending this message
+   * @param to To who this message will be send
+   * @param forward To who this messages is destined
    * @param latitude The latitude of this node
    * @param longitude The longitude of this node
    * @param height The height of this node
    * @param timeSincePosix The moment in time this was measured
    */
-  LocationMessage( const uint8_t creator, const uint8_t from, const uint8_t _to,
-                   const uint8_t _forward, float latitude, float longitude,
+  LocationMessage( const uint8_t creator, const uint8_t from, const uint8_t to,
+                   const uint8_t forward, float latitude, float longitude,
                    int16_t height, uint32_t timeSincePosix );
   /**
    * @brief Construct a new Location Message object from a NRF24 payload
@@ -145,8 +157,11 @@ namespace Messages
    *        It tells others who you are, if you are connected to the gateway.
    *        And how many hops it take you to talk with the gateway.
    *
-   * @param _ID of this Node
-   * @param _hopsUntilsGateway How many hops it takes you to get to the gateway
+   * @param creator The ID  of the creator node
+   * @param from Who is sending this message
+   * @param to To who this message will be send
+   * @param forward To who this messages is destined   * @param
+   * _hopsUntilsGateway How many hops it takes you to get to the gateway
    * @param _knowGateway If you are connected to a gateway
    */
   IntroduceMessage( const uint8_t creator, const uint8_t from,
@@ -182,8 +197,11 @@ namespace Messages
    *        Who your preffere.dGateWay is and how many hops it take you to talk
    *         with the gateway. If this meesage is forwared it makes a hop.
    *
-   * @param _ID of this Node.
-   * @param _knowGateway If you are connected to a gateway.
+   * @param creator The ID  of the creator node
+   * @param from Who is sending this message
+   * @param to To who this message will be send
+   * @param forward To who this messages is destined   * @param _knowGateway If
+   * you are connected to a gateway.
    * @param _prefferedGateWay The gateway this node communicates with.
    * @param _hops How many hops it takes you to get to the gateway.
    */
@@ -234,8 +252,11 @@ namespace Messages
    * @brief Construct a new Missing Message object
    *         Used to inform others about a missing Node in the network
    *
-   * @param _ID The ID of the current Node.
-   * @param _missing The ID of the Node that went missing.
+   * @param creator The ID  of the creator node
+   * @param from Who is sending this message
+   * @param to To who this message will be send
+   * @param forward To who this messages is destined   * @param _missing The ID
+   * of the Node that went missing.
    */
   MissingMessage( const uint8_t creator, const uint8_t from, const uint8_t _to,
                   const uint8_t _forward, const uint8_t _missing );
@@ -263,7 +284,10 @@ namespace Messages
    * @brief Construct a new Go To Location Message object
    *        Used to tell other to go to a specific location
    *
-   * @param _ID The ID of the current Node
+   * @param creator The ID  of the creator node
+   * @param from Who is sending this message
+   * @param to To who this message will be send
+   * @param forward To who this messages is destined
    * @param latitude The target latitude to go to
    * @param longitude The target longitude to go to
    * @param height The target height to go to
@@ -300,7 +324,10 @@ namespace Messages
    * @brief Construct a new Movement Negotiation Message object
    *        Used to negotiate with others about who should move.
    *
-   * @param _ID the ID of the current Node
+   * @param creator The ID  of the creator node
+   * @param from Who is sending this message
+   * @param to To who this message will be send
+   * @param forward To who this messages is destined
    * @param _cost the calculated cost.
    */
   MovementNegotiationMessage( const uint8_t creator, const uint8_t from,

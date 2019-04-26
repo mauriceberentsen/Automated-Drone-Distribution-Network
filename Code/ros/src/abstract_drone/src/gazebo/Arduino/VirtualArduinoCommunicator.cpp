@@ -31,14 +31,14 @@ namespace Arduino
   if ( _sdf->HasElement( "Debug" ) ) {
    this->debug = _sdf->Get< bool >( "Debug" );
   }
-  meshnetworkCommunicator =
-      new Communication::Meshnetwork::MeshnetworkCommunicator( nodeID, droneID,
-                                                               debug );
   setup( );
  }
 
  void VirtualArduinoCommunicator::setup( )
  {
+  meshnetworkCommunicator =
+      new Communication::Meshnetwork::MeshnetworkCommunicator( nodeID, droneID,
+                                                               debug );
   meshnetworkCommunicator->Init( );
  }
 

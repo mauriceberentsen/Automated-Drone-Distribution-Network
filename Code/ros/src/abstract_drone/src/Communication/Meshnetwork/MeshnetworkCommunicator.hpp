@@ -23,6 +23,9 @@ namespace Meshnetwork
   /**
    * @brief Construct a new Meshnetwork Communicator object
    *
+   * @param node The ID of the Node
+   * @param drone The ID of the connected Drone Engine
+   * @param developermode Debuging mode enabled
    */
   MeshnetworkCommunicator( const uint8_t node, const uint8_t drone,
                            bool developermode );
@@ -42,7 +45,8 @@ namespace Meshnetwork
    * If an introducee is connected to a gateway and has less hops we request his
    * location.
    *
-   * @param _msg NRF24 Message holding Message of type IntroduceMessage
+   * @param message Pointer to char array[32] holding the message of type
+   * IntroduceMessage
    */
 
   void processIntroduction( const uint8_t *message );
@@ -61,7 +65,8 @@ namespace Meshnetwork
    *             Set his gateway as prefferedGateWay and try to contact that
    *             gateway.
    *
-   * @param _msg  NRF24 Message holding Message of type HeartbeatMessage.
+   * @param message Pointer to char array[32] holding the message of type
+   * HeartbeatMessage.
    */
   void ProcessHeartbeat( const uint8_t *message );
   /**
@@ -129,7 +134,8 @@ namespace Meshnetwork
    * @brief Procces message for movement negotiation.
    * Add the cost of other node to the list.
    *
-   * @param _msg NRF24 MovementNegotiationMessage
+   * @param message Pointer to char array[32] holding the message of type
+   * MovementNegotiationMessage
    */
   void processMovementNegotiationMessage( const uint8_t *message );
 

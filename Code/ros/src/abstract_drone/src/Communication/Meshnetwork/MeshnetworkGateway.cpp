@@ -24,10 +24,14 @@ namespace Meshnetwork
 
  void MeshnetworkGateway::Init( )
  {
+  // Since we are a gateway this is always true
   connectedToGateway = true;
+  // Would make no sense to connect to another gateway
   prefferedGateWay = this->nodeID;
-  std::this_thread::sleep_for( std::chrono::microseconds( initTime ) );
   internet->connect( );
+  // Give the InternetComponent some time to boot
+  std::this_thread::sleep_for( std::chrono::microseconds( initTime ) );
+  // Begin with routing nearby nodes
   routerTech->startRouting( );
  }
 
@@ -37,7 +41,7 @@ namespace Meshnetwork
 
  void MeshnetworkGateway::CheckConnection( )
  {
-  while ( true ) {  // this->rosNode->ok( ) ) {
+  while ( true ) {
    std::this_thread::sleep_for(
        std::chrono::seconds( CheckConnectionTime ) );  // check every 10 seconds
    routerTech->maintainRouting( );
@@ -46,18 +50,19 @@ namespace Meshnetwork
 
  void MeshnetworkGateway::lostConnection( )
  {
+  // We cant lose connection since we are the connection
  }
 
  void MeshnetworkGateway::ProcessHeartbeat( const uint8_t* message )
  {
   Messages::HeartbeatMessage msg( message );
-  // ROS_INFO("RECIEVED A HEARTBEAT FROM %u", msg.getID( ));
   sendHeartbeat( msg.getID( ) );
  }
 
  void MeshnetworkGateway::processMovementNegotiationMessage(
      const uint8_t* message )
  {
+  // In the current implementation gateways dont move
  }
 }  // namespace Meshnetwork
 }  // namespace Communication

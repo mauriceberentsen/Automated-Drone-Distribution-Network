@@ -26,37 +26,36 @@ namespace RoutingTechnique
  {
  }
 
- /*virtual */ void ChildTableTree::startRouting( )
+ void ChildTableTree::startRouting( )
  {
   meshnetworkComponent.searchOtherNodesInRange( );
  }
- /*virtual */ void ChildTableTree::maintainRouting( )
+ void ChildTableTree::maintainRouting( )
  {
   meshnetworkComponent.searchOtherNodesInRange( );
   for ( auto& node : getSetOfChildren( ) )
    meshnetworkComponent.sendHeartbeat( node );
  }
- /*virtual */ void ChildTableTree::canCommunicateWithNode( const uint8_t node )
+ void ChildTableTree::canCommunicateWithNode( const uint8_t node )
  {
   proofOfAvailability( node, node );
  }
- /*virtual */ uint8_t ChildTableTree::cantCommunicateWithNode(
-     const uint8_t node )
+ uint8_t ChildTableTree::cantCommunicateWithNode( const uint8_t node )
  {
   return proofOfMissing( node, node );
  }
- /*virtual */ uint8_t ChildTableTree::OtherCantCommunicateWithNode(
-     const uint8_t other, const uint8_t node )
+ uint8_t ChildTableTree::OtherCantCommunicateWithNode( const uint8_t other,
+                                                       const uint8_t node )
  {
   return proofOfMissing( other, node );
  }
- /*virtual */ void ChildTableTree::OtherCanCommunicateWithNode(
-     const uint8_t other, const uint8_t node )
+ void ChildTableTree::OtherCanCommunicateWithNode( const uint8_t other,
+                                                   const uint8_t node )
  {
   proofOfAvailability( other, node );
  }
 
- /*virtual */ uint8_t ChildTableTree::getDirectionToNode( const uint8_t node )
+ uint8_t ChildTableTree::getDirectionToNode( const uint8_t node )
  {
   // is it one of our own childeren?
   auto it = family.find( node );
@@ -71,12 +70,12 @@ namespace RoutingTechnique
   return UINT8_MAX;
  }
 
- /*virtual */ const uint16_t ChildTableTree::getAmountOfChildren( )
+ const uint16_t ChildTableTree::getAmountOfChildren( )
  {
   return family.size( );
  }
 
- /*virtual */ const uint16_t ChildTableTree::getTableSize( )
+ const uint16_t ChildTableTree::getTableSize( )
  {
   uint16_t size = 0;
   for ( auto& child : family ) {
@@ -86,19 +85,19 @@ namespace RoutingTechnique
   return size;
  }
 
- /*virtual */ const bool ChildTableTree::empty( )
+ const bool ChildTableTree::empty( )
  {
   return family.empty( );
  };
 
- /*virtual */ const std::set< uint8_t > ChildTableTree::getSetOfChildren( )
+ const std::set< uint8_t > ChildTableTree::getSetOfChildren( )
  {
   std::set< uint8_t > children;
   for ( auto& child : family )
    children.insert( child.first );
   return children;
  }
- /*virtual */ void ChildTableTree::NodeMovedLocation( )
+ void ChildTableTree::NodeMovedLocation( )
  {
   family.clear( );
  }

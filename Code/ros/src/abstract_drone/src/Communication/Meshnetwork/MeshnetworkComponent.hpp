@@ -62,7 +62,7 @@ namespace Meshnetwork
   /**
    * @brief Called upon each received Ros Message.
    *
-   * @param _msg The received Ros Message. We use NRF24 Message
+   * @param message Pointer to char array[32] holding the message
    */
   void OnMsg( const uint8_t *message );
 
@@ -86,12 +86,16 @@ namespace Meshnetwork
  protected:
   /**
    * @brief Construct a new Meshnetwork Component object
+   *
+   * @param node The ID of the Node
+   * @param drone The ID of the connected Drone Engine
+   * @param developermode Debuging mode enabled
    */
   MeshnetworkComponent( const uint8_t node, const uint8_t drone,
                         bool developermode = false );
 
   /**
-   * @brief Used internal for the drone to fly towards a remebered location
+   * @brief Used internal to tell the drone to fly towards a location
    *
    * @param _msg LocationMessage with the location to fly towards
    */
@@ -135,10 +139,10 @@ namespace Meshnetwork
    */
   virtual void CheckConnection( ) = 0;
   /**
-   * @brief Handover the message to be sending with the wireless signal
-   * simulator
+   * @brief Handover the message to be sent to the antenna
    *
-   * @param message Message to be sending
+   * @param message Pointer to the char[32] message to be sending
+   * @param to The addressee of the message
    * @return true Sending was succesfull
    * @return false Sending not succeeded
    */
@@ -148,7 +152,8 @@ namespace Meshnetwork
    * called by case Messages::PRESENT
    * override this function for correct respones upon introduction
    *
-   * @param _msg NRF24 Message holding Message of type IntroduceMessage
+   * @param message Pointer to char array[32] holding the message of type
+   * IntroduceMessage
    */
   virtual void processIntroduction( const uint8_t *message ) = 0;
   /**
@@ -156,7 +161,8 @@ namespace Meshnetwork
    * called by case Messages::HEARTBEAT
    * override this function for correct respones upon Heartbeats
    *
-   * @param _msg  NRF24 Message holding Message of type HeartbeatMessage
+   * @param message Pointer to char array[32] holding the message of type
+   * HeartbeatMessage
    */
   virtual void ProcessHeartbeat( const uint8_t *message ) = 0;
 
@@ -172,7 +178,7 @@ namespace Meshnetwork
    * called by case Messages::MOVEMENT_NEGOTIATION
    * override this function to process negotiation message
    *
-   * @param _msg  NRF24 Message holding Message of type
+   * @param message Pointer to char array[32] holding the message of type
    * MovementNegotiationMessage
    */
   virtual void processMovementNegotiationMessage( const uint8_t *message ) = 0;
@@ -181,7 +187,7 @@ namespace Meshnetwork
   /**
    * @brief Used for forwarding messages. HeartbeatMessage gets an extra hop
    *
-   * @param _msg The message to forward
+   * @param message Pointer to char array[32] holding the message to forward
    */
   void forwardMessage( const uint8_t *message );
 
@@ -189,14 +195,15 @@ namespace Meshnetwork
    * @brief Used for directing messages to the right functions of our own.
    * Only called upon if the message is meant for us.
    *
-   * @param _msg The message received
+   *@param message Pointer to char array[32] holding the message to process
    */
   void processMessage( const uint8_t *message );
   /**
    * @brief Process message with the type Location
    * called by case Messages::LOCATION
    *
-   * @param _msg NRF24 Message holding Location Message
+   * @param message Pointer to char array[32] holding the message of type
+   * LocationMessage
    */
   void processLocation( const uint8_t *message );
 
@@ -206,7 +213,8 @@ namespace Meshnetwork
    * Inform the router tech that a node went missing
    * Tell others about a missing node
    *
-   * @param _msg  NRF24 Message holding Message of type MissingMessage
+   * @param message Pointer to char array[32] holding the message of type
+   * MissingMessage
    */
   void processMissing( const uint8_t *message );
   /**
@@ -214,7 +222,8 @@ namespace Meshnetwork
    * called by case Messages::MOVE_TO_LOCATION
    * Sends the goal to the engine of the connected drone
    *
-   * @param _msg  NRF24 Message holding Message of type GoToLocationMessage
+   * @param message Pointer to char array[32] holding the message of type
+   * GoToLocationMessage
    */
   void processSendGoalToEngine( const uint8_t *message );
 

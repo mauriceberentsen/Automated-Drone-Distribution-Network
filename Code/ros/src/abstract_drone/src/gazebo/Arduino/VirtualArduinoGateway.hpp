@@ -1,14 +1,14 @@
 #ifndef VIRTUALARDUINOGATEWAY
 #define VIRTUALARDUINOGATEWAY
-#include "VirtualArduino.hpp"
 
+#include "IVirtualArduino.hpp"
 #include "../../Communication/Meshnetwork/MeshnetworkGateway.hpp"
 
 namespace gazebo
 {
 namespace Arduino
 {
- class VirtualArduinoGateway : public VirtualArduino
+ class VirtualArduinoGateway : public IVirtualArduino
  {
  public:
   VirtualArduinoGateway( );
@@ -23,13 +23,25 @@ namespace Arduino
   void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf );
 
  private:
+  /**
+   * @brief Initializes the Meshnetwork Gateway
+   *
+   */
   void setup( );
+  /**
+   * @brief Does nothing
+   *
+   */
   void loop( );
 
  private:
+  /// \brief The nodeID for the gateway
   uint8_t nodeID;
+  /// \brief The ID of the connected Drone Engine
   uint8_t droneID;
+  /// \brief if Debugging should be enabled
   bool debug;
+  /// \brief A pointer to the connected MeshnetworkGateway
   Communication::Meshnetwork::MeshnetworkGateway* meshnetworkGateway;
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
