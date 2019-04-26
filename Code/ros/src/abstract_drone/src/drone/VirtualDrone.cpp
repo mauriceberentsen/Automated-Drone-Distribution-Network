@@ -8,27 +8,27 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "Drone.hpp"
+#include "VirtualDrone.hpp"
 
 namespace gazebo
 {
 namespace DroneSimulation
 {
- /*static*/ int Drone::droneID = 0;
+ /*static*/ int VirtualDrone::droneID = 0;
 
- Drone::Drone( const float _x, const float _y, const float _z,
-               physics::WorldPtr _parent )
+ VirtualDrone::VirtualDrone( const float _x, const float _y, const float _z,
+                             physics::WorldPtr _parent )
      : x( _x ), y( _y ), z( _z ), parent( _parent )
  {
  }
 
- Drone::~Drone( )
+ VirtualDrone::~VirtualDrone( )
  {
  }
 
  RouterDrone::RouterDrone( const float _x, const float _y, const float _z,
                            physics::WorldPtr _parent )
-     : Drone( _x, _y, _z, _parent )
+     : VirtualDrone( _x, _y, _z, _parent )
  {
   std::stringstream ss;
   ss << "<sdf version ='1.6'>\
@@ -58,14 +58,14 @@ namespace DroneSimulation
           </material>\
               </visual>\
             </link>\
-            <plugin name=\"meshnetworkCom\" filename=\"libmeshnetworkCom.so\">\
+            <plugin name=\"MeshnetworkCommunicator\" filename=\"libMeshnetworkCommunicator.so\">\
             <DroneID>"
      << std::to_string( droneID ) << "</DroneID>\
             <nodeID>"
      << std::to_string( droneID ) << "</nodeID>\
             <Debug>true</Debug>\
             </plugin>\
-     <plugin filename = 'libdroneEngine.so' name ='droneEngine'>\
+     <plugin filename = 'libDroneEngine.so' name ='DroneEngine'>\
      <DroneID>"
      << std::to_string( droneID ) << " </DroneID> </plugin>\
      </model ></sdf>";
@@ -87,7 +87,7 @@ namespace DroneSimulation
 
  GatewayDrone::GatewayDrone( const float _x, const float _y, const float _z,
                              physics::WorldPtr _parent )
-     : Drone( _x, _y, _z, _parent )
+     : VirtualDrone( _x, _y, _z, _parent )
  {
   std::stringstream ss;
   ss << "<sdf version ='1.6'>\
@@ -117,14 +117,14 @@ namespace DroneSimulation
           </material>\
               </visual>\
             </link>\
-            <plugin name=\"meshnetworkGateway\" filename=\"libmeshnetworkGateway.so\">\
+            <plugin name=\"MeshnetworkGateway\" filename=\"libMeshnetworkGateway.so\">\
             <nodeID>"
      << std::to_string( droneID ) << "</nodeID>\
               <DroneID>"
      << std::to_string( droneID ) << "</DroneID>\
             <Debug>true</Debug>\
             </plugin>\
-            <plugin filename='libdroneEngine.so' name='droneEngine'>\
+            <plugin filename='libDroneEngine.so' name='DroneEngine'>\
              <DroneID>"
      << std::to_string( droneID ) << "</DroneID>\
             </plugin>\

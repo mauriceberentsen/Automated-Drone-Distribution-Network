@@ -1,5 +1,5 @@
 /**
- * @file meshnetwork_gateway.cpp
+ * @file MeshnetworkGateway.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief source file for the MeshnetworkGateway
  * @version 1.0
@@ -8,14 +8,16 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "meshnetwork_gateway.hpp"
-
-namespace gazebo
+#include "MeshnetworkGateway.hpp"
+namespace Communication
 {
 namespace Meshnetwork
 {
- MeshnetworkGateway::MeshnetworkGateway( )
-     : internet( new ros::RosInternetMock( *this ) )
+ MeshnetworkGateway::MeshnetworkGateway( const uint8_t node,
+                                         const uint8_t drone,
+                                         bool developermode )
+     : MeshnetworkComponent( node, drone, developermode )
+     , internet( new ros::RosInternetMock( *this ) )
  {
  }
 
@@ -23,9 +25,7 @@ namespace Meshnetwork
  {
   connectedToGateway = true;
   prefferedGateWay = this->nodeID;
-
-  common::Time::Sleep( 0.01 );
-
+  std::this_thread::sleep_for( std::chrono::microseconds( initTime ) );
   internet->connect( );
   routerTech->startRouting( );
  }
@@ -36,8 +36,9 @@ namespace Meshnetwork
 
  void MeshnetworkGateway::CheckConnection( )
  {
-  while ( true ) {                              // this->rosNode->ok( ) ) {
-   common::Time::Sleep( CheckConnectionTime );  // check every 10 seconds
+  while ( true ) {  // this->rosNode->ok( ) ) {
+   std::this_thread::sleep_for(
+       std::chrono::seconds( CheckConnectionTime ) );  // check every 10 seconds
    routerTech->maintainRouting( );
   }
  }
@@ -58,5 +59,4 @@ namespace Meshnetwork
  {
  }
 }  // namespace Meshnetwork
-GZ_REGISTER_MODEL_PLUGIN( Meshnetwork::MeshnetworkGateway )
-}  // namespace gazebo
+}  // namespace Communication

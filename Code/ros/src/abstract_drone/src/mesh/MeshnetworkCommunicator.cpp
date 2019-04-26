@@ -1,5 +1,5 @@
 /**
- * @file meshnetwork_communicator.cpp
+ * @file MeshnetworkCommunicator.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief source file for MeshnetworkCommunicator
  * @version 1.0
@@ -8,19 +8,24 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "meshnetwork_communicator.hpp"
+#include <thread>  // std::this_thread::sleep_for
+#include <chrono>  // std::chrono::seconds
 
-namespace gazebo
+#include "MeshnetworkCommunicator.hpp"
+namespace Communication
 {
 namespace Meshnetwork
 {
- MeshnetworkCommunicator::MeshnetworkCommunicator( )
+ MeshnetworkCommunicator::MeshnetworkCommunicator( const uint8_t node,
+                                                   const uint8_t drone,
+                                                   bool developermode )
+     : MeshnetworkComponent( node, drone, developermode )
  {
  }
  // Called after load
  void MeshnetworkCommunicator::Init( )
  {
-  common::Time::Sleep( initTime );
+  std::this_thread::sleep_for( std::chrono::microseconds( initTime ) );
   routerTech->startRouting( );
  }
 
@@ -70,7 +75,9 @@ namespace Meshnetwork
     connectedToGateway = false;
     continue;
    }
-   common::Time::Sleep( CheckConnectionTime );  // check every 10 seconds
+   std::this_thread::sleep_for(
+       std::chrono::seconds( CheckConnectionTime ) );  // check every 10
+   // seconds
    routerTech->maintainRouting( );
    searchOtherNodesInRange( );  // maybe there is someone close
    if ( connectedToGateway ) {
@@ -93,16 +100,17 @@ namespace Meshnetwork
  {
   if ( connectedToGateway ) {
    timerStarted = false;
+   this->lastTimeOnline = std::clock( );
    return;
   }
   if ( !timerStarted ) {
    routerTech->cantCommunicateWithNode( prefferedGateWay );
    informAboutMissingChild( this->nodeID, prefferedGateWay );
-   this->lastTimeOnline = this->model->GetWorld( )->SimTime( );
+   this->lastTimeOnline = std::clock( );
    timerStarted = true;
-  } else if ( lastTimeOnline <
-              this->model->GetWorld( )->SimTime( ) - timeUntilConnectionLost ) {
-   ROS_WARN( "%f seconds since no connection", timeUntilConnectionLost );
+  } else if ( ( std::clock( ) - this->lastTimeOnline ) /
+                  ( double )CLOCKS_PER_SEC >
+              timeUntilConnectionLost ) {
    StartEmergencyProtocol( );
    timerStarted = false;
   }
@@ -132,7 +140,6 @@ namespace Meshnetwork
   // Before we go to action we first make a list of everybody near that is
   // disconnected.
 
-  ROS_INFO( "LOST AS A GROUP LETS PICK SOMEONE TO MOVE" );
   // First find out how far away you are
   if ( routerTech->getDirectionToNode( lastGoodKnownLocation.getID( ) ) ==
        UINT8_MAX ) {
@@ -140,6 +147,7 @@ namespace Meshnetwork
   } else {
    myDistance = -1;
   }
+
   SafeAddToNegotiationList( std::make_pair( myDistance, this->nodeID ) );
 
   // add ourself to the list
@@ -149,22 +157,11 @@ namespace Meshnetwork
    // wait for others to respond
    continue;
   }
-
   // now it is time for action
 
-  for ( auto &i : negotiationList ) {
-   std::cout << this->model->GetName( ) + " " << ( int )i.second << "--"
-             << i.first << std::endl;
-  }
-  ROS_INFO( "%s Node %u has the greatest cost",
-            this->model->GetName( ).c_str( ),
-            negotiationList.rbegin( )->second );
   if ( myDistance >= 0 && negotiationList.rbegin( )->second == this->nodeID ) {
-   ROS_INFO( "%s: i'm the one who need to move ",
-             this->model->GetName( ).c_str( ) );
    sendGoalToEngine( lastGoodKnownLocation );
    routerTech->NodeMovedLocation( );
-
    lastGoodKnownLocation = prefferedGateWayLocation;
    negotiationList.clear( );
   } else {
@@ -187,7 +184,7 @@ namespace Meshnetwork
 
    Messages::MovementNegotiationMessage MovNegotiationMsg(
        this->nodeID, this->nodeID, towards, towards, cost );
-   uint8_t buffer[32];
+   uint8_t buffer[Messages::MAX_PAYLOAD];
    MovNegotiationMsg.toPayload( buffer );
    SendMessage( buffer, towards );
   }
@@ -200,4 +197,4 @@ namespace Meshnetwork
   SafeAddToNegotiationList( std::make_pair( msg.getCost( ), msg.getID( ) ) );
  }
 }  // namespace Meshnetwork
-}  // namespace gazebo
+}  // namespace Communication

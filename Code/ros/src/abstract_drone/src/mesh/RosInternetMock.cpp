@@ -1,9 +1,10 @@
 #include "RosInternetMock.hpp"
-#include "meshnetwork_gateway.hpp"
+#include "MeshnetworkGateway.hpp"
 
 namespace ros
 {
-RosInternetMock::RosInternetMock( gazebo::Meshnetwork::MeshnetworkGateway &MG )
+RosInternetMock::RosInternetMock(
+    Communication::Meshnetwork::MeshnetworkGateway &MG )
     : meshnetworkGateway( MG )
 {
  // Initialize ros, if it has not already been initialized.
@@ -39,8 +40,7 @@ void RosInternetMock::connect( )
          ros::VoidPtr( ), &this->rosQueue );
 
  this->gatewaySub = this->rosNode->subscribe( so );
- ROS_INFO( "%s connected to virtual internet",
-           meshnetworkGateway.model->GetName( ).c_str( ) );
+ ROS_INFO( "%gateway connected to virtual internet" );
 }
 void RosInternetMock::QueueThread( )
 {

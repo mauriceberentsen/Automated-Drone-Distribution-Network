@@ -1,5 +1,5 @@
 /**
- * @file node.cpp
+ * @file Node.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Source file for Node
  * @version 1.0
@@ -8,10 +8,10 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "node.hpp"
+#include "Node.hpp"
 namespace gazebo
 {
-namespace Wireless
+namespace WirelessSimulation
 {
  Node::Node( const Vector3< float >& _position,
              const std::shared_ptr< ros::NodeHandle >& _nodeHandle,
@@ -53,5 +53,5 @@ namespace Wireless
   this->on = on;
  }
 
-}  // namespace Wireless
+}  // namespace WirelessSimulation
 }  // namespace gazebo

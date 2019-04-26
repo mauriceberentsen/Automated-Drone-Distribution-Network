@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "drone_factory.hpp"
-#include "Drone.hpp"
+#include "DroneFactory.hpp"
+#include "VirtualDrone.hpp"
 
 namespace gazebo
 {

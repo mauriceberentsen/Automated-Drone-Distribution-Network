@@ -1,5 +1,5 @@
 /**
- * @file meshnetwork_component.hpp
+ * @file MeshnetworkComponent.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief header for the abstract class MeshnetworkComponent,
  * generalisation for communication parts in a Meshnetwork
@@ -14,12 +14,8 @@
 // system
 #include <map>
 // libary
-// gazebo
-#include <gazebo/gazebo.hh>
-#include <gazebo/physics/physics.hh>
-#include <gazebo/common/common.hh>
 // Required interfaces
-#include "IWireless.hpp"
+#include "IWirelessCommunication.hpp"
 #include "IRoutingTechnique.hpp"
 #include "IDroneEngine.hpp"
 // implemented interfaces
@@ -27,13 +23,12 @@
 #include "ChildTableTree.hpp"
 #include "rosDroneEngineConnector.hpp"
 // classes
-#include "message.hpp"
-
-namespace gazebo
+#include "Message.hpp"
+namespace Communication
 {
 namespace Meshnetwork
 {
- class MeshnetworkComponent : public ModelPlugin
+ class MeshnetworkComponent
  {
  public:
   /**
@@ -82,24 +77,18 @@ namespace Meshnetwork
   void sendGoalToDrone( const uint8_t ID, const float latitude,
                         const float longitude, const uint16_t height );
 
- protected:
-  /**
-   * @brief Construct a new Meshnetwork Component object
-   */
-  MeshnetworkComponent( );
-  /**
-   * @brief Called when a Plugin is first created, and after the World has been
-   * loaded. This function should not be blocking
-   *
-   * @param _parent Pointer to the Model
-   * @param _sdf Pointer to the SDF element of the plugin
-   */
-  void Load( physics::ModelPtr _parent, sdf::ElementPtr _sdf );
   /**
    * @brief called once after Load for initialization behavior.
    *
    */
   virtual void Init( ) = 0;
+
+ protected:
+  /**
+   * @brief Construct a new Meshnetwork Component object
+   */
+  MeshnetworkComponent( const uint8_t node, const uint8_t drone,
+                        bool developermode = false );
 
   /**
    * @brief Used internal for the drone to fly towards a remebered location
@@ -235,9 +224,9 @@ namespace Meshnetwork
   // No public vars
   // protected:
   /// \brief The time to wait at initialization
-  const float initTime = 0.001;
+  const int initTime = 10;
   /// \brief The time to wait before rechecking the Component
-  const float CheckConnectionTime = 10.0;
+  const int CheckConnectionTime = 10;
   /// \brief The ID of the current Node
   uint8_t nodeID;
   /// \brief The ID of the prefferedGateWay
@@ -261,8 +250,7 @@ namespace Meshnetwork
   /// \brief The location of the prefferedGateWay
   Messages::LocationMessage prefferedGateWayLocation =
       Messages::LocationMessage( 0, 0, 0, 0, 0, 0, 0, 0 );
-  /// \brief pointer to this model plugin
-  physics::ModelPtr model;
+
   /// \brief pointer to the used RoutingTechnique
   std::unique_ptr< RoutingTechnique::IRoutingTechnique > routerTech;
 
@@ -276,6 +264,5 @@ namespace Meshnetwork
   std::thread checkConnectionThread;
  };
 }  // namespace Meshnetwork
-}  // namespace gazebo
-
+}  // namespace Communication
 #endif  // MESHNETWORKCOMPONENT

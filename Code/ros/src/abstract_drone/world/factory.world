@@ -7,12 +7,12 @@
     <include>
       <uri>model://sun</uri>
     </include>
-    <plugin name="wirelessSimulator" filename="libwirelessSimulator.so">
+    <plugin name="WirelessSignalSimulator" filename="libWirelessSignalSimulator.so">
       <CommunicationDistance>9</CommunicationDistance>
     </plugin>
 
 
-    <plugin name="dronefactory" filename="libdronefactory.so">
+    <plugin name="DroneFactory" filename="libDroneFactory.so">
       <amountOfRouterDrones>17</amountOfRouterDrones>
       <amountOfGatewayDrones>1</amountOfGatewayDrones>
     </plugin>

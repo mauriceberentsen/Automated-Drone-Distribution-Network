@@ -1,5 +1,5 @@
 /**
- * @file node.hpp
+ * @file Node.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Header file for Node class
  * @version 1.0
@@ -18,7 +18,7 @@
 using namespace ignition::math;
 namespace gazebo
 {
-namespace Wireless
+namespace WirelessSimulation
 {
  class Node
  {
@@ -60,6 +60,6 @@ namespace Wireless
   /// \brief the name of the topic this node is publing towards.
   const std::string subtopicname;
  };
-}  // namespace Wireless
+}  // namespace WirelessSimulation
 }  // namespace gazebo
 #endif  // NODEHPP

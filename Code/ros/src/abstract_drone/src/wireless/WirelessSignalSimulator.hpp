@@ -1,5 +1,5 @@
 /**
- * @file wireless_signal_simulator.hpp
+ * @file WirelessSignalSimulator.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Header file for the the WirelessSignalSimulator
  * @version 1.0
@@ -23,11 +23,11 @@
 #include "abstract_drone/WirelessMessage.h"
 #include "abstract_drone/AreaScan.h"
 
-#include "node.hpp"
+#include "Node.hpp"
 
 namespace gazebo
 {
-namespace Wireless
+namespace WirelessSimulation
 {
  class WirelessSignalSimulator : public WorldPlugin
  {
@@ -113,8 +113,8 @@ namespace Wireless
   /// \brief A thread the keeps running the rosQueue
   std::thread rosQueueThread;
  };
-}  // namespace Wireless
+}  // namespace WirelessSimulation
 // Register this plugin with the simulator
-GZ_REGISTER_WORLD_PLUGIN( Wireless::WirelessSignalSimulator )
+GZ_REGISTER_WORLD_PLUGIN( WirelessSimulation::WirelessSignalSimulator )
 }  // namespace gazebo
 #endif  // WIRELESSSIGNALSIMULATOR

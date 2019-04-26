@@ -1,5 +1,5 @@
 /**
- * @file wireless_signal_simulator.cpp
+ * @file WirelessSignalSimulator.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Source file for the WirelessSignalSimulator
  * @version 1.0
@@ -10,11 +10,11 @@
  */
 #include "ros/subscribe_options.h"
 
-#include "wireless_signal_simulator.hpp"
+#include "WirelessSignalSimulator.hpp"
 
 namespace gazebo
 {
-namespace Wireless
+namespace WirelessSimulation
 {
  bool WirelessSignalSimulator::send_message(
      abstract_drone::WirelessMessage::Request &req,
@@ -63,7 +63,7 @@ namespace Wireless
   auto from = Network.find( req.id );
   res.near.clear( );
   if ( from != Network.end( ) ) {
-   for ( std::pair< uint8_t, Wireless::Node * > other : Network ) {
+   for ( std::pair< uint8_t, Node * > other : Network ) {
     if ( other.first == from->first ) continue;  // not interrested in ourself
     if ( !other.second->getOn( ) ) continue;
     float distance =
@@ -166,6 +166,6 @@ namespace Wireless
             pos.X( ), pos.Y( ), pos.Z( ), pubtopicname.c_str( ) );
  }
 
-}  // namespace Wireless
+}  // namespace WirelessSimulation
 // Register this plugin with the simulator
 }  // namespace gazebo

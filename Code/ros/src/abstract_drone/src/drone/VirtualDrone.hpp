@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2019
  *
  */
-#ifndef DRONE
-#define DRONE
+#ifndef VIRTUALDRONE
+#define VIRTUALDRONE
 
 #include <sstream>
 #include <iostream>
@@ -21,7 +21,7 @@ namespace gazebo
 {
 namespace DroneSimulation
 {
- class Drone
+ class VirtualDrone
  {
  protected:
   /**
@@ -32,9 +32,9 @@ namespace DroneSimulation
     * @param _z Z coordinate in the world
     * @param _parent The world to place the drone in
     */
-  explicit Drone( const float _x, const float _y, const float _z,
-                  physics::WorldPtr _parent );
-  ~Drone( );
+  explicit VirtualDrone( const float _x, const float _y, const float _z,
+                         physics::WorldPtr _parent );
+  ~VirtualDrone( );
   /// \brief static Drone counter to give every drone an unique ID as long as
   /// the same factory is used
   static int droneID;
@@ -50,7 +50,7 @@ namespace DroneSimulation
   const physics::WorldPtr parent;
  };
 
- class RouterDrone : public Drone
+ class RouterDrone : public VirtualDrone
  {
  public:
   /**
@@ -68,7 +68,7 @@ namespace DroneSimulation
   ~RouterDrone( );
  };
 
- class GatewayDrone : public Drone
+ class GatewayDrone : public VirtualDrone
  {
  public:
   /**

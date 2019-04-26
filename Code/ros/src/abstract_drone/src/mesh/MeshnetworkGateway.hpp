@@ -1,5 +1,5 @@
 /**
- * @file meshnetwork_gateway.hpp
+ * @file MeshnetworkGateway.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief header file for the class MeshnetworkGateway
  * @version 1.0
@@ -11,12 +11,11 @@
 #ifndef MESHNETWORKGATEWAY
 #define MESHNETWORKGATEWAY
 
-#include "meshnetwork_component.hpp"
+#include "MeshnetworkComponent.hpp"
 #include "IInternetConnection.hpp"
 
 #include "RosInternetMock.hpp"
-
-namespace gazebo
+namespace Communication
 {
 namespace Meshnetwork
 {
@@ -27,10 +26,9 @@ namespace Meshnetwork
    * @brief Construct a new Meshnetwork Gateway object
    *
    */
-  MeshnetworkGateway( );
+  MeshnetworkGateway( const uint8_t node, const uint8_t drone,
+                      bool developermode );
 
- protected:
- private:
   /**
    * @brief Called after Load
    * -does the following
@@ -41,6 +39,9 @@ namespace Meshnetwork
    *
    */
   void Init( );
+
+ protected:
+ private:
   /**
    * @brief Inherited function for introductions. As gateway we do nothing with
    * introductions
@@ -79,6 +80,5 @@ namespace Meshnetwork
  };
  // Register this plugin with the simulator
 }  // namespace Meshnetwork
-
-}  // namespace gazebo
+}  // namespace Communication
 #endif  // MESHNETWORKGATEWAY

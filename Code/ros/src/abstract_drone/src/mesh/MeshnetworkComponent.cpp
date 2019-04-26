@@ -1,5 +1,5 @@
 /**
- * @file meshnetwork_component.cpp
+ * @file MeshnetworkComponent.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Source file of abstract class MeshnetworkComponent
  * @version 1.0
@@ -13,52 +13,25 @@
 #include <thread>
 #include <iostream>
 
-#include "meshnetwork_component.hpp"
-
-namespace gazebo
+#include "MeshnetworkComponent.hpp"
+namespace Communication
 {
 namespace Meshnetwork
 {
- /*public*/ MeshnetworkComponent::MeshnetworkComponent( )
-     : routerTech( new RoutingTechnique::ChildTableTree( *this ) )
-     , communication( new Wireless::VirtualNRF24( *this ) )
+ MeshnetworkComponent::MeshnetworkComponent( const uint8_t node,
+                                             const uint8_t drone,
+                                             bool developermode )
+     : nodeID( node )
+     , droneID( drone )
+     , debug( developermode )
+     , routerTech( new RoutingTechnique::ChildTableTree( *this ) )
+     , communication( new ros::WirelessSimulation::VirtualNRF24( *this ) )
  {
- }
-
- /*protected*/ void MeshnetworkComponent::Load( physics::ModelPtr _parent,
-                                                sdf::ElementPtr _sdf )
- {
-  // Store the pointer to the model
-  this->model = _parent;
-  this->nodeID = UINT8_MAX;    // unkown nodes are number UINT8_MAX
-  this->droneID = UINT16_MAX;  // Drones need unique id's to connect the motor
-
-  if ( _sdf->HasElement( "nodeID" ) ) {
-   this->nodeID = _sdf->Get< int >( "nodeID" );
-  }
-  if ( _sdf->HasElement( "DroneID" ) ) {
-   this->droneID = _sdf->Get< int >( "DroneID" );
-  } else {
-   ROS_ERROR(
-       "Drone com being used without a droneid, set up using the tag \
-    <DroneID> unique <DroneID> \n  Restart ussing droneID's else drone \
-    movement will be a mess" );
-  }
-  if ( _sdf->HasElement( "Debug" ) ) {
-   this->debug = _sdf->Get< bool >( "Debug" );
-  }
-
   this->droneEngine.reset( new ros::rosDroneEngineConnector( this->droneID ) );
   this->communication->StartAntenna( );
+  if ( debug ) { this->communication->DebugingMode( true ); }
   this->checkConnectionThread =
       std::thread( std::bind( &MeshnetworkComponent::CheckConnection, this ) );
-  if ( debug ) {
-   this->communication->DebugingMode( true );
-   ROS_INFO( "Started publishing debug info for %s",
-             this->model->GetName( ).c_str( ) );
-  }
-  ROS_INFO( "Loaded MeshnetworkComponent Plugin with parent...%s",
-            this->model->GetName( ).c_str( ) );
  }
 
  void MeshnetworkComponent::OnMsg( const uint8_t *message )
@@ -80,8 +53,8 @@ namespace Meshnetwork
       routerTech->getDirectionToNode( message[Messages::FORWARD] );
   if ( other == UINT8_MAX ) { return; }
 
-  uint8_t buffer[32];
-  for ( int i = 0; i < 32; i++ ) {
+  uint8_t buffer[Messages::MAX_PAYLOAD];
+  for ( int i = 0; i < Messages::MAX_PAYLOAD; i++ ) {
    buffer[i] = message[i];
   }
   buffer[Messages::FROM] = this->nodeID;
@@ -121,8 +94,6 @@ namespace Meshnetwork
     processMovementNegotiationMessage( message );
     break;
    default:
-    ROS_WARN( "%s UNKOWN message recieved %u", this->model->GetName( ).c_str( ),
-              msgType );
     break;
   }
  }
@@ -141,7 +112,7 @@ namespace Meshnetwork
  {
   Messages::Message msg( this->nodeID, this->nodeID, Messages::REQUESTLOCATION,
                          other, other );
-  uint8_t buffer[32];
+  uint8_t buffer[Messages::MAX_PAYLOAD];
   msg.toPayload( buffer );
   SendMessage( buffer, other );
  }
@@ -177,7 +148,7 @@ namespace Meshnetwork
   Messages::HeartbeatMessage heartbeat( this->nodeID, this->nodeID, towards,
                                         other, connectedToGateway,
                                         prefferedGateWay );
-  uint8_t buffer[32];
+  uint8_t buffer[Messages::MAX_PAYLOAD];
   heartbeat.toPayload( buffer );
   return SendMessage( buffer, towards );
  }
@@ -190,7 +161,7 @@ namespace Meshnetwork
   uint8_t other = routerTech->getDirectionToNode( ID );
   Messages::GoToLocationMessage GTLmsg( this->nodeID, this->nodeID, other, ID,
                                         latitude, longitude, height );
-  uint8_t buffer[32];
+  uint8_t buffer[Messages::MAX_PAYLOAD];
   GTLmsg.toPayload( buffer );
   SendMessage( buffer, other );
  }
@@ -205,7 +176,7 @@ namespace Meshnetwork
 
    Messages::MissingMessage missingMSG( this->nodeID, this->nodeID, other,
                                         chi1d, missing );
-   uint8_t buffer[32];
+   uint8_t buffer[Messages::MAX_PAYLOAD];
    missingMSG.toPayload( buffer );
    SendMessage( buffer, other );
   }
@@ -216,7 +187,7 @@ namespace Meshnetwork
   Messages::IntroduceMessage introduce( this->nodeID, this->nodeID, 0, 0,
                                         this->hopsFromGatewayAway,
                                         this->connectedToGateway );
-  uint8_t buffer[32];
+  uint8_t buffer[Messages::MAX_PAYLOAD];
   introduce.toPayload( buffer );
 
   communication->BroadcastMessage( buffer );
@@ -235,7 +206,7 @@ namespace Meshnetwork
   Messages::LocationMessage msg( this->nodeID, this->nodeID, other, other,
                                  location.X( ), location.Y( ), location.Z( ),
                                  0 );
-  uint8_t buffer[32];
+  uint8_t buffer[Messages::MAX_PAYLOAD];
   msg.toPayload( buffer );
   SendMessage( buffer, other );
  }
@@ -258,7 +229,7 @@ namespace Meshnetwork
   Messages::IntroduceMessage introduce( this->nodeID, this->nodeID, other,
                                         other, this->hopsFromGatewayAway,
                                         this->connectedToGateway );
-  uint8_t buffer[32];
+  uint8_t buffer[Messages::MAX_PAYLOAD];
   introduce.toPayload( buffer );
   SendMessage( buffer, other );
  }
@@ -275,5 +246,4 @@ namespace Meshnetwork
   return false;
  }
 }  // namespace Meshnetwork
-
-}  // namespace gazebo
+}  // namespace Communication

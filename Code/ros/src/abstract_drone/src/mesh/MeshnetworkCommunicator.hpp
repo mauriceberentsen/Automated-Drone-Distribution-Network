@@ -1,5 +1,5 @@
 /**
- * @file meshnetwork_communicator.hpp
+ * @file MeshnetworkCommunicator.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief header file for MeshnetworkCommunicator
  * @version 1.0
@@ -11,10 +11,9 @@
 #ifndef MESHNETWORKCOMMUNICATOR
 #define MESHNETWORKCOMMUNICATOR
 #include <mutex>  // std::mutex
-
-#include "meshnetwork_component.hpp"
-
-namespace gazebo
+#include <ctime>
+#include "MeshnetworkComponent.hpp"
+namespace Communication
 {
 namespace Meshnetwork
 {
@@ -25,16 +24,18 @@ namespace Meshnetwork
    * @brief Construct a new Meshnetwork Communicator object
    *
    */
-  MeshnetworkCommunicator( );
+  MeshnetworkCommunicator( const uint8_t node, const uint8_t drone,
+                           bool developermode );
 
- protected:
- private:
   /**
    * @brief called once after Load for initialization behavior.
    * Give the system some breathing time with a short sleep.
    * Tell the routerTech to start routing.
    */
   void Init( );
+
+ protected:
+ private:
   /**
    * @brief Process message with the type IntroduceMessage
    * called by case Messages::PRESENT
@@ -142,15 +143,12 @@ namespace Meshnetwork
   bool timerStarted = false;
   /// \brief multimap sorted on cost, used to determine which node should move
   std::multimap< float, uint8_t > negotiationList;
-  /// \brief Time variable to register that last moment that this node was
+  /// \brief Clock variable to register that last moment that this node was
   /// connected to a gateway
-  common::Time lastTimeOnline;
+  std::clock_t lastTimeOnline;
   /// \brief Allowed time that no connection is available
-  const float timeUntilConnectionLost = 30.0;
+  const int timeUntilConnectionLost = 30;
  };
 }  // namespace Meshnetwork
-GZ_REGISTER_MODEL_PLUGIN( Meshnetwork::MeshnetworkCommunicator )
-
-// Register this plugin with the simulator
-}  // namespace gazebo
+}  // namespace Communication
 #endif  // MESHNETWORKCOMMUNICATOR

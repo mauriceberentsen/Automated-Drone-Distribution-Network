@@ -11,7 +11,7 @@
 #include "ros/subscribe_options.h"
 #include "abstract_drone/nodeInfo.h"
 
-#include "droneEngine.hpp"
+#include "DroneEngine.hpp"
 
 namespace gazebo
 {
