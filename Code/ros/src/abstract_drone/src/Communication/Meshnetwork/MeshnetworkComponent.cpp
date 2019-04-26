@@ -48,6 +48,34 @@ namespace Meshnetwork
   return this->nodeID;
  }
 
+ const bool MeshnetworkComponent::getConnectedToGateway( ) const
+ {
+  return connectedToGateway;
+ }
+ const uint32_t MeshnetworkComponent::getTotalMessageSent( ) const
+ {
+  return totalMessageSent;
+ }
+ const uint8_t MeshnetworkComponent::getPrefferedGateway( ) const
+ {
+  return prefferedGateWay;
+ }
+
+ const uint8_t MeshnetworkComponent::getHopsFromGatewayAway( ) const
+ {
+  return hopsFromGatewayAway;
+ }
+
+ const uint8_t MeshnetworkComponent::getLastGoodKnownLocationID( ) const
+ {
+  return lastGoodKnownLocation.getID( );
+ }
+
+ const uint8_t MeshnetworkComponent::getRouterTechTableSize( ) const
+ {
+  return routerTech->getTableSize( );
+ }
+
  void MeshnetworkComponent::forwardMessage( const uint8_t *message )
  {
   const uint8_t other =

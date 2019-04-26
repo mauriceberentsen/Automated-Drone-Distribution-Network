@@ -1,5 +1,5 @@
 /**
- * @file Drone.hpp
+ * @file VirtualDrone.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief header file for all drone classes
  * @version 1.0

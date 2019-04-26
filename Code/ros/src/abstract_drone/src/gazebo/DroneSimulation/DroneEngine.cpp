@@ -1,5 +1,5 @@
 /**
- * @file droneEngine.cpp
+ * @file DroneEngine.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Source file for the drone engine
  * @version 1.0

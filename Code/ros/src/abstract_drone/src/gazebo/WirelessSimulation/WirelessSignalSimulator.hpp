@@ -98,11 +98,13 @@ namespace WirelessSimulation
  public:
  protected:
  private:
+  /// \brief default CommunicationDistance
   float maxComDistance = 30.0;  // meters
-
+  /// \brief Service to find all nodes near
   ros::ServiceServer service;
+  /// \brief Service used sending messages
   ros::ServiceServer messageservice;
-
+  /// \brief List of all known nodes
   std::map< uint8_t, Node * > Network;
   /// \brief A node use for ROS transport
   std::shared_ptr< ros::NodeHandle > rosNode;

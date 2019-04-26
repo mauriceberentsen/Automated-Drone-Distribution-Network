@@ -1,5 +1,5 @@
 /**
- * @file droneEngine.hpp
+ * @file DroneEngine.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief header file for the droneEngine
  * @version 1.0

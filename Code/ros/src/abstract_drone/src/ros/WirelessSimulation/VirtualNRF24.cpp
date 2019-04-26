@@ -1,3 +1,14 @@
+/**
+ * @file VirtualNRF24.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file for the Virtual NRF24
+ * @version 1.0
+ * @date 2019-04-22
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
+
 #include "abstract_drone/AreaScan.h"
 #include "abstract_drone/nodeInfo.h"
 
@@ -153,7 +164,7 @@ namespace WirelessSimulation
  {
   this->on = !this->on;
   abstract_drone::nodeInfo nodeinf;
-  nodeinf.nodeID = this->meshnetworkComponent.nodeID;
+  nodeinf.nodeID = this->meshnetworkComponent.getNodeID( );
   nodeinf.on = this->on;
   rosPub.publish( nodeinf );
   return true;
@@ -173,15 +184,14 @@ namespace WirelessSimulation
   while ( this->rosNode->ok( ) ) {
    std::this_thread::sleep_for(
        std::chrono::seconds( 1 ) );  // 1hz refresh is enough
-   msg.nodeID = meshnetworkComponent.nodeID;
-   msg.ConnectedWithGateway = meshnetworkComponent.connectedToGateway;
-   msg.familySize = meshnetworkComponent.routerTech->getTableSize( );
-   msg.totalMessages = meshnetworkComponent.totalMessageSent;
-   msg.connectedNodes = meshnetworkComponent.routerTech->getAmountOfChildren( );
-   msg.prefferedGateWay = meshnetworkComponent.prefferedGateWay;
+   msg.nodeID = meshnetworkComponent.getNodeID( );
+   msg.ConnectedWithGateway = meshnetworkComponent.getConnectedToGateway( );
+   msg.familySize = meshnetworkComponent.getRouterTechTableSize( );
+   msg.totalMessages = meshnetworkComponent.getTotalMessageSent( );
+   msg.prefferedGateWay = meshnetworkComponent.getPrefferedGateway( );
    msg.on = this->on;
-   msg.hops = meshnetworkComponent.hopsFromGatewayAway;
-   msg.prefLoc = meshnetworkComponent.lastGoodKnownLocation.getID( );
+   msg.hops = meshnetworkComponent.getHopsFromGatewayAway( );
+   msg.prefLoc = meshnetworkComponent.getLastGoodKnownLocationID( );
    nodeDebugTopic.publish( msg );
   }
  }

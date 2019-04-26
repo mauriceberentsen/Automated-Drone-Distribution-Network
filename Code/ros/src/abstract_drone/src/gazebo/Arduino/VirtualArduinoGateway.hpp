@@ -1,3 +1,13 @@
+/**
+ * @file VirtualArduinoGateway.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Header file for VirtualArduinoGateway
+ * @version 1.0
+ * @date 2019-04-24
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef VIRTUALARDUINOGATEWAY
 #define VIRTUALARDUINOGATEWAY
 
@@ -29,7 +39,7 @@ namespace Arduino
    */
   void setup( );
   /**
-   * @brief Does nothing
+   * @brief Not implemented
    *
    */
   void loop( );

@@ -1,3 +1,13 @@
+/**
+ * @file VirtualArduinoGateway.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Sourcefile for virtual arduino gateway
+ * @version 1.0
+ * @date 2019-04-24
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "VirtualArduinoGateway.hpp"
 
 namespace gazebo

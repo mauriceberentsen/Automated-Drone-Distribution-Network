@@ -60,6 +60,43 @@ namespace Meshnetwork
    */
   uint8_t getNodeID( );
   /**
+   * @brief Get the ConnectedToGateway
+   *
+   * @return true connected
+   * @return false not connected
+   */
+  const bool getConnectedToGateway( ) const;
+  /**
+   * @brief Get the Total Message Sent
+   *
+   * @return const uint32_t amount
+   */
+  const uint32_t getTotalMessageSent( ) const;
+  /**
+   * @brief Get the Preffered Gateway ID
+   *
+   * @return const uint8_t ID
+   */
+  const uint8_t getPrefferedGateway( ) const;
+  /**
+   * @brief Get theHopsFromGatewayAway
+   *
+   * @return const uint8_t amount of hops away
+   */
+  const uint8_t getHopsFromGatewayAway( ) const;
+  /**
+   * @brief Get the ID of LastGoodKnownLocation
+   *
+   * @return const uint8_t ID
+   */
+  const uint8_t getLastGoodKnownLocationID( ) const;
+  /**
+   * @brief Get the size of the RouterTechTable
+   *
+   * @return const uint8_t
+   */
+  const uint8_t getRouterTechTableSize( ) const;
+  /**
    * @brief Called upon each received Ros Message.
    *
    * @param message Pointer to char array[32] holding the message
@@ -230,8 +267,8 @@ namespace Meshnetwork
   /***************** Variables *************************/
 
  public:
-  // No public vars
-  // protected:
+  // No variables
+ protected:
   /// \brief The time to wait at initialization
   const int initTime = 10;
   /// \brief The time to wait before rechecking the Component

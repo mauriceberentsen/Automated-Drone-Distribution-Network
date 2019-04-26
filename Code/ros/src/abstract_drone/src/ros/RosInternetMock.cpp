@@ -1,5 +1,17 @@
-#include "RosInternetMock.hpp"
+/**
+ * @file RosInternetMock.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file for RosInternetMock
+ * @version 1.0
+ * @date 2019-04-24
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
+// gateway header
 #include "../Communication/Meshnetwork/MeshnetworkGateway.hpp"
+// local header
+#include "RosInternetMock.hpp"
 
 namespace ros
 {

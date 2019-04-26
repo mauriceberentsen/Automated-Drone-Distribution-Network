@@ -1,3 +1,13 @@
+/**
+ * @file VirtualArduinoCommunicator.cpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Source file for VirtualArduinoCommunicator
+ * @version 1.0
+ * @date 2019-04-24
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #include "VirtualArduinoCommunicator.hpp"
 
 namespace gazebo

@@ -1,9 +1,17 @@
+/**
+ * @file VirtualNRF24.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Header file for VirtualNRF24
+ * @version 1.0
+ * @date 2019-04-24
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef VIRTUALNRF24
 #define VIRTUALNRF24
 
 #include <thread>
-
-#include "../../Communication/Wireless/IWirelessCommunication.hpp"
 // ros
 #include "ros/ros.h"
 #include "std_srvs/Trigger.h"
@@ -12,6 +20,9 @@
 #include "abstract_drone/WirelessMessage.h"
 #include "abstract_drone/NRF24.h"
 #include "abstract_drone/NodeDebugInfo.h"
+// interface
+#include "../../Communication/Wireless/IWirelessCommunication.hpp"
+
 namespace Communication
 {
 namespace Meshnetwork
@@ -26,14 +37,59 @@ namespace WirelessSimulation
  class VirtualNRF24 : public Communication::Wireless::IWirelessCommunication
  {
  public:
+  /**
+   * @brief Construct a new VirtualNRF24 object
+   *
+   * @param MC Reference to the connected MeshnetworkComponent
+   */
   explicit VirtualNRF24( Communication::Meshnetwork::MeshnetworkComponent& MC );
+  /**
+   * @brief Destroy the Virtual NRF24 object
+   *
+   */
   ~VirtualNRF24( );
+  /**
+   * @brief Start the communication pipe of the NRF24
+   *
+   */
   void StartAntenna( );
+  /**
+   * @brief Stop the communication pipe
+   *
+   */
   void StopAntenna( );
+  /**
+   * @brief Send a payload
+   *
+   * @param msg uint8_t pointer to the message to be send
+   * @return true Sending was succesfull
+   * @return false Sending didn't succeed
+   */
   bool SendMessageTo( const uint8_t* msg );
+  /**
+   * @brief Broadcast a message to all nodes nearby
+   *
+   * @param msg pointer to the message to be send
+   */
   void BroadcastMessage( const uint8_t* msg );
+  /**
+   * @brief debuging activation
+   *
+   * @param on state
+   */
   void DebugingMode( const bool on = true );
+  /**
+   * @brief Handles incomming ROS messages
+   *
+   * @param _msg NRF24 message
+   */
   void OnRosMsg( const abstract_drone::NRF24ConstPtr& _msg );
+  /**
+   * @brief get On state
+   *
+   * @return true on
+   * @return false off
+   */
   const bool On( );
 
  private:
@@ -72,7 +128,6 @@ namespace WirelessSimulation
   std::string Node_TopicName;
   /// \brief the name the WirelessSignalSimulator listens to
   const std::string WirelessSignalSimulatorName = "/WirelessSignalSimulator";
-
   /// \brief Service for requesting all nodes near
   ros::ServiceClient areaScanner;
   /// \brief Service for sending messages using the WirelessSignalSimulator

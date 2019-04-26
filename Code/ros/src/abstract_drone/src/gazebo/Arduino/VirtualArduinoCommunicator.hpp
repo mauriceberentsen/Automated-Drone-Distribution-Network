@@ -1,3 +1,13 @@
+/**
+ * @file VirtualArduinoCommunicator.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Header file for VirtualArduinoCommunicator
+ * @version 1.0
+ * @date 2019-04-24
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef VIRTUALARDUINOCOMMUNICATOR
 #define VIRTUALARDUINOCOMMUNICATOR
 
@@ -26,6 +36,10 @@ namespace Arduino
    *
    */
   void setup( );
+  /**
+   * @brief Not implemented
+   *
+   */
   void loop( );
 
  private:

@@ -1,3 +1,13 @@
+/**
+ * @file IVirtualArduino.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Header file of interface Virtual Arduino
+ * @version 1.0
+ * @date 2019-04-24
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef VIRTUALARDUINO
 #define VIRTUALARDUINO
 

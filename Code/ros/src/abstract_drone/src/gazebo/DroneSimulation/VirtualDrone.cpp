@@ -1,5 +1,5 @@
 /**
- * @file Drone.cpp
+ * @file VirtualDrone.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Source file for all drone classes
  * @version 1.0

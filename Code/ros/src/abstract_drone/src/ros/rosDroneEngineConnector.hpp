@@ -1,8 +1,21 @@
+/**
+ * @file rosDroneEngineConnector.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief header file for rosDroneEngineConnector
+ * @version 1.0
+ * @date 2019-04-24
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef ROSDRONEENGINECONNECTOR
 #define ROSDRONEENGINECONNECTOR
+// ros libary
 #include "ros/ros.h"
 #include "abstract_drone/Location.h"
+// local header
 #include "../Drone/IDroneEngine.hpp"
+
 namespace ros
 {
 class rosDroneEngineConnector : public Drone::IDroneEngine

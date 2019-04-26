@@ -1,14 +1,25 @@
+/**
+ * @file RosInternetMock.hpp
+ * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
+ * @brief Header file for RosInternetMock
+ * @version 1.0
+ * @date 2019-04-26
+ *
+ * @copyright Copyright (c) 2019
+ *
+ */
 #ifndef ROSINTERNETMOCK
 #define ROSINTERNETMOCK
-
+// system
 #include <thread>
-
+// ros
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
-
+// gateway header
 #include "abstract_drone/RequestGatewayDroneFlight.h"
-
+// internet interface
 #include "../Communication/IInternetConnection.hpp"
+
 namespace Communication
 {
 namespace Meshnetwork
