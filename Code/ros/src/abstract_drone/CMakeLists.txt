@@ -63,6 +63,7 @@ add_service_files(
    FILES
   WirelessMessage.srv
   AreaScan.srv
+  CasusRequest.srv
   RequestDroneFlight.srv
   RequestGPS.srv
 )
@@ -172,7 +173,7 @@ add_library(DroneEngine SHARED src/gazebo/DroneSimulation/DroneEngine.cpp)
 target_link_libraries(DroneEngine ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(DroneEngine abstract_drone_generate_messages_cpp)
 
-add_library(DroneFactory SHARED src/gazebo/DroneSimulation/DroneFactory.cpp
+add_library(DroneFactory SHARED src/gazebo/DroneFactory.cpp
                                 src/gazebo/DroneSimulation/VirtualDrone.cpp)
 target_link_libraries(DroneFactory  ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(DroneFactory abstract_drone_generate_messages_cpp)
@@ -191,18 +192,7 @@ add_dependencies(WirelessSignalSimulator abstract_drone_generate_messages_cpp)
 ## Your package locations should be listed before other locations
 include_directories(
   # include
-  ${catkin_INCLUDE_DIRS},
-  ${CATKIN_DEVEL_PREFIX}/src/Communication,
-  ${CATKIN_DEVEL_PREFIX}/src/Communication/Meshnetwork,
-  ${CATKIN_DEVEL_PREFIX}/src/Communication/RoutingTechnique,
-  ${CATKIN_DEVEL_PREFIX}/src/Communication/Wireless,
-  ${CATKIN_DEVEL_PREFIX}/src/Drone,
-  ${CATKIN_DEVEL_PREFIX}/src/gazebo/Arduino,
-  ${CATKIN_DEVEL_PREFIX}/src/gazebo/DroneSimulation,
-  ${CATKIN_DEVEL_PREFIX}/src/gazebo/WirelessSimulation,
-  ${CATKIN_DEVEL_PREFIX}/src/ros,
-  ${CATKIN_DEVEL_PREFIX}/src/ros/DroneManagerService,
-  ${CATKIN_DEVEL_PREFIX}/src/ros/WirelessSimulation
+  ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -251,8 +241,6 @@ include_directories(
 
 ## Mark executables and/or libraries for installation
 install(TARGETS
-#  modelmovement
-#  dronefactory
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   )

@@ -13,6 +13,7 @@
 
 #include "ros/ros.h"
 #include "abstract_drone/RequestDroneFlight.h"
+#include "abstract_drone/CasusRequest.h"
 namespace ros
 {
 namespace DroneManagerService
@@ -60,8 +61,8 @@ namespace DroneManagerService
    * @return true servicecall succesfull
    * @return false servicecall had an error
    */
-  bool setDronesToCasus( abstract_drone::RequestDroneFlight::Request &req,
-                         abstract_drone::RequestDroneFlight::Response &res );
+  bool setDronesToCasus( abstract_drone::CasusRequest::Request &req,
+                         abstract_drone::CasusRequest::Response &res );
 
  private:
   /// \brief Pointer to RosNode used for communication transport

@@ -49,10 +49,10 @@ namespace DroneManagerService
  }
 
  bool DroneManager::setDronesToCasus(
-     abstract_drone::RequestDroneFlight::Request &req,
-     abstract_drone::RequestDroneFlight::Response &res )
+     abstract_drone::CasusRequest::Request &req,
+     abstract_drone::CasusRequest::Response &res )
  {
-  switch ( req.ID ) {
+  switch ( req.caseID ) {
    case 1:
     RequestMovement( 1, -13, 24 );
 
