@@ -43,6 +43,18 @@ namespace WirelessSimulation
   Node_TopicName =
       "/Node/" + std::to_string( meshnetworkComponent.getNodeID( ) );
   ROS_INFO( "Start virtual antenna[%s]", Node_TopicName.c_str( ) );
+  this->rosPub = this->rosNode->advertise< abstract_drone::nodeInfo >(
+      WirelessSignalSimulatorName, 100 );
+
+  // inform the WirelessSignalSimulator
+  abstract_drone::nodeInfo nodeinf;
+  nodeinf.nodeID = meshnetworkComponent.getNodeID( );
+  nodeinf.sub = Node_TopicName;
+  nodeinf.on = true;
+  while ( rosPub.getNumSubscribers( ) == 0 ) {
+   std::this_thread::sleep_for( std::chrono::microseconds( 1 ) );
+  }
+  rosPub.publish( nodeinf );
 
   std::string powerSwitch =
       "/Nodes/" + std::to_string( meshnetworkComponent.getNodeID( ) ) +
@@ -55,8 +67,6 @@ namespace WirelessSimulation
           &this->rosQueue );
 
   this->rosSub = this->rosNode->subscribe( so );
-  this->rosPub = this->rosNode->advertise< abstract_drone::nodeInfo >(
-      WirelessSignalSimulatorName, 100 );
 
   // Setup  area scanner
   this->areaScanner = this->rosNode->serviceClient< abstract_drone::AreaScan >(
@@ -74,13 +84,6 @@ namespace WirelessSimulation
   // Spin up the queue helper thread.
   this->rosQueueThread =
       std::thread( std::bind( &VirtualNRF24::QueueThread, this ) );
-
-  // inform the WirelessSignalSimulator
-  abstract_drone::nodeInfo nodeinf;
-  nodeinf.nodeID = meshnetworkComponent.getNodeID( );
-  nodeinf.sub = Node_TopicName;
-  nodeinf.on = true;
-  rosPub.publish( nodeinf );
  }
  void VirtualNRF24::StopAntenna( )
  {
@@ -159,10 +162,10 @@ namespace WirelessSimulation
   meshnetworkComponent.OnMsg( _msg->payload.data( ) );
  }
 
- bool VirtualNRF24::switchPower( std_srvs::TriggerRequest& request,
-                                 std_srvs::TriggerResponse& response )
+ bool VirtualNRF24::switchPower( abstract_drone::PowerSwitchRequest& request,
+                                 abstract_drone::PowerSwitchResponse& response )
  {
-  this->on = !this->on;
+  this->on = request.power;
   abstract_drone::nodeInfo nodeinf;
   nodeinf.nodeID = this->meshnetworkComponent.getNodeID( );
   nodeinf.on = this->on;

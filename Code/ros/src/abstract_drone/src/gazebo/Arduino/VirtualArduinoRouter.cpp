@@ -1,29 +1,29 @@
 /**
- * @file VirtualArduinoGateway.cpp
+ * @file VirtualArduinoRouter.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief Sourcefile for virtual arduino gateway
+ * @brief Source file for VirtualArduinoRouter
  * @version 1.0
  * @date 2019-04-24
  *
  * @copyright Copyright (c) 2019
  *
  */
-#include "VirtualArduinoGateway.hpp"
+#include "VirtualArduinoRouter.hpp"
 
 namespace gazebo
 {
 namespace ArduinoSimulation
 {
- VirtualArduinoGateway::VirtualArduinoGateway( )
+ VirtualArduinoRouter::VirtualArduinoRouter( )
  {
  }
 
- VirtualArduinoGateway::~VirtualArduinoGateway( )
+ VirtualArduinoRouter::~VirtualArduinoRouter( )
  {
  }
 
- void VirtualArduinoGateway::Load( physics::ModelPtr _parent,
-                                   sdf::ElementPtr _sdf )
+ void VirtualArduinoRouter::Load( physics::ModelPtr _parent,
+                                  sdf::ElementPtr _sdf )
  {
   // Store the pointer to the model
   this->model = _parent;
@@ -44,18 +44,18 @@ namespace ArduinoSimulation
   setup( );
  }
 
- void VirtualArduinoGateway::setup( )
+ void VirtualArduinoRouter::setup( )
  {
-  meshnetworkGateway = new Communication::Meshnetwork::MeshnetworkGateway(
+  meshnetworkRouter = new Communication::Meshnetwork::MeshnetworkRouter(
       nodeID, droneID, debug );
-  meshnetworkGateway->Init( );
+  meshnetworkRouter->Init( );
  }
 
- void VirtualArduinoGateway::loop( )
+ void VirtualArduinoRouter::loop( )
  {
  }
 
 }  // namespace ArduinoSimulation
 
-GZ_REGISTER_MODEL_PLUGIN( ArduinoSimulation::VirtualArduinoGateway )
+GZ_REGISTER_MODEL_PLUGIN( ArduinoSimulation::VirtualArduinoRouter )
 }  // namespace gazebo

@@ -1,0 +1,98 @@
+@startuml
+
+namespace Communication{
+    interface IInternetConnection
+    namespace Meshnetwork{
+        class MeshnetworkCommunicator
+        class MeshnetworkComponent
+        class MeshnetworkGateway
+    }
+    namespace Messages{
+        class  	Message
+        class  	GoToLocationMessage
+        class  	HeartbeatMessage
+        class  	IntroduceMessage
+        class  	LocationMessage
+        class  	MissingMessage
+        class  	MovementNegotiationMessage
+
+     Message <|-up- GoToLocationMessage
+     Message <|-down- MovementNegotiationMessage
+     Message <|-left- IntroduceMessage
+     Message <|-right- LocationMessage
+     Message <|-- HeartbeatMessage
+     Message <|-- MissingMessage
+         
+    }
+    namespace RoutingTechnique{
+        interface IRoutingTechnique
+        class ChildTableTree
+        ChildTableTree ..|> IRoutingTechnique
+    }
+    namespace Wireless{
+        interface IWirelessCommunication
+    }        
+}
+namespace Drone{
+    interface IDroneEngine
+}
+namespace gazebo{
+    namespace Arduino{
+        class  	IVirtualArduino
+        class  	VirtualArduinoCommunicator
+        class  	VirtualArduinoGateway
+
+        VirtualArduinoCommunicator --|> IVirtualArduino
+        VirtualArduinoGateway --|> IVirtualArduino
+
+    }
+    namespace DroneSimulation{
+        class  	DroneEngine
+        class  	DroneFactory
+        class  	GatewayDrone
+        class  	RouterDrone
+        class  	VirtualDrone
+
+        GatewayDrone --|> VirtualDrone
+        RouterDrone --|> VirtualDrone
+
+        VirtualDrone *-- DroneEngine
+
+
+    }
+    namespace WirelessSimulation{
+        class  	Node
+        class  	WirelessSignalSimulator
+
+        WirelessSignalSimulator -- "*" Node
+    }
+}
+
+namespace ros{
+    namespace DroneManagerService{
+        class DroneManager
+    }
+    namespace WirelessSimulation{
+        class  	VirtualNRF24
+    }
+    class  	rosDroneEngineConnector
+    class  	RosInternetMock
+}
+
+Communication.Meshnetwork.MeshnetworkGateway ..> Communication.IInternetConnection 
+Communication.Meshnetwork.MeshnetworkComponent ..> Communication.Wireless.IWirelessCommunication 
+Communication.Meshnetwork.MeshnetworkComponent ..> Drone.IDroneEngine
+Communication.Meshnetwork.MeshnetworkComponent ..> Communication.RoutingTechnique.IRoutingTechnique
+ros.WirelessSimulation.VirtualNRF24 ..|> Communication.Wireless.IWirelessCommunication
+ros.WirelessSimulation.VirtualNRF24 ..> gazebo.WirelessSimulation.WirelessSignalSimulator
+gazebo.WirelessSimulation.WirelessSignalSimulator <.. gazebo.DroneSimulation.DroneEngine
+ros.RosInternetMock ..|> Communication.IInternetConnection
+ros.rosDroneEngineConnector ..|> Drone.IDroneEngine
+ros.rosDroneEngineConnector ..> gazebo.DroneSimulation.DroneEngine
+
+gazebo.DroneSimulation.GatewayDrone *-- gazebo.Arduino.VirtualArduinoGateway
+gazebo.DroneSimulation.RouterDrone *-- gazebo.Arduino.VirtualArduinoCommunicator
+ros.DroneManagerService ..> ros.RosInternetMock
+
+
+@enduml

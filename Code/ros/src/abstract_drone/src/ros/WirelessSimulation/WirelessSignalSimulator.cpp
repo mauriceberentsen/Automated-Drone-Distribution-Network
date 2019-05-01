@@ -12,10 +12,40 @@
 
 #include "WirelessSignalSimulator.hpp"
 
-namespace gazebo
+namespace ros
 {
 namespace WirelessSimulation
 {
+ WirelessSignalSimulator::WirelessSignalSimulator( const float comDistance )
+     : maxComDistance( comDistance )
+ {
+  std::string Node_TopicName = "/WirelessSignalSimulator";
+  // Initialize ros, if it has not already been initialized.
+  if ( !ros::isInitialized( ) ) {
+   int argc = 0;
+   char **argv = NULL;
+   ros::init( argc, argv, "WirelessSignalSimulator",
+              ros::init_options::NoSigintHandler );
+  }
+
+  // CreateROS node.
+  this->rosNode.reset( new ros::NodeHandle( "SignalSimulator" ) );
+
+  ros::SubscribeOptions so =
+      ros::SubscribeOptions::create< abstract_drone::nodeInfo >(
+          Node_TopicName, 1000,
+          boost::bind( &WirelessSignalSimulator::OnRosMsg, this, _1 ),
+          ros::VoidPtr( ), &this->rosQueue );
+  this->rosSub = this->rosNode->subscribe( so );
+  this->messageservice = this->rosNode->advertiseService(
+      "message", &WirelessSignalSimulator::send_message, this );
+  this->service = this->rosNode->advertiseService(
+      "othersInRange", &WirelessSignalSimulator::getNodesInRange, this );
+
+  this->rosQueueThread =
+      std::thread( std::bind( &WirelessSignalSimulator::QueueThread, this ) );
+ }
+
  bool WirelessSignalSimulator::send_message(
      abstract_drone::WirelessMessage::Request &req,
      abstract_drone::WirelessMessage::Response &res )
@@ -81,43 +111,6 @@ namespace WirelessSimulation
   }
  }
 
- void WirelessSignalSimulator::Load( physics::WorldPtr _parent,
-                                     sdf::ElementPtr _sdf )
- {
-  std::string Node_TopicName = "/WirelessSignalSimulator";
-  // Initialize ros, if it has not already been initialized.
-  if ( !ros::isInitialized( ) ) {
-   int argc = 0;
-   char **argv = NULL;
-   ros::init( argc, argv, "WirelessSignalSimulator",
-              ros::init_options::NoSigintHandler );
-  }
-
-  if ( _sdf->HasElement( "CommunicationDistance" ) ) {
-   this->maxComDistance = _sdf->Get< float >( "CommunicationDistance" );
-  } else {
-   ROS_WARN( "No CommunicationDistance is set using the default [%f]",
-             this->maxComDistance );
-  }
-
-  // CreateROS node.
-  this->rosNode.reset( new ros::NodeHandle( "SignalSimulator" ) );
-
-  ros::SubscribeOptions so =
-      ros::SubscribeOptions::create< abstract_drone::nodeInfo >(
-          Node_TopicName, 1000,
-          boost::bind( &WirelessSignalSimulator::OnRosMsg, this, _1 ),
-          ros::VoidPtr( ), &this->rosQueue );
-  this->rosSub = this->rosNode->subscribe( so );
-  this->messageservice = this->rosNode->advertiseService(
-      "message", &WirelessSignalSimulator::send_message, this );
-  this->service = this->rosNode->advertiseService(
-      "othersInRange", &WirelessSignalSimulator::getNodesInRange, this );
-
-  this->rosQueueThread =
-      std::thread( std::bind( &WirelessSignalSimulator::QueueThread, this ) );
- }
-
  void WirelessSignalSimulator::OnRosMsg(
      const abstract_drone::nodeInfoConstPtr &_msg )
  {
@@ -168,4 +161,4 @@ namespace WirelessSimulation
 
 }  // namespace WirelessSimulation
 // Register this plugin with the simulator
-}  // namespace gazebo
+}  // namespace ros

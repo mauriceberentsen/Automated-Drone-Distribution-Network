@@ -9,7 +9,7 @@
  *
  */
 #include "Node.hpp"
-namespace gazebo
+namespace ros
 {
 namespace WirelessSimulation
 {
@@ -54,4 +54,4 @@ namespace WirelessSimulation
  }
 
 }  // namespace WirelessSimulation
-}  // namespace gazebo
+}  // namespace ros

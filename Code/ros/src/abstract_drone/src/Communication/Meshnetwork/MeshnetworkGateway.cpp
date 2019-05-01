@@ -18,7 +18,7 @@ namespace Meshnetwork
                                          const uint8_t drone,
                                          bool developermode )
      : MeshnetworkComponent( node, drone, developermode )
-     , internet( new ros::RosInternetMock( *this ) )
+     , internet( new ros::Internet::RosInternetMock( *this ) )
  {
  }
 
@@ -30,7 +30,6 @@ namespace Meshnetwork
   prefferedGateWay = this->nodeID;
   internet->connect( );
   // Give the InternetComponent some time to boot
-  std::this_thread::sleep_for( std::chrono::microseconds( initTime ) );
   // Begin with routing nearby nodes
   routerTech->startRouting( );
  }

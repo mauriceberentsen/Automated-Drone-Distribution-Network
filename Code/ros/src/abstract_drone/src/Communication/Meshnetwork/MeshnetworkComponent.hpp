@@ -21,7 +21,7 @@
 // implemented interfaces
 #include "../RoutingTechnique/ChildTableTree.hpp"
 #include "../../ros/WirelessSimulation/VirtualNRF24.hpp"
-#include "../../ros/rosDroneEngineConnector.hpp"
+#include "../../ros/RosDroneEngineConnector.hpp"
 // classes
 #include "../Messages/Message.hpp"
 namespace Communication

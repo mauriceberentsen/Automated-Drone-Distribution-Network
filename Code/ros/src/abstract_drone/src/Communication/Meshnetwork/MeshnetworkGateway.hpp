@@ -83,7 +83,7 @@ namespace Meshnetwork
  public:
  protected:
  private:
-  std::unique_ptr< IInternetConnection > internet;
+  std::unique_ptr< Internet::IInternetConnection > internet;
  };
  // Register this plugin with the simulator
 }  // namespace Meshnetwork

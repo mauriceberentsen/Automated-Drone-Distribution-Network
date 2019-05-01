@@ -12,11 +12,7 @@
 #define WIRELESSSIGNALSIMULATOR
 
 #include <map>
-
-#include "gazebo/physics/physics.hh"
-#include "gazebo/common/common.hh"
-#include "gazebo/gazebo.hh"
-
+#include <thread>
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
 #include "abstract_drone/nodeInfo.h"
@@ -25,13 +21,22 @@
 
 #include "Node.hpp"
 
-namespace gazebo
+namespace ros
 {
 namespace WirelessSimulation
 {
- class WirelessSignalSimulator : public WorldPlugin
+ class WirelessSignalSimulator
  {
  public:
+  /**
+   * @brief This function is called at loading the plugin.
+   *        - Start ros if not already running
+   *        - Setup ROS Subscribers and Services
+   *        - Spin up thread for ros handling
+   *
+   *@param comDistance maximum communication distance
+   */
+  WirelessSignalSimulator( const float comDistance );
   /**
    * @brief A servicecall used for sending messages from one node to another
    * conform basic rules of wireless communication
@@ -57,17 +62,6 @@ namespace WirelessSimulation
 
  protected:
  private:
-  /**
-   * @brief This function is called at loading the plugin.
-   *        - Start ros if not already running
-   *        - Read SDF for the CommunicationDistance tag
-   *        - Setup ROS Subscribers and Services
-   *        - Spin up thread for ros handling
-   *
-   * @param _parent Pointer to this plugin
-   * @param _sdf pointer to this plugin SDF
-   */
-  void Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf );
   /**
    * @brief Handles Ros messages recieved of the type nodeInfo
    *        - Used for administration of the following
@@ -116,7 +110,6 @@ namespace WirelessSimulation
   std::thread rosQueueThread;
  };
 }  // namespace WirelessSimulation
-// Register this plugin with the simulator
-GZ_REGISTER_WORLD_PLUGIN( WirelessSimulation::WirelessSignalSimulator )
-}  // namespace gazebo
+
+}  // namespace ros
 #endif  // WIRELESSSIGNALSIMULATOR

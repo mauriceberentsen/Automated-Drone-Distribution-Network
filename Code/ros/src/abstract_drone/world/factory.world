@@ -3,15 +3,11 @@
   <world name="default">
     <include>
       <uri>model://ground_plane</uri>
+      <size> 10000 10000 </size>
     </include>
     <include>
       <uri>model://sun</uri>
     </include>
-    <plugin name="WirelessSignalSimulator" filename="libWirelessSignalSimulator.so">
-      <CommunicationDistance>9</CommunicationDistance>
-    </plugin>
-
-
     <plugin name="DroneFactory" filename="libDroneFactory.so">
       <amountOfRouterDrones>17</amountOfRouterDrones>
       <amountOfGatewayDrones>1</amountOfGatewayDrones>

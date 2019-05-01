@@ -20,7 +20,9 @@ int main( int argc, char **argv )
  ros::init( argc, argv, "DroneManager" );
  std::shared_ptr< ros::NodeHandle > rosNode;
  std::string gatewayName = "/gateway";
+
  rosNode.reset( new ros::NodeHandle( "DroneManager" ) );
+
  ros::DroneManagerService::DroneManager DM( rosNode, gatewayName );
  ros::ServiceServer sendToLocationService = rosNode->advertiseService(
      "requestDroneMovement",
@@ -28,6 +30,7 @@ int main( int argc, char **argv )
  ros::ServiceServer setToCasusService = rosNode->advertiseService(
      "SetToCasus", &ros::DroneManagerService::DroneManager::setDronesToCasus,
      &DM );
+
  ROS_INFO( "Drone manager online" );
  ros::spin( );
 

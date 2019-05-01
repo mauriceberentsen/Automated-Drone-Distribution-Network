@@ -28,7 +28,7 @@ namespace RoutingTechnique
 
  void ChildTableTree::startRouting( )
  {
-  meshnetworkComponent.searchOtherNodesInRange( );
+  // meshnetworkComponent.searchOtherNodesInRange( );
  }
  void ChildTableTree::maintainRouting( )
  {

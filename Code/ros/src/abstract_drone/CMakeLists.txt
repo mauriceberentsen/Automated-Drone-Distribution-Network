@@ -61,11 +61,12 @@ add_message_files(
 ## Generate services in the 'srv' folder
 add_service_files(
    FILES
-  WirelessMessage.srv
-  AreaScan.srv
-  CasusRequest.srv
-  RequestDroneFlight.srv
-  RequestGPS.srv
+   AreaScan.srv
+   CasusRequest.srv
+   PowerSwitch.srv
+   RequestDroneFlight.srv
+   RequestGPS.srv
+   WirelessMessage.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -89,9 +90,14 @@ generate_messages(
 #target_link_libraries(listener ${catkin_LIBRARIES})
 #add_dependencies(listener abstract_drone_gencpp)
 
-add_executable(drone_manager src/ros/DroneManagerService/DroneManagerService.cpp src/ros/DroneManagerService/DroneManager.cpp)
-target_link_libraries(drone_manager ${catkin_LIBRARIES})
-add_dependencies(drone_manager abstract_drone_gencpp abstract_drone_generate_messages_cpp)
+add_executable(DroneManager src/ros/DroneManagerService/DroneManagerService.cpp src/ros/DroneManagerService/DroneManager.cpp)
+target_link_libraries(DroneManager ${catkin_LIBRARIES})
+add_dependencies(DroneManager abstract_drone_gencpp abstract_drone_generate_messages_cpp)
+
+add_executable(WirelessSignalSimulator src/ros/WirelessSimulation/WirelessSignalSimulatorService.cpp src/ros/WirelessSimulation/WirelessSignalSimulator.cpp src/ros/WirelessSimulation/Node.cpp)
+target_link_libraries(WirelessSignalSimulator ${catkin_LIBRARIES})
+add_dependencies(WirelessSignalSimulator abstract_drone_gencpp abstract_drone_generate_messages_cpp)
+
 
 #add_executable(request_drone_flight_client src/request_drone_flight_client.cpp)
 #target_link_libraries(request_drone_flight_client ${catkin_LIBRARIES})
@@ -148,15 +154,15 @@ find_package(gazebo REQUIRED)
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} include)
 
-add_library(MeshnetworkCommunicator SHARED src/gazebo/Arduino/VirtualArduinoCommunicator.cpp
+add_library(MeshnetworkRouter SHARED       src/gazebo/Arduino/VirtualArduinoRouter.cpp
                                            src/Communication/Meshnetwork/MeshnetworkComponent.cpp
-                                           src/Communication/Meshnetwork/MeshnetworkCommunicator.cpp
+                                           src/Communication/Meshnetwork/MeshnetworkRouter.cpp
                                            src/Communication/RoutingTechnique/ChildTableTree.cpp
                                            src/Communication/Messages/Message.cpp
-                                           src/ros/rosDroneEngineConnector.cpp
+                                           src/ros/RosDroneEngineConnector.cpp
                                            src/ros/WirelessSimulation/VirtualNRF24.cpp)
-target_link_libraries(MeshnetworkCommunicator ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(MeshnetworkCommunicator abstract_drone_generate_messages_cpp)
+target_link_libraries(MeshnetworkRouter ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
+add_dependencies(MeshnetworkRouter abstract_drone_generate_messages_cpp)
 
 add_library(MeshnetworkGateway SHARED src/gazebo/Arduino/VirtualArduinoGateway.cpp
                                       src/Communication/Meshnetwork/MeshnetworkComponent.cpp
@@ -164,7 +170,7 @@ add_library(MeshnetworkGateway SHARED src/gazebo/Arduino/VirtualArduinoGateway.c
                                       src/Communication/RoutingTechnique/ChildTableTree.cpp
                                       src/Communication/Messages/Message.cpp
                                       src/ros/WirelessSimulation/VirtualNRF24.cpp
-                                      src/ros/rosDroneEngineConnector.cpp
+                                      src/ros/RosDroneEngineConnector.cpp
                                       src/ros/RosInternetMock.cpp)
 target_link_libraries(MeshnetworkGateway ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(MeshnetworkGateway abstract_drone_generate_messages_cpp)
@@ -178,10 +184,7 @@ add_library(DroneFactory SHARED src/gazebo/DroneFactory.cpp
 target_link_libraries(DroneFactory  ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(DroneFactory abstract_drone_generate_messages_cpp)
 
-add_library(WirelessSignalSimulator SHARED src/gazebo/WirelessSimulation/WirelessSignalSimulator.cpp
-                                           src/gazebo/WirelessSimulation/Node.cpp)
-target_link_libraries(WirelessSignalSimulator  ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(WirelessSignalSimulator abstract_drone_generate_messages_cpp)
+
 
 
 ###########

@@ -16,7 +16,7 @@
 #include "abstract_drone/NRF24.h"
 
 using namespace ignition::math;
-namespace gazebo
+namespace ros
 {
 namespace WirelessSimulation
 {
@@ -61,5 +61,5 @@ namespace WirelessSimulation
   const std::string subtopicname;
  };
 }  // namespace WirelessSimulation
-}  // namespace gazebo
+}  // namespace ros
 #endif  // NODEHPP

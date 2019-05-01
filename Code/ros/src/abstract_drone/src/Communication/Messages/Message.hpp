@@ -18,7 +18,7 @@ namespace Communication
 namespace Messages
 {
  /**
-  * @brief Used for reconizing message types when parsed into a 32 byte array
+  * @brief Used for recognizing message types when parsed into a 32 byte array
   *
   */
  enum Messagetype : uint8_t {
@@ -31,7 +31,10 @@ namespace Messages
   MOVE_TO_LOCATION,      // 6
   MOVEMENT_NEGOTIATION,  // 7
  };
-
+ /**
+  * @brief Used for helping with the place in a 32 byte array
+  *
+  */
  enum MessageHelper : uint8_t {
   CREATOR = 0,      // 0
   FROM = 1,         // 1

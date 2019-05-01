@@ -28,7 +28,8 @@ namespace Meshnetwork
      , routerTech( new RoutingTechnique::ChildTableTree( *this ) )
      , communication( new ros::WirelessSimulation::VirtualNRF24( *this ) )
  {
-  this->droneEngine.reset( new ros::rosDroneEngineConnector( this->droneID ) );
+  this->droneEngine.reset(
+      new ros::Drone::RosDroneEngineConnector( this->droneID ) );
   this->communication->StartAntenna( );
   if ( debug ) { this->communication->DebugingMode( true ); }
   this->checkConnectionThread =

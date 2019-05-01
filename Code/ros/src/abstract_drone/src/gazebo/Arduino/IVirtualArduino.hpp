@@ -18,7 +18,7 @@
 
 namespace gazebo
 {
-namespace Arduino
+namespace ArduinoSimulation
 {
  class IVirtualArduino : public ModelPlugin
  {
@@ -34,6 +34,6 @@ namespace Arduino
   virtual void loop( ) = 0;
  };
 
-}  // namespace Arduino
+}  // namespace ArduinoSimulation
 }  // namespace gazebo
 #endif  // VIRTUALARDUINO

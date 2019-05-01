@@ -16,7 +16,7 @@
 
 namespace gazebo
 {
-namespace Arduino
+namespace ArduinoSimulation
 {
  class VirtualArduinoGateway : public IVirtualArduino
  {
@@ -57,6 +57,6 @@ namespace Arduino
   physics::ModelPtr model;
  };
 
-}  // namespace Arduino
+}  // namespace ArduinoSimulation
 }  // namespace gazebo
 #endif  // VIRTUALARDUINOGATEWAY

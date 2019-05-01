@@ -58,7 +58,7 @@ namespace DroneSimulation
           </material>\
               </visual>\
             </link>\
-            <plugin name=\"MeshnetworkCommunicator\" filename=\"libMeshnetworkCommunicator.so\">\
+            <plugin name=\"MeshnetworkRouter\" filename=\"libMeshnetworkRouter.so\">\
             <DroneID>"
      << std::to_string( droneID ) << "</DroneID>\
             <nodeID>"

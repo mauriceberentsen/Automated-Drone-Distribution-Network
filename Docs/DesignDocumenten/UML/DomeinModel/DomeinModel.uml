@@ -1,105 +1,61 @@
 @startuml
 
-package gazebo
-{
-    class WorldPlugin
-    class ModelPlugin
+class MeshnetworkComponent
+class MeshnetworkGateway
+class MeshnetworkCommunicator
 
-    package Wireless
-    {
-        class WirelessSignalSimulator
-        class Node
-        WirelessSignalSimulator "1" - "*" Node
-        
-    }
+MeshnetworkGateway      --|> MeshnetworkComponent
+MeshnetworkCommunicator --|> MeshnetworkComponent
 
+interface WirelessCommunication
+interface InternetConnection
 
-    package DroneSimulation
-    {
-        class DroneEngine
-        class Drone
-        class RouterDrone
-        class GatewayDrone
-        class DroneFactory
-        DroneFactory"1" o--> "*"RouterDrone : creates >
-        DroneFactory"1" o--> "*"GatewayDrone : creates >
-        Drone - DroneEngine
-        Drone <|-down- RouterDrone
-        Drone <|-down- GatewayDrone
+MeshnetworkGateway o-- InternetConnection : Connects to Internet >
+MeshnetworkComponent o-- WirelessCommunication : Communicates with other drones through >
 
+(MeshnetworkComponent, WirelessCommunication) .. Message
 
-    }
+class DroneManager
 
-    package MeshNetwork
-    {
-        class MeshnetworkCommunicator
-        class MeshnetworkGateway
-        class MeshnetworkComponent
+DroneManager -up- InternetConnection : Controls Drones via >
 
-        MeshnetworkCommunicator --|> MeshnetworkComponent
-        MeshnetworkGateway --|> MeshnetworkComponent
-        MeshnetworkComponent --|> ModelPlugin
+class Arduino
+class ArduinoCommunicator
+class ArduinoGateway
 
+ArduinoCommunicator -up-|> Arduino
+ArduinoGateway      -up-|> Arduino
 
-    }
-    MeshnetworkComponent ..> WirelessSignalSimulator : send messages with >
-    WirelessSignalSimulator --|> WorldPlugin
-    DroneFactory --|> WorldPlugin
-    DroneEngine --|> ModelPlugin 
+ArduinoCommunicator ..> MeshnetworkCommunicator : <<use>>
+ArduinoGateway      ..> MeshnetworkGateway : <<use>>
 
-}
+class NRF24
 
-package RoutingTechnique
-{
-    interface IRoutingTechnique
-    class ChildTableTree
-    ChildTableTree ..|> IRoutingTechnique
-}
-package Messages
-{
-    class Message
+WirelessCommunication ..> NRF24 : is preformed by >
 
-    enum Messagetype {
-        NOTDEFINED
-        LOCATION              
-        REQUESTLOCATION
-        PRESENT             
-        HEARTBEAT            
-        MISSING                         
-        MOVE_TO_LOCATION     
-        MOVEMENT_NEGOTIATION 
-    }
-    Message  .up.> Messagetype
+class Drone
+class RouterDrone
+class GatewayDrone
 
-    class LocationMessage
-    class IntroduceMessage
-    class HeartbeatMessage
-    class MissingMessage
-    class GoToLocationMessage
-    class MovementNegotiationMessage
+RouterDrone     -up-|> Drone
+GatewayDrone    -up-|> Drone
 
-    Message <|-- LocationMessage
-    Message <|-- IntroduceMessage
-    Message <|-- HeartbeatMessage
-    Message <|-up- MissingMessage
-    Message <|-left- GoToLocationMessage
-    Message <|-left- MovementNegotiationMessage
+RouterDrone o-- ArduinoCommunicator
+GatewayDrone o-- ArduinoGateway
 
-}
+class DroneEngine
 
+Drone *-left- DroneEngine 
+MeshnetworkComponent ..> DroneEngine : repositions with\n & \n gets current locations from >
 
-package DroneManagerService
-{
-    class DroneManager
-    class DroneManagerService
-    DroneManagerService --> DroneManager
-}
+class ros
 
- MeshnetworkComponent o--> "2" LocationMessage : Remembers\n locations with >   
- DroneManager ..> GatewayDrone : Sends Commands to >
- MeshnetworkComponent ..> Message : <<use>>
- MeshnetworkComponent -- ChildTableTree : Routes with >
- RouterDrone o--o MeshnetworkCommunicator
- GatewayDrone o--o MeshnetworkGateway
+ros ...> WirelessCommunication : simulates >
+ros ..> InternetConnection : simulates >
+
+class gazebo
+
+gazebo ..> "0..*" Drone : simulates >
+
 
 @enduml

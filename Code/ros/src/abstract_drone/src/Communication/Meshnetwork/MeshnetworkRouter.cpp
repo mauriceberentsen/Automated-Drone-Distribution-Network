@@ -1,7 +1,7 @@
 /**
- * @file MeshnetworkCommunicator.cpp
+ * @file MeshnetworkRouter.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief source file for MeshnetworkCommunicator
+ * @brief source file for MeshnetworkRouter
  * @version 1.0
  * @date 2019-04-19
  *
@@ -11,26 +11,25 @@
 #include <thread>  // std::this_thread::sleep_for
 #include <chrono>  // std::chrono::seconds
 
-#include "MeshnetworkCommunicator.hpp"
+#include "MeshnetworkRouter.hpp"
 
 namespace Communication
 {
 namespace Meshnetwork
 {
- MeshnetworkCommunicator::MeshnetworkCommunicator( const uint8_t node,
-                                                   const uint8_t drone,
-                                                   bool developermode )
+ MeshnetworkRouter::MeshnetworkRouter( const uint8_t node, const uint8_t drone,
+                                       bool developermode )
      : MeshnetworkComponent( node, drone, developermode )
  {
  }
  // Called after load
- void MeshnetworkCommunicator::Init( )
+ void MeshnetworkRouter::Init( )
  {
   std::this_thread::sleep_for( std::chrono::microseconds( initTime ) );
   routerTech->startRouting( );
  }
 
- void MeshnetworkCommunicator::processIntroduction( const uint8_t *message )
+ void MeshnetworkRouter::processIntroduction( const uint8_t *message )
  {
   Messages::IntroduceMessage introduce( message );
   if ( introduce.getKnowGateway( ) &&
@@ -40,7 +39,7 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkCommunicator::ProcessHeartbeat( const uint8_t *message )
+ void MeshnetworkRouter::ProcessHeartbeat( const uint8_t *message )
  {
   Messages::HeartbeatMessage msg( message );
   msg.toString( ).c_str( );
@@ -68,7 +67,7 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkCommunicator::CheckConnection( )
+ void MeshnetworkRouter::CheckConnection( )
  {
   while ( true )  // {this->rosNode->ok( ) )
   {
@@ -91,13 +90,13 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkCommunicator::sendHeartbeatToGateway( )
+ void MeshnetworkRouter::sendHeartbeatToGateway( )
  {
   if ( !sendHeartbeat( prefferedGateWay ) ) {}
   // this we be flipped back by response of the gateway
   connectedToGateway = false;
  }
- void MeshnetworkCommunicator::lostConnection( )
+ void MeshnetworkRouter::lostConnection( )
  {
   if ( connectedToGateway ) {
    timerStarted = false;
@@ -117,7 +116,7 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkCommunicator::StartEmergencyProtocol( )
+ void MeshnetworkRouter::StartEmergencyProtocol( )
  {
   if ( connectedToGateway )  // in case we meanwhile found a connection
   {
@@ -133,7 +132,7 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkCommunicator::startMovementNegotiation( )
+ void MeshnetworkRouter::startMovementNegotiation( )
  {
   static float myDistance;
   // Find out which who the greatest distance from the GATEWAY. He shall be
@@ -169,7 +168,7 @@ namespace Meshnetwork
    negotiationList.clear( );
   }
  }
- void MeshnetworkCommunicator::SafeAddToNegotiationList(
+ void MeshnetworkRouter::SafeAddToNegotiationList(
      const std::pair< float, uint8_t > &val )
  {
   mtx.lock( );
@@ -177,7 +176,7 @@ namespace Meshnetwork
   mtx.unlock( );
  }
 
- void MeshnetworkCommunicator::informOthersAboutCost( float cost )
+ void MeshnetworkRouter::informOthersAboutCost( float cost )
  {
   for ( auto &other : routerTech->getSetOfChildren( ) ) {
    uint8_t towards = routerTech->getDirectionToNode( other );
@@ -191,7 +190,7 @@ namespace Meshnetwork
   }
  }
 
- void MeshnetworkCommunicator::processMovementNegotiationMessage(
+ void MeshnetworkRouter::processMovementNegotiationMessage(
      const uint8_t *message )
  {
   Messages::MovementNegotiationMessage msg( message );

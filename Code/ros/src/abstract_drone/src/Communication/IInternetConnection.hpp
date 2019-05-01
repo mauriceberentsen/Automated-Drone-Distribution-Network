@@ -12,20 +12,22 @@
 #define IINTERNETCONNECTION
 namespace Communication
 {
-class IInternetConnection
+namespace Internet
 {
-public:
- /**
-  * @brief Connect to the internet service
-  *
-  */
- virtual void connect( ) = 0;
- /**
-  * @brief  Disconnect from the internet service
-  *
-  */
- virtual void disconnect( ) = 0;
-};
+ class IInternetConnection
+ {
+ public:
+  /**
+   * @brief Connect to the internet service
+   *
+   */
+  virtual void connect( ) = 0;
+  /**
+   * @brief  Disconnect from the internet service
+   *
+   */
+  virtual void disconnect( ) = 0;
+ };
+}  // namespace Internet
 }  // namespace Communication
-
 #endif  // IINTERNETCONNECTION

@@ -1,28 +1,28 @@
 /**
- * @file VirtualArduinoCommunicator.hpp
+ * @file VirtualArduinoRouter.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief Header file for VirtualArduinoCommunicator
+ * @brief Header file for VirtualArduinoRouter
  * @version 1.0
  * @date 2019-04-24
  *
  * @copyright Copyright (c) 2019
  *
  */
-#ifndef VIRTUALARDUINOCOMMUNICATOR
-#define VIRTUALARDUINOCOMMUNICATOR
+#ifndef VIRTUALARDUINOROUTER
+#define VIRTUALARDUINOROUTER
 
 #include "IVirtualArduino.hpp"
-#include "../../Communication/Meshnetwork/MeshnetworkCommunicator.hpp"
+#include "../../Communication/Meshnetwork/MeshnetworkRouter.hpp"
 
 namespace gazebo
 {
-namespace Arduino
+namespace ArduinoSimulation
 {
- class VirtualArduinoCommunicator : public IVirtualArduino
+ class VirtualArduinoRouter : public IVirtualArduino
  {
  public:
-  VirtualArduinoCommunicator( );
-  ~VirtualArduinoCommunicator( );
+  VirtualArduinoRouter( );
+  ~VirtualArduinoRouter( );
   /**
    * @brief Called when a Plugin is first created, and after the World has been
    * loaded. This function should not be blocking
@@ -49,13 +49,13 @@ namespace Arduino
   uint8_t droneID;
   /// \brief if Debugging should be enabled
   bool debug;
-  /// \brief A pointer to the connected MeshnetworkCommunicator
-  Communication::Meshnetwork::MeshnetworkCommunicator* meshnetworkCommunicator;
+  /// \brief A pointer to the connected MeshnetworkRouter
+  Communication::Meshnetwork::MeshnetworkRouter* meshnetworkRouter;
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
  };
 
-}  // namespace Arduino
+}  // namespace ArduinoSimulation
 
 }  // namespace gazebo
-#endif  // VIRTUALARDUINOCOMMUNICATOR
+#endif  // VIRTUALARDUINOROUTER

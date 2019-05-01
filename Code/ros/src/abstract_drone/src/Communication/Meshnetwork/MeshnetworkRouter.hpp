@@ -1,15 +1,15 @@
 /**
- * @file MeshnetworkCommunicator.hpp
+ * @file MeshnetworkRouter.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief header file for MeshnetworkCommunicator
+ * @brief header file for MeshnetworkRouter
  * @version 1.0
  * @date 2019-04-02
  *
  * @copyright Copyright (c) 2019
  *
  */
-#ifndef MESHNETWORKCOMMUNICATOR
-#define MESHNETWORKCOMMUNICATOR
+#ifndef MESHNETWORKROUTER
+#define MESHNETWORKROUTER
 #include <mutex>  // std::mutex
 #include <ctime>
 #include "MeshnetworkComponent.hpp"
@@ -17,7 +17,7 @@ namespace Communication
 {
 namespace Meshnetwork
 {
- class MeshnetworkCommunicator : public MeshnetworkComponent
+ class MeshnetworkRouter : public MeshnetworkComponent
  {
  public:
   /**
@@ -27,8 +27,8 @@ namespace Meshnetwork
    * @param drone The ID of the connected Drone Engine
    * @param developermode Debuging mode enabled
    */
-  MeshnetworkCommunicator( const uint8_t node, const uint8_t drone,
-                           bool developermode );
+  MeshnetworkRouter( const uint8_t node, const uint8_t drone,
+                     bool developermode );
 
   /**
    * @brief called once after Load for initialization behavior.
@@ -157,4 +157,4 @@ namespace Meshnetwork
  };
 }  // namespace Meshnetwork
 }  // namespace Communication
-#endif  // MESHNETWORKCOMMUNICATOR
+#endif  // MeshnetworkRouter
