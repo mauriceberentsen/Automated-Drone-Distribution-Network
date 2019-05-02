@@ -76,7 +76,7 @@ namespace Messages
   }
  }
 
- const uint8_t Message::getID( ) const
+ const uint8_t Message::getCreator( ) const
  {
   return this->creator;
  }

@@ -1,0 +1,43 @@
+@startuml
+autonumber
+participant "Node 0:MeshGateway" as 0
+participant "msg:HeartbeatMessage" as msg
+participant "routerTech:IRoutingTechnique" as IRT
+participant "communication:IWirelessCommunication" as IWC
+participant "Node 1:MeshRouter" as 1
+participant "Node 2:MeshRouter" as 2
+
+0 ->  0 +: SendHeartbeat(other = 2) : bool
+0 -> IRT +: towards = getDirectionToNode( other )
+return towards = 1
+0->msg ** : <<create>>\nmsg =HeartbeatMessage(NodeID,\nNodeID,towards,other,\nconnectedToGateway,\nprefferedGateway)
+activate msg
+0 -> IWC+: sendMessage(msg)
+IWC --> 1 + :OnMsg(msg)
+0 <-- IWC : succes : bool 
+deactivate 0
+deactivate msg
+deactivate IWC
+1->1 +: fowardMessage(msg)
+1 -> IRT +: towards = getDirectionToNode( msg[FORWARD] )
+return towards = 2
+1->1 : msg[FROM] = NodeID
+1->1 : msg[TO] = towards
+alt msg[TYPE] == HEARTBEAT
+1->msg ** : <<create>> msg =HeartbeatMessage(msg)
+activate msg
+msg -> msg : makeHop()
+alt msg.getHops > UINT8_MAX - 1
+1 -> msg !! : delete message
+end
+end
+1 -> IWC +: SendMessageTo(msg)
+IWC --> 2 +: OnMsg(msg)
+IWC --> 1 : succes : bool
+deactivate 1
+deactivate IWC
+deactivate 1
+activate 2
+2->2 : ProcessHeartbeat(msg)
+
+@enduml

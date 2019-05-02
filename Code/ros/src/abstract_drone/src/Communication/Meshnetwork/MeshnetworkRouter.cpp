@@ -34,15 +34,14 @@ namespace Meshnetwork
   Messages::IntroduceMessage introduce( message );
   if ( introduce.getKnowGateway( ) &&
        introduce.getHopsUntilGateway( ) < this->hopsFromGatewayAway &&
-       introduce.getID( ) != lastGoodKnownLocation.getID( ) ) {
-   requestLocation( introduce.getID( ) );
+       introduce.getCreator( ) != lastGoodKnownLocation.getCreator( ) ) {
+   requestLocation( introduce.getCreator( ) );
   }
  }
 
  void MeshnetworkRouter::ProcessHeartbeat( const uint8_t *message )
  {
   Messages::HeartbeatMessage msg( message );
-  msg.toString( ).c_str( );
   // if sender is gateway flip bool and return
   if ( msg.getIsGateway( ) ) {
    prefferedGateWay = msg.getPrefferedGateway( );
@@ -54,11 +53,11 @@ namespace Meshnetwork
   // if sender doesn't know gateway but we do
   if ( !msg.getKnowGateway( ) && connectedToGateway ) {
    // send a heartbeat back to inform him we know a gateway
-   sendHeartbeat( msg.getID( ) );
+   sendHeartbeat( msg.getCreator( ) );
   }
   // if sender knows gateway and we don't
   else if ( msg.getKnowGateway( ) && !connectedToGateway ) {
-   routerTech->OtherCanCommunicateWithNode( msg.getID( ),
+   routerTech->OtherCanCommunicateWithNode( msg.getCreator( ),
                                             msg.getPrefferedGateway( ) );
    // Set his gateway as prefferedGateWay and try to contact that
    // gateway
@@ -141,7 +140,7 @@ namespace Meshnetwork
   // disconnected.
 
   // First find out how far away you are
-  if ( routerTech->getDirectionToNode( lastGoodKnownLocation.getID( ) ) ==
+  if ( routerTech->getDirectionToNode( lastGoodKnownLocation.getCreator( ) ) ==
        UINT8_MAX ) {
    myDistance = distanceBetweenMeAndLocation( prefferedGateWayLocation );
   } else {
@@ -184,7 +183,7 @@ namespace Meshnetwork
 
    Messages::MovementNegotiationMessage MovNegotiationMsg(
        this->nodeID, this->nodeID, towards, towards, cost );
-   uint8_t buffer[Messages::MAX_PAYLOAD];
+   uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
    MovNegotiationMsg.toPayload( buffer );
    SendMessage( buffer, towards );
   }
@@ -194,7 +193,8 @@ namespace Meshnetwork
      const uint8_t *message )
  {
   Messages::MovementNegotiationMessage msg( message );
-  SafeAddToNegotiationList( std::make_pair( msg.getCost( ), msg.getID( ) ) );
+  SafeAddToNegotiationList(
+      std::make_pair( msg.getCost( ), msg.getCreator( ) ) );
  }
 }  // namespace Meshnetwork
 }  // namespace Communication

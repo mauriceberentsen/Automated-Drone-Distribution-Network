@@ -55,7 +55,7 @@ namespace Meshnetwork
  void MeshnetworkGateway::ProcessHeartbeat( const uint8_t* message )
  {
   Messages::HeartbeatMessage msg( message );
-  sendHeartbeat( msg.getID( ) );
+  sendHeartbeat( msg.getCreator( ) );
  }
 
  void MeshnetworkGateway::processMovementNegotiationMessage(

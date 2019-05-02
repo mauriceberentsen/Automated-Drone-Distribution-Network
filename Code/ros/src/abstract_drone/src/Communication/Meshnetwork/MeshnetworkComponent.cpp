@@ -27,9 +27,8 @@ namespace Meshnetwork
      , debug( developermode )
      , routerTech( new RoutingTechnique::ChildTableTree( *this ) )
      , communication( new ros::WirelessSimulation::VirtualNRF24( *this ) )
+     , droneEngine( new ros::Drone::RosDroneEngineConnector( drone ) )
  {
-  this->droneEngine.reset(
-      new ros::Drone::RosDroneEngineConnector( this->droneID ) );
   this->communication->StartAntenna( );
   if ( debug ) { this->communication->DebugingMode( true ); }
   this->checkConnectionThread =
@@ -69,7 +68,7 @@ namespace Meshnetwork
 
  const uint8_t MeshnetworkComponent::getLastGoodKnownLocationID( ) const
  {
-  return lastGoodKnownLocation.getID( );
+  return lastGoodKnownLocation.getCreator( );
  }
 
  const uint8_t MeshnetworkComponent::getRouterTechTableSize( ) const
@@ -83,7 +82,7 @@ namespace Meshnetwork
       routerTech->getDirectionToNode( message[Messages::FORWARD] );
   if ( other == UINT8_MAX ) { return; }
 
-  uint8_t buffer[Messages::MAX_PAYLOAD];
+  uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
   for ( int i = 0; i < Messages::MAX_PAYLOAD; i++ ) {
    buffer[i] = message[i];
   }
@@ -92,7 +91,7 @@ namespace Meshnetwork
   if ( buffer[Messages::TYPE] == Messages::HEARTBEAT ) {
    Messages::HeartbeatMessage msg( buffer );
    msg.makeHop( );
-   if ( msg.getHops( ) > UINT8_MAX ) return;
+   if ( msg.getHops( ) > UINT8_MAX - 1 ) return;
    msg.toPayload( buffer );
   }
   SendMessage( buffer, other );
@@ -130,7 +129,7 @@ namespace Meshnetwork
  /*public*/ void MeshnetworkComponent::processLocation( const uint8_t *message )
  {
   Messages::LocationMessage msg( message );
-  if ( msg.getID( ) == prefferedGateWay ) {
+  if ( msg.getCreator( ) == prefferedGateWay ) {
    prefferedGateWayLocation = msg;
    knowPrefferedGatewayLocation = true;
   } else {
@@ -140,9 +139,10 @@ namespace Meshnetwork
 
  void MeshnetworkComponent::requestLocation( const uint8_t other )
  {
+  uint8_t towards = routerTech->getDirectionToNode( other );
   Messages::Message msg( this->nodeID, this->nodeID, Messages::REQUESTLOCATION,
-                         other, other );
-  uint8_t buffer[Messages::MAX_PAYLOAD];
+                         towards, other );
+  uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
   msg.toPayload( buffer );
   SendMessage( buffer, other );
  }
@@ -150,9 +150,9 @@ namespace Meshnetwork
  void MeshnetworkComponent::processMissing( const uint8_t *message )
  {
   Messages::MissingMessage msg( message );
-  if ( routerTech->OtherCantCommunicateWithNode( msg.getID( ),
+  if ( routerTech->OtherCantCommunicateWithNode( msg.getCreator( ),
                                                  msg.getMissing( ) ) > 0 )
-   informAboutMissingChild( msg.getID( ), msg.getMissing( ) );
+   informAboutMissingChild( msg.getCreator( ), msg.getMissing( ) );
  }
 
  void MeshnetworkComponent::processSendGoalToEngine( const uint8_t *message )
@@ -178,7 +178,7 @@ namespace Meshnetwork
   Messages::HeartbeatMessage heartbeat( this->nodeID, this->nodeID, towards,
                                         other, connectedToGateway,
                                         prefferedGateWay );
-  uint8_t buffer[Messages::MAX_PAYLOAD];
+  uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
   heartbeat.toPayload( buffer );
   return SendMessage( buffer, towards );
  }
@@ -188,12 +188,12 @@ namespace Meshnetwork
                                              const float longitude,
                                              const uint16_t height )
  {
-  uint8_t other = routerTech->getDirectionToNode( ID );
-  Messages::GoToLocationMessage GTLmsg( this->nodeID, this->nodeID, other, ID,
-                                        latitude, longitude, height );
-  uint8_t buffer[Messages::MAX_PAYLOAD];
-  GTLmsg.toPayload( buffer );
-  SendMessage( buffer, other );
+  uint8_t towards = routerTech->getDirectionToNode( ID );
+  Messages::GoToLocationMessage goToLocationMsg(
+      this->nodeID, this->nodeID, towards, ID, latitude, longitude, height );
+  uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
+  goToLocationMsg.toPayload( buffer );
+  SendMessage( buffer, towards );
  }
 
  void MeshnetworkComponent::informAboutMissingChild( uint8_t parent,
@@ -204,10 +204,10 @@ namespace Meshnetwork
    uint8_t other = routerTech->getDirectionToNode( chi1d );
    if ( other == UINT8_MAX ) continue;
 
-   Messages::MissingMessage missingMSG( this->nodeID, this->nodeID, other,
-                                        chi1d, missing );
-   uint8_t buffer[Messages::MAX_PAYLOAD];
-   missingMSG.toPayload( buffer );
+   Messages::MissingMessage missingMessage( this->nodeID, this->nodeID, other,
+                                            chi1d, missing );
+   uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
+   missingMessage.toPayload( buffer );
    SendMessage( buffer, other );
   }
  }
@@ -217,7 +217,7 @@ namespace Meshnetwork
   Messages::IntroduceMessage introduce( this->nodeID, this->nodeID, 0, 0,
                                         this->hopsFromGatewayAway,
                                         this->connectedToGateway );
-  uint8_t buffer[Messages::MAX_PAYLOAD];
+  uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
   introduce.toPayload( buffer );
 
   communication->BroadcastMessage( buffer );
@@ -226,17 +226,17 @@ namespace Meshnetwork
  void MeshnetworkComponent::processRequestLocation( const uint8_t *payload )
  {
   Messages::Message msg( payload );
-  sendLocation( msg.getID( ) );
+  sendLocation( msg.getCreator( ) );
  }
 
  void MeshnetworkComponent::sendLocation( const uint8_t other )
  {
   const ignition::math::Vector3< float > location = droneEngine->getLocation( );
-
-  Messages::LocationMessage msg( this->nodeID, this->nodeID, other, other,
+  uint8_t towards = routerTech->getDirectionToNode( other );
+  Messages::LocationMessage msg( this->nodeID, this->nodeID, towards, other,
                                  location.X( ), location.Y( ), location.Z( ),
                                  0 );
-  uint8_t buffer[Messages::MAX_PAYLOAD];
+  uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
   msg.toPayload( buffer );
   SendMessage( buffer, other );
  }
@@ -259,7 +259,7 @@ namespace Meshnetwork
   Messages::IntroduceMessage introduce( this->nodeID, this->nodeID, other,
                                         other, this->hopsFromGatewayAway,
                                         this->connectedToGateway );
-  uint8_t buffer[Messages::MAX_PAYLOAD];
+  uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
   introduce.toPayload( buffer );
   SendMessage( buffer, other );
  }

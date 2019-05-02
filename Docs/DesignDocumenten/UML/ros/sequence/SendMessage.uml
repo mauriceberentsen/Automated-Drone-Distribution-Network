@@ -1,38 +1,13 @@
 @startuml
 autonumber
-participant "Node 1:MeshComponent" as 1
-participant "heartbeat:HeartbeatMessage" as 1m
-participant "WM:WirelessMessage" as 1wm
-participant "NodeTable:ChildTableTree" as 1NT
+participant "communication:VirtualNRF24" as 1
 participant "publishService:WirelessSignalSimulator" as SS
 note over SS: Service that simulates wireless communication
 participant "Node 2:MeshComponent" as 2
 
 
 [-> 1  : SendHeartbeat(other = 2) : bool
-activate 1
-1 -> 1NT ++: towards = NodeTable.getDirectionToNode(other) : uint8_t
-1NT -> 1NT : it = family.find(other) \n : iterator <<uint8_t, set<uin8_t> >>
-note over 1NT: Look if the other node is a child else look if it's a grandchild. If nothing is found return 255
-alt \t      it != family.end()
-	1 <- 1NT : it->first
-else
-	loop \t child : family
-    alt \t child.second.find(node) != child.second.end() 
-    1 <- 1NT : child.first
-    end
-    end
-	1 <- 1NT-- : 255
-end
-create 1m
-1 -> 1m : <<create>>\n HeartbeatMessage(nodeID,\n connectedToGateway,\n prefferedGateway)
-create 1wm
-1 -> 1wm : <<Create>>
-1 -> 1wm : WM.request.message.from = NodeID
-1 -> 1wm : WM.request.message.to = towards
-1 -> 1wm : WM.request.message.forward = other
-1 -> 1m  : heartbeat.toPayload(WM.request.message.payload)
-return sendMessage(towards, WM)
+
 
 
 alt SignalSimulator available

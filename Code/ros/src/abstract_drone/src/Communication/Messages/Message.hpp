@@ -73,7 +73,7 @@ namespace Messages
    */
   virtual const std::string toString( ) const;
 
-  const uint8_t getID( ) const;
+  const uint8_t getCreator( ) const;
 
  protected:
   /**

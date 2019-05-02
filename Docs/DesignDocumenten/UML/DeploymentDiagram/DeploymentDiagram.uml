@@ -1,5 +1,4 @@
 @startuml
-title Deployment diagram
 artifact ArduinoRouter  <<ino file>> as ArduinoRouter
 artifact ArduinoGateway  <<ino file>> as ArduinoGateway
 
@@ -8,8 +7,8 @@ rectangle factory.launch <<launch file>> as factory
 
 artifact DroneManagerService <<ROS node>> as DroneManagerService
 artifact WirelessSignalSimulator <<ROS node>> as WirelessSignalSimulator
-artifact "MeshnetworkNode/ID" <<ROS node>> as meshnode
-artifact "Drone/ID" <<ROS node>> as dronenode
+artifact "MeshNode" <<ROS node>> as meshnode
+artifact "Drone" <<ROS node>> as dronenode
 artifact gazebo  <<ROS node>> as gazebo
 
 
@@ -24,8 +23,10 @@ empty_world ..> gazebo
 factory ..> DroneManagerService
 factory ..> WirelessSignalSimulator
 
-factoryworld ..> meshnode
-factoryworld ..> dronenode
+factoryworld .down.> meshnode
+factoryworld .down.> dronenode
+
+dronenode - meshnode
 
 
 @enduml
