@@ -1,7 +1,7 @@
 /**
  * @file IWirelessCommunication.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief Header file for the IWirelessCommunication
+ * @brief Header file for the interface IWirelessCommunication
  * @version 1.0
  * @date 2019-04-24
  *
@@ -17,6 +17,8 @@ namespace Wireless
  class IWirelessCommunication
  {
  public:
+  virtual ~IWirelessCommunication( ){};
+
   /**
    * @brief Start the Antenna
    *

@@ -26,7 +26,8 @@ namespace Meshnetwork
      , droneID( drone )
      , debug( developermode )
      , routerTech( new RoutingTechnique::ChildTableTree( *this ) )
-     , communication( new ros::WirelessSimulation::VirtualNRF24( *this ) )
+     , communication(
+           new ros::WirelessSimulation::VirtualNRF24( *this, *this ) )
      , droneEngine( new ros::Drone::RosDroneEngineConnector( drone ) )
  {
   this->communication->StartAntenna( );
@@ -43,9 +44,9 @@ namespace Meshnetwork
                                            message[Messages::CREATOR] );
  }
 
- uint8_t MeshnetworkComponent::getNodeID( )
+ const uint8_t MeshnetworkComponent::getNodeID( ) const
  {
-  return this->nodeID;
+  return nodeID;
  }
 
  const bool MeshnetworkComponent::getConnectedToGateway( ) const
@@ -183,7 +184,7 @@ namespace Meshnetwork
   return SendMessage( buffer, towards );
  }
 
- void MeshnetworkComponent::sendGoalToDrone( const uint8_t ID,
+ void MeshnetworkComponent::SendGoalToDrone( const uint8_t ID,
                                              const float latitude,
                                              const float longitude,
                                              const uint16_t height )

@@ -9,7 +9,7 @@
  *
  */
 // gateway header
-#include "../Communication/Meshnetwork/MeshnetworkGateway.hpp"
+#include "../Communication/Internet/IGatewayCommands.hpp"
 // local header
 #include "RosInternetMock.hpp"
 
@@ -18,7 +18,7 @@ namespace ros
 namespace Internet
 {
  RosInternetMock::RosInternetMock(
-     Communication::Meshnetwork::MeshnetworkGateway &MG )
+     Communication::Internet::IGatewayCommands &MG )
      : meshnetworkGateway( MG )
  {
   // Initialize ros, if it has not already been initialized.
@@ -66,8 +66,8 @@ namespace Internet
  void RosInternetMock::gatewayQueue(
      const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg )
  {
-  meshnetworkGateway.sendGoalToDrone( _msg->ID, _msg->latitude, _msg->longitude,
-                                      _msg->height );
+  meshnetworkGateway.SendGoalRequestToDrone( _msg->ID, _msg->latitude,
+                                             _msg->longitude, _msg->height );
  }
 
 }  // namespace Internet

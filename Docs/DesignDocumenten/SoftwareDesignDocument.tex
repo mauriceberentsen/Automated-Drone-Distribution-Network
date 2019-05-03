@@ -83,7 +83,7 @@
 
 
 \hypersetup{colorlinks=true, urlcolor=red,citecolor=black,linkcolor=blue}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{2}
 
 
 
@@ -358,9 +358,20 @@ Deze kan de NRF24 naar een direct adres versturen of zenden naar alle NRF24 node
 \subsection{IInternetConnection}
 \label{architectural:interfaces:IInternetConnection}
 Deze high level interface wordt gebruikt voor het leggen van een verbinding naar een extern punt buiten het netwerk. Omdat de gateway zich alleen hoeft te verbinden met een punt bestaat deze interface alleen uit een connect en een disconnect.
+\subsection{IGatewayCommands}
+\label{architectural:interfaces:IGatewayCommands}
+Deze interface wordt gebruikt voor het ontvangen van commando's via een verbinding met een extern punt buiten het netwerk. Op dit moment is er alleen een functie aanwezig voor het verzoeken van een drone verplaatsing
 \subsection{IWirelessCommunication}
 \label{architectural:interfaces:IWirelessCommunication}
 In deze interface wordt de functionaliteit gesteld waar een draadloos communicatiemiddel aan moet voldoen. Het bevat functies om een antenne te starten en te stoppen. Het versturen van een bericht naar een specifiek punt of het zenden naar elke punt in de buurt. Er is een functie aanwezig om wanneer mogelijk debugging te gebruiken. Tenslotte moet een aansluitend component met deze interface moeten kunnen teruggeven of deze aan of uit staat.
+
+\subsection{IMeshNetwork}
+\label{architectural:interfaces:IMeshNetwork}
+Deze interface wordt aangeboden om een aangesloten draadloos communicatie middel de mogelijkheid te geven om berichten door te kunnen geven aan het \nameref{architectural:subcomponenten:MeshnetworkComponent} en het ID van dit component kenbaar te maken.
+
+\subsection{IMeshDebugInfo}
+\label{architectural:interfaces:IMeshDebugInfo}
+Deze interface wordt aangeboden om een verzameling variabelen openbaar te maken die nuttig zijn als debug informatie.
 
 \subsection{NRF24HighLevelInterface}
 \label{architectural:interfaces:NRF24HighLevelInterface}
@@ -477,10 +488,80 @@ Het is een extractie uit het \nameref{fig:componentdiagram}
 	\label{fig:component:Communicatie}
 \end{figure}
 
-\subsubsection{Interface beschrijving}
-\label{DetailedDesign:CommunicatieComponentDiagram:interface}
-Het communicatie component heeft geen aangeboden interfaces.
-Wel wordt er intern een interface aangeboden door het subcomponent RoutingTechnique deze wordt hier behandeld. 
+\subsubsection{Extern aangeboden interface beschrijvingen}
+\label{DetailedDesign:CommunicatieComponentDiagram:interface:extern}
+Het communicatie component heeft drie extern aangeboden interfaces. De interface IMeshNetwork wordt aangeboden om berichten voor het meshnetwerk te kunnen ontvangen vanaf een aangesloten draadloos communicatie component. De interface IGatewayCommands wordt gebruikt voor het ontvangen van aansturing vanuit een extern punt naar een gateway. Tenslotte biedt het MeshnetworkComponent nog een interface aan met debuginformatie genaamd IMeshDebuginfo. Omdat deze laatste interface alleen maar getters bevat is besloten deze niet uitgebreid te behandelen.
+
+\paragraph{IMeshNetwork}
+\label{DetailedDesign:CommunicatieComponentDiagram:interface:IMeshnetwork}
+De volgende functies worden aangeboden door de interface IMeshNetwork. 
+
+\begin{lstlisting}
+void OnMsg( const uint8_t* message );
+
+const uint8_t getNodeID( ) const;
+\end{lstlisting}
+
+\subparagraph{OnMsg}
+Deze functie geeft een antenne toegang tot een meshcomponent om berichten door te geven. Het bericht wordt opgegeven met een adresverwijzing tot de array waar het bericht in staat
+
+\textbf{\textit{preconditie:}} Het meshcomponent heeft een thread gestart voor bericht afhandeling.
+
+\textbf{\textit{postconditie:}} Het opgegeven bericht is behandeld door het meshcomponent.
+
+\subparagraph{getNodeID}
+Deze functie geeft de antenne door welk node id het meshcomponent bezit.
+
+\textbf{\textit{preconditie:}} Het meshcomponent heeft een node id
+
+\textbf{\textit{postconditie:}} Het id van het mehscomponent is doorgegeven.
+
+\paragraph{IGatewayCommands }
+\label{DetailedDesign:CommunicatieComponentDiagram:interface:IGatewayCommands}
+De volgende functie wordt aangeboden door de interface IGatewayCommands. 
+
+\begin{lstlisting}
+void SendGoalRequestToDrone( const uint8_t ID, const float latitude,
+			 const float longitude, const uint16_t height );
+\end{lstlisting}
+
+\subparagraph{SendGoalRequestToDrone}
+Deze functie laat de aangesloten gateway een verzoek doen tot het verplaatsen van een drone. Er is nog geen ingebouwde functionaliteit om terug te geven of dit verzoek ook is aangekomen bij de drone. 
+
+\textbf{\textit{preconditie:}} De gateway die het verzoek ontvangt heeft een route tot de drone die het verzoek moet ontvangen. 
+
+\textbf{\textit{postconditie:}} De drone heeft het verzoek ontvangen en zal zich daar naartoe gaan verplaatsen
+
+\subsubsection{Intern aangeboden interface beschrijvingen}
+\label{DetailedDesign:CommunicatieComponentDiagram:interface:intern}
+
+Intern worden er twee interfaces aangeboden. Het MeshnetworkComponent biedt een interface IRoutingEssentials aan waar basale communicatie functies in zitten om routeringstechnieken mogelijk te maken.  Ook wordt er een interface IRoutinTechnique door het subcomponent RoutingTechnique aangeboden.
+
+\paragraph{IRoutingEssentials}
+
+De volgende functies worden aangeboden door de interface IRoutingEssentials. 
+
+\begin{lstlisting}
+
+void searchOtherNodesInRange( )	
+
+bool sendHeartbeat(uint8_t other);
+
+\end{lstlisting}
+\subparagraph{searchOtherNodesInRange}
+Deze functie wordt aangeroepen om het component te verzoeken om te kijken of er andere nodes binnen bereik zijn.
+
+
+\textbf{\textit{preconditie:}} Meshcomponent is voorzien van een draadloos communicatiemiddel die gestart is. 
+
+\textbf{\textit{postconditie:}} Meshcomponent heeft een inventarisatie gemaakt van alles nodes binnen bereik. 
+
+\subparagraph{sendHeartbeat}
+Door het aanroepen van deze functie wordt er een hearbeat verzonden van het component naar een node met het opgegeven ID in de parameter.
+
+\textbf{\textit{preconditie:}} Geadresseerde is bekend bij de routing techniek.
+
+\textbf{\textit{postconditie:}} Routing techniek geeft terug welk adres het vervolg adres is voor het bericht.
 
 \paragraph{IRoutingTechnique}
 
@@ -511,7 +592,7 @@ const std::set< uint8_t > getSetOfChildren( );
 
 const bool empty( );
 \end{lstlisting}
-\subsection{getDirectionToNode}
+\subparagraph{getDirectionToNode}
 Deze functie is de functie waar de aanvragende interface het meeste belang bij heeft.
 Deze functie verwacht een id van de geadresseerde node als parameter.
 De routing techniek zal vervolgens uitzoeken naar welke node een bericht doorgegeven moet worden om het bericht aan te laten komen bij de geadresseerde.
@@ -521,14 +602,14 @@ Dit adres wordt terug gegeven als een return waarde.
 
 \textbf{\textit{postconditie:}} Routing techniek geeft terug welk adres het vervolg adres is voor het bericht.
 
-\subsection{startRouting}
+\subparagraph{startRouting}
 De functie start routing wordt aangeroepen zodra de routing techniek moet beginnen met het opbouwen van communicatie routes.
 
 \textbf{\textit{preconditie:}} Het communicatie waarover de routering gebeurd is beschikbaar
 
 \textbf{\textit{postconditie:}} De node zich aangemeld bij andere nodes en kan adressen opslaan.
 
-\subsection{maintainRouting}
+\subparagraph{maintainRouting}
 Deze functie wordt herhaaldelijk aangeroepen in de software.
 Het roept de routing techniek aan om een onderhoud te plegen aan de opgebouwde routing informatie.
 Zo zal vaak het geval zijn dat de routing techniek controleert of de aansluitende nodes nog bestaan.
@@ -537,7 +618,7 @@ Zo zal vaak het geval zijn dat de routing techniek controleert of de aansluitend
 
 \textbf{\textit{postconditie:}} Er is onderhoud uitgevoerd aan de lijst van beschikbare nodes.
 
-\subsection{NodeMovedLocation} 
+\subparagraph{NodeMovedLocation} 
 Deze functie wordt aangeroepen zodra de drone zich verplaatst heeft. Het is aan routing techniek om hier adequaat op te reageren.
 In de huidige implementatie worden alle routes als ongeldig gezien waardoor de tabel geleegd wordt. 
 
@@ -546,7 +627,7 @@ In de huidige implementatie worden alle routes als ongeldig gezien waardoor de t
 \textbf{\textit{postconditie:}} De routeringstechniek heeft de tabel bij adequaat bijgewerkt.
 
 
-\subsection{cantCommunicateWithNode} 
+\subparagraph{cantCommunicateWithNode} 
 Deze functie wordt aangeroepen als er geen connectie gelegd kan worden met een node. Deze functie geeft terug op hoeveel routes de node had in het netwerk. 
 
 \textbf{\textit{preconditie:}} De node is aanwezig in de route tabel.
@@ -554,21 +635,21 @@ Deze functie wordt aangeroepen als er geen connectie gelegd kan worden met een n
 \textbf{\textit{postconditie:}} De route wordt verwijderd of als niet beschikbaar beschouwd.
 
 
-\subsection{OtherCantCommunicateWithNode}
+\subparagraph{OtherCantCommunicateWithNode}
 Deze functie wordt aangeroepen als een andere node aangeeft dat hij geen connectie kan maken met een node. Deze functie geeft terug op hoeveel routes de niet bereikbare node voorkomt. 
 
 \textbf{\textit{preconditie:}} De node is aanwezig in de route tabel.
 
 \textbf{\textit{postconditie:}} De route wordt verwijderd of als niet beschikbaar beschouwd.
 
-\subsection{canCommunicateWithNode}
+\subparagraph{canCommunicateWithNode}
 Zodra een node bevestiging heeft dat deze verbinding kan maken wordt deze functie aangeroepen. Als parameter wordt het adres meegegeven.
 
 \textbf{\textit{preconditie:}} Er is bevestiging dat een node een directe verbinding heeft met een andere node.
 
 \textbf{\textit{postconditie:}} De verbonden node wordt toegevoegd als direct route punt.
  
-\subsection{OtherCanCommunicateWithNode}
+\subparagraph{OtherCanCommunicateWithNode}
 De functie wordt aangeroepen als een andere node doorstuurt dat hij bevestiging heeft dat hij verbinding heeft met een nieuwe node in het netwerk. Als parameter wordt het adres meegegeven van zowel de node die aangeeft dat hij een verbinding heeft gevonden als het adres die hij gevonden heeft.
 
 \textbf{\textit{preconditie:}}  Er is bevestiging dat een node een verbinding heeft met een andere node.
@@ -576,28 +657,28 @@ De functie wordt aangeroepen als een andere node doorstuurt dat hij bevestiging 
 \textbf{\textit{postconditie:}}  De gevonden node wordt toegevoegd als route punt in het netwerk.
 
 
-\subsection{getTableSize}
+\subparagraph{getTableSize}
 Deze functie geeft terug hoeveel routes er zich bevinden in de opgebouwde routing tabel.
 
 \textbf{\textit{preconditie:}} Geen pre conditie.
 
 \textbf{\textit{postconditie:}} Alle routes zijn geteld en de functie geeft dit aantal terug
 
-\subsection{getAmountOfChildren}
+\subparagraph{getAmountOfChildren}
 In deze functie wordt het aantal gevonden direct aansluitende nodes geteld en terug gegeven.  
 
 \textbf{\textit{preconditie:}}  Geen preconditie
 
 \textbf{\textit{postconditie:}} Het aantal direct aansluitende nodes is geteld en en dit aantal is terug gegeven.
 
-\subsection{getSetOfChildren}
+\subparagraph{getSetOfChildren}
 Hier wordt een set gemaakt met id's van direct aansluitende nodes 
 \textbf{\textit{preconditie:}} Geen preconditie
 
 \textbf{\textit{postconditie:}} Er is een set met de id's van alle nodes waar een directe verbinding mee gevonden is
 
-\subsection{empty}
-Deze functie geeft een bolean terug welke aangeeft of de tabel leeg is.
+\subparagraph{empty}
+Deze functie geeft een boolean terug welke aangeeft of de tabel leeg is.
 Dit is een aparte functie omdat het scheelt in complexiteit ten opzichte van het tellen van een tabel en die vergelijken met 0.
   
 \textbf{\textit{preconditie:}} Geen preconditie
@@ -664,14 +745,30 @@ Als het bericht een heartbeat was wordt deze doorgestuurd anders wordt het aange
 \label{DetailedDesign:Communicatie:sequence:heartbeatrouter->router}
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{UML/out/Communication/Sequence/RouterHeartbeatRouter/RouterHeartbeatRouter.png}\end{center}
-	\caption{Sequence diagram van een heartbeat bericht van een gateway naar een router via een andere router.}
+	\caption{Sequence diagram van een router die een heartbeat stuurt naar een router.}
 	\label{fig:communication:sequence:sequence:router->router}
+\end{figure}
+In de bovenstaande sequence diagram \ref{fig:communication:sequence:sequence:router->router} wordt de flow behandeld van een heartbeat van een router naar een andere router.
+De keuze om dit in een sequence diagram uit te werken is om te laten zien dat er niet in elke scenario een reactie bericht verwacht hoeft te worden.
+
+In stap 11 en 12 is bijvoorbeeld de afhandeling te zien als de zendende router verbinding heeft met een gateway en de ontvangende router niet.
+In dit scenario gaat de router geen bericht terugsturen maar stelt hij de gateway die de zendende router heeft in als voorkeur en probeert een heartbeat te versturen naar deze gateway.    
+Als het scenario omgedraaid is en de zendende router heeft geen verbinding met een gateway maar de ontvangende router wel stuurt hij juist wel een heartbeat terug. 
+De zendende router zal hierdoor de zelfde stappen gaan uitvoeren als stap 11 en 12 waardoor hij weer een verbinding opbouwt met een gateway.
+
+Dit houdt dus ook in als beide routers geen verbinding hebben met een gateway, of juist allebei wel,dat ze geen response sturen op een heartbeat.
+
+
+\subsection{Activity Diagrammen}
+\label{DetailedDesign:Communicatie:Activity}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{UML/out/Communication/activity/MeshRouter/MeshRouter.png}\end{center}
+	\caption{Activity diagram MeshRouter applicatie.}
+	\label{fig:communication:activity:meshcommunicator}
 \end{figure}
 
 
-
-\subsection{Activity and State Diagrams}
-\label{DetailedDesign:Communicatie:Activity}
 \subsection{Design decisions made for the sub-system}
 
 \section{Design Sub-Systeem gazebo}

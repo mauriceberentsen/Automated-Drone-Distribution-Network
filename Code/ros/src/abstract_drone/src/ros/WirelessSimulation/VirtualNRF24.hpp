@@ -20,8 +20,11 @@
 #include "abstract_drone/PowerSwitch.h"
 #include "abstract_drone/NRF24.h"
 #include "abstract_drone/NodeDebugInfo.h"
-// interface
+// offered interface
 #include "../../Communication/Wireless/IWirelessCommunication.hpp"
+// Required interface
+#include "../../Communication/Wireless/IMeshNetwork.hpp"
+#include "../../Communication/Wireless/IMeshDebugInfo.hpp"
 
 namespace Communication
 {
@@ -42,7 +45,8 @@ namespace WirelessSimulation
    *
    * @param MC Reference to the connected MeshnetworkComponent
    */
-  explicit VirtualNRF24( Communication::Meshnetwork::MeshnetworkComponent& MC );
+  VirtualNRF24( Communication::Wireless::IMeshNetwork& MC,
+                Communication::Wireless::IMeshDebugInfo& debug );
   /**
    * @brief Destroy the Virtual NRF24 object
    *
@@ -114,12 +118,15 @@ namespace WirelessSimulation
    */
   void publishDebugInfo( );
 
+ private:
   /// \brief thread for publishing debug information at 1hz
   std::thread NodeDebugInfoThread;
   /// \brief Service to turn the communication on and off
   ros::ServiceServer switchPowerService;
-  /// \brief The connected MeshnetworkComponent used for WirelessSimulator
-  Communication::Meshnetwork::MeshnetworkComponent& meshnetworkComponent;
+  /// \brief The connected Meshnetwork Interface used for messages
+  Communication::Wireless::IMeshNetwork& meshnetworkComponent;
+  /// \brief Interface providing debug info about the meshnetwork
+  Communication::Wireless::IMeshDebugInfo& debuginfo;
   /// \brief Pointer to the Ros Node of this class
   std::unique_ptr< ros::NodeHandle > rosNode;
   /// \brief rosQueue for handling messages

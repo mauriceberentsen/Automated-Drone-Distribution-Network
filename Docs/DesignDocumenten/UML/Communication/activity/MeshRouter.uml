@@ -1,0 +1,36 @@
+@startuml
+|MeshnetworkRouter|
+start
+|IWirelessCommunication|
+:startAntenna;
+|MeshnetworkRouter|
+if(debug) then (false)
+#white:nothing;
+else(true)
+|IWirelessCommunication|
+:DebugingMode(true);
+|MeshnetworkRouter|
+endif
+|IRoutingTechnique|
+:startRouting;
+|MeshnetworkRouter|
+	while (program running) is ([time passed])
+    if(on) then ([false])
+    :connectedToGateway\n\t = false;
+    else ([true])
+    |IRoutingTechnique|
+    :maintainRouting;
+    |MeshnetworkRouter|
+    if(connectedToGateway) then([true])
+    :sendHeartbeatToGateway;
+    	if(knowGatewayLocation) then ([false])
+        :requestLocation(gateway);
+        endif
+        :sendHeartbeatToGateway;
+    else ([false])
+    :lostConnection;
+    endif
+    endif
+    endwhile ([false])
+stop
+@enduml

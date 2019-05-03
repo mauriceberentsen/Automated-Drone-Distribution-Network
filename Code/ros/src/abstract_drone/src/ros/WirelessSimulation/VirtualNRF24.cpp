@@ -21,9 +21,9 @@ namespace ros
 {
 namespace WirelessSimulation
 {
- VirtualNRF24::VirtualNRF24(
-     Communication::Meshnetwork::MeshnetworkComponent& MC )
-     : meshnetworkComponent( MC )
+ VirtualNRF24::VirtualNRF24( Communication::Wireless::IMeshNetwork& MC,
+                             Communication::Wireless::IMeshDebugInfo& debug )
+     : meshnetworkComponent( MC ), debuginfo( debug )
  {
  }
 
@@ -187,14 +187,14 @@ namespace WirelessSimulation
   while ( this->rosNode->ok( ) ) {
    std::this_thread::sleep_for(
        std::chrono::seconds( 1 ) );  // 1hz refresh is enough
-   msg.nodeID = meshnetworkComponent.getNodeID( );
-   msg.ConnectedWithGateway = meshnetworkComponent.getConnectedToGateway( );
-   msg.familySize = meshnetworkComponent.getRouterTechTableSize( );
-   msg.totalMessages = meshnetworkComponent.getTotalMessageSent( );
-   msg.prefferedGateWay = meshnetworkComponent.getPrefferedGateway( );
+   msg.nodeID = debuginfo.getNodeID( );
+   msg.ConnectedWithGateway = debuginfo.getConnectedToGateway( );
+   msg.familySize = debuginfo.getRouterTechTableSize( );
+   msg.totalMessages = debuginfo.getTotalMessageSent( );
+   msg.prefferedGateWay = debuginfo.getPrefferedGateway( );
    msg.on = this->on;
-   msg.hops = meshnetworkComponent.getHopsFromGatewayAway( );
-   msg.prefLoc = meshnetworkComponent.getLastGoodKnownLocationID( );
+   msg.hops = debuginfo.getHopsFromGatewayAway( );
+   msg.prefLoc = debuginfo.getLastGoodKnownLocationID( );
    nodeDebugTopic.publish( msg );
   }
  }

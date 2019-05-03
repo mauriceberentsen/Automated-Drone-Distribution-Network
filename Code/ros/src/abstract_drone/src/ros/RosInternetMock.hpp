@@ -18,7 +18,7 @@
 // gateway header
 #include "abstract_drone/RequestGatewayDroneFlight.h"
 // internet interface
-#include "../Communication/IInternetConnection.hpp"
+#include "../Communication/Internet/IInternetConnection.hpp"
 
 namespace Communication
 {
@@ -34,7 +34,7 @@ namespace Internet
  class RosInternetMock : public Communication::Internet::IInternetConnection
  {
  public:
-  RosInternetMock( Communication::Meshnetwork::MeshnetworkGateway &MG );
+  RosInternetMock( Communication::Internet::IGatewayCommands &IGC );
   ~RosInternetMock( );
   void connect( );
   void disconnect( );
@@ -56,7 +56,7 @@ namespace Internet
   /// \brief Subscriber to the general gateway topic
   ros::Subscriber gatewaySub;
   /// \brief Reference to the gateway for incoming messages
-  Communication::Meshnetwork::MeshnetworkGateway &meshnetworkGateway;
+  Communication::Internet::IGatewayCommands &meshnetworkGateway;
   /// \brief Pointer to the Ros Node of this class
   std::shared_ptr< ros::NodeHandle > rosNode;
   /// \brief thread to keep an open line for receiving NRF24 messages

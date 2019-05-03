@@ -25,7 +25,6 @@ namespace Meshnetwork
  // Called after load
  void MeshnetworkRouter::Init( )
  {
-  std::this_thread::sleep_for( std::chrono::microseconds( initTime ) );
   routerTech->startRouting( );
  }
 
@@ -78,7 +77,6 @@ namespace Meshnetwork
        std::chrono::seconds( CheckConnectionTime ) );  // check every 10
    // seconds
    routerTech->maintainRouting( );
-   searchOtherNodesInRange( );  // maybe there is someone close
    if ( connectedToGateway ) {
     if ( !knowPrefferedGatewayLocation ) {
      requestLocation( prefferedGateWay );

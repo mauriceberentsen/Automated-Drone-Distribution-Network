@@ -63,5 +63,12 @@ namespace Meshnetwork
  {
   // In the current implementation gateways dont move
  }
+ void MeshnetworkGateway::SendGoalRequestToDrone( const uint8_t ID,
+                                                  const float latitude,
+                                                  const float longitude,
+                                                  const uint16_t height )
+ {
+  SendGoalToDrone( ID, latitude, longitude, height );
+ }
 }  // namespace Meshnetwork
 }  // namespace Communication

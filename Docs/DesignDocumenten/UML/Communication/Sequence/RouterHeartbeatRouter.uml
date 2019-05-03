@@ -29,7 +29,7 @@ deactivate 1
 alt msg.getKnowGateway() && ! connectedToGateway
     2->2:prefferedGateWay = msg.getPrefferedGateway( )
     2->2:sendHeartbeatToGateway()
-else ! msg.getIsGateway() && connectedToGateway
+else ! msg.getKnowGateway() && connectedToGateway
     2->2+:SendHeartbeat(msg.getCreator())
     2->IWS+:SendMessageTo(heartbeat)
     deactivate 2

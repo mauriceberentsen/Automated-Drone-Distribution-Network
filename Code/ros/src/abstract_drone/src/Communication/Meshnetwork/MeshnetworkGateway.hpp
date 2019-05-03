@@ -12,14 +12,16 @@
 #define MESHNETWORKGATEWAY
 
 #include "MeshnetworkComponent.hpp"
-#include "../IInternetConnection.hpp"
+#include "../Internet/IInternetConnection.hpp"
+#include "../Internet/IGatewayCommands.hpp"
 
 #include "../../ros/RosInternetMock.hpp"
 namespace Communication
 {
 namespace Meshnetwork
 {
- class MeshnetworkGateway : public MeshnetworkComponent
+ class MeshnetworkGateway : public MeshnetworkComponent,
+                            public Internet::IGatewayCommands
  {
  public:
   /**
@@ -42,6 +44,9 @@ namespace Meshnetwork
    *
    */
   void Init( );
+
+  void SendGoalRequestToDrone( const uint8_t ID, const float latitude,
+                               const float longitude, const uint16_t height );
 
  protected:
  private:

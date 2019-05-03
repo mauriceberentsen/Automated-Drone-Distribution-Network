@@ -17,7 +17,7 @@ namespace Communication
 {
 namespace RoutingTechnique
 {
- ChildTableTree::ChildTableTree( Meshnetwork::MeshnetworkComponent& MC )
+ ChildTableTree::ChildTableTree( IRoutingEssentials& MC )
      : meshnetworkComponent( MC )
  {
  }

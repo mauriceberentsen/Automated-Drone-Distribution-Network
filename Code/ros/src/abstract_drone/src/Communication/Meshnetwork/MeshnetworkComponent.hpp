@@ -13,7 +13,10 @@
 #define MESHNETWORKCOMPONENT
 // system
 #include <map>
-// libary
+// Offered interfaces
+#include "../RoutingTechnique/IRoutingEssentials.hpp"
+#include "../Wireless/IMeshNetwork.hpp"
+#include "../Wireless/IMeshDebugInfo.hpp"
 // Required interfaces
 #include "../RoutingTechnique/IRoutingTechnique.hpp"
 #include "../Wireless/IWirelessCommunication.hpp"
@@ -28,7 +31,9 @@ namespace Communication
 {
 namespace Meshnetwork
 {
- class MeshnetworkComponent
+ class MeshnetworkComponent : public RoutingTechnique::IRoutingEssentials,
+                              public Wireless::IMeshNetwork,
+                              public Wireless::IMeshDebugInfo
  {
  public:
   /**
@@ -58,7 +63,7 @@ namespace Meshnetwork
    *
    * @return uint8_t this->nodeID
    */
-  uint8_t getNodeID( );
+  const uint8_t getNodeID( ) const;
   /**
    * @brief Get the ConnectedToGateway
    *
@@ -97,7 +102,7 @@ namespace Meshnetwork
    */
   const uint8_t getRouterTechTableSize( ) const;
   /**
-   * @brief Called upon each received Ros Message.
+   * @brief Called upon each received Message.
    *
    * @param message Pointer to char array[32] holding the message
    */
@@ -111,7 +116,7 @@ namespace Meshnetwork
    * @param longitude
    * @param height
    */
-  void sendGoalToDrone( const uint8_t ID, const float latitude,
+  void SendGoalToDrone( const uint8_t ID, const float latitude,
                         const float longitude, const uint16_t height );
 
   /**

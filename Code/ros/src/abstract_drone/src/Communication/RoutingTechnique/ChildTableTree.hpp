@@ -14,6 +14,7 @@
 #include <set>
 
 #include "IRoutingTechnique.hpp"
+#include "IRoutingEssentials.hpp"
 namespace Communication
 {
 namespace Meshnetwork
@@ -35,7 +36,7 @@ namespace RoutingTechnique
    * @param MC reference to a MeshnetworkComponent because we want to send
    * messages for maintainance
    */
-  explicit ChildTableTree( Meshnetwork::MeshnetworkComponent& MC );
+  explicit ChildTableTree( IRoutingEssentials& MC );
   ~ChildTableTree( );
 
   uint8_t getDirectionToNode( const uint8_t node );
@@ -95,7 +96,7 @@ namespace RoutingTechnique
  private:
   /// \brief The conneceted MeshnetworkComponent used for sending messages to
   /// other nodes.
-  Meshnetwork::MeshnetworkComponent& meshnetworkComponent;
+  IRoutingEssentials& meshnetworkComponent;
   /// \brief The family with connected childeren and grandchildren.
   std::map< uint8_t, std::set< uint8_t > > family;
  };
