@@ -756,17 +756,145 @@ In dit scenario gaat de router geen bericht terugsturen maar stelt hij de gatewa
 Als het scenario omgedraaid is en de zendende router heeft geen verbinding met een gateway maar de ontvangende router wel stuurt hij juist wel een heartbeat terug. 
 De zendende router zal hierdoor de zelfde stappen gaan uitvoeren als stap 11 en 12 waardoor hij weer een verbinding opbouwt met een gateway.
 
-Dit houdt dus ook in als beide routers geen verbinding hebben met een gateway, of juist allebei wel,dat ze geen response sturen op een heartbeat.
+Dit houdt dus ook in als beide routers geen verbinding hebben met een gateway, of allebei wel, dat ze geen response sturen op een heartbeat.
 
 
 \subsection{Activity Diagrammen}
 \label{DetailedDesign:Communicatie:Activity}
 
+Aan de hand van de onderstaande activity diagrammen wordt de flow van de communicatie applicatie uitgelegd. 
+In het component zijn twee soorten applicaties beschikbaar een router en een gateway. 
+Deze worden eerst apart behandeld daarna zal de rest van het component aan bod komen.
+
+Voor elk activity diagram telt dat er onder het diagram een begeleidende tekst is toegevoegd.
+
+\subsubsection{Activity diagrammen router}
+\label{DetailedDesign:Communicatie:Activity:router}
+
+Eerst wordt de algemene flow van de router applicatie toegelicht vervolgens zullen protocollen worden toegelicht die optreden in bepaalde situaties.
+
+\paragraph{Meshnetwerk router applicatie}
+\label{DetailedDesign:Communicatie:Activity:router:applicatie}
+De onderstaande flow zichtbaar in \autoref{fig:communication:activity:meshrouter} laat de algemene flow zien van de router applicatie. 
+
+
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=\linewidth]{UML/out/Communication/activity/MeshRouter/MeshRouter.png}\end{center}
-	\caption{Activity diagram MeshRouter applicatie.}
-	\label{fig:communication:activity:meshcommunicator}
+	\begin{center}\includegraphics[width=.83\linewidth]{UML/out/Communication/activity/MeshRouter/MeshRouter.png}\end{center}
+	\caption{Activity diagram meshnetwerk router applicatie.}
+	\label{fig:communication:activity:meshrouter}
 \end{figure}
+
+
+Zodra het programma start wordt als eerste de antenne aan gezet en wanneer dit geactiveerd is ook de de debug stand van de antenne. 
+Nadat deze is opgestart wordt kenbaar gemaakt aan de routeringstechniek dat deze ook kan starten met het opbouwen van routes.
+
+Nu deze twee zijn opgestart kan de basis lus van het programma beginnen. 
+Zolang het programma draait wordt deze lus herhaald.
+
+Elke  keer zodra het programma op dit punt aankomt wacht het 10(instelbaar) seconden.
+Hierna controleert de router of de aangesloten antenne nog aan staat. 
+Als dit niet zo is begint de lus opnieuw.
+Als de antenne wel aan staat wordt er een verzoek gedaan aan de routeringstechniek om onderhoudt te plegen.
+
+Vervolgens zijn er twee paden mogelijke op basis van het feit of er verbinding is met een gateway.
+Als er geen verbinding is wordt het protocol opgestart voor een verloren verbinding.
+Hoe dit protocol werkt wordt apart toegelicht in het hierop volgende diagram.
+
+Wanneer er wel verbinding is met een gateway wordt er gekeken  of de router ook op de hoogte is van de locatie van de router.
+Als hij dit nog niet weet vraagt hij deze op bij de gateway.
+Tenslotte wordt er een heartbeat verstuurt naar de gateway.
+
+
+\paragraph{Meshnetwerk router protocol bij verloren verbinding}
+\label{DetailedDesign:Communicatie:Activity:verloren}
+In het diagram getoond in \autoref{fig:communication:activity:verlorenverbinding} wordt het protocol uitgelegd die een router uitvoert zodra deze zijn verbinding heeft verloren met een gateway.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/Communication/activity/LostConnection/LostConnection.png}\end{center}
+	\caption{Activity diagram verloren verbinding protocol.}
+	\label{fig:communication:activity:verlorenverbinding}
+\end{figure}
+
+Het protocol start op met het nogmaals checken of de gateway geen verbinding heeft.
+Als er nog steeds geen verbinding is wordt er gekeken of er al een timer gestart is die bijhoudt hoelang er al geen verbinding meer is.
+
+Als er nog geen timer gestart is wordt de routeringstechniek op de hoogte gebracht dat de verbinding verloren is met de gateway.
+Vervolgens worden de direct aangesloten nodes ook op de hoogte gebracht van de verloren verbinding.
+Tenslotte  wordt er een timer gestart door een boolean te schakelen en de huidige tijd op te slaan daarna wordt de functie verlaten.
+
+Als er al wel een timer gestart is wordt er gekeken of de tijd die een node zonder verbinding mag zitten al verstreken is.
+Als deze tijd nog niet verstreken is wordt de functie verlaten.
+
+Wanneer de tijd wel verstreken is wordt het noodprotocol opgestart die in de volgende paragraaf beter wordt toegelicht.
+Zodra dit protocol is uitgevoerd wordt de timer weer uitgezet zodat deze in een volgende lus weer opnieuw gaat lopen.
+\pagebreak
+\paragraph{Meshnetwerk router noodprotocol}
+In \autoref{fig:communication:activity:nood} wordt het uitgevoerde protocol toegelicht die wordt uitgevoerd wanneer een node te lang zonder verbinding zit.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{UML/out/Communication/activity/EmergencyProtocol/EmergencyProtocol.png}\end{center}
+	\caption{Activity diagram noodprotocol.}
+	\label{fig:communication:activity:nood}
+\end{figure}
+
+Het noodprotocol begint met een laatste check of de node ondertussen alweer verbinding heeft 
+als dit zo is wordt het protocol niet uitgevoerd en de onderhandelingslijst leeg gehaald.
+
+Wanneer er nog steeds geen verbinding is gelegd met een gateway wordt het protocol gestart.
+Eerst wordt de routing techniek geraadpleegd of er nog andere nodes verbonden zijn met deze node.
+
+Als dat niet zo is wordt er een verzoek gestuurd naar de drone om zich te gaan verplaatsen naar de locatie die als laatste gemarkeerde is als goede locatie.
+Nadat deze verplaatst is wordt de locatie van de gateway ingesteld als laatst bekende goede locatie.
+Ook wordt de routeringstechniek op de hoogte gesteld dat er een verplaatsing heeft plaats gevonden.
+Als dit allemaal is uitgevoerd wordt dit protocol gesloten.
+
+Wanneer er wel andere nodes verbonden zijn met deze node dan moeten deze onderling gaan onderhandelen wie er een verplaatsing moet gaan uitvoeren om zo efficiënt mogelijk het netwerk proberen te herstellen. Deze werking is apart uitgelegd in de hier opvolgende activity diagram \ref{fig:communication:activity:verplaatsingsonderhandeling}. Nadat deze onderhandelingen zijn afgelopen wordt het noodprotocol afgesloten zodat het netwerk even een moment heeft een poging te doen zichzelf te herstellen.
+\pagebreak
+\paragraph{Meshnetwerk router verplaatsingsonderhandeling}
+\autoref{fig:communication:activity:verplaatsingsonderhandeling} laat de flow zien die een enkele node neemt wanneer deze start met onderhandelen over wie er een verplaatsing moet uitvoeren.
+
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.6\linewidth]{UML/out/Communication/activity/MovementNegotiation/MovementNegotiation.png}\end{center}
+	\caption{Activity diagram verplaatsingsonderhandeling}
+	\label{fig:communication:activity:verplaatsingsonderhandeling}
+\end{figure}
+De flow begint met het berekenen hoeveel punten de beweging van de node scoort.
+In de opgeleverde applicatie worden de verplaatsingpunten op twee factoren gebaseerd.
+Het aantal punten die een node krijgt staat gelijk aan de afstand die het heeft hemelsbreed met de gateway.
+Een voorwaarde is wel dat de locatie waar de node zich naartoe wil gaan verplaatsen niet bezet wordt door een andere node. Als dit zo is worden de punten op -1 gezet waardoor die automatisch niet meer mee doet omdat er gekeken omdat het minimale aantal punten 0 is.
+
+Hierna voegt de node zichzelf toe in de onderhandellijst en maakt hij zijn score bekend aan zijn aangesloten nodes.
+Zodra de node dit bekend heeft gemaakt wacht hij tot de andere nodes dit ook hebben gedaan.
+
+Als dit zover is kijkt de node of hij de hoogste score heeft in een lijst.
+
+Wanneer een node de hoogste score heeft verzoekt hij de drone om zich te verplaatsen naar de laatst bekende goede locatie. Ook maakt de node dit bekend aan de routeringstechniek. 
+Vervolgens stelt de node de locatie van de gateway in als laatste bekende goede locatie.
+
+Tenslotte maakt de node altijd aan het einde van de onderhandeling de lijst waar alle onderhandel waardes in staan. 
+
+\subsubsection{Activity diagrammen gateway}
+\label{DetailedDesign:Communicatie:Activity:gateway}
+In het volgende stuk worden de activity diagrammen behandeld die specifiek betrekking hebben op de gateway applicatie. Eerst wordt de algemene flow van de applicatie behandeld en daarna flows binnen de applicatie
+
+\paragraph{Meshnetwerk gateway applicatie}
+Deze paragraaf beschrijft de algemene flow van de gateway applicatie. 
+\label{DetailedDesign:Communicatie:Activity:gateway:applicatie}
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.8\linewidth]{UML/out/Communication/activity/MeshGateway/MeshGateway.png}\end{center}
+	\caption{Activity diagram meshnetwerk Gateway applicatie.}
+	\label{fig:communication:activity:gateway}
+\end{figure}
+
+Zodra de gateway begint start hij meteen de antenne op van de draadloze communicatie.
+Als debug aan staat verzoekt hij deze stand van de antenne om aan te gaan.
+Na het starten van de antenne zoekt de gateway een verbinding op met het internet via de aangesloten \nameref{architectural:interfaces:IInternetConnection} om zo aansturen vanuit een extern punt van het meshnetwerk mogelijk te maken.
+
+Daarna stelt hij de variabelen in die gebruikt worden in het netwerk om routers een weg naar de router toe te laten vinden. Voor nu worden de waarde dat er een verbinding is met de gateway altijd op waar gezet. In de toekomst kan dit nog veranderd worden op basis van het feit of er een internetverbinding is opgezet. 
+
+Tenslotte begint de gateway met een verzoek naar de routeringstechniek om te starten met routeren. Waarna de gateway alleen nog periodiek een verzoek zal sturen om de routering te onderhouden.
+ 
 
 
 \subsection{Design decisions made for the sub-system}

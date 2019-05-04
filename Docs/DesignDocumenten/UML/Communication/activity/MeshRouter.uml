@@ -7,7 +7,7 @@ start
 if(debug) then (false)
 #white:nothing;
 else(true)
-|IWirelessCommunication|
+|#lightgrey|IWirelessCommunication|
 :DebugingMode(true);
 |MeshnetworkRouter|
 endif
@@ -15,8 +15,11 @@ endif
 :startRouting;
 |MeshnetworkRouter|
 	while (program running) is ([time passed])
+|IWirelessCommunication|
+
     if(on) then ([false])
-    :connectedToGateway\n\t = false;
+|MeshnetworkRouter|
+#white:nothing;
     else ([true])
     |IRoutingTechnique|
     :maintainRouting;

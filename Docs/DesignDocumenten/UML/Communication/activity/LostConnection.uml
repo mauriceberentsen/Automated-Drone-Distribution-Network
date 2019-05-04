@@ -1,5 +1,5 @@
 @startuml
-
+|MeshnetworkRouter|
 
 start
 
@@ -8,17 +8,19 @@ if (connectedToGateway) then ([true])
 	:timerStarted = false;
     stop
 else ([false])
-	if(timerStarted) then ([false])
-    	:Remove gateway from \nknown connections;
-       	:Inform children about \nlost connection;
-		:Set Time went offline;
-        :Start Timer;
-    else ([true])    
+	if(timerStarted) then ([true])
 		if (lastTimeOnline < currentTime - waitTime) then ([true])
-        	:StartEmergencyProtocol;
+			:StartEmergencyProtocol;
 			:timerStarted = false;
-            else ([false])
-        endif
+			else ([false])
+		endif
+    else ([false])
+    	|IRoutingTechnique|
+		:Remove gateway from \nknown connections;
+		|MeshnetworkRouter|		
+       	:Inform children about \nlost connection;
+		:Save time noticed offline;
+        :Start Timer;
     endif
 endif
 stop
