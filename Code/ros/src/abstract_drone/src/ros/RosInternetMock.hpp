@@ -34,7 +34,7 @@ namespace Internet
  class RosInternetMock : public Communication::Internet::IInternetConnection
  {
  public:
-  RosInternetMock( Communication::Internet::IGatewayCommands &IGC );
+  explicit RosInternetMock( Communication::Internet::IGatewayCommands &IGC );
   ~RosInternetMock( );
   void connect( );
   void disconnect( );

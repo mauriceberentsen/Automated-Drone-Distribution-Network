@@ -23,7 +23,7 @@ namespace Drone
  class RosDroneEngineConnector : public ::Drone::IDroneEngine
  {
  public:
-  RosDroneEngineConnector( uint16_t droneID );
+  explicit RosDroneEngineConnector( uint16_t droneID );
   ~RosDroneEngineConnector( );
   /**
    * @brief Uses Ros transport to send a goal to the virtual engine

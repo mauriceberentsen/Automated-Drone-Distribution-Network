@@ -36,7 +36,7 @@ namespace WirelessSimulation
    *
    *@param comDistance maximum communication distance
    */
-  WirelessSignalSimulator( const float comDistance );
+  explicit WirelessSignalSimulator( const float comDistance );
   /**
    * @brief A servicecall used for sending messages from one node to another
    * conform basic rules of wireless communication
