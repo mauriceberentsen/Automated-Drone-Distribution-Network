@@ -24,11 +24,12 @@ namespace Meshnetwork
 
  void MeshnetworkGateway::Init( )
  {
-  // Since we are a gateway this is always true
+  internet->connect( );
+  // Since we are a gateway this is always true. In the future we could base
+  // this on the fact if we are connected to the internet
   connectedToGateway = true;
   // Would make no sense to connect to another gateway
   prefferedGateWay = this->nodeID;
-  internet->connect( );
   // Give the InternetComponent some time to boot
   // Begin with routing nearby nodes
   routerTech->startRouting( );

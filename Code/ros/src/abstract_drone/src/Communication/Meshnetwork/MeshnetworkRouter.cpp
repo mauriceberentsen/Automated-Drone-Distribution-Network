@@ -93,6 +93,7 @@ namespace Meshnetwork
   // this we be flipped back by response of the gateway
   connectedToGateway = false;
  }
+
  void MeshnetworkRouter::lostConnection( )
  {
   if ( connectedToGateway ) {
