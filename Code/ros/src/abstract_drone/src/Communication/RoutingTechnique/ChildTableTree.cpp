@@ -64,7 +64,9 @@ namespace RoutingTechnique
   } else  // is it one of the grandchilderen? Direct them that way
   {
    for ( auto& child : family ) {
-    if ( child.second.find( node ) != child.second.end( ) ) return child.first;
+    if ( child.second.find( node ) != child.second.end( ) ) {
+     return child.first;
+    }
    }
   }
   return UINT8_MAX;

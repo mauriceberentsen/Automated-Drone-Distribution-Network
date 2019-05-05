@@ -182,177 +182,6 @@ Na het component diagram zal elke subcomponent kort toegelicht worden
 \clearpage
 
 
-
-\section{Componenten}
-\label{architectural:subcomponenten}
-
-%NAMESPACE Communication
-\subsection{Internet}
-\label{architectural:subcomponenten:Internet}
-Dit component bevat alleen een high level interface om verbinding te maken en te verbreken met het internet
-\subsection{Meshnetwork}
-\label{architectural:subcomponenten:Meshnetwork}
-Dit component bevat de basis componenten voor het opbouwen van een meshnetwerk.
-\subsection{MeshnetworkComponent}
-
-\label{architectural:subcomponenten:MeshnetworkComponent}
-Een MeshnetworkComponent is de basis van elk component in het mesh netwerk.
-Het vereist routeringstechniek via de \nameref{architectural:interfaces:IRoutingTechnique}, een aansluiting naar een drone via \nameref{architectural:interfaces:IDroneEngine} en een vorm van draadloze communicatie via \nameref{architectural:interfaces:IWirelessCommunication}.
-Hij maakt gebruikt van het component \nameref{architectural:subcomponenten:Messages} om te communiceren met andere MeshnetworkComponenten.
- 
-\subsection{MeshnetworkRouter}
-\label{architectural:subcomponenten:MeshnetworkRouter}
-Een meshnetwork router is een \nameref{architectural:subcomponenten:MeshnetworkComponent} die in staat is verbinding met andere nodes op te bouwen.
-Zijn doel is om altijd verbinding te hebben met een \nameref{architectural:subcomponenten:MeshnetworkGateway}.
-Als hij dit te lang niet heeft kan hij zich verplaatsen door aanspraak te maken op de DroneEngine.
-Wanneer hij zich in een groep van andere Routers bevind zal hij eerst onderling onderhandelen wie er zich moet verplaatsen.
-
-\subsection{MeshnetworkGateway}
-\label{architectural:subcomponenten:MeshnetworkGateway}
-De gateway is een \nameref{architectural:subcomponenten:MeshnetworkComponent} die in staat is een verbinding op te bouwen naar een punt buiten het meshnetwerk. In de huidige situatie kan dit via een internetverbinding die loopt via de interface \nameref{architectural:interfaces:IInternetConnection}. 
-
-\subsection{Messages}
-\label{architectural:subcomponenten:Messages}
-Dit component betreft een verzameling van bericht samenstellingen die gebruikt worden voor de communicatie van het meshnetwerk.
-
-\subsection{Message}
-\label{architectural:subcomponenten:Message}
-Een Message is de basis van elke bericht en bevat tenminste de volgende informatie:  Maker, zender, berichttype, ontvanger, geadresseerde. 
-\subsection{GoToLocationMessage}
-\label{architectural:subcomponenten:GoToLocationMessage}
-Dit bericht bevat een locatie waar een drone zich naartoe moet verplaatsen.
-
-\subsection{HeartbeatMessage}
-\label{architectural:subcomponenten:HeartbeatMessage}
-Dit bericht wordt gebruikt om de verbinding met anderen te onderhouden. Dit bericht maakt een hop per keer dat deze doorgestuurd wordt.
-
-\subsection{IntroduceMessage}
-\label{architectural:subcomponenten:IntroduceMessage}
-Een introductie bericht wordt gebruikt door een node om schik voor te stellen aan alle andere nodes die dichtbij zijn. 
-
-\subsection{LocationMessage}
-\label{architectural:subcomponenten:LocationMessage}
-Dit bericht wordt gebruikt om de huidige locatie van een node door te sturen naar een ander.
-
-\subsection{MissingMessage}
-\label{architectural:subcomponenten:MissingMessage}
-Zodra een \nameref{architectural:subcomponenten:MeshnetworkComponent} de verbinding verliest met een ander gebruikt hij dit bericht om andere daarover te informeren.
-
-\subsection{MovementNegotiationMessage}	
-\label{architectural:subcomponenten:MovementNegotiationMessage}
-Om onderling te onderhandelen tussen de nodes wie er actie moet ondernemen wordt dit bericht gebruikt.
-
-\subsection{RoutingTechnique}
-\label{architectural:subcomponenten:RoutingTechnique}
-Dit component voorziet het meshnetwerk van een routing techniek wat dus inhoudt dat dit het component is die de communicatieroutes opbouwt naar andere punten in het netwerk.
-  
-\subsection{ChildTableTree}
-\label{architectural:subcomponenten:ChildTableTree}
-Deze techniek is een hybride meshnetwerk routing techniek waarbij een node de buren die deze heeft ziet als een kind.
-Als een node een nieuw kind heeft vertelt hij dit aan zijn buren.
-Omdat een node door zijn buren ook gezien wordt als kind registreren deze zijn nieuwe kind dus als kleinkind.
-Hierdoor hoeft een node alleen maar te zoeken aan wie welk kind hij een bericht hoeft door te geven. 
-De complexiteit van de routingtechniek neemt per stap in het netwerk af bij nodes met meerdere kinderen.
-Als een drone zich verplaatst heeft wist deze het de opgebouwde geheugen van kinderen en kleinkinderen. 
-
-\subsection{Wireless}
-\label{architectural:subcomponenten:Wireless}
-Dit component voorziet een \nameref{architectural:subcomponenten:MeshnetworkComponent} van een high level interface voor draadloze communicatie.
-Als er een draadloos component wordt aangesloten moet deze hierop aangesloten worden. 
-
-%NAMESPACE Drone
-\subsection{Drone}
-\label{architectural:subcomponenten:Drone}
-Dit component representeert een drone. Omdat er op dit moment geen fysieke drone aanwezig is bezit deze component alleen een high level interface.
-Deze interface is geschikt voor het ophalen van de huidige locatie en het ontvangen van een doellocatie
-
-%NAMESPACE Arduino
-\subsection{ArduinoRouter}
-\label{architectural:subcomponenten:ArduinoRouter}
-Dit component is een Arduino die voorzien is van een sketch om zich te gedragen als een router in het meshnetwerk
-\subsection{ArduinoGateway}
-\label{architectural:subcomponenten:ArduinoGateway}
-Dit component is een Arduino die voorzien is van een sketch om zich te gedragen als een gateway in het meshnetwerk
-
-%NAMESPACE GAZEBO
-\subsection{ArduinoSimulation}
-\label{architectural:subcomponenten:ArduinoSimulation}
-In de dit component wordt een arduino gesimuleerd, deze simulatie is puur functioneel en betreft alleen een gelijk gedrag met betrekking tot de Arduino sketch. 
-Het heeft geen effect op de clock snelheid deze is gelijk aan de computer waarop de software draait. 
-
-\subsection{VirtualArduino}
-\label{architectural:subcomponenten:VirtualArduino}
-Dit abstracte component verplicht elke virtuele Arduino tot het aanmaken van een setup en loop functie zoals dit ook is in Arduino sketches.
-Omdat deze Arduino altijd wordt toegevoegd aan een ander model erft dit component over van modelplugin.    
- 
-\subsection{VirtualArduinoRouter}
-\label{architectural:subcomponenten:VirtualArduinoRouter}
-Deze \nameref{architectural:subcomponenten:VirtualArduino} is voorzien van een sketch die de arduino zich laat gedragen als in router in het meshnetwerk. Dit component representeert het component \nameref{architectural:subcomponenten:ArduinoRouter} in gazebo.
-
-\subsection{VirtualArduinoGateway}
-\label{architectural:subcomponenten:VirtualArduinoGateway}
-Deze \nameref{architectural:subcomponenten:VirtualArduino} is voorzien van een sketch die de arduino zich laat gedragen als in gateway in het meshnetwerk. Dit component representeert het component \nameref{architectural:subcomponenten:ArduinoGateway} in gazebo.
-
-
-\subsection{DroneSimulation}
-\label{architectural:subcomponenten:DroneSimulation}
-Dit component is verantwoordelijk voor het simuleren van drones. 
-
-\subsection{DroneEngine}
-\label{architectural:subcomponenten:DroneEngine}
-Elke \nameref{architectural:subcomponenten:VirtualDrone} is voorzien deze drone engine. 
-Dit component maakt het mogelijk voor een drone om zich in een rechte lijn door lucht zich te verplaatsen waarbij het opstijgen en de landing verticaal wordt uitgevoerd.
-Daarnaast biedt dit component via een rosservice het deel van de interface \nameref{architectural:interfaces:IDroneEngine} aan om de huidige locatie op te vragen.
-Via een rostopic kan er een doel gestuurd gestuurd worden om het andere deel van de net genoemde interface te voorzien.
-Tenslotte stuurt dit component bij elke verplaatsing de huidige locatie door naar de \nameref{architectural:subcomponenten:WirelessSignalSimulator}. 
-
-\subsection{VirtualDrone}
-\label{architectural:subcomponenten:VirtualDrone}
-Een virtuele drone is een abstract component die alle variabelen bevat die nodig zijn om een drone in de wereld te injecteren. Deze variabelen betreffen een drone id, locatie en verwijzing naar de gazebo wereld. 
-
-\subsection{GatewayDrone}
-\label{architectural:subcomponenten:GatewayDrone}
-Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualArduinoGateway} plugin. 
-\subsection{RouterDrone}
-\label{architectural:subcomponenten:RouterDrone}
-Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualArduinoRouter} plugin. 
-
-\subsection{DroneFactory}
-\label{architectural:subcomponenten:DroneFactory}
-Dit component is verantwoordelijk voor het produceren van drones. Het is een WorldPlugin die aan de hand van meegegeven parameters gateway en router drones aanmaakt.  
-
-%NAMESPACE Ros
-\subsection{RosDroneEngineConnector}
-\label{architectural:subcomponenten:RosDroneEngineConnector}
-Dit component is een adapter tussen de \nameref{architectural:subcomponenten:DroneEngine} en de interface \nameref{architectural:interfaces:IDroneEngine}. Die het mogelijk maakt om ros te gebruiken om aanspraak te maken op de virtuele drone.
-
-\subsection{DroneManagerService}
-\label{architectural:subcomponenten:DroneManagerService}
-Dit component is de toegangspoort voor de ontwikkelaar tot de \nameref{architectural:subcomponenten:MeshnetworkGateway}.
-Op dit moment is het component alleen geschikt om verplaatsingverzoeken te versturen via de gateway naar de Drones.
-Hiervoor biedt het twee interfaces in de vorm van rosservices aan waarbij er een voor locaties is en de ander voor casussen. 
-
-\subsection{DroneManager}
-\label{architectural:subcomponenten:DroneManager}
-Dit subcomponent realiseert de rosservices en publiceert verplaatsingverzoeken naar de gateways.  
-
-\subsection{RosInternetMock}
-\label{architectural:subcomponenten:RosInternetMock}
-Deze internetmock laat de \nameref{architectural:subcomponenten:DroneManager} zich voordoen als internetpunt zodat er geen daadwerkelijke TCP/IP implementatie hoeft worden gemaakt 
-\subsection{WirelessSimulation}
-\label{architectural:subcomponenten:WirelessSimulation}
-Het WirelessSimulation component is verantwoordelijk voor het simuleren van de NRF24 en het draadloze signaal hiervan. 
-\subsection{WirelessSignalSimulator}
-\label{architectural:subcomponenten:WirelessSignalSimulator}
-Deze simulator bepaald of twee nodes met elkaar mogen communiceren. Het doet dit op basis van informatie die het continue ontvangt via het drone informatie topic. 
-\subsection{Node}
-\label{architectural:subcomponenten:Node}
-Dit component wordt alleen gebruikt door de \nameref{architectural:subcomponenten:WirelessSignalSimulator} om te registreren welke Nodes bestaan, waar ze zijn en naar welk topic ze luisteren.
-\subsection{VirtualNRF24}
-\label{architectural:subcomponenten:VirtualNRF24}
-Dit component is de virtuele versie van de NRF24, het is in staat om payloads te verwerken van 32 byte.
-Deze kan de NRF24 naar een direct adres versturen of zenden naar alle NRF24 nodes binnen bereik.
-
 \section{Interfaces}
 \label{architectural:interfaces}
 \subsection{IInternetConnection}
@@ -487,6 +316,86 @@ Het is een extractie uit het \nameref{fig:componentdiagram}
 	\caption{Component diagram communicatie}
 	\label{fig:component:Communicatie}
 \end{figure}
+
+
+\subsubsection{Meshnetwork}
+\label{architectural:subcomponenten:Meshnetwork}
+Dit component bevat de basis componenten voor het opbouwen van een meshnetwerk.
+
+\subsubsection{MeshnetworkComponent}
+
+\label{architectural:subcomponenten:MeshnetworkComponent}
+Een MeshnetworkComponent is de basis van elk component in het mesh netwerk.
+Het vereist routeringstechniek via de \nameref{architectural:interfaces:IRoutingTechnique}, een aansluiting naar een drone via \nameref{architectural:interfaces:IDroneEngine} en een vorm van draadloze communicatie via \nameref{architectural:interfaces:IWirelessCommunication}.
+Hij maakt gebruikt van het component \nameref{architectural:subcomponenten:Messages} om te communiceren met andere MeshnetworkComponenten.
+
+\subsubsection{MeshnetworkRouter}
+\label{architectural:subcomponenten:MeshnetworkRouter}
+Een meshnetwork router is een \nameref{architectural:subcomponenten:MeshnetworkComponent} die in staat is verbinding met andere nodes op te bouwen.
+Zijn doel is om altijd verbinding te hebben met een \nameref{architectural:subcomponenten:MeshnetworkGateway}.
+Als hij dit te lang niet heeft kan hij zich verplaatsen door aanspraak te maken op de DroneEngine.
+Wanneer hij zich in een groep van andere Routers bevind zal hij eerst onderling onderhandelen wie er zich moet verplaatsen.
+
+\subsubsection{MeshnetworkGateway}
+\label{architectural:subcomponenten:MeshnetworkGateway}
+De gateway is een \nameref{architectural:subcomponenten:MeshnetworkComponent} die in staat is een verbinding op te bouwen naar een punt buiten het meshnetwerk. In de huidige situatie kan dit via een internetverbinding die loopt via de interface \nameref{architectural:interfaces:IInternetConnection}. 
+
+\subsubsection{Internet}
+\label{architectural:subcomponenten:Internet}
+Dit component bevat een high level interface om verbinding te maken en te verbreken met het internet.
+Daarnaast biedt het een interface aan om berichten te ontvangen.
+
+\subsubsection{Messages}
+\label{architectural:subcomponenten:Messages}
+Dit component betreft een verzameling van bericht samenstellingen die gebruikt worden voor de communicatie van het meshnetwerk.
+
+\subsubsection{Message}
+\label{architectural:subcomponenten:Message}
+Een Message is de basis van elke bericht en bevat tenminste de volgende informatie:  Maker, zender, berichttype, ontvanger, geadresseerde. 
+\subsubsection{GoToLocationMessage}
+\label{architectural:subcomponenten:GoToLocationMessage}
+Dit bericht bevat een locatie waar een drone zich naartoe moet verplaatsen.
+
+\subsubsection{HeartbeatMessage}
+\label{architectural:subcomponenten:HeartbeatMessage}
+Dit bericht wordt gebruikt om de verbinding met anderen te onderhouden. Dit bericht maakt een hop per keer dat deze doorgestuurd wordt.
+
+\subsubsection{IntroduceMessage}
+\label{architectural:subcomponenten:IntroduceMessage}
+Een introductie bericht wordt gebruikt door een node om schik voor te stellen aan alle andere nodes die dichtbij zijn. 
+
+\subsubsection{LocationMessage}
+\label{architectural:subcomponenten:LocationMessage}
+Dit bericht wordt gebruikt om de huidige locatie van een node door te sturen naar een ander.
+
+\subsubsection{MissingMessage}
+\label{architectural:subcomponenten:MissingMessage}
+Zodra een \nameref{architectural:subcomponenten:MeshnetworkComponent} de verbinding verliest met een ander gebruikt hij dit bericht om andere daarover te informeren.
+
+\subsubsection{MovementNegotiationMessage}	
+\label{architectural:subcomponenten:MovementNegotiationMessage}
+Om onderling te onderhandelen tussen de nodes wie er actie moet ondernemen wordt dit bericht gebruikt.
+
+\subsubsection{RoutingTechnique}
+\label{architectural:subcomponenten:RoutingTechnique}
+Dit component voorziet het meshnetwerk van een routing techniek wat dus inhoudt dat dit het component is die de communicatieroutes opbouwt naar andere punten in het netwerk.
+
+\subsubsection{ChildTableTree}
+\label{architectural:subcomponenten:ChildTableTree}
+Deze techniek is een hybride meshnetwerk routing techniek waarbij een node de buren die deze heeft ziet als een kind.
+Als een node een nieuw kind heeft vertelt hij dit aan zijn buren.
+Omdat een node door zijn buren ook gezien wordt als kind registreren deze zijn nieuwe kind dus als kleinkind.
+Hierdoor hoeft een node alleen maar te zoeken aan wie welk kind hij een bericht hoeft door te geven. 
+De complexiteit van de routingtechniek neemt per stap in het netwerk af bij nodes met meerdere kinderen.
+Als een drone zich verplaatst heeft wist deze het de opgebouwde geheugen van kinderen en kleinkinderen. 
+
+\subsubsection{Wireless}
+\label{architectural:subcomponenten:Wireless}
+Dit component voorziet een \nameref{architectural:subcomponenten:MeshnetworkComponent} van een high level interface voor draadloze communicatie.
+Als er een draadloos component wordt aangesloten moet deze hierop aangesloten worden. 
+\subsection{Interfaces}
+\label{DetailedDesign:CommunicatieComponentDiagram:interface}
+Het communicatie component biedt zowel intern als extern interfaces aan. Deze worden hieronder omschreven.
 
 \subsubsection{Extern aangeboden interface beschrijvingen}
 \label{DetailedDesign:CommunicatieComponentDiagram:interface:extern}
@@ -687,7 +596,7 @@ Dit is een aparte functie omdat het scheelt in complexiteit ten opzichte van het
 
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:Communicatie:sequence}
-Hier worden aan de hand van sequence diagrammen communicatie wegen omschreven die zich binnen het component afspelen.
+Hier worden aan de hand van sequence diagrammen communicatie wegen omschreven die gebruikt worden tussen verschillende nodes in het netwerk.
 
 \subsubsection{Heartbeat van router naar gateway met directe verbinding}
 \label{DetailedDesign:Communicatie:sequence:heartbeatrouter->gateway}
@@ -706,7 +615,8 @@ In het geval van deze sequence diagram heeft de router een directe verbinding me
 
 Vervolgens maakt de router een heartbeat bericht aan die het via de \nameref{architectural:interfaces:IWirelessCommunication} interface verstuurd naar de Gateway.
 De router geeft door aan de routeringstechniek in stap 10 of 11 of het zenden wel of niet gelukt is op basis van de succes feedback uit stap 9.
-Als het niet lukt geeft hij dit ook door aan zijn aangesloten punten in stap 12 %TODO referentie naar hoe die werkt
+Als het niet lukt geeft hij dit ook door aan zijn aangesloten punten in stap 12. 
+De werking hiervan is terug te vinden in \nameref{DetailedDesign:Communicatie:sequence:contactverlies}
 Als laatste voordat de router zijn functie verlaat zet hij in stap 13 de boolean die bijhoudt of verbinding is met de gateway (connectedToGateway) op false omdat hij verwacht dat er reactie komt van de gateway die het weer op true zet.
 
 Bij stap 8 is het gelukt om het bericht te versturen naar de gateway die daar via zijn eigen \nameref{architectural:interfaces:IWirelessCommunication} interface het bericht ontvangt.
@@ -758,6 +668,20 @@ De zendende router zal hierdoor de zelfde stappen gaan uitvoeren als stap 11 en 
 
 Dit houdt dus ook in als beide routers geen verbinding hebben met een gateway, of allebei wel, dat ze geen response sturen op een heartbeat.
 
+\subsubsection{Informatieverspreiding bij verliezen contact met andere node}
+\label{DetailedDesign:Communicatie:sequence:contactverlies}
+Op het moment dat een node doorheeft dat er een verbinding verloren is met een andere node gaat hij de op hem aangesloten nodes daarover informeren. Dit zodat ieder andere node zijn routingstabel kan updaten 
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{UML/out/Communication/Sequence/LostConnectionWithOther/LostConnectionWithOther.png}\end{center}
+	\caption{Sequence diagram van een component die zijn aangesloten nodes op de hoogte brengt van een verloren node.}
+	\label{fig:communication:sequence:contactverlies}
+\end{figure}
+
+De eerste stap die een meshcomponent onderneemt is het raadplegen van de routeringstechniek of er direct aangesloten nodes zijn.
+Per aangesloten node verstuurt het component een bericht dat er een node geen verbinding meer wil maken.
+Een uitzondering is als de direct aangesloten node degene is die het component geïnformeerd heeft over het feit van de vermissing.
+Die ontvangt geen bericht aangezien deze natuurlijk al op de hoogte is.
+
 
 \subsection{Activity Diagrammen}
 \label{DetailedDesign:Communicatie:Activity}
@@ -804,7 +728,7 @@ Wanneer er wel verbinding is met een gateway wordt er gekeken  of de router ook 
 Als hij dit nog niet weet vraagt hij deze op bij de gateway.
 Tenslotte wordt er een heartbeat verstuurt naar de gateway.
 
-
+\pagebreak
 \paragraph{Meshnetwerk router protocol bij verloren verbinding}
 \label{DetailedDesign:Communicatie:Activity:verloren}
 In het diagram getoond in \autoref{fig:communication:activity:verlorenverbinding} wordt het protocol uitgelegd die een router uitvoert zodra deze zijn verbinding heeft verloren met een gateway.
@@ -894,13 +818,62 @@ Na het starten van de antenne zoekt de gateway een verbinding op met het interne
 Daarna stelt hij de variabelen in die gebruikt worden in het netwerk om routers een weg naar de router toe te laten vinden. Voor nu worden de waarde dat er een verbinding is met de gateway altijd op waar gezet. In de toekomst kan dit nog veranderd worden op basis van het feit of er een internetverbinding is opgezet. 
 
 Tenslotte begint de gateway met een verzoek naar de routeringstechniek om te starten met routeren. Waarna de gateway alleen nog periodiek een verzoek zal sturen om de routering te onderhouden.
- 
 
+\subsubsection{Meshnetwerk algemene applicatie}
+Dit volgende stuk beschrijft de flows in de applicatie die zowel de router als de gateway volgen. 
+
+\paragraph{Meshnetwerk flow bij ontvangst bericht}
+\label{DetailedDesign:Communicatie:Activity:meshcomponent:onmsg}
+Deze paragraaf beschrijft acties die de applicatie onderneemt bij het ontvangen van een bericht. 
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.8\linewidth]{UML/out/Communication/activity/processMessage/processMessage.png}\end{center}
+	\caption{Activity diagram meshnetwerk flow ontvangen bericht}
+	\label{fig:communication:meshcomponent:onmsg}
+\end{figure}
+
+In het acitvity diagram is te zien dat er bij het ontvangen van een bericht eerst wordt gekeken of het bericht geadresseerd is voor de ontvangende node.
+Als die niet zo is dan wordt het bericht doorgestuurd naar een volgend punt.
+
+Wanneer het wel geadresseerd is voor de ontvangende node dan gaat het de functie in om het bericht te verwerken. Hoe het bericht verwerkt wordt is afhankelijk van het type die het bericht bij zich draagt. Dit wordt gedaan aan de hand van een switch case.
+
+\paragraph{Routeringstechniek voor het vinden van een pad tot het adres}
+\label{DetailedDesign:Communicatie:Activity:routeringtechniek:aanvraag}
+In het communicatie component is een routeringstechniek aanwezig voor het vinden van een route tot een pad. Hoe deze techniek het volgende adres vindt in de route wordt getoond in het volgende activity diagram. 
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.45\linewidth]{UML/out/Communication/activity/padtotadres/padtotadres.png}\end{center}
+	\caption{Activity diagram vinden pad tot adres}
+	\label{fig:communication:routeringtechniek:aanvraag}
+\end{figure}
+
+In het diagram is te zien dat er drie uitgang situaties zijn. 
+Eerst zal de techniek kijken of het adres behoord tot een direct aangesloten node en als dat zo is geeft hij dit terug.
+Als er direct aangesloten node is gevonden kijkt het systeem of een van de aangesloten nodes het adres kent.
+Wanneer een aangesloten node het adres kent geeft de routeringstechniek het adres van de aangesloten node terug.
+Tenslotte als niemand het adres kent wordt dit terug gegeven.
+
+\paragraph{Routeringstechniek actie bij bewijs van contact}
+\label{DetailedDesign:Communicatie:Activity:routeringtechniek:contactgevonden}
+Als een node bewijs heeft dat er een verbinding is geeft hij dit door aan de routeringstechniek die verwerkt dat in de huidige implementatie op de volgende manier.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.45\linewidth]{UML/out/Communication/activity/contactgevonden/contactgevonden.png}\end{center}
+	\caption{Activity diagram vinden pad tot adres}
+	\label{fig:communication:routeringtechniek:gevonde}
+\end{figure}
+
+Op het moment dat er contact gelegd is dan wordt er gekeken of dit direct contact was of dat er een aangesloten node een nieuw contact heeft gevonden. Als het direct contact was komt er een nieuwe route aftakking door het toevoegen van een kind van de node.
+Als er indirect een nieuw contact wordt gevonden dan wordt de gene die dit aangeeft geregistreerd als nieuw punt wanneer die nog onbekend was. Vervolgens wordt aan het adres die gevonden is toegevoegd aan de set van de gene die de vondst aangeeft.
 
 \subsection{Design decisions made for the sub-system}
 
 \section{Design Sub-Systeem gazebo}
 \label{DetailedDesign:MeshNetwerk}
+Het sub syteem gazebo is het component die verantwoordelijk is voor de simulatie van de drones. 
+Het is zowel verantwoordelijk voor het initialiseren van de virtuele hardware als aan elkaar koppelen van deze hardware.
+Hoewel het nu nog niet van toepassing is zal gazebo uiteindelijk ook verantwoordelijk voor het toepassen van physics op de virutele drones. 
+
+
 \subsection{Component Diagram}
 \label{DetailedDesign:MeshNetwerk:ComponentDiagram}
 \begin{figure}[H]
@@ -908,6 +881,103 @@ Tenslotte begint de gateway met een verzoek naar de routeringstechniek om te sta
 	\caption{component diagram gazebo}
 	\label{fig:component:gazebo}
 \end{figure}
+
+%NAMESPACE GAZEBO
+\subsubsection{ArduinoSimulation}
+\label{architectural:subcomponenten:ArduinoSimulation}
+In de dit component wordt een arduino gesimuleerd, deze simulatie is puur functioneel en betreft alleen een gelijk gedrag met betrekking tot de Arduino sketch. 
+Het heeft geen effect op de clock snelheid deze is gelijk aan de computer waarop de software draait. 
+
+\subsubsection{VirtualArduino}
+\label{architectural:subcomponenten:VirtualArduino}
+Dit abstracte component verplicht elke virtuele Arduino tot het aanmaken van een setup en loop functie zoals dit ook is in Arduino sketches.
+Omdat deze Arduino altijd wordt toegevoegd aan een ander model erft dit component over van modelplugin.    
+
+\subsubsection{VirtualArduinoRouter}
+\label{architectural:subcomponenten:VirtualArduinoRouter}
+Deze \nameref{architectural:subcomponenten:VirtualArduino} is voorzien van een sketch die de arduino zich laat gedragen als in router in het meshnetwerk. 
+
+\subsubsection{VirtualArduinoGateway}
+\label{architectural:subcomponenten:VirtualArduinoGateway}
+Deze \nameref{architectural:subcomponenten:VirtualArduino} is voorzien van een sketch die de arduino zich laat gedragen als in gateway in het meshnetwerk. 
+
+
+\subsubsection{DroneSimulation}
+\label{architectural:subcomponenten:DroneSimulation}
+Dit component is verantwoordelijk voor het simuleren van drones. 
+
+\subsubsection{DroneEngine}
+\label{architectural:subcomponenten:DroneEngine}
+Elke \nameref{architectural:subcomponenten:VirtualDrone} is voorzien deze drone engine. 
+Dit component maakt het mogelijk voor een drone om zich in een rechte lijn door lucht zich te verplaatsen waarbij het opstijgen en de landing verticaal wordt uitgevoerd.
+Daarnaast biedt dit component via een rosservice het deel van de interface \nameref{architectural:interfaces:IDroneEngine} aan om de huidige locatie op te vragen.
+Via een rostopic kan er een doel gestuurd gestuurd worden om het andere deel van de net genoemde interface te voorzien.
+Tenslotte stuurt dit component bij elke verplaatsing de huidige locatie door naar de \nameref{architectural:subcomponenten:WirelessSignalSimulator}. 
+
+\subsubsection{VirtualDrone}
+\label{architectural:subcomponenten:VirtualDrone}
+Een virtuele drone is een abstract component die alle variabelen bevat die nodig zijn om een drone in de wereld te injecteren. Deze variabelen betreffen een drone id, locatie en verwijzing naar de gazebo wereld. 
+
+\subsubsection{GatewayDrone}
+\label{architectural:subcomponenten:GatewayDrone}
+Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualArduinoGateway} plugin. 
+\subsubsection{RouterDrone}
+\label{architectural:subcomponenten:RouterDrone}
+Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualArduinoRouter} plugin. 
+
+\subsubsection{DroneFactory}
+\label{architectural:subcomponenten:DroneFactory}
+Dit component is verantwoordelijk voor het produceren van drones. Het is een WorldPlugin die aan de hand van meegegeven parameters gateway en router drones aanmaakt. 
+
+\subsection{Interfaces}
+\label{DetailedDesign:MeshNetwerk:interfaces}
+In de vorm van ros transport types voldoet het gazebo component aan extern aangeboden interfaces.
+Door gebruik te maken van een ServiceServer \nameref{architectural:ros:service:RequestGPS} en een subscriber op het topic \nameref{architectural:ros:topic:Location} die samen de functionaliteit bieden benodigd voor de interface \nameref{architectural:interfaces:IDroneEngine}. 
+Door informatie te publiceren op het topic \nameref{architectural:ros:topic:DroneInfo} biedt het informatie per drone aan over locaties.
+
+\subsubsection{RequestGPS}
+\label{DetailedDesign:MeshNetwerk:interfaces:requestgps}
+
+Elke drone engine maakt een service aan met de naam "\slash Drones/drone\textunderscore id/gps"	waarbij de drone\textunderscore id een variabele is.
+De structuur van de service ziet er als volgt uit.
+\begin{lstlisting}
+---
+float32 latitude
+float32 longitude
+int16 height
+\end{lstlisting}
+
+Deze service heeft geen parameters waaraan voldaan moet worden. 
+Als response geeft het de huidige locatie terug van de drone.
+
+\subsubsection{Location}
+\label{DetailedDesign:MeshNetwerk:interfaces:location}
+
+Door het luisteren naar het topic "\slash Drones/drone\textunderscore id/goal"\  is het mogelijk om doelen te sturen naar de drone. 
+Dit gebeurd door Location berichten te sturen naar de drone welke de volgende structuur hebben.
+
+\begin{lstlisting}
+float32 latitude
+float32 longitude
+int16 height
+\end{lstlisting}
+
+Bij ontvangst stelt de DroneEngine de ontvangen locatie in als doel.
+
+\subsubsection{DroneInfo}
+\label{DetailedDesign:MeshNetwerk:interfaces:droneinfo}
+Tenslotte publiceert de drone informatie op het topic "\slash WirelessSignalSimulator\slash.
+Hiervoor gebruikt het het bericht DroneInfo die de volgende structuur heeft:
+
+\begin{lstlisting}
+uint8 nodeID
+float32[3] position
+string sub
+bool on
+\end{lstlisting}
+
+
+
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:MeshNetwerk:sequence}
 \subsection{Activity and State Diagrams}
@@ -924,6 +994,40 @@ Tenslotte begint de gateway met een verzoek naar de routeringstechniek om te sta
 	\caption{component diagram ros}
 	\label{fig:component:ros}
 \end{figure}
+
+%NAMESPACE Ros
+\subsubsection{RosDroneEngineConnector}
+\label{architectural:subcomponenten:RosDroneEngineConnector}
+Dit component is een adapter tussen de \nameref{architectural:subcomponenten:DroneEngine} en de interface \nameref{architectural:interfaces:IDroneEngine}. Die het mogelijk maakt om ros te gebruiken om aanspraak te maken op de virtuele drone.
+
+\subsubsection{DroneManagerService}
+\label{architectural:subcomponenten:DroneManagerService}
+Dit component is de toegangspoort voor de ontwikkelaar tot de \nameref{architectural:subcomponenten:MeshnetworkGateway}.
+Op dit moment is het component alleen geschikt om verplaatsingverzoeken te versturen via de gateway naar de Drones.
+Hiervoor biedt het twee interfaces in de vorm van rosservices aan waarbij er een voor locaties is en de ander voor casussen. 
+
+\subsubsection{DroneManager}
+\label{architectural:subcomponenten:DroneManager}
+Dit subcomponent realiseert de rosservices en publiceert verplaatsingverzoeken naar de gateways.  
+
+\subsubsection{RosInternetMock}
+\label{architectural:subcomponenten:RosInternetMock}
+Deze internetmock laat de \nameref{architectural:subcomponenten:DroneManager} zich voordoen als internetpunt zodat er geen daadwerkelijke TCP/IP implementatie hoeft worden gemaakt 
+\subsubsection{WirelessSimulation}
+\label{architectural:subcomponenten:WirelessSimulation}
+Het WirelessSimulation component is verantwoordelijk voor het simuleren van de NRF24 en het draadloze signaal hiervan. 
+\subsubsection{WirelessSignalSimulator}
+\label{architectural:subcomponenten:WirelessSignalSimulator}
+Deze simulator bepaald of twee nodes met elkaar mogen communiceren. Het doet dit op basis van informatie die het continue ontvangt via het drone informatie topic. 
+\subsubsection{Node}
+\label{architectural:subcomponenten:Node}
+Dit component wordt alleen gebruikt door de \nameref{architectural:subcomponenten:WirelessSignalSimulator} om te registreren welke Nodes bestaan, waar ze zijn en naar welk topic ze luisteren.
+\subsubsection{VirtualNRF24}
+\label{architectural:subcomponenten:VirtualNRF24}
+Dit component is de virtuele versie van de NRF24, het is in staat om payloads te verwerken van 32 byte.
+Deze kan de NRF24 naar een direct adres versturen of zenden naar alle NRF24 nodes binnen bereik.
+
+
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:WirelessSimulatie:sequence}
 \subsection{Activity and State Diagrams}

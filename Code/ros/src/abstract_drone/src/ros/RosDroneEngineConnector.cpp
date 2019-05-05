@@ -58,7 +58,6 @@ namespace Drone
  const ignition::math::Vector3< float > RosDroneEngineConnector::getLocation( )
  {
   abstract_drone::RequestGPS GPS;
-  GPS.request.ID = this->ID;
   {
    if ( this->GPSLink.call( GPS ) ) {
     ignition::math::Vector3< float > loc(

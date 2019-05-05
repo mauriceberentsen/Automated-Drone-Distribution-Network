@@ -9,7 +9,7 @@
  *
  */
 #include "ros/subscribe_options.h"
-#include "abstract_drone/nodeInfo.h"
+#include "abstract_drone/DroneInfo.h"
 
 #include "DroneEngine.hpp"
 
@@ -59,7 +59,7 @@ namespace DroneSimulation
   this->rosSub = this->rosNode->subscribe( so );
 
   this->wirelessSimulatorPub =
-      this->rosNode->advertise< abstract_drone::nodeInfo >(
+      this->rosNode->advertise< abstract_drone::DroneInfo >(
           "/WirelessSignalSimulator", 100 );
 
   this->rosQueueThread =
@@ -139,7 +139,7 @@ namespace DroneSimulation
  void DroneEngine::informWirelessSimulator( )
  {
   pose = this->model->WorldPose( );
-  abstract_drone::nodeInfo nI;
+  abstract_drone::DroneInfo nI;
   nI.nodeID = this->drone_id;
   nI.position[0] = pose.Pos( ).X( );
   nI.position[1] = pose.Pos( ).Y( );

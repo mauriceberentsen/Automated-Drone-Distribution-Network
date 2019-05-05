@@ -1,6 +1,8 @@
 @startuml
 |MeshCommunicator|
 start
+:onMsg;
+if(forward == this->nodeID) then (true)
 :processMessage;
 if (case: LOCATION) then ([true])
 :processLocation;
@@ -16,17 +18,9 @@ elseif (case: MOVE_TO_LOCATION) then ([true])
 :sendGoalToEngine;
 elseif (case: MOVEMENT_NEGOTIATION) then ([true])
 :processMovementNegotiationMessage;
-else
-:Print unknown message;
-
 endif
-
-
-
+else (false)
+:forward message;
+endif
 stop
-
-
-
-
-
 @enduml

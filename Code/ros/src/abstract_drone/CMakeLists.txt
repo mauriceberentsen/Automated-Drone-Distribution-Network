@@ -53,7 +53,7 @@ add_message_files(
    FILES
    Location.msg
    NRF24.msg
-   nodeInfo.msg
+   DroneInfo.msg
    NodeDebugInfo.msg
    RequestGatewayDroneFlight.msg
 )

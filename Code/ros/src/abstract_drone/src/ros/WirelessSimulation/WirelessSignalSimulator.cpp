@@ -32,7 +32,7 @@ namespace WirelessSimulation
   this->rosNode.reset( new ros::NodeHandle( "SignalSimulator" ) );
 
   ros::SubscribeOptions so =
-      ros::SubscribeOptions::create< abstract_drone::nodeInfo >(
+      ros::SubscribeOptions::create< abstract_drone::DroneInfo >(
           Node_TopicName, 1000,
           boost::bind( &WirelessSignalSimulator::OnRosMsg, this, _1 ),
           ros::VoidPtr( ), &this->rosQueue );
@@ -112,7 +112,7 @@ namespace WirelessSimulation
  }
 
  void WirelessSignalSimulator::OnRosMsg(
-     const abstract_drone::nodeInfoConstPtr &_msg )
+     const abstract_drone::DroneInfoConstPtr &_msg )
  {
   auto it = Network.find( _msg->nodeID );
   if ( it !=

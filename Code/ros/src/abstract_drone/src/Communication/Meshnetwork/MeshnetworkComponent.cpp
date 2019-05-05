@@ -106,7 +106,7 @@ namespace Meshnetwork
     processLocation( message );
     break;
    case Messages::MISSING:
-    processMissing( message );
+    ( message );
     break;
    case Messages::MOVE_TO_LOCATION:
     processSendGoalToEngine( message );
@@ -202,14 +202,13 @@ namespace Meshnetwork
  {
   for ( auto &chi1d : routerTech->getSetOfChildren( ) ) {
    if ( parent == chi1d ) continue;
-   uint8_t other = routerTech->getDirectionToNode( chi1d );
-   if ( other == UINT8_MAX ) continue;
-
-   Messages::MissingMessage missingMessage( this->nodeID, this->nodeID, other,
+   uint8_t towards = routerTech->getDirectionToNode( chi1d );
+   if ( towards == UINT8_MAX ) continue;
+   Messages::MissingMessage missingMessage( this->nodeID, this->nodeID, towards,
                                             chi1d, missing );
    uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
    missingMessage.toPayload( buffer );
-   SendMessage( buffer, other );
+   SendMessage( buffer, towards );
   }
  }
 
@@ -251,6 +250,7 @@ namespace Meshnetwork
   a = A.getLongitude( ) - location.X( );
   b = A.getLatitude( ) - location.Y( );
   c = A.getHeight( ) - location.Z( );
+  // return the square root of (a^2 + b^2 + c^2)
   return std::sqrt( std::pow( a, 2 ) + std::pow( b, 2 ) + std::pow( c, 2 ) );
  }
 

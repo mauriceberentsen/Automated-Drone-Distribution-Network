@@ -10,7 +10,7 @@
  */
 
 #include "abstract_drone/AreaScan.h"
-#include "abstract_drone/nodeInfo.h"
+#include "abstract_drone/DroneInfo.h"
 
 #include "VirtualNRF24.hpp"
 #include "../../Communication/Meshnetwork/MeshnetworkComponent.hpp"
@@ -43,11 +43,11 @@ namespace WirelessSimulation
   Node_TopicName =
       "/Node/" + std::to_string( meshnetworkComponent.getNodeID( ) );
   ROS_INFO( "Start virtual antenna[%s]", Node_TopicName.c_str( ) );
-  this->rosPub = this->rosNode->advertise< abstract_drone::nodeInfo >(
+  this->rosPub = this->rosNode->advertise< abstract_drone::DroneInfo >(
       WirelessSignalSimulatorName, 100 );
 
   // inform the WirelessSignalSimulator
-  abstract_drone::nodeInfo nodeinf;
+  abstract_drone::DroneInfo nodeinf;
   nodeinf.nodeID = meshnetworkComponent.getNodeID( );
   nodeinf.sub = Node_TopicName;
   nodeinf.on = true;
@@ -166,7 +166,7 @@ namespace WirelessSimulation
                                  abstract_drone::PowerSwitchResponse& response )
  {
   this->on = request.power;
-  abstract_drone::nodeInfo nodeinf;
+  abstract_drone::DroneInfo nodeinf;
   nodeinf.nodeID = this->meshnetworkComponent.getNodeID( );
   nodeinf.on = this->on;
   rosPub.publish( nodeinf );

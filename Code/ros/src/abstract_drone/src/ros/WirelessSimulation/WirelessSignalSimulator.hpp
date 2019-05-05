@@ -15,7 +15,7 @@
 #include <thread>
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
-#include "abstract_drone/nodeInfo.h"
+#include "abstract_drone/DroneInfo.h"
 #include "abstract_drone/WirelessMessage.h"
 #include "abstract_drone/AreaScan.h"
 
@@ -63,7 +63,7 @@ namespace WirelessSimulation
  protected:
  private:
   /**
-   * @brief Handles Ros messages recieved of the type nodeInfo
+   * @brief Handles Ros messages recieved of the type DroneInfo
    *        - Used for administration of the following
    *            -# The whereabouts of the nodes
    *            -# The topic they are subscribed to for sending messages
@@ -71,7 +71,7 @@ namespace WirelessSimulation
    *
    * @param _msg ROS message holding Node information
    */
-  void OnRosMsg( const abstract_drone::nodeInfoConstPtr &_msg );
+  void OnRosMsg( const abstract_drone::DroneInfoConstPtr &_msg );
 
   /**
    * @brief  ROS helper function that processes messages
