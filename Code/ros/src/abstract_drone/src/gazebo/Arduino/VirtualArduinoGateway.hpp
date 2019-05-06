@@ -13,6 +13,10 @@
 
 #include "IVirtualArduino.hpp"
 #include "../../Communication/Meshnetwork/MeshnetworkGateway.hpp"
+#include "../../ros/RosInternetMock.hpp"
+#include "../../ros/RosDroneEngineConnector.hpp"
+#include "../../Communication/RoutingTechnique/ChildTableTree.hpp"
+#include "../../ros/WirelessSimulation/VirtualNRF24.hpp"
 
 namespace gazebo
 {
@@ -53,6 +57,12 @@ namespace ArduinoSimulation
   bool debug;
   /// \brief A pointer to the connected MeshnetworkGateway
   Communication::Meshnetwork::MeshnetworkGateway* meshnetworkGateway;
+
+  Communication::RoutingTechnique::ChildTableTree* CTT;
+  ros::Drone::RosDroneEngineConnector* RDEC;
+  ros::WirelessSimulation::VirtualNRF24* NRF24;
+  ros::Internet::RosInternetMock* RIM;
+
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
  };

@@ -45,8 +45,7 @@ namespace WirelessSimulation
    *
    * @param MC Reference to the connected MeshnetworkComponent
    */
-  VirtualNRF24( Communication::Wireless::IMeshNetwork& MC,
-                Communication::Wireless::IMeshDebugInfo& debug );
+  VirtualNRF24( );
   /**
    * @brief Destroy the Virtual NRF24 object
    *
@@ -56,7 +55,7 @@ namespace WirelessSimulation
    * @brief Start the communication pipe of the NRF24
    *
    */
-  void StartAntenna( );
+  void StartAntenna( Communication::Wireless::IMeshNetwork* MC );
   /**
    * @brief Stop the communication pipe
    *
@@ -81,7 +80,8 @@ namespace WirelessSimulation
    *
    * @param on state
    */
-  void DebugingMode( const bool on = true );
+  void DebugingMode( Communication::Wireless::IMeshDebugInfo* debug,
+                     const bool on = true );
   /**
    * @brief Handles incomming ROS messages
    *
@@ -124,9 +124,9 @@ namespace WirelessSimulation
   /// \brief Service to turn the communication on and off
   ros::ServiceServer switchPowerService;
   /// \brief The connected Meshnetwork Interface used for messages
-  Communication::Wireless::IMeshNetwork& meshnetworkComponent;
+  Communication::Wireless::IMeshNetwork* meshnetworkComponent;
   /// \brief Interface providing debug info about the meshnetwork
-  Communication::Wireless::IMeshDebugInfo& debuginfo;
+  Communication::Wireless::IMeshDebugInfo* debuginfo;
   /// \brief Pointer to the Ros Node of this class
   std::unique_ptr< ros::NodeHandle > rosNode;
   /// \brief rosQueue for handling messages

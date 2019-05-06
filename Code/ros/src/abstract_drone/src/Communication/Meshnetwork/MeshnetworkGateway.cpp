@@ -14,17 +14,18 @@ namespace Communication
 {
 namespace Meshnetwork
 {
- MeshnetworkGateway::MeshnetworkGateway( const uint8_t node,
-                                         const uint8_t drone,
-                                         bool developermode )
-     : MeshnetworkComponent( node, drone, developermode )
-     , internet( new ros::Internet::RosInternetMock( *this ) )
+ MeshnetworkGateway::MeshnetworkGateway(
+     const uint8_t node, const uint8_t drone, bool developermode,
+     RoutingTechnique::IRoutingTechnique* IRT, Drone::IDroneEngine* IDE,
+     Wireless::IWirelessCommunication* IWC, Internet::IInternetConnection* ICC )
+     : MeshnetworkComponent( node, drone, developermode, IRT, IDE, IWC )
+     , internet( ICC )
  {
  }
 
  void MeshnetworkGateway::Init( )
  {
-  internet->connect( );
+  internet->connect( this );
   // Since we are a gateway this is always true. In the future we could base
   // this on the fact if we are connected to the internet
   connectedToGateway = true;
@@ -32,7 +33,7 @@ namespace Meshnetwork
   prefferedGateWay = this->nodeID;
   // Give the InternetComponent some time to boot
   // Begin with routing nearby nodes
-  routerTech->startRouting( );
+  routerTech->startRouting( this );
  }
 
  void MeshnetworkGateway::processIntroduction( const uint8_t* message )

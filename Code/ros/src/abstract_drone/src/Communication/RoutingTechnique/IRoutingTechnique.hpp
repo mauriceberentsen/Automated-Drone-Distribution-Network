@@ -12,6 +12,8 @@
 #define IROUTINGTECHNIQUE
 #include <inttypes.h>
 #include <set>
+
+#include "IRoutingEssentials.hpp"
 namespace Communication
 {
 namespace RoutingTechnique
@@ -33,7 +35,8 @@ namespace RoutingTechnique
    * @brief Call this method is called once to start the routing technique.
    *
    */
-  virtual void startRouting( ) = 0;
+  virtual void startRouting(
+      Communication::RoutingTechnique::IRoutingEssentials* IRE ) = 0;
   /**
    * @brief This method is called every time to maintain the routing.
    *

@@ -101,7 +101,7 @@ namespace DroneSimulation
    *        - plays the animation
    *
    */
-  void BootDroneMovement( );
+  void ExecuteDroneMovement( );
 
  private:
   /// \brief The DroneID of this engine

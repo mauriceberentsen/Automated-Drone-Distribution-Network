@@ -17,8 +17,7 @@ namespace Communication
 {
 namespace RoutingTechnique
 {
- ChildTableTree::ChildTableTree( IRoutingEssentials& MC )
-     : meshnetworkComponent( MC )
+ ChildTableTree::ChildTableTree( )
  {
  }
 
@@ -26,15 +25,16 @@ namespace RoutingTechnique
  {
  }
 
- void ChildTableTree::startRouting( )
+ void ChildTableTree::startRouting( IRoutingEssentials* IRE )
  {
-  meshnetworkComponent.searchOtherNodesInRange( );
+  meshnetworkComponent = IRE;
+  meshnetworkComponent->searchOtherNodesInRange( );
  }
  void ChildTableTree::maintainRouting( )
  {
-  meshnetworkComponent.searchOtherNodesInRange( );
+  meshnetworkComponent->searchOtherNodesInRange( );
   for ( auto& node : getSetOfChildren( ) )
-   meshnetworkComponent.sendHeartbeat( node );
+   meshnetworkComponent->sendHeartbeat( node );
  }
  void ChildTableTree::canCommunicateWithNode( const uint8_t node )
  {

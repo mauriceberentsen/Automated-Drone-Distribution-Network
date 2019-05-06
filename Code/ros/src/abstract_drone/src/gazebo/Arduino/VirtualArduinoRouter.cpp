@@ -46,8 +46,11 @@ namespace ArduinoSimulation
 
  void VirtualArduinoRouter::setup( )
  {
+  CTT = new Communication::RoutingTechnique::ChildTableTree( );
+  RDEC = new ros::Drone::RosDroneEngineConnector( droneID );
+  NRF24 = new ros::WirelessSimulation::VirtualNRF24( );
   meshnetworkRouter = new Communication::Meshnetwork::MeshnetworkRouter(
-      nodeID, droneID, debug );
+      nodeID, droneID, debug, CTT, RDEC, NRF24 );
   meshnetworkRouter->Init( );
  }
 

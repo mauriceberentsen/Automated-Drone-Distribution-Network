@@ -19,19 +19,19 @@ namespace Communication
 {
 namespace Meshnetwork
 {
- MeshnetworkComponent::MeshnetworkComponent( const uint8_t node,
-                                             const uint8_t drone,
-                                             bool developermode )
+ MeshnetworkComponent::MeshnetworkComponent(
+     const uint8_t node, const uint8_t drone, bool developermode,
+     RoutingTechnique::IRoutingTechnique *IRT, Drone::IDroneEngine *IDE,
+     Wireless::IWirelessCommunication *IWC )
      : nodeID( node )
      , droneID( drone )
      , debug( developermode )
-     , routerTech( new RoutingTechnique::ChildTableTree( *this ) )
-     , communication(
-           new ros::WirelessSimulation::VirtualNRF24( *this, *this ) )
-     , droneEngine( new ros::Drone::RosDroneEngineConnector( drone ) )
+     , routerTech( IRT )
+     , droneEngine( IDE )
+     , communication( IWC )
  {
-  this->communication->StartAntenna( );
-  if ( debug ) { this->communication->DebugingMode( true ); }
+  this->communication->StartAntenna( this );
+  if ( debug ) { this->communication->DebugingMode( this, true ); }
   this->checkConnectionThread =
       std::thread( std::bind( &MeshnetworkComponent::CheckConnection, this ) );
  }

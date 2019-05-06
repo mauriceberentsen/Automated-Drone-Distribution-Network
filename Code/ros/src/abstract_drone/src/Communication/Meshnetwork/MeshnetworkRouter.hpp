@@ -28,7 +28,10 @@ namespace Meshnetwork
    * @param developermode Debuging mode enabled
    */
   MeshnetworkRouter( const uint8_t node, const uint8_t drone,
-                     bool developermode );
+                     bool developermode,
+                     RoutingTechnique::IRoutingTechnique *IRT,
+                     Drone::IDroneEngine *IDE,
+                     Wireless::IWirelessCommunication *IWC );
 
   /**
    * @brief called once after Load for initialization behavior.

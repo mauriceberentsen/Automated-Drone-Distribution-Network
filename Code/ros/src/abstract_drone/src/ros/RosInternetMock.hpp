@@ -34,9 +34,9 @@ namespace Internet
  class RosInternetMock : public Communication::Internet::IInternetConnection
  {
  public:
-  explicit RosInternetMock( Communication::Internet::IGatewayCommands &IGC );
+  RosInternetMock( );
   ~RosInternetMock( );
-  void connect( );
+  void connect( Communication::Internet::IGatewayCommands *IGC );
   void disconnect( );
 
  private:
@@ -56,7 +56,7 @@ namespace Internet
   /// \brief Subscriber to the general gateway topic
   ros::Subscriber gatewaySub;
   /// \brief Reference to the gateway for incoming messages
-  Communication::Internet::IGatewayCommands &meshnetworkGateway;
+  Communication::Internet::IGatewayCommands *meshnetworkGateway;
   /// \brief Pointer to the Ros Node of this class
   std::shared_ptr< ros::NodeHandle > rosNode;
   /// \brief thread to keep an open line for receiving NRF24 messages

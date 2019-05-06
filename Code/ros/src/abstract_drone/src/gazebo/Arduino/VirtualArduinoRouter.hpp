@@ -53,6 +53,9 @@ namespace ArduinoSimulation
   Communication::Meshnetwork::MeshnetworkRouter* meshnetworkRouter;
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
+  Communication::RoutingTechnique::ChildTableTree* CTT;
+  ros::Drone::RosDroneEngineConnector* RDEC;
+  ros::WirelessSimulation::VirtualNRF24* NRF24;
  };
 
 }  // namespace ArduinoSimulation

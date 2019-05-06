@@ -10,6 +10,8 @@
  */
 #ifndef IWIRELESS
 #define IWIRELESS
+#include "IMeshNetwork.hpp"
+#include "IMeshDebugInfo.hpp"
 namespace Communication
 {
 namespace Wireless
@@ -23,7 +25,7 @@ namespace Wireless
    * @brief Start the Antenna
    *
    */
-  virtual void StartAntenna( ) = 0;
+  virtual void StartAntenna( Communication::Wireless::IMeshNetwork* IMN ) = 0;
   /**
    * @brief Stop the Antenna
    *
@@ -48,7 +50,8 @@ namespace Wireless
    *
    * @param on on/off state
    */
-  virtual void DebugingMode( const bool on ) = 0;
+  virtual void DebugingMode( Communication::Wireless::IMeshDebugInfo* IMD,
+                             const bool on ) = 0;
   /**
    * @brief Get ON/OFF state
    *

@@ -15,7 +15,6 @@
 #include "../Internet/IInternetConnection.hpp"
 #include "../Internet/IGatewayCommands.hpp"
 
-#include "../../ros/RosInternetMock.hpp"
 namespace Communication
 {
 namespace Meshnetwork
@@ -32,7 +31,11 @@ namespace Meshnetwork
    * @param developermode Debuging mode enabled
    */
   MeshnetworkGateway( const uint8_t node, const uint8_t drone,
-                      bool developermode );
+                      bool developermode,
+                      RoutingTechnique::IRoutingTechnique* IRT,
+                      Drone::IDroneEngine* IDE,
+                      Wireless::IWirelessCommunication* IWC,
+                      Internet::IInternetConnection* ICC );
 
   /**
    * @brief Called after Load

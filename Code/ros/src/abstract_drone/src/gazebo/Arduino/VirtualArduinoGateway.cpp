@@ -44,10 +44,19 @@ namespace ArduinoSimulation
   setup( );
  }
 
+ //  communication::RoutingTechnique::ChildTableTree CTT;
+ //  ros::Drone::RosDroneEngineConnector RDEC;
+ //  ros::Internet::RosInternetMock RIM;
+ //  ros::WirelessSimulation::VirtualNRF24 NRF24;
+
  void VirtualArduinoGateway::setup( )
  {
+  CTT = new Communication::RoutingTechnique::ChildTableTree( );
+  RDEC = new ros::Drone::RosDroneEngineConnector( droneID );
+  NRF24 = new ros::WirelessSimulation::VirtualNRF24( );
+  RIM = new ros::Internet::RosInternetMock( );
   meshnetworkGateway = new Communication::Meshnetwork::MeshnetworkGateway(
-      nodeID, droneID, debug );
+      nodeID, droneID, debug, CTT, RDEC, NRF24, RIM );
   meshnetworkGateway->Init( );
  }
 

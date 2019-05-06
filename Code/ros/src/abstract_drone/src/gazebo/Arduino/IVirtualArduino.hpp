@@ -23,7 +23,7 @@ namespace ArduinoSimulation
  class IVirtualArduino : public ModelPlugin
  {
   /**
-   * @brief Should be called at start up
+   * @brief Should be called one time at start up
    *
    */
   virtual void setup( ) = 0;

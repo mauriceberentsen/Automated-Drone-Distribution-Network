@@ -36,7 +36,7 @@ namespace RoutingTechnique
    * @param MC reference to a MeshnetworkComponent because we want to send
    * messages for maintainance
    */
-  explicit ChildTableTree( IRoutingEssentials& MC );
+  explicit ChildTableTree( );
   ~ChildTableTree( );
 
   uint8_t getDirectionToNode( const uint8_t node );
@@ -44,7 +44,7 @@ namespace RoutingTechnique
    * @brief We search for others in range
    *
    */
-  void startRouting( );
+  void startRouting( IRoutingEssentials* IRE );
   /**
    * @brief We search for others in range and send them a heartbeat
    *
@@ -96,7 +96,7 @@ namespace RoutingTechnique
  private:
   /// \brief The conneceted MeshnetworkComponent used for sending messages to
   /// other nodes.
-  IRoutingEssentials& meshnetworkComponent;
+  IRoutingEssentials* meshnetworkComponent;
   /// \brief The family with connected childeren and grandchildren.
   std::map< uint8_t, std::set< uint8_t > > family;
  };

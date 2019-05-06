@@ -18,14 +18,17 @@ namespace Communication
 namespace Meshnetwork
 {
  MeshnetworkRouter::MeshnetworkRouter( const uint8_t node, const uint8_t drone,
-                                       bool developermode )
-     : MeshnetworkComponent( node, drone, developermode )
+                                       bool developermode,
+                                       RoutingTechnique::IRoutingTechnique *IRT,
+                                       Drone::IDroneEngine *IDE,
+                                       Wireless::IWirelessCommunication *IWC )
+     : MeshnetworkComponent( node, drone, developermode, IRT, IDE, IWC )
  {
  }
  // Called after load
  void MeshnetworkRouter::Init( )
  {
-  routerTech->startRouting( );
+  routerTech->startRouting( this );
  }
 
  void MeshnetworkRouter::processIntroduction( const uint8_t *message )

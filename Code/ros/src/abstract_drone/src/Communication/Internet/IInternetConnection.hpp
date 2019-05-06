@@ -10,6 +10,7 @@
  */
 #ifndef IINTERNETCONNECTION
 #define IINTERNETCONNECTION
+#include "../../Communication/Internet/IGatewayCommands.hpp"
 namespace Communication
 {
 namespace Internet
@@ -21,7 +22,7 @@ namespace Internet
    * @brief Connect to the internet service
    *
    */
-  virtual void connect( ) = 0;
+  virtual void connect( Communication::Internet::IGatewayCommands *IGC ) = 0;
   /**
    * @brief  Disconnect from the internet service
    *

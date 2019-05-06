@@ -17,22 +17,8 @@ namespace ros
 {
 namespace Internet
 {
- RosInternetMock::RosInternetMock(
-     Communication::Internet::IGatewayCommands &MG )
-     : meshnetworkGateway( MG )
+ RosInternetMock::RosInternetMock( )
  {
-  // Initialize ros, if it has not already been initialized.
-  if ( !ros::isInitialized( ) ) {
-   int argc = 0;
-   char **argv = NULL;
-   ros::init( argc, argv, "RosInternetMock",
-              ros::init_options::NoSigintHandler );
-  }
-  this->rosNode.reset( new ros::NodeHandle( "droneEngineConnector" ) );
-
-  // Spin up the queue helper thread.
-  this->rosQueueThread =
-      std::thread( std::bind( &RosInternetMock::QueueThread, this ) );
  }
 
  RosInternetMock::~RosInternetMock( )
@@ -45,8 +31,22 @@ namespace Internet
   this->gatewaySub.shutdown( );
  }
 
- void RosInternetMock::connect( )
+ void RosInternetMock::connect( Communication::Internet::IGatewayCommands *IGC )
  {
+  meshnetworkGateway = IGC;
+  // Initialize ros, if it has not already been initialized.
+  if ( !ros::isInitialized( ) ) {
+   int argc = 0;
+   char **argv = NULL;
+   ros::init( argc, argv, "RosInternetMock",
+              ros::init_options::NoSigintHandler );
+  }
+  this->rosNode.reset( new ros::NodeHandle( "droneEngineConnector" ) );
+
+  // Spin up the queue helper thread.
+  this->rosQueueThread =
+      std::thread( std::bind( &RosInternetMock::QueueThread, this ) );
+
   ros::SubscribeOptions so = ros::SubscribeOptions::create<
       abstract_drone::RequestGatewayDroneFlight >(
       "/gateway", 1000, boost::bind( &RosInternetMock::gatewayQueue, this, _1 ),
@@ -66,8 +66,8 @@ namespace Internet
  void RosInternetMock::gatewayQueue(
      const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg )
  {
-  meshnetworkGateway.SendGoalRequestToDrone( _msg->ID, _msg->latitude,
-                                             _msg->longitude, _msg->height );
+  meshnetworkGateway->SendGoalRequestToDrone( _msg->ID, _msg->latitude,
+                                              _msg->longitude, _msg->height );
  }
 
 }  // namespace Internet

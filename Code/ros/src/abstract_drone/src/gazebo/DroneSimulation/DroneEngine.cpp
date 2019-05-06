@@ -32,11 +32,6 @@ namespace DroneSimulation
 
   this->model = _parent;
 
-  // Listen to the update event. This event is broadcast every
-  // simulation iteration.
-  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
-      std::bind( &DroneEngine::OnUpdate, this ) );
-
   // Initialize ros, if it has not already been initialized.
   if ( !ros::isInitialized( ) ) {
    int argc = 0;
@@ -71,6 +66,10 @@ namespace DroneSimulation
   ROS_INFO( "Loaded DroneEngine Plugin connect to topicname:[%s]",
             this->model->GetName( ).c_str( ) );
   informWirelessSimulator( );
+  // Listen to the update event. This event is broadcast every
+  // simulation iteration.
+  this->updateConnection = event::Events::ConnectWorldUpdateBegin(
+      std::bind( &DroneEngine::OnUpdate, this ) );
  }
 
  void DroneEngine::OnUpdate( )
@@ -79,7 +78,7 @@ namespace DroneSimulation
   while ( !atGoal( ) && !moving ) {
    // TODO implement a better check because now we cant use multiple waypoints
    // or replan during flight
-   BootDroneMovement( );
+   ExecuteDroneMovement( );
   }
   if ( moving ) { informWirelessSimulator( ); }
   if ( this->atGoal( ) ) {
@@ -99,7 +98,7 @@ namespace DroneSimulation
          ( goal.Pos( ).Z( ) > pose.Pos( ).Z( ) - presision );
  }
 
- void DroneEngine::BootDroneMovement( )
+ void DroneEngine::ExecuteDroneMovement( )
  {
   ROS_WARN( "call move model" );
   if ( moving ) return;

@@ -134,7 +134,10 @@ namespace Meshnetwork
    * @param developermode Debuging mode enabled
    */
   MeshnetworkComponent( const uint8_t node, const uint8_t drone,
-                        bool developermode = false );
+                        bool developermode,
+                        RoutingTechnique::IRoutingTechnique *IRT,
+                        Drone::IDroneEngine *IDE,
+                        Wireless::IWirelessCommunication *IWC );
 
   /**
    * @brief Used internal to tell the drone to fly towards a location
@@ -305,9 +308,9 @@ namespace Meshnetwork
   /// \brief pointer to the used RoutingTechnique
   std::unique_ptr< RoutingTechnique::IRoutingTechnique > routerTech;
 
+  /// \brief Wireless communication
   /// \brief Connection towards the DroneEngine
   std::unique_ptr< Drone::IDroneEngine > droneEngine;
-  /// \brief Wireless communication
   std::unique_ptr< Wireless::IWirelessCommunication > communication;
 
  private:

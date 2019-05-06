@@ -21,9 +21,7 @@ namespace ros
 {
 namespace WirelessSimulation
 {
- VirtualNRF24::VirtualNRF24( Communication::Wireless::IMeshNetwork& MC,
-                             Communication::Wireless::IMeshDebugInfo& debug )
-     : meshnetworkComponent( MC ), debuginfo( debug )
+ VirtualNRF24::VirtualNRF24( )
  {
  }
 
@@ -31,8 +29,9 @@ namespace WirelessSimulation
  {
  }
 
- void VirtualNRF24::StartAntenna( )
+ void VirtualNRF24::StartAntenna( Communication::Wireless::IMeshNetwork* MC )
  {
+  meshnetworkComponent = MC;
   // Initialize ros, if it has not already been initialized.
   if ( !ros::isInitialized( ) ) {
    int argc = 0;
@@ -41,14 +40,14 @@ namespace WirelessSimulation
   }
   this->rosNode.reset( new ros::NodeHandle( "VirtualNRF24" ) );
   Node_TopicName =
-      "/Node/" + std::to_string( meshnetworkComponent.getNodeID( ) );
+      "/Node/" + std::to_string( meshnetworkComponent->getNodeID( ) );
   ROS_INFO( "Start virtual antenna[%s]", Node_TopicName.c_str( ) );
   this->rosPub = this->rosNode->advertise< abstract_drone::DroneInfo >(
       WirelessSignalSimulatorName, 100 );
 
   // inform the WirelessSignalSimulator
   abstract_drone::DroneInfo nodeinf;
-  nodeinf.nodeID = meshnetworkComponent.getNodeID( );
+  nodeinf.nodeID = meshnetworkComponent->getNodeID( );
   nodeinf.sub = Node_TopicName;
   nodeinf.on = true;
   while ( rosPub.getNumSubscribers( ) == 0 ) {
@@ -57,7 +56,7 @@ namespace WirelessSimulation
   rosPub.publish( nodeinf );
 
   std::string powerSwitch =
-      "/Nodes/" + std::to_string( meshnetworkComponent.getNodeID( ) ) +
+      "/Nodes/" + std::to_string( meshnetworkComponent->getNodeID( ) ) +
       "/powerSwitch";
 
   ros::SubscribeOptions so =
@@ -120,10 +119,10 @@ namespace WirelessSimulation
  void VirtualNRF24::BroadcastMessage( const uint8_t* msg )
  {
   abstract_drone::AreaScan scanMsg;
-  scanMsg.request.id = meshnetworkComponent.getNodeID( );
+  scanMsg.request.id = meshnetworkComponent->getNodeID( );
   if ( areaScanner.call( scanMsg ) ) {
    if ( scanMsg.response.near.empty( ) ) {
-    ROS_WARN( "Node %d found none", meshnetworkComponent.getNodeID( ) );
+    ROS_WARN( "Node %d found none", meshnetworkComponent->getNodeID( ) );
     return;
    }
 
@@ -144,10 +143,12 @@ namespace WirelessSimulation
   }
  }
 
- void VirtualNRF24::DebugingMode( const bool on )
+ void VirtualNRF24::DebugingMode(
+     Communication::Wireless::IMeshDebugInfo* debug, const bool on )
  {
+  debuginfo = debug;
   std::string DebugInfoName =
-      "/Nodes/" + std::to_string( meshnetworkComponent.getNodeID( ) ) +
+      "/Nodes/" + std::to_string( meshnetworkComponent->getNodeID( ) ) +
       "/debug";
 
   this->nodeDebugTopic =
@@ -159,7 +160,7 @@ namespace WirelessSimulation
 
  void VirtualNRF24::OnRosMsg( const abstract_drone::NRF24ConstPtr& _msg )
  {
-  meshnetworkComponent.OnMsg( _msg->payload.data( ) );
+  meshnetworkComponent->OnMsg( _msg->payload.data( ) );
  }
 
  bool VirtualNRF24::switchPower( abstract_drone::PowerSwitchRequest& request,
@@ -167,7 +168,7 @@ namespace WirelessSimulation
  {
   this->on = request.power;
   abstract_drone::DroneInfo nodeinf;
-  nodeinf.nodeID = this->meshnetworkComponent.getNodeID( );
+  nodeinf.nodeID = this->meshnetworkComponent->getNodeID( );
   nodeinf.on = this->on;
   rosPub.publish( nodeinf );
   return true;
@@ -187,14 +188,14 @@ namespace WirelessSimulation
   while ( this->rosNode->ok( ) ) {
    std::this_thread::sleep_for(
        std::chrono::seconds( 1 ) );  // 1hz refresh is enough
-   msg.nodeID = debuginfo.getNodeID( );
-   msg.ConnectedWithGateway = debuginfo.getConnectedToGateway( );
-   msg.familySize = debuginfo.getRouterTechTableSize( );
-   msg.totalMessages = debuginfo.getTotalMessageSent( );
-   msg.prefferedGateWay = debuginfo.getPrefferedGateway( );
+   msg.nodeID = debuginfo->getNodeID( );
+   msg.ConnectedWithGateway = debuginfo->getConnectedToGateway( );
+   msg.familySize = debuginfo->getRouterTechTableSize( );
+   msg.totalMessages = debuginfo->getTotalMessageSent( );
+   msg.prefferedGateWay = debuginfo->getPrefferedGateway( );
    msg.on = this->on;
-   msg.hops = debuginfo.getHopsFromGatewayAway( );
-   msg.prefLoc = debuginfo.getLastGoodKnownLocationID( );
+   msg.hops = debuginfo->getHopsFromGatewayAway( );
+   msg.prefLoc = debuginfo->getLastGoodKnownLocationID( );
    nodeDebugTopic.publish( msg );
   }
  }
