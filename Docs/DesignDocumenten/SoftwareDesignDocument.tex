@@ -96,21 +96,10 @@
 \end{figure}
 \maketitle
 
-%\section*{Voorwoord}
-%\addcontentsline{toc}{section}{\protect\numberline{}Voorwoord}
-%\pagebreak
-
-%Geschikt voor minimaal 50 nodes; Kan slecht of geen signaal nabootsen
-
 \tableofcontents
 \clearpage
 
 
-%\clearpage
-
-%\section*{Samenvatting}
-%\addcontentsline{toc}{section}{\protect\numberline{}Samenvatting}
-%\pagebreak
 
 
 \chapter{Inleiding}
@@ -879,7 +868,11 @@ Als een node bewijs heeft dat er een verbinding is geeft hij dit door aan de rou
 Op het moment dat er contact gelegd is dan wordt er gekeken of dit direct contact was of dat er een aangesloten node een nieuw contact heeft gevonden. Als het direct contact was komt er een nieuwe route aftakking door het toevoegen van een kind van de node.
 Als er indirect een nieuw contact wordt gevonden dan wordt de gene die dit aangeeft geregistreerd als nieuw punt wanneer die nog onbekend was. Vervolgens wordt aan het adres die gevonden is toegevoegd aan de set van de gene die de vondst aangeeft.
 
-\subsection{Design decisions made for the sub-system}
+\subsection{Ontwerpkeuzes gemaakt voor het communicatie component}
+\label{DetailedDesign:Communicatie:ontwerkeuzes}
+In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
+
+%\subsubsection{}
 
 \section{Design Sub-Systeem gazebo}
 \label{DetailedDesign:MeshNetwerk}
@@ -1178,8 +1171,10 @@ Tenslotte moet de animatie bij 100 procent landen op het ingestelde doel.
 Als deze volledige animatie is ingesteld wordt dit verstuurd naar het model om uit te voeren.    
  
 
-\subsection{Design decisions made for the sub-system}
-\label{DetailedDesign:MeshNetwerk:decisions}
+\subsection{Ontwerpkeuzes gemaakt voor het gazebo component}
+\label{DetailedDesign:gazebo:ontwerkeuzes}
+In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
+
 
 \section{Design Sub-System ros}
 \label{DetailedDesign:WirelessSimulatie}
@@ -1605,16 +1600,87 @@ Dit bericht wordt tenslotte gepubliceerd naar de \nameref{architectural:subcompo
 
 
 
+\subsubsection{Sturen doel naar drone}
+\label{DetailedDesign:ros:sequence:sturendoelnaarengine}
+
+De \nameref{architectural:subcomponenten:RosDroneEngineConnector} biedt in zijn aangeboden interface twee functies aan.
+Een van die functies is het versturen van een doel naar de \nameref{architectural:subcomponenten:DroneEngine}. 
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.8\linewidth]{UML/out/ros/sequence/powerSwitch/powerSwitch.png}\end{center}
+	\caption{Sequence diagram sturen doel naar de DroneEngine}
+	\label{fig:ros:sequence:sequence:sturendoelnaarengine}
+\end{figure}
+
+Om een doel te versturen maakt de RosEngineConnector een Location bericht aan waarin de locatie staat waar de drone zich naartoe moet verplaatsen.
+Deze publiceert hij vervolgens op het topic van de DroneEngine.
+
+\subsubsection{Ophalen locatie van de drone}
+\label{DetailedDesign:ros:sequence:ophalenlocatie}
+
+De \nameref{architectural:subcomponenten:RosDroneEngineConnector} biedt in zijn aangeboden interface de functie aan om een locatie van een drone op te vragen. Dit werkt als volgt
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.9\linewidth]{UML/out/ros/sequence/getLocation/getLocation.png}\end{center}
+	\caption{Sequence diagram power switch Virtuele NRF24}
+	\label{fig:ros:sequence:sequence:ophalenlocatie}
+\end{figure}
+
+Als er een verzoek om een locatie gemaakt wordt maakt de RosEngineConnector een RequestGPS bericht aan. 
+Vervolgens gebruikt hij dit bericht in een servicecall naar de \nameref{architectural:subcomponenten:DroneEngine} die als response de locatie terug zal geven. 
+Met deze waardes wordt een Vector3 aangemaakt welke vervolgens teruggegeven wordt.
+Er is nog geen goede afhandeling wanneer de DroneEngine niet beschikbaar is voor nu wordt er locatie (6,6,6) teruggegeven.
+
+
 \subsection{Activity Diagrammen}
 %\subsection{Activity and State Diagrams}
 \label{DetailedDesign:ros:activity}
 
+\paragraph{Verwerken drone informatie WirelessSimulator}
+\label{DetailedDesign:ros:Activity:droneinfo}
+Er is een generiek topic van de wireless simulator waar zowel de \nameref{architectural:subcomponenten:DroneEngine} als de \nameref{architectural:subcomponenten:VirtualNRF24} informatie op posten. Om dit te scheiden neemt de WirelessSimulator de volgende stappen bij het ontvangen van een bericht. 
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.6\linewidth]{UML/out/ros/activity/processDroneInfo/processDroneInfo.png}\end{center}
+	\caption{Activity diagram initialiseren van de DroneEngine}
+	\label{fig:communication:MeshNetwerk:Activity:initialiserenDrone}
+\end{figure}
 
-\subsection{Design decisions made for the sub-system}
-\label{DetailedDesign:ros:decisions}
+Wanneer er een bericht ontvangen wordt met drone informatie kijkt de WirelessSimulator eerst of de node al bekend is bij hem.
+Als deze nog niet bekend is kijkt de simulator of het bericht een string bevat met op welk topic de node luistert. 
+Als niet in het bericht staat wordt de functie verlaten, wanneer dit wel zo wordt de node opgeslagen.
+
+Wanneer het bericht van een bekende node af komt wordt er gekeken of er een power switch is.
+Als dit zo is past de simulator ook de switch in zijn register voor die node aan zodat die weet in welke staat die staat.
+Bij een bericht waar de stand van de power niet wisselt wordt de node zijn informatie bijgewerkt met de meest recente informatie.
+
+\paragraph{Start antenne VirtualNRF24}
+\label{DetailedDesign:ros:Activity:antenne}
+
+Omdat er tijdens het opstarten van een virtuele antenne veel stappen worden ondernomen wordt het volgende activity diagram gebruikt om dit proces extra toe te lichten.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.4\linewidth]{UML/out/ros/activity/StartAntenna/StartAntenna.png}\end{center}
+	\caption{Activity diagram initialiseren van de DroneEngine}
+	\label{fig:ros:MeshNetwerk:Activity:antenne}
+\end{figure}
+
+Als een antenne start legt die als eerste verbinding met zijn vereiste interface \nameref{architectural:interfaces:IMeshNetwork}. 
+Vervolgens controleert de antenne of ros al draait als dit nog niet zo is start hij deze op.
+Hierna start de antenne een rosnode op die hij gebruikt voor ros transport.
+Zodra deze node opgestart is start de antenne met luisteren naar zijn eigen topic
+Als dit topic aangemaakt is maakt hij een ros publisher aan voor de nodeInfo.  
+Als dit gedaan is wacht de antenne tot de wirelessSignalSimulator luistert naar het topic.
+Wanneer deze luistert publiceert de antenne de informatie.
+Vervolgens worden de services opgestart om nodes binnen bereik te vinden en de powerswitch.
+Tenslotte wordt er een thread opgestart voor het bufferen van ros berichten.
+
+\subsection{Ontwerpkeuzes gemaakt voor het ros component}
+\label{DetailedDesign:ros:ontwerkeuzes}
+In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
 
 \section{Design Sub-System NRF24}
 \label{DetailedDesign:NRF24}
+
 \subsection{Component Diagram}
 \label{DetailedDesign:NRF24:ComponentDiagram}
 \begin{figure}[H]
@@ -1624,10 +1690,13 @@ Dit bericht wordt tenslotte gepubliceerd naar de \nameref{architectural:subcompo
 \end{figure}
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:NRF24:sequence}
+
 \subsection{Activity Diagrams}
 \label{DetailedDesign:NRF24:activity}
-\subsection{Design decisions made for the sub-system}
-\label{DetailedDesign:NRF24:decisions}
+
+\subsection{Ontwerpkeuzes gemaakt voor het NRF24 component}
+\label{DetailedDesign:NRF24:ontwerkeuzes}
+In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
 
 
 \bibliographystyle{apacite}

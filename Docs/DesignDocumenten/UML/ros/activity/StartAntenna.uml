@@ -6,12 +6,12 @@ if(ros::isInitialized) then (false)
 :start ros;
 endif
 :start ros node;
+:subscribe to node topic for receiving messages;
 :announce nodeInfo publisher;
 :create nodeInfo message;
 while (wirelessSignalSimulator listening) is (false)
 endwhile
 :publish nodeInfo;
-:subscribe to node topic for recieving messages;
 :start othersInRange service;
 :start powerswitch service;
 :spin up ros helper thread;

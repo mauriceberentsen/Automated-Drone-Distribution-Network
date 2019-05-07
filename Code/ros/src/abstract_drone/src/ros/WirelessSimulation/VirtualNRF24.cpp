@@ -42,6 +42,15 @@ namespace WirelessSimulation
   Node_TopicName =
       "/Node/" + std::to_string( meshnetworkComponent->getNodeID( ) );
   ROS_INFO( "Start virtual antenna[%s]", Node_TopicName.c_str( ) );
+
+  ros::SubscribeOptions so =
+      ros::SubscribeOptions::create< abstract_drone::NRF24 >(
+          Node_TopicName, 1000,
+          boost::bind( &VirtualNRF24::OnRosMsg, this, _1 ), ros::VoidPtr( ),
+          &this->rosQueue );
+
+  this->rosSub = this->rosNode->subscribe( so );
+
   this->rosPub = this->rosNode->advertise< abstract_drone::DroneInfo >(
       WirelessSignalSimulatorName, 100 );
 
@@ -54,14 +63,6 @@ namespace WirelessSimulation
    std::this_thread::sleep_for( std::chrono::microseconds( 1 ) );
   }
   rosPub.publish( nodeinf );
-
-  ros::SubscribeOptions so =
-      ros::SubscribeOptions::create< abstract_drone::NRF24 >(
-          Node_TopicName, 1000,
-          boost::bind( &VirtualNRF24::OnRosMsg, this, _1 ), ros::VoidPtr( ),
-          &this->rosQueue );
-
-  this->rosSub = this->rosNode->subscribe( so );
 
   // Setup  area scanner
   this->areaScanner = this->rosNode->serviceClient< abstract_drone::AreaScan >(
