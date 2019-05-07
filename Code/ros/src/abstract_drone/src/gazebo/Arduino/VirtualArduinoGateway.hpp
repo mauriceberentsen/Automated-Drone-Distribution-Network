@@ -58,10 +58,10 @@ namespace ArduinoSimulation
   /// \brief A pointer to the connected MeshnetworkGateway
   Communication::Meshnetwork::MeshnetworkGateway* meshnetworkGateway;
 
-  Communication::RoutingTechnique::ChildTableTree* CTT;
-  ros::Drone::RosDroneEngineConnector* RDEC;
+  Communication::RoutingTechnique::ChildTableTree* routing;
+  ros::Drone::RosDroneEngineConnector* engine;
   ros::WirelessSimulation::VirtualNRF24* NRF24;
-  ros::Internet::RosInternetMock* RIM;
+  ros::Internet::RosInternetMock* internet;
 
   /// \brief pointer to this model plugin
   physics::ModelPtr model;

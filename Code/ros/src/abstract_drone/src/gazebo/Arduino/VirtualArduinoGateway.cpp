@@ -35,7 +35,7 @@ namespace ArduinoSimulation
   } else {
    ROS_ERROR(
        "Drone com being used without a droneid, set up using the tag \
-    <DroneID> unique <DroneID> \n  Restart ussing droneID's else drone \
+    <DroneID> unique <DroneID> \n  Restart using droneID's else drone \
     movement will be a mess" );
   }
   if ( _sdf->HasElement( "Debug" ) ) {
@@ -44,19 +44,19 @@ namespace ArduinoSimulation
   setup( );
  }
 
- //  communication::RoutingTechnique::ChildTableTree CTT;
- //  ros::Drone::RosDroneEngineConnector RDEC;
- //  ros::Internet::RosInternetMock RIM;
+ //  communication::RoutingTechnique::ChildTableTree routing;
+ //  ros::Drone::RosDroneEngineConnector Engine;
+ //  ros::Internet::RosInternetMock internet;
  //  ros::WirelessSimulation::VirtualNRF24 NRF24;
 
  void VirtualArduinoGateway::setup( )
  {
-  CTT = new Communication::RoutingTechnique::ChildTableTree( );
-  RDEC = new ros::Drone::RosDroneEngineConnector( droneID );
+  routing = new Communication::RoutingTechnique::ChildTableTree( );
+  engine = new ros::Drone::RosDroneEngineConnector( droneID );
   NRF24 = new ros::WirelessSimulation::VirtualNRF24( );
-  RIM = new ros::Internet::RosInternetMock( );
+  internet = new ros::Internet::RosInternetMock( );
   meshnetworkGateway = new Communication::Meshnetwork::MeshnetworkGateway(
-      nodeID, droneID, debug, CTT, RDEC, NRF24, RIM );
+      nodeID, droneID, debug, routing, engine, NRF24, internet );
   meshnetworkGateway->Init( );
  }
 

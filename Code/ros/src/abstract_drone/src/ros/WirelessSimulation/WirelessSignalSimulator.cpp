@@ -50,9 +50,9 @@ namespace WirelessSimulation
      abstract_drone::WirelessMessage::Request &req,
      abstract_drone::WirelessMessage::Response &res )
  {
-  auto to = Network.find( req.message.to );
+  auto to = Network.find( req.to );
 
-  auto from = Network.find( req.message.from );
+  auto from = Network.find( req.from );
 
   if ( from != Network.end( ) &&
        to != Network.end( ) )  // Already exists in the Network UpdateLocation
@@ -74,11 +74,11 @@ namespace WirelessSimulation
    }
   } else {
    if ( from == Network.end( ) ) {
-    ROS_ERROR( "Sender %d doesnt exist in Network", ( int )req.message.from );
+    ROS_ERROR( "Sender %d doesnt exist in Network", ( int )req.from );
     res.succes = false;
    }
    if ( to == Network.end( ) ) {
-    ROS_ERROR( "reciever %d doesnt exist in Network", ( int )req.message.to );
+    ROS_ERROR( "reciever %d doesnt exist in Network", ( int )req.to );
     res.succes = false;
    }
    res.succes = false;

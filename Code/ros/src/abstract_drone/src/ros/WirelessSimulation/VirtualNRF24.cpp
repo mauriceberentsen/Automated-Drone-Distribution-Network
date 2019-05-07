@@ -55,10 +55,6 @@ namespace WirelessSimulation
   }
   rosPub.publish( nodeinf );
 
-  std::string powerSwitch =
-      "/Nodes/" + std::to_string( meshnetworkComponent->getNodeID( ) ) +
-      "/powerSwitch";
-
   ros::SubscribeOptions so =
       ros::SubscribeOptions::create< abstract_drone::NRF24 >(
           Node_TopicName, 1000,
@@ -76,6 +72,9 @@ namespace WirelessSimulation
       this->rosNode->serviceClient< abstract_drone::WirelessMessage >(
           "/SignalSimulator/message" );
 
+  std::string powerSwitch =
+      "/Nodes/" + std::to_string( meshnetworkComponent->getNodeID( ) ) +
+      "/powerSwitch";
   // Give the node an ON/OFF button
   this->switchPowerService = this->rosNode->advertiseService(
       powerSwitch, &VirtualNRF24::switchPower, this );
@@ -96,10 +95,8 @@ namespace WirelessSimulation
  bool VirtualNRF24::SendMessageTo( const uint8_t* msg )
  {
   abstract_drone::WirelessMessage WM;
-  WM.request.message.from = msg[FROM];
-  WM.request.message.to = msg[TO];
-  WM.request.message.forward = msg[FORWARD];
-  WM.request.message.ack = 0;
+  WM.request.from = msg[FROM];
+  WM.request.to = msg[TO];
   for ( int i = 0; i < MAX_PAYLOAD; i++ ) {
    WM.request.message.payload[i] = msg[i];
   }
@@ -167,10 +164,10 @@ namespace WirelessSimulation
                                  abstract_drone::PowerSwitchResponse& response )
  {
   this->on = request.power;
-  abstract_drone::DroneInfo nodeinf;
-  nodeinf.nodeID = this->meshnetworkComponent->getNodeID( );
-  nodeinf.on = this->on;
-  rosPub.publish( nodeinf );
+  abstract_drone::DroneInfo nodeinfo;
+  nodeinfo.nodeID = this->meshnetworkComponent->getNodeID( );
+  nodeinfo.on = this->on;
+  rosPub.publish( nodeinfo );
   return true;
  }
 

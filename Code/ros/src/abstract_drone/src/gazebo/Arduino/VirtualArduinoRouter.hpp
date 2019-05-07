@@ -12,7 +12,11 @@
 #define VIRTUALARDUINOROUTER
 
 #include "IVirtualArduino.hpp"
+
 #include "../../Communication/Meshnetwork/MeshnetworkRouter.hpp"
+#include "../../ros/RosDroneEngineConnector.hpp"
+#include "../../Communication/RoutingTechnique/ChildTableTree.hpp"
+#include "../../ros/WirelessSimulation/VirtualNRF24.hpp"
 
 namespace gazebo
 {
@@ -53,8 +57,8 @@ namespace ArduinoSimulation
   Communication::Meshnetwork::MeshnetworkRouter* meshnetworkRouter;
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
-  Communication::RoutingTechnique::ChildTableTree* CTT;
-  ros::Drone::RosDroneEngineConnector* RDEC;
+  Communication::RoutingTechnique::ChildTableTree* routing;
+  ros::Drone::RosDroneEngineConnector* engine;
   ros::WirelessSimulation::VirtualNRF24* NRF24;
  };
 

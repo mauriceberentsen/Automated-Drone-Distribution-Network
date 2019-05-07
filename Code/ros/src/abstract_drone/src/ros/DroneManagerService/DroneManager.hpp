@@ -70,7 +70,7 @@ namespace DroneManagerService
   /// \brief Name of topic that Gateways are subscribed to
   std::string GatewayTopic = "/gateway";
   /// \brief ros publisher used to send messages to gateways
-  Publisher rosPub;
+  Publisher internet;
  };
 }  // namespace DroneManagerService
 }  // namespace ros

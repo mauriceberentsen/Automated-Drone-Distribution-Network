@@ -33,9 +33,8 @@ namespace Drone
   std::string gps_ServiceName =
       "/Drones/" + std::to_string( this->ID ) + "/gps";
 
-  this->droneEnginePublisher =
-      this->rosNode->advertise< abstract_drone::Location >( connectedEngine,
-                                                            100 );
+  this->droneEngine = this->rosNode->advertise< abstract_drone::Location >(
+      connectedEngine, 100 );
   ROS_INFO( "Loaded DroneEngineconnector connected to topicname:[%s]",
             gps_ServiceName.c_str( ) );
   // Connect to the GPS service
@@ -52,7 +51,7 @@ namespace Drone
   msg.longitude = longitude;
   msg.height = height;
 
-  droneEnginePublisher.publish( msg );
+  droneEngine.publish( msg );
  }
 
  const ignition::math::Vector3< float > RosDroneEngineConnector::getLocation( )
@@ -64,7 +63,9 @@ namespace Drone
         GPS.response.longitude, GPS.response.latitude, GPS.response.height );
     return loc;
    } else {
-    ignition::math::Vector3< float > loc( 1, 1, 1 );
+    ignition::math::Vector3< float > loc( 6, 6, 6 );
+    // TODO Come up with some beter implementation when no gps service is
+    // avaiable
     return loc;
    }
   }

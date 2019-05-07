@@ -1,0 +1,17 @@
+@startuml
+
+participant ":VirtualNRF" as NRF
+participant "nodeinfo:DroneInfo" as DI
+participant ":WirelessSignalSimulator" as WSS
+
+[-> NRF : switchPower(request, response)
+activate NRF
+NRF -> NRF : on = request.power
+create DI
+NRF -> DI : <<create>>
+NRF -> NRF : nodeinfo.NodeID = NodeID
+NRF -> NRF : nodeinfo.on = on
+NRF --> WSS : publish(nodeinfo)
+[<-- NRF : true
+
+@enduml

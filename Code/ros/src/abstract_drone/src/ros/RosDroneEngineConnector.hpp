@@ -46,7 +46,7 @@ namespace Drone
   /// \brief the ID of the connected engine
   uint16_t ID;
   /// \brief Publisher towards the DroneEngine
-  ros::Publisher droneEnginePublisher;
+  ros::Publisher droneEngine;
   /// \brief Service for requesting the current location
   ros::ServiceClient GPSLink;
   /// \brief Pointer to the Ros Node of this class

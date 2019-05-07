@@ -17,8 +17,8 @@ namespace DroneSimulation
  /*static*/ int VirtualDrone::droneID = 0;
 
  VirtualDrone::VirtualDrone( const float _x, const float _y, const float _z,
-                             physics::WorldPtr _parent )
-     : x( _x ), y( _y ), z( _z ), parent( _parent )
+                             physics::WorldPtr _parent, bool _debug )
+     : x( _x ), y( _y ), z( _z ), parent( _parent ), debug( _debug )
  {
  }
 
@@ -27,14 +27,16 @@ namespace DroneSimulation
  }
 
  RouterDrone::RouterDrone( const float _x, const float _y, const float _z,
-                           physics::WorldPtr _parent )
-     : VirtualDrone( _x, _y, _z, _parent )
+                           physics::WorldPtr _parent, bool _debug )
+     : VirtualDrone( _x, _y, _z, _parent, _debug )
  {
   std::stringstream ss;
   ss << "<sdf version ='1.6'>\
           <model name ='router_drone'>\
            <static>1</static>\
-            <pose>0 0 0.5 0 0 0</pose>\
+            <pose>"
+     << x << " " << y << " " << z + 0.5 << " "
+     << " 0 0 0</pose>\
             <link name ='link'>\
               <inertial>\
               <pose>"
@@ -63,7 +65,8 @@ namespace DroneSimulation
      << std::to_string( droneID ) << "</DroneID>\
             <nodeID>"
      << std::to_string( droneID ) << "</nodeID>\
-            <Debug>true</Debug>\
+            <Debug>"
+     << std::to_string( debug ) << "</Debug>\
             </plugin>\
      <plugin filename = 'libDroneEngine.so' name ='DroneEngine'>\
      <DroneID>"
@@ -86,14 +89,16 @@ namespace DroneSimulation
  }
 
  GatewayDrone::GatewayDrone( const float _x, const float _y, const float _z,
-                             physics::WorldPtr _parent )
-     : VirtualDrone( _x, _y, _z, _parent )
+                             physics::WorldPtr _parent, bool _debug )
+     : VirtualDrone( _x, _y, _z, _parent, _debug )
  {
   std::stringstream ss;
   ss << "<sdf version ='1.6'>\
           <model name ='gateway_drone'>\
            <static>1</static>\
-            <pose>0 0 0.5 0 0 0</pose>\
+            <pose>"
+     << x << " " << y << " " << z + 0.5 << " "
+     << " 0 0 0</pose>\
             <link name ='link'>\
               <inertial>\
               <pose>"
@@ -122,7 +127,8 @@ namespace DroneSimulation
      << std::to_string( droneID ) << "</nodeID>\
               <DroneID>"
      << std::to_string( droneID ) << "</DroneID>\
-            <Debug>true</Debug>\
+            <Debug>"
+     << std::to_string( debug ) << "</Debug>\
             </plugin>\
             <plugin filename='libDroneEngine.so' name='DroneEngine'>\
              <DroneID>"

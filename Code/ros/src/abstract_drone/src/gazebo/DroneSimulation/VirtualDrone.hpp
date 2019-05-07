@@ -33,7 +33,7 @@ namespace DroneSimulation
     * @param _parent The world to place the drone in
     */
   explicit VirtualDrone( const float _x, const float _y, const float _z,
-                         physics::WorldPtr _parent );
+                         physics::WorldPtr _parent, bool debug = false );
   ~VirtualDrone( );
   /// \brief static Drone counter to give every drone an unique ID as long as
   /// the same factory is used
@@ -48,6 +48,8 @@ namespace DroneSimulation
   const float z;
   /// \brief Pointer to the World the drone will be placed in
   const physics::WorldPtr parent;
+  /// \brief Debugging mode on or off
+  const bool debug;
  };
 
  class RouterDrone : public VirtualDrone
@@ -64,7 +66,7 @@ namespace DroneSimulation
    * @param _parent The world to place the drone in
    */
   RouterDrone( const float _x, const float _y, const float _z,
-               physics::WorldPtr _parent );
+               physics::WorldPtr _parent, bool debug = false );
   ~RouterDrone( );
  };
 
@@ -82,7 +84,7 @@ namespace DroneSimulation
    * @param _parent The world to place the drone in
    */
   GatewayDrone( const float _x, const float _y, const float _z,
-                physics::WorldPtr _parent );
+                physics::WorldPtr _parent, bool debug = false );
   ~GatewayDrone( );
  };
 }  // namespace DroneSimulation

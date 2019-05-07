@@ -52,7 +52,7 @@ namespace WirelessSimulation
   /// any message
   bool on;
   /// \brief ROS Publisher to the topic of this node
-  ros::Publisher rosPub;
+  ros::Publisher connectedNRF;
   /// \brief Pointer towards the nodehandler to be ale to publish
   std::shared_ptr< ros::NodeHandle > nodeHandle;
   /// \brief the current position of this drone

@@ -18,7 +18,7 @@ namespace DroneManagerService
                              std::string &GatewayTopicName )
      : nodeHandle( _rosNode ), GatewayTopic( GatewayTopicName )
  {
-  rosPub =
+  internet =
       this->nodeHandle->advertise< abstract_drone::RequestGatewayDroneFlight >(
           GatewayTopic, 100 );
  }
@@ -32,7 +32,8 @@ namespace DroneManagerService
   msg.latitude = latitude;
   msg.longitude = longitude;
   msg.height = height;
-  rosPub.publish( msg );
+  internet.publish( msg );
+  return true;
  }
 
  bool DroneManager::RequestMovement(
@@ -44,7 +45,7 @@ namespace DroneManagerService
   msg.latitude = req.latitude;
   msg.longitude = req.longitude;
   msg.height = req.height;
-  rosPub.publish( msg );
+  internet.publish( msg );
   return true;
  }
 
@@ -54,118 +55,120 @@ namespace DroneManagerService
  {
   switch ( req.caseID ) {
    case 1:
-    RequestMovement( 1, -13, 24 );
+    return RequestMovement( 1, -13, 24 );
 
     break;
    case 2:
-    RequestMovement( 2, -11, 20 );
+    return RequestMovement( 2, -11, 20 );
 
     break;
    case 3:
-    RequestMovement( 3, -12, 14 );
+    return RequestMovement( 3, -12, 14 );
 
     break;
    case 4:
-    RequestMovement( 4, -7, 16 );
+    return RequestMovement( 4, -7, 16 );
 
     break;
    case 5:
-    RequestMovement( 5, -12, 7 );
+    return RequestMovement( 5, -12, 7 );
 
     break;
    case 6:
-    RequestMovement( 6, -7, 12 );
+    return RequestMovement( 6, -7, 12 );
 
     break;
    case 7:
-    RequestMovement( 7, -9, 5 );
+    return RequestMovement( 7, -9, 5 );
 
     break;
    case 8:
-    RequestMovement( 8, -5, 10 );
+    return RequestMovement( 8, -5, 10 );
 
     break;
    case 9:
-    RequestMovement( 9, -5, 5 );
+    return RequestMovement( 9, -5, 5 );
 
     break;
    case 10:
-    RequestMovement( 10, 4, 9 );
+    return RequestMovement( 10, 4, 9 );
 
     break;
    case 11:
-    RequestMovement( 11, 5, 5 );
+    return RequestMovement( 11, 5, 5 );
 
     break;
    case 12:
-    RequestMovement( 12, 7, 13 );
+    return RequestMovement( 12, 7, 13 );
 
     break;
    case 13:
-    RequestMovement( 13, 9, 7 );
+    return RequestMovement( 13, 9, 7 );
 
     break;
    case 14:
-    RequestMovement( 14, 8, 20 );
+    return RequestMovement( 14, 8, 20 );
 
     break;
    case 15:
-    RequestMovement( 15, 5, 25 );
+    return RequestMovement( 15, 5, 25 );
 
     break;
    case 16:
-    RequestMovement( 16, 11, 25 );
+    return RequestMovement( 16, 11, 25 );
 
     break;
    case 17:
-    RequestMovement( 17, 8, 27 );
+    return RequestMovement( 17, 8, 27 );
 
     break;
    case 100:
     for ( int i = 1; i < 11; i++ ) {
      for ( int j = 0; j < 10; j++ ) {
-      RequestMovement( i + j, i * 5, j * 5 );
+      if ( !RequestMovement( i + j, i * 5, j * 5 ) ) { return false; }
      }
     }
+    return true;
 
+    break;
+   case 0:
+    return RequestMovement( 1, -13, 24 )
+
+           && RequestMovement( 2, -11, 20 )
+
+           && RequestMovement( 3, -12, 14 )
+
+           && RequestMovement( 4, -7, 16 )
+
+           && RequestMovement( 5, -12, 7 )
+
+           && RequestMovement( 6, -7, 12 )
+
+           && RequestMovement( 7, -9, 5 )
+
+           && RequestMovement( 8, -5, 10 )
+
+           && RequestMovement( 9, -5, 5 )
+
+           && RequestMovement( 10, 4, 9 )
+
+           && RequestMovement( 11, 5, 5 )
+
+           && RequestMovement( 12, 7, 13 )
+
+           && RequestMovement( 13, 9, 7 )
+
+           && RequestMovement( 14, 8, 20 )
+
+           && RequestMovement( 15, 5, 25 )
+
+           && RequestMovement( 16, 11, 25 )
+
+           && RequestMovement( 17, 8, 26.5 );
     break;
    default:
-    RequestMovement( 1, -13, 24 );
-
-    RequestMovement( 2, -11, 20 );
-
-    RequestMovement( 3, -12, 14 );
-
-    RequestMovement( 4, -7, 16 );
-
-    RequestMovement( 5, -12, 7 );
-
-    RequestMovement( 6, -7, 12 );
-
-    RequestMovement( 7, -9, 5 );
-
-    RequestMovement( 8, -5, 10 );
-
-    RequestMovement( 9, -5, 5 );
-
-    RequestMovement( 10, 4, 9 );
-
-    RequestMovement( 11, 5, 5 );
-
-    RequestMovement( 12, 7, 13 );
-
-    RequestMovement( 13, 9, 7 );
-
-    RequestMovement( 14, 8, 20 );
-
-    RequestMovement( 15, 5, 25 );
-
-    RequestMovement( 16, 11, 25 );
-
-    RequestMovement( 17, 8, 26.5 );
-    break;
+    return false;
   }
-  return true;
  }
 }  // namespace DroneManagerService
 }  // namespace ros

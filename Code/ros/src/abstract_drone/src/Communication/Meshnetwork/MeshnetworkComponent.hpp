@@ -13,6 +13,8 @@
 #define MESHNETWORKCOMPONENT
 // system
 #include <map>
+#include <thread>
+#include <functional>
 // Offered interfaces
 #include "../RoutingTechnique/IRoutingEssentials.hpp"
 #include "../Wireless/IMeshNetwork.hpp"
@@ -21,10 +23,6 @@
 #include "../RoutingTechnique/IRoutingTechnique.hpp"
 #include "../Wireless/IWirelessCommunication.hpp"
 #include "../../Drone/IDroneEngine.hpp"
-// implemented interfaces
-#include "../RoutingTechnique/ChildTableTree.hpp"
-#include "../../ros/WirelessSimulation/VirtualNRF24.hpp"
-#include "../../ros/RosDroneEngineConnector.hpp"
 // classes
 #include "../Messages/Message.hpp"
 namespace Communication

@@ -1,19 +1,28 @@
 @startuml
 autonumber
 participant "communication:VirtualNRF24" as 1
+participant "WM:WirelessMessage" as WM
 participant "publishService:WirelessSignalSimulator" as SS
 note over SS: Service that simulates wireless communication
-participant "Node 2:MeshComponent" as 2
+participant "to:Node" as node
+participant "Node 2:VirtualNRF24" as 2
+participant "meshnetworkComponent:IMeshNetwork" as IMN
 
 
-[-> 1  : SendHeartbeat(other = 2) : bool
-
+[-> 1  : SendMessageTo(msg) : bool
+create WM
+1 -> WM : <<create>>
+1 -> WM : request.from = msg[FROM]
+1 -> WM : request.to = msg[TO]
+loop int i = 0; i < MAX_PAYLOAD; i++
+1 -> WM : WM.request.message.payload[i] = msg[i];
+end
 
 
 alt SignalSimulator available
 1 -> SS ++ : send_message(WM) : bool
-SS -> SS : from = Network.find(WM.request.message.from) : iterator <<uint8_t, Node>>
-SS -> SS : to = Network.find(WM.request.message.to) : iterator <<uint8_t, Node>>
+SS -> SS : from = Network.find(WM.request.from) : iterator <<uint8_t, Node>>
+SS -> SS : to = Network.find(WM.request.to) : iterator <<uint8_t, Node>>
 
 alt from != Network.end( ) && to != Network.end( )
 	alt !from->second->on  || !to->second->on 
@@ -22,7 +31,12 @@ alt from != Network.end( ) && to != Network.end( )
     	SS -> SS : distance  = \n from->second->getPosition( ).Distance( to->second->getPosition( ) )
         alt distance < maximum communication distance
         	SS -> SS ++ : to->second->recieveMessage( req.message );
-            SS --> 2 --:  OnRosMsg (req.message)
+            SS -> node --:  RecieveMessage(req.message)
+						activate node
+						node --> 2 +: publish(msg)
+						deactivate node
+						2 -> IMN : onMsg(msg)
+						deactivate 2
         	SS <- SS :	response.succes = true
 		else
         	SS <- SS :	response.succes = false
@@ -36,7 +50,6 @@ end
 1 <- SS --: <<Response>>
 
 alt  response.succes == false
-1 -> 1 :  informAboutMissingchild (NodeID, other)
 [<- 1 : False
 else
 [<- 1 : True

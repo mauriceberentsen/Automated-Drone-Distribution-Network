@@ -21,7 +21,7 @@ namespace WirelessSimulation
      , subtopicname( _subtopicname )
      , on( true )
  {
-  rosPub =
+  connectedNRF =
       nodeHandle->advertise< abstract_drone::NRF24 >( subtopicname, 100, true );
  }
 
@@ -31,7 +31,7 @@ namespace WirelessSimulation
 
  void Node::recieveMessage( const abstract_drone::NRF24& msg ) const
  {
-  rosPub.publish( msg );
+  connectedNRF.publish( msg );
  }
 
  const Vector3< float >& Node::getPosition( ) const

@@ -4,7 +4,7 @@
 start
 
 :checkConnection;
-while (rosnode -> ok() ) is (true)
+while (program running) is (true)
 	if (on) then ([false])
 		elseif ([true])
 			:sendHeartbeatToAllChilderen;

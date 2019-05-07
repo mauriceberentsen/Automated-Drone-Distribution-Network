@@ -11,6 +11,7 @@
     <plugin name="DroneFactory" filename="libDroneFactory.so">
       <amountOfRouterDrones>17</amountOfRouterDrones>
       <amountOfGatewayDrones>1</amountOfGatewayDrones>
+      <Debug>1</Debug>
     </plugin>
   </world>
 </sdf>
