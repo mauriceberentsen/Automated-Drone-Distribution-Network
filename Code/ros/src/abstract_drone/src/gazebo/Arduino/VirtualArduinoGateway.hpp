@@ -57,12 +57,14 @@ namespace ArduinoSimulation
   bool debug;
   /// \brief A pointer to the connected MeshnetworkGateway
   Communication::Meshnetwork::MeshnetworkGateway* meshnetworkGateway;
-
+  /// \brief Pointer to the routing technique
   Communication::RoutingTechnique::ChildTableTree* routing;
+  /// \brief Pointer to the connected drone eninge
   ros::Drone::RosDroneEngineConnector* engine;
+  /// \brief Pointer to the connected NRF24
   ros::WirelessSimulation::VirtualNRF24* NRF24;
+  /// \brief Pointer to the internet connection
   ros::Internet::RosInternetMock* internet;
-
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
  };

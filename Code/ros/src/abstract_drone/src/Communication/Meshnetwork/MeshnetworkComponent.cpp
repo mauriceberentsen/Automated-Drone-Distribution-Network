@@ -106,7 +106,7 @@ namespace Meshnetwork
     processLocation( message );
     break;
    case Messages::MISSING:
-    ( message );
+    processMissing( message );
     break;
    case Messages::MOVE_TO_LOCATION:
     processSendGoalToEngine( message );

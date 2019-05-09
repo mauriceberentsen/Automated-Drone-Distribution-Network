@@ -81,6 +81,23 @@ namespace Messages
   return this->creator;
  }
 
+ const uint8_t Message::getFrom( ) const
+ {
+  return this->from;
+ }
+ const Messagetype Message::getMessageType( ) const
+ {
+  return this->type;
+ }
+ const uint8_t Message::getTo( ) const
+ {
+  return this->to;
+ }
+ const uint8_t Message::getForward( ) const
+ {
+  return this->forward;
+ }
+
  LocationMessage::LocationMessage( const uint8_t _creator, const uint8_t _from,
                                    const uint8_t _to, const uint8_t _forward,
                                    float _latitude, float _longitude,
@@ -167,7 +184,7 @@ namespace Messages
  {
   return this->height;
  }
- const int16_t LocationMessage::gettimeSincePosix( ) const
+ const int32_t LocationMessage::gettimeSincePosix( ) const
  {
   return this->timeSincePosix;
  }

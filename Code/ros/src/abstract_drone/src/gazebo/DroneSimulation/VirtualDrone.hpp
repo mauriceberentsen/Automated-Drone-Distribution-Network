@@ -31,6 +31,7 @@ namespace DroneSimulation
     * @param _y Y coordinate in the world
     * @param _z Z coordinate in the world
     * @param _parent The world to place the drone in
+    * @param debug debugging on or off
     */
   explicit VirtualDrone( const float _x, const float _y, const float _z,
                          physics::WorldPtr _parent, bool debug = false );
@@ -64,6 +65,7 @@ namespace DroneSimulation
    * @param _y Y coordinate in the world
    * @param _z Z coordinate in the world
    * @param _parent The world to place the drone in
+   * @param debug debugging on or off
    */
   RouterDrone( const float _x, const float _y, const float _z,
                physics::WorldPtr _parent, bool debug = false );
@@ -82,6 +84,7 @@ namespace DroneSimulation
    * @param _y Y coordinate in the world
    * @param _z Z coordinate in the world
    * @param _parent The world to place the drone in
+   * @param debug debugging on or off
    */
   GatewayDrone( const float _x, const float _y, const float _z,
                 physics::WorldPtr _parent, bool debug = false );

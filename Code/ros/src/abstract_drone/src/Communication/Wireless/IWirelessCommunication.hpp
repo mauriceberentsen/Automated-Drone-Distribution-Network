@@ -24,6 +24,7 @@ namespace Wireless
   /**
    * @brief Start the Antenna
    *
+   * @param IMN Pointer to the interface of a meshcomponent
    */
   virtual void StartAntenna( Communication::Wireless::IMeshNetwork* IMN ) = 0;
   /**
@@ -48,6 +49,7 @@ namespace Wireless
   /**
    * @brief Set debugging mode
    *
+   * @param IMD Pointer to the debug interface of a meshcomponent
    * @param on on/off state
    */
   virtual void DebugingMode( Communication::Wireless::IMeshDebugInfo* IMD,

@@ -43,7 +43,6 @@ namespace WirelessSimulation
   /**
    * @brief Construct a new VirtualNRF24 object
    *
-   * @param MC Reference to the connected MeshnetworkComponent
    */
   VirtualNRF24( );
   /**
@@ -54,6 +53,7 @@ namespace WirelessSimulation
   /**
    * @brief Start the communication pipe of the NRF24
    *
+   * @param MC Reference to the connected MeshnetworkComponent
    */
   void StartAntenna( Communication::Wireless::IMeshNetwork* MC );
   /**
@@ -78,6 +78,7 @@ namespace WirelessSimulation
   /**
    * @brief debuging activation
    *
+   * @param debug Pointer to the debug interface of the meshnetworkComponent
    * @param on state
    */
   void DebugingMode( Communication::Wireless::IMeshDebugInfo* debug,

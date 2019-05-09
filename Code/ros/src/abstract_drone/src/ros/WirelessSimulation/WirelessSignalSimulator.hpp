@@ -41,8 +41,9 @@ namespace WirelessSimulation
    * @brief A servicecall used for sending messages from one node to another
    * conform basic rules of wireless communication
    *
-   * @param req.message NRF24 message that the sender wants to send
-   * @param res.succes boolean describing the succes of sending the message
+   * @param req holds the NRF24 message that the sender wants to send
+   * @param res for the succes boolean describing the succes of sending the
+   * message
    * @return true servicecall succesfull
    * @return false servicecall failed
    */
@@ -52,8 +53,8 @@ namespace WirelessSimulation
    * @brief Since we can't just broadcast a signal towards all directions this
    * servicecall gives all nodes in range of the requested NodeID
    *
-   * @param req.id The ID of the requesting node
-   * @param res.near std::Vector holding a nodes near
+   * @param req Holds the id The ID of the requesting node
+   * @param res returns the near std::Vector holding all nodes near
    * @return true servicecall succesfull
    * @return false servicecall failed
    */

@@ -45,6 +45,8 @@ namespace DroneManagerService
    * @brief servicecall to publish a request a specific drone to a given
    * location
    *
+   * @param req Reference to the request
+   * @param res Reference to the response
    * @return true Service call succesfull
    * @return false Could not perform service
    */
@@ -53,7 +55,7 @@ namespace DroneManagerService
   /**
    * @brief Set the Drones to a given casus
    *
-   * @param req.id The drone that needs to move
+   * @param req .id The drone that needs to move
    *        - 0 = All drone move
    *        - 1-17 drone id that needs to move
    *        - 100 set all drone to a grid of 10 x 10

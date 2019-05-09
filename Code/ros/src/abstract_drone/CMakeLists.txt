@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 2.8.3)
 project(abstract_drone)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
+add_definitions(-std=c++11 -Wall -g)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -267,10 +268,17 @@ install(DIRECTORY include/${PROJECT_NAME}/
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_abstract_drone.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+catkin_add_gtest(${PROJECT_NAME}-ChildTableTree-test src/Communication/RoutingTechnique/tests/utestChildTableTree.cpp
+                                                     src/Communication/RoutingTechnique/ChildTableTree.cpp)
+
+catkin_add_gtest(${PROJECT_NAME}-GatewayDrone-test src/Communication/Messages/Tests/utestMessage.cpp
+                                                     src/Communication/Messages/Message.cpp
+)
+
+
+if(TARGET ${PROJECT_NAME}-test)
+  target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
+endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)

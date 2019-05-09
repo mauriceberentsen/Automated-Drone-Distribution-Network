@@ -1,5 +1,5 @@
 /**
- * @file message.hpp
+ * @file Message.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Header file for all Messages
  * @version 1.0
@@ -74,6 +74,10 @@ namespace Messages
   virtual const std::string toString( ) const;
 
   const uint8_t getCreator( ) const;
+  const uint8_t getFrom( ) const;
+  const Messagetype getMessageType( ) const;
+  const uint8_t getTo( ) const;
+  const uint8_t getForward( ) const;
 
  protected:
   /**
@@ -101,7 +105,7 @@ namespace Messages
   /// \brief The sender of the message
   uint8_t from;
   /// \brief The type of the message
-  uint8_t type;
+  Messagetype type;
   /// \brief send this message to
   uint8_t to;
   /// \brief forward this message to
@@ -138,7 +142,7 @@ namespace Messages
   const float getLatitude( ) const;
   const float getLongitude( ) const;
   const int16_t getHeight( ) const;
-  const int16_t gettimeSincePosix( ) const;
+  const int32_t gettimeSincePosix( ) const;
 
  private:
   /// \brief The latitude of a location
@@ -163,13 +167,13 @@ namespace Messages
    * @param creator The ID  of the creator node
    * @param from Who is sending this message
    * @param to To who this message will be send
-   * @param forward To who this messages is destined   * @param
-   * _hopsUntilsGateway How many hops it takes you to get to the gateway
-   * @param _knowGateway If you are connected to a gateway
+   * @param forward To who this messages is destined
+   * @param hopsUntilsGateway How many hops it takes you to get to the gateway
+   * @param knowGateway If you are connected to a gateway
    */
-  IntroduceMessage( const uint8_t creator, const uint8_t from,
-                    const uint8_t _to, const uint8_t _forward,
-                    const uint8_t _hopsUntilsGateway, const bool _knowGateway );
+  IntroduceMessage( const uint8_t creator, const uint8_t from, const uint8_t to,
+                    const uint8_t forward, const uint8_t hopsUntilsGateway,
+                    const bool knowGateway );
   /**
    * @brief Construct a new Introduce Message objectfrom a NRF24 payload
    *
@@ -203,15 +207,14 @@ namespace Messages
    * @param creator The ID  of the creator node
    * @param from Who is sending this message
    * @param to To who this message will be send
-   * @param forward To who this messages is destined   * @param _knowGateway If
-   * you are connected to a gateway.
-   * @param _prefferedGateWay The gateway this node communicates with.
-   * @param _hops How many hops it takes you to get to the gateway.
+   * @param forward To who this messages is destined
+   * @param knowGateway If you are connected to a gateway.
+   * @param prefferedGateWay The gateway this node communicates with.
+   * @param hops How many hops it takes you to get to the gateway.
    */
-  HeartbeatMessage( const uint8_t creator, const uint8_t from,
-                    const uint8_t _to, const uint8_t _forward,
-                    const bool _knowGateway, const uint8_t _prefferedGateWay,
-                    uint8_t _hops = 0 );
+  HeartbeatMessage( const uint8_t creator, const uint8_t from, const uint8_t to,
+                    const uint8_t forward, const bool knowGateway,
+                    const uint8_t prefferedGateWay, uint8_t hops = 0 );
   /**
    * @brief Construct a new Heartbeat Message objectfrom a NRF24 payload.
    *
@@ -258,11 +261,11 @@ namespace Messages
    * @param creator The ID  of the creator node
    * @param from Who is sending this message
    * @param to To who this message will be send
-   * @param forward To who this messages is destined   * @param _missing The ID
-   * of the Node that went missing.
+   * @param forward To who this messages is destined
+   * @param missing The ID of the Node that went missing.
    */
-  MissingMessage( const uint8_t creator, const uint8_t from, const uint8_t _to,
-                  const uint8_t _forward, const uint8_t _missing );
+  MissingMessage( const uint8_t creator, const uint8_t from, const uint8_t to,
+                  const uint8_t forward, const uint8_t missing );
   /**
    * @brief Construct a new Missing Message objectfrom a NRF24 payload
    *
@@ -296,8 +299,8 @@ namespace Messages
    * @param height The target height to go to
    */
   GoToLocationMessage( const uint8_t creator, const uint8_t from,
-                       const uint8_t _to, const uint8_t _forward,
-                       float latitude, float longitude, int16_t height );
+                       const uint8_t to, const uint8_t forward, float latitude,
+                       float longitude, int16_t height );
   /**
    * @brief Construct a new Go To Location Message objectfrom a NRF24 payload
    *
@@ -331,11 +334,11 @@ namespace Messages
    * @param from Who is sending this message
    * @param to To who this message will be send
    * @param forward To who this messages is destined
-   * @param _cost the calculated cost.
+   * @param cost the calculated cost.
    */
   MovementNegotiationMessage( const uint8_t creator, const uint8_t from,
-                              const uint8_t _to, const uint8_t _forward,
-                              const float _cost );
+                              const uint8_t to, const uint8_t forward,
+                              const float cost );
   /**
    * @brief Construct a new Movement Negotiation Message objectfrom a NRF24
    * payload

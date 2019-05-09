@@ -29,6 +29,10 @@ namespace Meshnetwork
    * @param node The ID of the Node
    * @param drone The ID of the connected Drone Engine
    * @param developermode Debuging mode enabled
+   * @param IRT Pointer to the RoutingTechnique interface
+   * @param IDE Pointer to the DroneEngine interface
+   * @param IWC Pointer to the Communication interface
+   * @param ICC Pointer to the Internet interface
    */
   MeshnetworkGateway( const uint8_t node, const uint8_t drone,
                       bool developermode,
@@ -91,6 +95,7 @@ namespace Meshnetwork
  public:
  protected:
  private:
+  /// \brief Internet connection interface
   std::unique_ptr< Internet::IInternetConnection > internet;
  };
  // Register this plugin with the simulator

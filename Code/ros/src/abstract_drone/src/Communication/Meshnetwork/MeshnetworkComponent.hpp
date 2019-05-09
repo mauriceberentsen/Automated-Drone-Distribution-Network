@@ -130,6 +130,9 @@ namespace Meshnetwork
    * @param node The ID of the Node
    * @param drone The ID of the connected Drone Engine
    * @param developermode Debuging mode enabled
+   * @param IRT Pointer to the RoutingTechnique interface
+   * @param IDE Pointer to the DroneEngine interface
+   * @param IWC Pointer to the Communication interface
    */
   MeshnetworkComponent( const uint8_t node, const uint8_t drone,
                         bool developermode,
@@ -213,9 +216,10 @@ namespace Meshnetwork
    * @brief Process message with the type requestLocation
    * called by case Messages::REQUESTLOCATION
    *
-   * @param _msg NRF24 Message holding normal Message
+   * @param message Pointer to char array[32] holding the message with type
+   * REQUESTLOCATION
    */
-  void processRequestLocation( const uint8_t *payload );
+  void processRequestLocation( const uint8_t *message );
   /**
    * @brief Process message with the type MovementNegotiationMessage
    * called by case Messages::MOVEMENT_NEGOTIATION
@@ -281,19 +285,25 @@ namespace Meshnetwork
   const int CheckConnectionTime = 10;
   /// \brief The ID of the current Node
   uint8_t nodeID;
+  /// \brief The ID of the connected Drone
+  uint16_t droneID;
+  /// \brief Boolean for enabling debug publishers
+  bool debug = false;
+  /// \brief pointer to the used RoutingTechnique
+  std::unique_ptr< RoutingTechnique::IRoutingTechnique > routerTech;
+  /// \brief Wireless communication interface
+  std::unique_ptr< Wireless::IWirelessCommunication > communication;
+  /// \brief Connection towards the DroneEngine
+  std::unique_ptr< Drone::IDroneEngine > droneEngine;
+
   /// \brief The ID of the prefferedGateWay
   uint8_t prefferedGateWay = 0;
   /// \brief The amount of hops this node is away from the prefferedGateWay
   uint8_t hopsFromGatewayAway = 0;
-  /// \brief Boolean for enabling debug publishers
-  bool debug = false;
-
   /// \brief Boolean if this node knows the location of his prefferedGateWay
   bool knowPrefferedGatewayLocation = false;
   /// \brief boolean if this node is connected to a gateway
   bool connectedToGateway = false;
-  /// \brief The ID of the connected Drone
-  uint16_t droneID;
   /// \brief The amount of messages send by this node
   uint32_t totalMessageSent = 0;
   /// \brief The last known location that was known to be a good location
@@ -302,14 +312,6 @@ namespace Meshnetwork
   /// \brief The location of the prefferedGateWay
   Messages::LocationMessage prefferedGateWayLocation =
       Messages::LocationMessage( 0, 0, 0, 0, 0, 0, 0, 0 );
-
-  /// \brief pointer to the used RoutingTechnique
-  std::unique_ptr< RoutingTechnique::IRoutingTechnique > routerTech;
-
-  /// \brief Wireless communication
-  /// \brief Connection towards the DroneEngine
-  std::unique_ptr< Drone::IDroneEngine > droneEngine;
-  std::unique_ptr< Wireless::IWirelessCommunication > communication;
 
  private:
   /// \brief thread to check the connection every CheckConnectionTime seconds
