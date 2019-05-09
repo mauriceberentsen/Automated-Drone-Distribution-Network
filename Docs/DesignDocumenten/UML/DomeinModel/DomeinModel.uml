@@ -2,10 +2,10 @@
 
 class MeshnetworkComponent
 class MeshnetworkGateway
-class MeshnetworkCommunicator
+class MeshnetworkRouter
 
 MeshnetworkGateway      --|> MeshnetworkComponent
-MeshnetworkCommunicator --|> MeshnetworkComponent
+MeshnetworkRouter --|> MeshnetworkComponent
 
 interface WirelessCommunication
 interface InternetConnection
@@ -20,13 +20,13 @@ class DroneManager
 DroneManager -up- InternetConnection : Controls Drones via >
 
 class Arduino
-class ArduinoCommunicator
+class ArduinoRouter
 class ArduinoGateway
 
-ArduinoCommunicator -up-|> Arduino
+ArduinoRouter -up-|> Arduino
 ArduinoGateway      -up-|> Arduino
 
-ArduinoCommunicator ..> MeshnetworkCommunicator : <<use>>
+ArduinoRouter ..> MeshnetworkRouter : <<use>>
 ArduinoGateway      ..> MeshnetworkGateway : <<use>>
 
 class NRF24
@@ -40,7 +40,7 @@ class GatewayDrone
 RouterDrone     -up-|> Drone
 GatewayDrone    -up-|> Drone
 
-RouterDrone o-- ArduinoCommunicator
+RouterDrone o-- ArduinoRouter
 GatewayDrone o-- ArduinoGateway
 
 class DroneEngine
