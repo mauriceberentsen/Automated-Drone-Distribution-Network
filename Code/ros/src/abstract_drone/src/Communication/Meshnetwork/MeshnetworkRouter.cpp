@@ -162,12 +162,12 @@ namespace Meshnetwork
 
   if ( myDistance >= 0 && negotiationList.rbegin( )->second == this->nodeID ) {
    sendGoalToEngine( lastGoodKnownLocation );
-   routerTech->NodeMovedLocation( );
    lastGoodKnownLocation = prefferedGateWayLocation;
    negotiationList.clear( );
   } else {
    negotiationList.clear( );
   }
+  routerTech->NodeMovedLocation( );
  }
  void MeshnetworkRouter::SafeAddToNegotiationList(
      const std::pair< float, uint8_t > &val )
