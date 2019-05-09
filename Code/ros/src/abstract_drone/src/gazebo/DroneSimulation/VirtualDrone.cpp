@@ -35,22 +35,22 @@ namespace DroneSimulation
           <model name ='router_drone'>\
            <static>1</static>\
             <pose>"
-     << x << " " << y << " " << z + 0.5 << " "
+     << x << " " << y << " " << z + 0.05 << " "
      << " 0 0 0</pose>\
             <link name ='link'>\
               <inertial>\
               <pose>"
-     << x << " " << y << " " << z + 0.5 << " "
+     << x << " " << y << " " << z + 0.05 << " "
      << "0 0 0</pose>\
               </inertial>\
               <collision name ='collision'>\
                 <geometry>\
-                  <box><size>0.5 0.5 0.5</size></box>\
+                  <box><size>0.2 0.2 0.1</size></box>\
                 </geometry>\
               </collision>\
               <visual name ='visual'>\
                 <geometry>\
-                  <box><size>0.5 0.5 0.5</size></box>\
+                  <box><size>0.2 0.2 0.1</size></box>\
                 </geometry>\
                 <material>\
             <script>\
@@ -97,22 +97,22 @@ namespace DroneSimulation
           <model name ='gateway_drone'>\
            <static>1</static>\
             <pose>"
-     << x << " " << y << " " << z + 0.5 << " "
+     << x << " " << y << " " << z + 0.1 << " "
      << " 0 0 0</pose>\
             <link name ='link'>\
               <inertial>\
               <pose>"
-     << x << " " << y << " " << z + 0.5 << " "
+     << x << " " << y << " " << z + 0.1 << " "
      << "0 0 0</pose>\
               </inertial>\
               <collision name ='collision'>\
                 <geometry>\
-                  <box><size>0.5 0.5 0.5</size></box>\
+                  <box><size>0.2 0.1 0.2</size></box>\
                 </geometry>\
               </collision>\
               <visual name ='visual'>\
                 <geometry>\
-                  <box><size>0.5 0.5 0.5</size></box>\
+                  <box><size>0.2 0.1 0.2</size></box>\
                 </geometry>\
                 <material>\
             <script>\

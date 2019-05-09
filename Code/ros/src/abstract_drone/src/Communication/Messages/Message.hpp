@@ -197,8 +197,8 @@ namespace Messages
    * @brief Construct a new Heartbeat Message object
    *        This message is used to enssure connectivity.
    *        It tells others who you are, if you are connected to the gateway.
-   *        Who your preffere.dGateWay is and how many hops it take you to talk
-   *         with the gateway. If this meesage is forwared it makes a hop.
+   *        Who your prefferedGateWay is and how many hops it take you to talk
+   *         with the gateway. If this message is forwared it makes a hop.
    *
    * @param creator The ID  of the creator node
    * @param from Who is sending this message
