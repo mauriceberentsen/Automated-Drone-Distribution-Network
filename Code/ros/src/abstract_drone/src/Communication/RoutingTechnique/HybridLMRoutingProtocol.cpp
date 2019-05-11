@@ -1,7 +1,7 @@
 /**
- * @file ChildTableTree.cpp
+ * @file HybridLMRoutingProtocol.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief source file for the class ChildTableTree
+ * @brief source file for the class HybridLMRoutingProtocol
  * @version 1.0
  * @date 2019-04-04
  *
@@ -10,52 +10,52 @@
  */
 #include <iostream>
 
-#include "ChildTableTree.hpp"
+#include "HybridLMRoutingProtocol.hpp"
 #include "../Meshnetwork/MeshnetworkComponent.hpp"
 
 namespace Communication
 {
 namespace RoutingTechnique
 {
- ChildTableTree::ChildTableTree( )
+ HybridLMRoutingProtocol::HybridLMRoutingProtocol( )
  {
  }
 
- ChildTableTree::~ChildTableTree( )
+ HybridLMRoutingProtocol::~HybridLMRoutingProtocol( )
  {
  }
 
- void ChildTableTree::startRouting( IRoutingEssentials* IRE )
+ void HybridLMRoutingProtocol::startRouting( IRoutingEssentials* IRE )
  {
   meshnetworkComponent = IRE;
   meshnetworkComponent->searchOtherNodesInRange( );
  }
- void ChildTableTree::maintainRouting( )
+ void HybridLMRoutingProtocol::maintainRouting( )
  {
   meshnetworkComponent->searchOtherNodesInRange( );
   for ( auto& node : getSetOfChildren( ) )
    meshnetworkComponent->sendHeartbeat( node );
  }
- void ChildTableTree::canCommunicateWithNode( const uint8_t node )
+ void HybridLMRoutingProtocol::canCommunicateWithNode( const uint8_t node )
  {
   proofOfAvailability( node, node );
  }
- uint8_t ChildTableTree::cantCommunicateWithNode( const uint8_t node )
+ uint8_t HybridLMRoutingProtocol::cantCommunicateWithNode( const uint8_t node )
  {
   return proofOfMissing( node, node );
  }
- uint8_t ChildTableTree::OtherCantCommunicateWithNode( const uint8_t other,
-                                                       const uint8_t node )
+ uint8_t HybridLMRoutingProtocol::OtherCantCommunicateWithNode(
+     const uint8_t other, const uint8_t node )
  {
   return proofOfMissing( other, node );
  }
- void ChildTableTree::OtherCanCommunicateWithNode( const uint8_t other,
-                                                   const uint8_t node )
+ void HybridLMRoutingProtocol::OtherCanCommunicateWithNode( const uint8_t other,
+                                                            const uint8_t node )
  {
   proofOfAvailability( other, node );
  }
 
- uint8_t ChildTableTree::getDirectionToNode( const uint8_t node )
+ uint8_t HybridLMRoutingProtocol::getDirectionToNode( const uint8_t node )
  {
   // is it one of our own childeren?
   auto it = family.find( node );
@@ -72,12 +72,12 @@ namespace RoutingTechnique
   return UINT8_MAX;
  }
 
- const uint16_t ChildTableTree::getAmountOfChildren( )
+ const uint16_t HybridLMRoutingProtocol::getAmountOfChildren( )
  {
   return family.size( );
  }
 
- const uint16_t ChildTableTree::getTableSize( )
+ const uint16_t HybridLMRoutingProtocol::getTableSize( )
  {
   uint16_t size = 0;
   for ( auto& child : family ) {
@@ -87,23 +87,23 @@ namespace RoutingTechnique
   return size;
  }
 
- const bool ChildTableTree::empty( )
+ const bool HybridLMRoutingProtocol::empty( )
  {
   return family.empty( );
  };
 
- const std::set< uint8_t > ChildTableTree::getSetOfChildren( )
+ const std::set< uint8_t > HybridLMRoutingProtocol::getSetOfChildren( )
  {
   std::set< uint8_t > children;
   for ( auto& child : family )
    children.insert( child.first );
   return children;
  }
- void ChildTableTree::NodeMovedLocation( )
+ void HybridLMRoutingProtocol::NodeMovedLocation( )
  {
   family.clear( );
  }
- /*private*/ void ChildTableTree::RegisterGrandChildOfChild(
+ /*private*/ void HybridLMRoutingProtocol::RegisterGrandChildOfChild(
      uint8_t child, uint8_t grandChild )
  {
   auto it = family.find( child );
@@ -116,8 +116,8 @@ namespace RoutingTechnique
   }
  }
 
- /*private*/ uint8_t ChildTableTree::proofOfMissing( uint8_t teller,
-                                                     uint8_t child )
+ /*private*/ uint8_t HybridLMRoutingProtocol::proofOfMissing( uint8_t teller,
+                                                              uint8_t child )
  {
   // teller claims that he lost a child, check if he is talking about himself
   if ( teller == child ) {
@@ -131,8 +131,8 @@ namespace RoutingTechnique
   return 0;
  }
 
- /*private*/ void ChildTableTree::proofOfAvailability( uint8_t teller,
-                                                       uint8_t child )
+ /*private*/ void HybridLMRoutingProtocol::proofOfAvailability( uint8_t teller,
+                                                                uint8_t child )
  {
   // teller claims that he knows child, check if he is talking about himself
   if ( teller == child ) {
@@ -147,7 +147,7 @@ namespace RoutingTechnique
   }
  }
 
- /*private*/ void ChildTableTree::RegisterChild( uint8_t child )
+ /*private*/ void HybridLMRoutingProtocol::RegisterChild( uint8_t child )
  {
   auto it = family.find( child );
   if ( it == family.end( ) )  // we dont know the child add him to the family

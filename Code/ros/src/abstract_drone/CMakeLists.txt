@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(abstract_drone)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
-add_definitions(-std=c++11 -Wall -g)
+## Compile as C++14, supported in ROS Kinetic and newer
+add_compile_options(-std=c++14)
+add_definitions(-std=c++14 -Wall -g)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -17,37 +17,12 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
-
-## Uncomment this if the package has a setup.py. This macro ensures
-## modules and global scripts declared therein get installed
-## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+find_package(Boost REQUIRED COMPONENTS system)
 
 ################################################
 ## Declare ROS messages, services and actions ##
 ################################################
 
-## To declare and build messages, services or actions from within this
-## package, follow these steps:
-## * Let MSG_DEP_SET be the set of packages whose message types you use in
-##   your messages/services/actions (e.g. std_msgs, actionlib_msgs, ...).
-## * In the file package.xml:
-##   * add a build_depend tag for "message_generation"
-##   * add a build_depend and a exec_depend tag for each package in MSG_DEP_SET
-##   * If MSG_DEP_SET isn't empty the following dependency has been pulled in
-##     but can be declared for certainty nonetheless:
-##     * add a exec_depend tag for "message_runtime"
-## * In this file (CMakeLists.txt):
-##   * add "message_generation" and every package in MSG_DEP_SET to
-##     find_package(catkin REQUIRED COMPONENTS ...)
-##   * add "message_runtime" and every package in MSG_DEP_SET to
-##     catkin_package(CATKIN_DEPENDS ...)
-##   * uncomment the add_*_files sections below as needed
-##     and list every .msg/.srv/.action file to be processed
-##   * uncomment the generate_messages entry below
-##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
 add_message_files(
@@ -70,67 +45,28 @@ add_service_files(
    WirelessMessage.srv
 )
 
-## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
-
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
   std_msgs
 )
 
-#add_executable(talker src/talker.cpp)
-#target_link_libraries(talker ${catkin_LIBRARIES})
-#add_dependencies(talker abstract_drone_gencpp)
-
-#add_executable(listener src/listener.cpp)
-#target_link_libraries(listener ${catkin_LIBRARIES})
-#add_dependencies(listener abstract_drone_gencpp)
+#############################
+## Declare ROS executables ##
+#############################
 
 add_executable(DroneManager src/ros/DroneManagerService/DroneManagerService.cpp src/ros/DroneManagerService/DroneManager.cpp)
 target_link_libraries(DroneManager ${catkin_LIBRARIES})
 add_dependencies(DroneManager abstract_drone_gencpp abstract_drone_generate_messages_cpp)
 
-add_executable(WirelessSignalSimulator src/ros/WirelessSimulation/WirelessSignalSimulatorService.cpp src/ros/WirelessSimulation/WirelessSignalSimulator.cpp src/ros/WirelessSimulation/Node.cpp)
+add_library(WirelessSignalSimulator src/ros/WirelessSimulation/WirelessSignalSimulatorService.cpp src/ros/WirelessSimulation/WirelessSignalSimulator.cpp src/ros/WirelessSimulation/Node.cpp)
 target_link_libraries(WirelessSignalSimulator ${catkin_LIBRARIES})
 add_dependencies(WirelessSignalSimulator abstract_drone_gencpp abstract_drone_generate_messages_cpp)
-
-
-#add_executable(request_drone_flight_client src/request_drone_flight_client.cpp)
-#target_link_libraries(request_drone_flight_client ${catkin_LIBRARIES})
-#add_dependencies(request_drone_flight_client abstract_drone_gencpp)
-
-#add_executable(request_drone_power_switch_client src/request_drone_power_switch_client.cpp)
-#target_link_libraries(request_drone_power_switch_client ${catkin_LIBRARIES})
-#add_dependencies(request_drone_power_switch_client abstract_drone_gencpp)
-
-################################################
-## Declare ROS dynamic reconfigure parameters ##
-################################################
-
-## To declare and build dynamic reconfigure parameters within this
-## package, follow these steps:
-## * In the file package.xml:
-##   * add a build_depend and a exec_depend tag for "dynamic_reconfigure"
-## * In this file (CMakeLists.txt):
-##   * add "dynamic_reconfigure" to
-##     find_package(catkin REQUIRED COMPONENTS ...)
-##   * uncomment the "generate_dynamic_reconfigure_options" section below
-##     and list every .cfg file to be processed
-
-## Generate dynamic reconfigure parameters in the 'cfg' folder
-# generate_dynamic_reconfigure_options(
-#   cfg/DynReconf1.cfg
-#   cfg/DynReconf2.cfg
-# )
 
 ###################################
 ## catkin specific configuration ##
 ###################################
+
 ## The catkin_package macro generates cmake config files for your package
 ## Declare things to be passed to dependent projects
 ## INCLUDE_DIRS: uncomment this if your package contains header files
@@ -138,7 +74,7 @@ add_dependencies(WirelessSignalSimulator abstract_drone_gencpp abstract_drone_ge
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+   INCLUDE_DIRS include
 #  LIBRARIES abstract_drone
    CATKIN_DEPENDS roscpp rospy std_msgs message_runtime 
    DEPENDS roscpp gazebo_ros
@@ -158,7 +94,7 @@ include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE
 add_library(MeshnetworkRouter SHARED       src/gazebo/Arduino/VirtualArduinoRouter.cpp
                                            src/Communication/Meshnetwork/MeshnetworkComponent.cpp
                                            src/Communication/Meshnetwork/MeshnetworkRouter.cpp
-                                           src/Communication/RoutingTechnique/ChildTableTree.cpp
+                                           src/Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp
                                            src/Communication/Messages/Message.cpp
                                            src/ros/RosDroneEngineConnector.cpp
                                            src/ros/WirelessSimulation/VirtualNRF24.cpp)
@@ -168,7 +104,7 @@ add_dependencies(MeshnetworkRouter abstract_drone_generate_messages_cpp)
 add_library(MeshnetworkGateway SHARED src/gazebo/Arduino/VirtualArduinoGateway.cpp
                                       src/Communication/Meshnetwork/MeshnetworkComponent.cpp
                                       src/Communication/Meshnetwork/MeshnetworkGateway.cpp
-                                      src/Communication/RoutingTechnique/ChildTableTree.cpp
+                                      src/Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp
                                       src/Communication/Messages/Message.cpp
                                       src/ros/WirelessSimulation/VirtualNRF24.cpp
                                       src/ros/RosDroneEngineConnector.cpp
@@ -185,9 +121,6 @@ add_library(DroneFactory SHARED src/gazebo/DroneFactory.cpp
 target_link_libraries(DroneFactory  ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(DroneFactory abstract_drone_generate_messages_cpp)
 
-
-
-
 ###########
 ## Build ##
 ###########
@@ -199,49 +132,12 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/abstract_drone.cpp
-# )
-
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Declare a C++ executable
-## With catkin_make all packages are built within a single CMake context
-## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/abstract_drone_node.cpp)
-
-## Rename C++ executable without prefix
-## The above recommended prefix causes long target names, the following renames the
-## target back to the shorter version for ease of user use
-## e.g. "rosrun someones_pkg node" instead of "rosrun someones_pkg someones_pkg_node"
-# set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
-
-## Add cmake target dependencies of the executable
-## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
-
 #############
 ## Install ##
 #############
 
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
-
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
 
 ## Mark executables and/or libraries for installation
 install(TARGETS
@@ -256,31 +152,23 @@ install(DIRECTORY include/${PROJECT_NAME}/
    PATTERN ".svn" EXCLUDE
  )
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
-
 #############
 ## Testing ##
 #############
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-ChildTableTree-test src/Communication/RoutingTechnique/tests/utestChildTableTree.cpp
-                                                     src/Communication/RoutingTechnique/ChildTableTree.cpp)
+catkin_add_gtest(${PROJECT_NAME}-HybridLMRoutingProtocol-test src/Communication/RoutingTechnique/tests/utestChildTableTree.cpp
+                                                     src/Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp)
 
 catkin_add_gtest(${PROJECT_NAME}-GatewayDrone-test src/Communication/Messages/Tests/utestMessage.cpp
                                                      src/Communication/Messages/Message.cpp
 )
+# catkin_add_gtest(${PROJECT_NAME}-MeshRouter-test src/Communication/Meshnetwork/tests/utestMeshRouter.cpp)
+
+# if(TARGET ${PROJECT_NAME}-MeshRouter-test)
+#   target_link_libraries(${PROJECT_NAME}-MeshRouter-test WirelessSignalSimulator MeshnetworkRouter ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
+# endif()
 
 
-if(TARGET ${PROJECT_NAME}-test)
-  target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-endif()
-
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)
 
 

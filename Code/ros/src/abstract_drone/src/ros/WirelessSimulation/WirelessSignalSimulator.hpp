@@ -29,14 +29,17 @@ namespace WirelessSimulation
  {
  public:
   /**
-   * @brief This function is called at loading the plugin.
-   *        - Start ros if not already running
-   *        - Setup ROS Subscribers and Services
-   *        - Spin up thread for ros handling
+   * @brief Construct a new Wireless Signal Simulator object
+   *         calls start on load
    *
    *@param comDistance maximum communication distance
    */
   explicit WirelessSignalSimulator( const float comDistance );
+  /**
+   * @brief Destroy the Wireless Signal Simulator object
+   *
+   */
+  ~WirelessSignalSimulator( );
   /**
    * @brief A servicecall used for sending messages from one node to another
    * conform basic rules of wireless communication
@@ -60,6 +63,21 @@ namespace WirelessSimulation
    */
   bool getNodesInRange( abstract_drone::AreaScan::Request &req,
                         abstract_drone::AreaScan::Response &res );
+
+  /**
+   * @brief This function is called at loading the plugin.
+   *        - Start ros if not already running
+   *        - Setup ROS Subscribers and Services
+   *        - Spin up thread for ros handling
+   *
+   *@param comDistance maximum communication distance
+   */
+  void Start( );
+  /**
+   * @brief Stops the WirelessSignalSimulator
+   *
+   */
+  void Stop( );
 
  protected:
  private:

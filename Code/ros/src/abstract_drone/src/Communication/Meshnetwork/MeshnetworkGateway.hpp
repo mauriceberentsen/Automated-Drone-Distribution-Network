@@ -51,6 +51,11 @@ namespace Meshnetwork
    *
    */
   void Init( );
+  /**
+   * @brief Stops the gateway
+   *
+   */
+  void Stop( );
 
   void SendGoalRequestToDrone( const uint8_t ID, const float latitude,
                                const float longitude, const uint16_t height );

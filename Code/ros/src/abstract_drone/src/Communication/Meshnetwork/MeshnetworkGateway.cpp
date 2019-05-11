@@ -36,6 +36,12 @@ namespace Meshnetwork
   routerTech->startRouting( this );
  }
 
+ void MeshnetworkGateway::Stop( )
+ {
+  communication->StopAntenna( );
+  internet->disconnect( );
+ }
+
  void MeshnetworkGateway::processIntroduction( const uint8_t* message )
  {
  }

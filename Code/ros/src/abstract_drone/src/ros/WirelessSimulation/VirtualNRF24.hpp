@@ -97,12 +97,6 @@ namespace WirelessSimulation
    */
   const bool On( );
 
- private:
-  /**
-   * @brief Used to queue up and handle ros message
-   *
-   */
-  void QueueThread( );
   /**
    * @brief ROS service function to switch power on and off
    *
@@ -113,6 +107,13 @@ namespace WirelessSimulation
    */
   bool switchPower( abstract_drone::PowerSwitchRequest& request,
                     abstract_drone::PowerSwitchResponse& response );
+
+ private:
+  /**
+   * @brief Used to queue up and handle ros message
+   *
+   */
+  void QueueThread( );
   /**
    * @brief Publishes information about the Component at 1hz
    *

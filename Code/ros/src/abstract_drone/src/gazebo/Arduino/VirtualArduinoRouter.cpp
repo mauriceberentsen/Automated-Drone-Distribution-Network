@@ -46,7 +46,7 @@ namespace ArduinoSimulation
 
  void VirtualArduinoRouter::setup( )
  {
-  routing = new Communication::RoutingTechnique::ChildTableTree( );
+  routing = new Communication::RoutingTechnique::HybridLMRoutingProtocol( );
   engine = new ros::Drone::RosDroneEngineConnector( droneID );
   NRF24 = new ros::WirelessSimulation::VirtualNRF24( );
   meshnetworkRouter = new Communication::Meshnetwork::MeshnetworkRouter(

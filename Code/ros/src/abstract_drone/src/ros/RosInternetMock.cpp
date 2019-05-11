@@ -28,7 +28,7 @@ namespace Internet
 
  void RosInternetMock::disconnect( )
  {
-  this->gatewaySub.shutdown( );
+  this->rosNode->shutdown( );
  }
 
  void RosInternetMock::connect( Communication::Internet::IGatewayCommands *IGC )

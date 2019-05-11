@@ -31,6 +31,10 @@ namespace Meshnetwork
   routerTech->startRouting( this );
  }
 
+ void MeshnetworkRouter::Stop( )
+ {
+  communication->StopAntenna( );
+ }
  void MeshnetworkRouter::processIntroduction( const uint8_t *message )
  {
   Messages::IntroduceMessage introduce( message );

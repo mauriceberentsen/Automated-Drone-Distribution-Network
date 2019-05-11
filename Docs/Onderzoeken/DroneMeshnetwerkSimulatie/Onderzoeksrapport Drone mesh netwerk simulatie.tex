@@ -169,6 +169,11 @@ De inleiding beschrijft:
 
 Het volgende onderzoek rapport wordt uitgevoerd ten behoeve van de het afstudeerproject van Maurice Berentsen, Hogeschool van Arnhem en Nijmegen.
 
+Het doel van dit onderzoek is het zetten van de eerste stap in de ontwikkeling van het
+dronenetwerk. De eerste stap is ontwikkelen van een netwerkmodule voor het onderling
+verbinden van drones. Het is van belang dat het meshnetwerk van de drones snel kan
+reageren op uitval van netwerkpunten.
+
 
 \chapter{Hoofd- en deelvragen}
 In dit hoofdstuk worden de hoofd- en deelvragen genoemd en onderbouwd.
@@ -179,7 +184,7 @@ Tenslotte wordt de invloed van het onderzoek op het afstudeerproject beschreven.
 \section{Hoofdvraag}
 Het doel van dit onderzoeksrapport is het beantwoorden van de volgende opgesteld hoofdvraag:
 \begin{quotation}
-\textit{Hoe kan een netwerkmodule een groep van ongeveer 100 drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?}	
+\textit{Hoe kunnen een netwerkmodules een groep van ongeveer 100 drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?}	
 \end{quotation}
 Doordat de uitvoerende student van dit onderzoek niet beschikt over een certificaat om met drones te mogen vliegen behoudt dit onderzoek zich tot een simulatie.
 Van de netwerkmodule wordt wel een fysiek prototype ontwikkeld.
@@ -192,7 +197,7 @@ Om de hoofdvraag te kunnen beantwoorden zijn er de volgende deelvragen opgesteld
 	\item Welke simulatie software is geschikt om een netwerk van ongeveer 100 drones in na te bootsen?
 	\item Wat is de grote van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?
 	\item Welke mesh netwerk hardware is geschikt voor het onderling verbinden van drones?
-	\item Welke mesh netwerk libary is geschikt voor de te gebruiken hardware?
+	\item Welke mesh netwerk techniek is geschikt voor de te gebruiken hardware?
 	\item Hoe gedraagt een node uit het mesh netwerk zich bij slecht of geen bereik?
 	\item Wat kan er toegevoegd worden aan de communicatie van de netwerkmodule om snel [TODO snel definiëren] achter uitval te komen?
 	\item Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?
@@ -236,12 +241,12 @@ Daarom past de werkplaats onderzoeksruimte goed bij dit onderzoek.
 
 \chapter{Criteria}
 \label{chapter:criteria}
-Maak hier een lijst met criteria aan de hand van de hoofd- en deelvragen.
-\begin{itemize}	
-\item Zijn de criteria duidelijk opgesteld?
-\item Waar moet de oplossing aan voldoen, staat dit erin?
-\end{itemize}
-\hrule
+%Maak hier een lijst met criteria aan de hand van de hoofd- en deelvragen.
+%\begin{itemize}	
+%\item Zijn de criteria duidelijk opgesteld?
+%\item Waar moet de oplossing aan voldoen, staat dit erin?
+%\end{itemize}
+%\hrule
 
 In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat deze betekenen wordt eerst toegelicht:
 \begin{itemize}
@@ -565,6 +570,7 @@ In \autoref{sec:payloadconclusie} is vastgesteld dat de payload berichten van 21
 Criteria \hyperlink{ph1}{PH1} eist dat het bereik van de modules minimaal 500 meter is.
 Vervolgens stelt criteria \hyperlink{ph5}{PH5} stelt dat het netwerk zuinig in gebruik moet zijn. 
 \subsection{Wat is een meshnetwerk?}
+\label{sec:meshnetwerkkeuze:watismesh}
 Een meshnetwerk is een term die gebruikt wordt voor een topologie techniek in netwerken.
 Om een voorbeeld beter toe te kunnen lichten worden eerst de tegenhangers besproken de ster en boom topologie.
 
@@ -710,6 +716,109 @@ Hij ziet een betere business case in een netwerk met een hogere dichtheid maar d
 Daarom zal er in dit project gebruik gemaakt worden van de nRF24l01+.
 
 
+
+\section{Welke routeringstechniek is geschikt voor de te gebruiken hardware?}
+\label{sec:meshnetwerktechniek}
+
+Het netwerk wordt opgebouwd door het toepassen van een meshnetwerktechniek.
+Wat een meshnetwerk is wordt al toegelicht in \autoref{sec:meshnetwerkkeuze:watismesh}.
+Een kenmerkend eigenschap van een meshnetwerk is het hebben van meerdere verbindingspunten per router of gateway. Dit wordt opgezet door een routeringstechniek. Er zijn verschillende technieken met elk voor en nadelen. De technieken zijn te verdelen in drie groepen: proactieve, reactief en hybride \cite{meshprotocols}. Het verschil tussen deze technieken zit hem in ontdekken van andere nodes in het netwerk. In de hierop volgende paragrafen worden deze technieken kort toegelicht. Vervolgens zal besloten worden welke van deze drie het meest geschikt is voor de te gebruiken hardware. Tenslotte zal gekeken worden binnen die groep gekozen worden welk techniek uitgewerkt wordt.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.6\linewidth]{Afbeeldingen/meshprotocollen.png}\end{center}
+	\caption{Bestaande routeringsprotocollen. Afkomstig van \protect\cite{meshprotocols}}
+	\label{fig:meshprotcollen}
+\end{figure}
+
+\subsection{Proactieve routeringstechniek}
+\label{sec:meshnetwerktechniek:proactief}
+
+Een proactief protocol is een protocol die zelf constant bezig is met het zoeken naar nieuwe punten in het netwerk.
+De nodes zorgen dat veranderingen meteen kenbaar gemaakt worden aan andere punten in het netwerk. 
+Dit zorgt ervoor dat het netwerk een zelf herstellend vermogen heeft en geschikt is voor het opsporen van fouten in het netwerk.
+Het protocol is geschikt voor situaties waar de posities van nodes zelden tot nooit veranderen. 
+In situaties waar paden vaak veranderen door het veranderen van node posities zal het protocol veel meer bandbreedte vragen van het netwerk. 
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.45\linewidth]{Afbeeldingen/proactive.png}\end{center}
+	\caption{Voorbeeld proactieve routeringstechniek.}
+	\label{fig:proactief}
+\end{figure}
+
+In \autoref{fig:proactief} wordt een voorbeeld getoond waar punt A een bericht wil versturen naar punt B en C. 
+Punt A is op de hoogte van alle routes in het netwerk net als de andere punten in het netwerk dat zijn.
+In de huidige situatie zijn er 21 verbindingen in het netwerk tussen de nodes.
+Er zijn 14 punten aanwezig in het netwerk minimaal zullen er dus voor het op de hoogte brengen van bestaande verbindingen 294 ($14 \times 21$) berichten rondgestuurd moeten worden. 
+
+Vervolgens kan er een pad gemaakt worden waarover een bericht verstuurd kan worden.
+Dit voorbeeld laat goed zien dat deze routingstechniek zijn voordeel haalt wanneer de nodes stil blijven staan omdat er dan niet opnieuw berichten verstuurd hoeven te worden. 
+ 
+\subsection{Reactieve routeringstechniek}
+\label{sec:meshnetwerktechniek:reactieve}
+
+Een reactieve routeringstechniek is een methode waarbij de nodes geen routes opslaan maar op aanvraag routes opbouwen. 
+Dit scheelt in het gebruik van geheugen en het heeft minder berichten bij het initialiseren van het netwerk. Daarentegen kost het deze techniek meer tijd om een bericht te versturen omdat er voordat er een bericht verstuurd kan worden eerst een route opgebouwd moet worden.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.45\linewidth]{Afbeeldingen/reactive.png}\end{center}
+	\caption{Voorbeeld proactieve routeringstechniek.}
+	\label{fig:reactief}
+\end{figure}
+
+\autoref{fig:reactief} laat een voorbeeld zien waarin er gebruik gemaakt wordt van een reactieve routeringstechniek.
+Er zal in dit voorbeeld voordat een route gezocht wordt er een route gemaakt moeten worden tussen de twee punten.
+Vervolgens als deze route gevonden is zal er een bericht hierover gestuurd worden. 
+Deze route wordt tijdelijke opgeslagen tot de node klaar is met het versturen van zijn data.
+
+\subsection{Hybride routeringstechniek}
+\label{sec:meshnetwerktechniek:hybride}
+Een hybride routeringstechniek is een techniek die een proactieve en reactieve techniek deels combineert om zo ongewenste nadelen te elimineren van elkaar. 
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.45\linewidth]{Afbeeldingen/hybride.png}\end{center}
+	\caption{Voorbeeld hybride routeringstechniek.}
+	\label{fig:hybride}
+\end{figure}
+
+In dit voorbeeld is een hybride routeringstechniek uitgewerkt er zijn veel meer varianten aanwezig het voorbeeld is om te laten zien hoe reactief en proactief geactiveerd wordt.
+In deze situatie is de gateway voorzien van een proactief protocol waardoor het alle routes kent. 
+De routers hoeven daardoor alleen een route te bereken naar een gateway toe.   
+  
+\subsection{Conclusie}
+\label{sec:meshnetwerktechniek:Conlusie}
+Het dronenetwerk is een netwerk die vaak te maken zal hebben met verplaatsingen.
+De hele eigenschap om autonoom nodes te kunnen verplaatsen is zelf de aanleiding van het project.
+Daardoor vallen een proactieve routeringstechnieken af. 
+Toch is de tegenhanger reactieve routering ook geen ideale oplossing.
+Het niet opslaan van routes maakt het versturen van berichten sloom en er is geheugen aanwezig op de microcontroller voor het opslaan van routes. 
+
+Daarom is de conclusie om een zelf een hybride variant te maken van de reactieve Lightweight Mobile Routing Protocol(LMR).
+Dit protocol wordt gebruikt omdat het een protocol is die een hop routeringstechniek gebruikt waardoor de payload klein blijft.
+De techniek is niet afhankelijk van een gateway en nodes hoeven alleen te bewust te zijn van de buren en met wie die buren verbonden zijn.
+Het protocol hoeft alleen maar aangepast te worden zodat routes opgeslagen blijven.
+Doordat deze techniek alleen routes opslaat van aangesloten buren en hun aangesloten punten zullen er geen grote routeringstabellen gecreëerd worden.
+
+
+\section{Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?}
+\label{sec:dronekeuze}
+
+In \autoref{sec:welkesim} is geconcludeerd dat als simulatie software ROS melodic met Gazebo9 wordt gebruikt.
+Hierin kwam naar voren dat niet elke drone package gebruikt kan worden doordat ze specifiek gemaakt zijn voor de versie van ROS.
+Omdat het project de focus heeft op de werking van netwerkmodules voldoet een abstracte versie van een drone.
+Zo hoeft deze bijvoorbeeld op dit moment nog niet realistisch te vliegen.
+
+Daarom is besloten dat de drone het volgende moet kunnen in de simulatie:
+
+\begin{itemize}
+	\item Een drone moet verticaal kunnen opstijgen.
+	\item Een drone moet verticaal kunnen landen.
+	\item Een drone moet zich kunnen voortbewegen.
+	\item Een drone verplaatsing begint altijd met opstijgen en eindigt altijd met een landing.
+	\item Een drone moet voorzien zijn van module die een locatie kan teruggeven. 
+	\item Een drone moet mag een basisvorm gebruiken om zich zichtbaar te maken in de simulatie
+\end{itemize}
+
+
 \chapter{Oplossingsrichtingen}
 
 \begin{itemize}
@@ -720,25 +829,21 @@ Daarom zal er in dit project gebruik gemaakt worden van de nRF24l01+.
 \hrule
 
 \chapter{Experimenten}
-\section{Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?}
-\label{sec:dronekeuze}
-
-In \autoref{sec:welkesim} is geconcludeerd dat als simulatie software ROS melodic met Gazebo9 wordt gebruikt.
-Hierin kwam naar voren dat niet elke drone package gebruikt kan worden doordat ze specifiek gemaakt zijn voor de versie van ROS.
-Omdat het project de focus heeft op de werking van netwerkmodules voldoet een abstracte versie van een drone.
-Zo hoeft deze bijvoorbeeld op dit moment nog niet realistisch te vliegen.
-
-
+\label{experimenten}
 
 \begin{itemize}
-\item Beschrijft waarom dit experiment van belang is.
-\item Voldoet de code van het experiment aan de opgestelde eisen?
-\item Voldoet het programma aan de opgestelde QoS?
-\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde eisen?
-\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde QoS?
+	\item Beschrijft waarom dit experiment van belang is.
+	\item Voldoet de code van het experiment aan de opgestelde eisen?
+	\item Voldoet het programma aan de opgestelde QoS?
+	\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde eisen?
+	\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde QoS?
 \end{itemize}
 \hrule
 
+\section{Hoe gedraagt een node uit het mesh netwerk zich bij slecht of geen bereik?}
+\label{experimenten:slechtofgeenbereik}
+\section{Wat kan er toegevoegd worden aan de communicatie van de netwerkmodule om snel [TODO snel definiëren] achter uitval te komen?}
+\label{experimenten:snelachteruitval}
 \chapter{Conclusie}
 
 \label{chapter:conclusie}

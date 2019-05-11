@@ -84,8 +84,10 @@ namespace WirelessSimulation
   this->rosQueueThread =
       std::thread( std::bind( &VirtualNRF24::QueueThread, this ) );
  }
+
  void VirtualNRF24::StopAntenna( )
  {
+  rosNode->shutdown( );
  }
 
  const bool VirtualNRF24::On( )
@@ -109,7 +111,7 @@ namespace WirelessSimulation
     return false;
    }
   } else {
-   ROS_ERROR( "SIGNAL SIMULATOR NOT AVAILABLE" );
+   //    ROS_ERROR( "SIGNAL SIMULATOR NOT AVAILABLE" );
    return false;
   }
  }

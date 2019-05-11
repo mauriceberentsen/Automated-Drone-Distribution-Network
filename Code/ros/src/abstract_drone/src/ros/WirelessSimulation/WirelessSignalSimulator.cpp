@@ -19,6 +19,16 @@ namespace WirelessSimulation
  WirelessSignalSimulator::WirelessSignalSimulator( const float comDistance )
      : maxComDistance( comDistance )
  {
+  Start( );
+ }
+
+ WirelessSignalSimulator::~WirelessSignalSimulator( )
+ {
+  Stop( );
+ }
+
+ void WirelessSignalSimulator::Start( )
+ {
   std::string Node_TopicName = "/WirelessSignalSimulator";
   // Initialize ros, if it has not already been initialized.
   if ( !ros::isInitialized( ) ) {
@@ -44,6 +54,11 @@ namespace WirelessSimulation
 
   this->rosQueueThread =
       std::thread( std::bind( &WirelessSignalSimulator::QueueThread, this ) );
+ }
+
+ void WirelessSignalSimulator::Stop( )
+ {
+  rosNode->shutdown( );
  }
 
  bool WirelessSignalSimulator::send_message(
@@ -74,11 +89,11 @@ namespace WirelessSimulation
    }
   } else {
    if ( from == Network.end( ) ) {
-    ROS_ERROR( "Sender %d doesnt exist in Network", ( int )req.from );
+    // ROS_ERROR( "Sender %d doesnt exist in Network", ( int )req.from );
     res.succes = false;
    }
    if ( to == Network.end( ) ) {
-    ROS_ERROR( "reciever %d doesnt exist in Network", ( int )req.to );
+    // ROS_ERROR( "reciever %d doesnt exist in Network", ( int )req.to );
     res.succes = false;
    }
    res.succes = false;
@@ -106,7 +121,7 @@ namespace WirelessSimulation
    }
    return true;
   } else {
-   ROS_ERROR( "requester %d doesnt exist in Network", ( int )req.id );
+   //    ROS_ERROR( "requester %d doesnt exist in Network", ( int )req.id );
    return false;
   }
  }

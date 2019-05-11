@@ -15,7 +15,7 @@
 #include "../../Communication/Meshnetwork/MeshnetworkGateway.hpp"
 #include "../../ros/RosInternetMock.hpp"
 #include "../../ros/RosDroneEngineConnector.hpp"
-#include "../../Communication/RoutingTechnique/ChildTableTree.hpp"
+#include "../../Communication/RoutingTechnique/HybridLMRoutingProtocol.hpp"
 #include "../../ros/WirelessSimulation/VirtualNRF24.hpp"
 
 namespace gazebo
@@ -58,7 +58,7 @@ namespace ArduinoSimulation
   /// \brief A pointer to the connected MeshnetworkGateway
   Communication::Meshnetwork::MeshnetworkGateway* meshnetworkGateway;
   /// \brief Pointer to the routing technique
-  Communication::RoutingTechnique::ChildTableTree* routing;
+  Communication::RoutingTechnique::HybridLMRoutingProtocol* routing;
   /// \brief Pointer to the connected drone eninge
   ros::Drone::RosDroneEngineConnector* engine;
   /// \brief Pointer to the connected NRF24

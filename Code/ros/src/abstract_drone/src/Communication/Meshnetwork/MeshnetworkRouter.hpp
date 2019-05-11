@@ -42,6 +42,11 @@ namespace Meshnetwork
    * Tell the routerTech to start routing.
    */
   void Init( );
+  /**
+   * @brief Stops the router
+   *
+   */
+  void Stop( );
 
  protected:
  private:

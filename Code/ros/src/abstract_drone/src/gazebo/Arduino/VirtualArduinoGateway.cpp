@@ -44,14 +44,14 @@ namespace ArduinoSimulation
   setup( );
  }
 
- //  communication::RoutingTechnique::ChildTableTree routing;
+ //  communication::RoutingTechnique::HybridLMRoutingProtocol routing;
  //  ros::Drone::RosDroneEngineConnector Engine;
  //  ros::Internet::RosInternetMock internet;
  //  ros::WirelessSimulation::VirtualNRF24 NRF24;
 
  void VirtualArduinoGateway::setup( )
  {
-  routing = new Communication::RoutingTechnique::ChildTableTree( );
+  routing = new Communication::RoutingTechnique::HybridLMRoutingProtocol( );
   engine = new ros::Drone::RosDroneEngineConnector( droneID );
   NRF24 = new ros::WirelessSimulation::VirtualNRF24( );
   internet = new ros::Internet::RosInternetMock( );

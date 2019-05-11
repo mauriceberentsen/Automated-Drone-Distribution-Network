@@ -1,7 +1,7 @@
 /**
- * @file ChildTableTree.hpp
+ * @file HybridLMRoutingProtocol.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief header file for the class ChildTableTree
+ * @brief header file for the class HybridLMRoutingProtocol
  * @version 1.0
  * @date 2019-04-04
  *
@@ -27,19 +27,19 @@ namespace Communication
 {
 namespace RoutingTechnique
 {
- class ChildTableTree : public IRoutingTechnique
+ class HybridLMRoutingProtocol : public IRoutingTechnique
  {
  public:
   /**
    * @brief Construct a new Child Table Tree object
    *
    */
-  ChildTableTree( );
+  HybridLMRoutingProtocol( );
   /**
    * @brief Destroy the Child Table Tree object
    *
    */
-  ~ChildTableTree( );
+  ~HybridLMRoutingProtocol( );
 
   /**
    * @brief Get the node you need to communicate with to let the message reach.

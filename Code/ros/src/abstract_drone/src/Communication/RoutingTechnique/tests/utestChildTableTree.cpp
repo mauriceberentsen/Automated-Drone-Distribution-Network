@@ -1,5 +1,5 @@
 // Bring in my package's API, which is what I'm testing
-#include "../ChildTableTree.hpp"
+#include "../HybridLMRoutingProtocol.hpp"
 // Bring in gtest
 #include <gtest/gtest.h>
 
@@ -7,7 +7,7 @@ using namespace Communication::RoutingTechnique;
 // Declare a test
 TEST( TestSuiteChildTableTree, addNeighbours )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.canCommunicateWithNode( 1 );
  CTT.canCommunicateWithNode( 2 );
  CTT.canCommunicateWithNode( 3 );
@@ -17,7 +17,7 @@ TEST( TestSuiteChildTableTree, addNeighbours )
 
 TEST( TestSuiteChildTableTree, addDoubleNeighbours )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.canCommunicateWithNode( 1 );
  CTT.canCommunicateWithNode( 2 );
  CTT.canCommunicateWithNode( 3 );
@@ -31,7 +31,7 @@ TEST( TestSuiteChildTableTree, addDoubleNeighbours )
 
 TEST( TestSuiteChildTableTree, cantCommunicate )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.canCommunicateWithNode( 1 );
  CTT.canCommunicateWithNode( 2 );
  CTT.canCommunicateWithNode( 3 );
@@ -44,7 +44,7 @@ TEST( TestSuiteChildTableTree, cantCommunicate )
 
 TEST( TestSuiteChildTableTree, addGranChildToUnknownChild )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.OtherCanCommunicateWithNode( 1, 4 );
  CTT.OtherCanCommunicateWithNode( 2, 5 );
  CTT.OtherCanCommunicateWithNode( 3, 6 );
@@ -55,7 +55,7 @@ TEST( TestSuiteChildTableTree, addGranChildToUnknownChild )
 
 TEST( TestSuiteChildTableTree, addGranChildToKnownChild )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.canCommunicateWithNode( 1 );
  CTT.canCommunicateWithNode( 2 );
  CTT.canCommunicateWithNode( 3 );
@@ -71,7 +71,7 @@ TEST( TestSuiteChildTableTree, addGranChildToKnownChild )
 
 TEST( TestSuiteChildTableTree, addSameGrandChildToAll )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.canCommunicateWithNode( 1 );
  CTT.canCommunicateWithNode( 2 );
  CTT.canCommunicateWithNode( 3 );
@@ -86,7 +86,7 @@ TEST( TestSuiteChildTableTree, addSameGrandChildToAll )
 
 TEST( TestSuiteChildTableTree, findRouteToNeighbour )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.canCommunicateWithNode( 1 );
  CTT.canCommunicateWithNode( 2 );
  CTT.canCommunicateWithNode( 3 );
@@ -96,7 +96,7 @@ TEST( TestSuiteChildTableTree, findRouteToNeighbour )
 
 TEST( TestSuiteChildTableTree, noRoutePossible )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.canCommunicateWithNode( 1 );
  CTT.canCommunicateWithNode( 2 );
  CTT.canCommunicateWithNode( 3 );
@@ -106,7 +106,7 @@ TEST( TestSuiteChildTableTree, noRoutePossible )
 
 TEST( TestSuiteChildTableTree, findRouteToGrandChild )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.OtherCanCommunicateWithNode( 1, 4 );
  CTT.OtherCanCommunicateWithNode( 2, 5 );
  CTT.OtherCanCommunicateWithNode( 3, 5 );
@@ -116,7 +116,7 @@ TEST( TestSuiteChildTableTree, findRouteToGrandChild )
 
 TEST( TestSuiteChildTableTree, removeGrandchildRoute )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.OtherCanCommunicateWithNode( 1, 4 );
  CTT.OtherCanCommunicateWithNode( 2, 5 );
  CTT.OtherCanCommunicateWithNode( 3, 6 );
@@ -128,7 +128,7 @@ TEST( TestSuiteChildTableTree, removeGrandchildRoute )
 
 TEST( TestSuiteChildTableTree, alternativeRouteToGrandchild )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.OtherCanCommunicateWithNode( 1, 4 );
  CTT.OtherCanCommunicateWithNode( 2, 5 );
  CTT.OtherCanCommunicateWithNode( 3, 5 );
@@ -140,7 +140,7 @@ TEST( TestSuiteChildTableTree, alternativeRouteToGrandchild )
 
 TEST( TestSuiteChildTableTree, noRouteToGrandchildBecauseMissingParent )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.OtherCanCommunicateWithNode( 1, 4 );
  CTT.OtherCanCommunicateWithNode( 2, 5 );
  CTT.OtherCanCommunicateWithNode( 3, 6 );
@@ -152,7 +152,7 @@ TEST( TestSuiteChildTableTree, noRouteToGrandchildBecauseMissingParent )
 
 TEST( TestSuiteChildTableTree, NodeMovedLocation )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.OtherCanCommunicateWithNode( 1, 4 );
  CTT.OtherCanCommunicateWithNode( 2, 5 );
  CTT.OtherCanCommunicateWithNode( 3, 6 );
@@ -164,14 +164,14 @@ TEST( TestSuiteChildTableTree, NodeMovedLocation )
 
 TEST( TestSuiteChildTableTree, empty )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
 
  EXPECT_TRUE( CTT.empty( ) );
 }
 
 TEST( TestSuiteChildTableTree, notempty )
 {
- ChildTableTree CTT;
+ HybridLMRoutingProtocol CTT;
  CTT.OtherCanCommunicateWithNode( 1, 4 );
 
  EXPECT_FALSE( CTT.empty( ) );
