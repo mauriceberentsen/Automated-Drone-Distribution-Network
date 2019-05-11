@@ -22,6 +22,7 @@ namespace ros
 namespace WirelessSimulation
 {
  VirtualNRF24::VirtualNRF24( )
+     : meshnetworkComponent( nullptr ), debuginfo( nullptr )
  {
  }
 

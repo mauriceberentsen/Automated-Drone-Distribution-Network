@@ -17,8 +17,8 @@ namespace DroneSimulation
  /*static*/ int VirtualDrone::droneID = 0;
 
  VirtualDrone::VirtualDrone( const float _x, const float _y, const float _z,
-                             physics::WorldPtr _parent, bool _debug )
-     : x( _x ), y( _y ), z( _z ), parent( _parent ), debug( _debug )
+                             physics::WorldPtr _parent, bool debug )
+     : x( _x ), y( _y ), z( _z ), parent( _parent ), debug( debug )
  {
  }
 
@@ -27,8 +27,8 @@ namespace DroneSimulation
  }
 
  RouterDrone::RouterDrone( const float _x, const float _y, const float _z,
-                           physics::WorldPtr _parent, bool _debug )
-     : VirtualDrone( _x, _y, _z, _parent, _debug )
+                           physics::WorldPtr _parent, bool debug )
+     : VirtualDrone( _x, _y, _z, _parent, debug )
  {
   std::stringstream ss;
   ss << "<sdf version ='1.6'>\
@@ -89,8 +89,8 @@ namespace DroneSimulation
  }
 
  GatewayDrone::GatewayDrone( const float _x, const float _y, const float _z,
-                             physics::WorldPtr _parent, bool _debug )
-     : VirtualDrone( _x, _y, _z, _parent, _debug )
+                             physics::WorldPtr _parent, bool debug )
+     : VirtualDrone( _x, _y, _z, _parent, debug )
  {
   std::stringstream ss;
   ss << "<sdf version ='1.6'>\

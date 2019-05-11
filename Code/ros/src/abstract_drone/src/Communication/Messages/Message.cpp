@@ -18,14 +18,14 @@ namespace Communication
 {
 namespace Messages
 {
- Message::Message( const uint8_t _creator, const uint8_t _from,
-                   Messagetype _Messagetype, const uint8_t _to,
-                   const uint8_t _forward )
-     : creator( _creator )
-     , from( _from )
-     , type( _Messagetype )
-     , to( _to )
-     , forward( _forward )
+ Message::Message( const uint8_t creator, const uint8_t from,
+                   Messagetype messagetype, const uint8_t to,
+                   const uint8_t forward )
+     : creator( creator )
+     , from( from )
+     , type( messagetype )
+     , to( to )
+     , forward( forward )
  {
  }
  Message::Message( const uint8_t *payload )
@@ -61,7 +61,7 @@ namespace Messages
  }
 
  void Message::CopyToCharArray( uint8_t *value, uint16_t size, uint8_t *arr,
-                                uint16_t start ) const
+                                uint16_t start )
  {
   for ( uint16_t i = 0; i < size; i++ ) {
    arr[i + start] = value[i];
@@ -98,15 +98,15 @@ namespace Messages
   return this->forward;
  }
 
- LocationMessage::LocationMessage( const uint8_t _creator, const uint8_t _from,
-                                   const uint8_t _to, const uint8_t _forward,
-                                   float _latitude, float _longitude,
-                                   int16_t _height, uint32_t _timeSincePosix )
-     : Message( _creator, _from, LOCATION, _to, _forward )
-     , latitude( _latitude )
-     , longitude( _longitude )
-     , height( _height )
-     , timeSincePosix( _timeSincePosix )
+ LocationMessage::LocationMessage( const uint8_t creator, const uint8_t from,
+                                   const uint8_t to, const uint8_t forward,
+                                   float latitude, float longitude,
+                                   int16_t height, uint32_t timeSincePosix )
+     : Message( creator, from, LOCATION, to, forward )
+     , latitude( latitude )
+     , longitude( longitude )
+     , height( height )
+     , timeSincePosix( timeSincePosix )
  {
  }
 
@@ -189,14 +189,13 @@ namespace Messages
   return this->timeSincePosix;
  }
 
- IntroduceMessage::IntroduceMessage( const uint8_t _creator,
-                                     const uint8_t _from, const uint8_t _to,
-                                     const uint8_t _forward,
-                                     const uint8_t _hopsUntilGateway,
-                                     const bool _knowGateway )
-     : Message( _creator, _from, PRESENT, _to, _forward )
-     , hopsUntilGateway( _hopsUntilGateway )
-     , knowGateway( _knowGateway )
+ IntroduceMessage::IntroduceMessage( const uint8_t creator, const uint8_t from,
+                                     const uint8_t to, const uint8_t forward,
+                                     const uint8_t hopsUntilGateway,
+                                     const bool knowGateway )
+     : Message( creator, from, PRESENT, to, forward )
+     , hopsUntilGateway( hopsUntilGateway )
+     , knowGateway( knowGateway )
  {
  }
 
@@ -263,10 +262,10 @@ namespace Messages
   return this->knowGateway;
  }
 
- MissingMessage::MissingMessage( const uint8_t _creator, const uint8_t _from,
-                                 const uint8_t _to, const uint8_t _forward,
-                                 const uint8_t _missing )
-     : Message( _creator, _from, MISSING, _to, _forward ), missing( _missing )
+ MissingMessage::MissingMessage( const uint8_t creator, const uint8_t from,
+                                 const uint8_t to, const uint8_t forward,
+                                 const uint8_t missing )
+     : Message( creator, from, MISSING, to, forward ), missing( missing )
  {
  }
 
@@ -319,16 +318,15 @@ namespace Messages
   return this->missing;
  }
 
- HeartbeatMessage::HeartbeatMessage( const uint8_t _creator,
-                                     const uint8_t _from, const uint8_t _to,
-                                     const uint8_t _forward,
-                                     const bool _knowGateway,
-                                     const uint8_t _prefferedGateWay,
-                                     uint8_t _hops )
-     : Message( _creator, _from, HEARTBEAT, _to, _forward )
-     , knowGateway( _knowGateway )
-     , prefferedGateWay( _prefferedGateWay )
-     , hops( _hops )
+ HeartbeatMessage::HeartbeatMessage( const uint8_t creator, const uint8_t from,
+                                     const uint8_t to, const uint8_t forward,
+                                     const bool knowGateway,
+                                     const uint8_t prefferedGateWay,
+                                     uint8_t hops )
+     : Message( creator, from, HEARTBEAT, to, forward )
+     , knowGateway( knowGateway )
+     , prefferedGateWay( prefferedGateWay )
+     , hops( hops )
  {
  }
 
@@ -413,16 +411,15 @@ namespace Messages
   return this->knowGateway;
  }
 
- GoToLocationMessage::GoToLocationMessage( const uint8_t _creator,
-                                           const uint8_t _from,
-                                           const uint8_t _to,
-                                           const uint8_t _forward,
-                                           float _latitude, float _longitude,
-                                           int16_t _height )
-     : Message( _creator, _from, MOVE_TO_LOCATION, _to, _forward )
-     , latitude( _latitude )
-     , longitude( _longitude )
-     , height( _height )
+ GoToLocationMessage::GoToLocationMessage( const uint8_t creator,
+                                           const uint8_t from, const uint8_t to,
+                                           const uint8_t forward,
+                                           float latitude, float longitude,
+                                           int16_t height )
+     : Message( creator, from, MOVE_TO_LOCATION, to, forward )
+     , latitude( latitude )
+     , longitude( longitude )
+     , height( height )
  {
  }
 
@@ -494,13 +491,12 @@ namespace Messages
   return this->height;
  }
 
- MovementNegotiationMessage::MovementNegotiationMessage( const uint8_t _creator,
-                                                         const uint8_t _from,
-                                                         const uint8_t _to,
-                                                         const uint8_t _forward,
-                                                         const float _cost )
-     : Message( _creator, _from, MOVEMENT_NEGOTIATION, _to, _forward )
-     , cost( _cost )
+ MovementNegotiationMessage::MovementNegotiationMessage( const uint8_t creator,
+                                                         const uint8_t from,
+                                                         const uint8_t to,
+                                                         const uint8_t forward,
+                                                         const float cost )
+     : Message( creator, from, MOVEMENT_NEGOTIATION, to, forward ), cost( cost )
  {
  }
 

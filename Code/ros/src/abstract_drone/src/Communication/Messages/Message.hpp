@@ -59,7 +59,7 @@ namespace Messages
   Message( const uint8_t creator, const uint8_t from, Messagetype messagetype,
            const uint8_t to, const uint8_t forward );
   explicit Message( const uint8_t *payload );
-  ~Message( );
+  virtual ~Message( );
   /**
    * @brief Copies the the content of a message to the given payload
    *
@@ -88,8 +88,8 @@ namespace Messages
    * @param arr array to copy from
    * @param start place in the array to start
    */
-  void CopyFromCharArray( uint8_t *value, uint16_t size, const uint8_t *arr,
-                          uint16_t start );
+  static void CopyFromCharArray( uint8_t *value, uint16_t size,
+                                 const uint8_t *arr, uint16_t start );
   /**
    * @brief Copies the value to a char array
    *
@@ -98,8 +98,8 @@ namespace Messages
    * @param arr array to copy to
    * @param start place in the array to begin copying
    */
-  void CopyToCharArray( uint8_t *value, uint16_t size, uint8_t *arr,
-                        uint16_t start ) const;
+  static void CopyToCharArray( uint8_t *value, uint16_t size, uint8_t *arr,
+                               uint16_t start );
   /// \brief The creator of the message
   uint8_t creator;
   /// \brief The sender of the message
@@ -172,7 +172,7 @@ namespace Messages
    * @param knowGateway If you are connected to a gateway
    */
   IntroduceMessage( const uint8_t creator, const uint8_t from, const uint8_t to,
-                    const uint8_t forward, const uint8_t hopsUntilsGateway,
+                    const uint8_t forward, const uint8_t hopsUntilGateway,
                     const bool knowGateway );
   /**
    * @brief Construct a new Introduce Message objectfrom a NRF24 payload
@@ -243,12 +243,12 @@ namespace Messages
   const uint8_t getHops( ) const;
 
  private:
-  /// \brief The amount of hops this heartbeat has taken
-  uint8_t hops;
   /// \brief Boolean true if the node is connected to a gateway
   bool knowGateway;
   /// \brief The ID of prefferedGateWay
   uint8_t prefferedGateWay;
+  /// \brief The amount of hops this heartbeat has taken
+  uint8_t hops;
  };
 
  class MissingMessage : public Message

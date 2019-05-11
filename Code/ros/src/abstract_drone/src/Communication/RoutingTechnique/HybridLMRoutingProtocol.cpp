@@ -18,6 +18,7 @@ namespace Communication
 namespace RoutingTechnique
 {
  HybridLMRoutingProtocol::HybridLMRoutingProtocol( )
+     : meshnetworkComponent( nullptr )
  {
  }
 

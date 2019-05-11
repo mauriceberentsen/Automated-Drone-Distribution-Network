@@ -15,6 +15,12 @@ namespace gazebo
 namespace ArduinoSimulation
 {
  VirtualArduinoGateway::VirtualArduinoGateway( )
+     : debug( false )
+     , meshnetworkGateway( nullptr )
+     , routing( nullptr )
+     , engine( nullptr )
+     , NRF24( nullptr )
+     , internet( nullptr )
  {
  }
 
@@ -43,11 +49,6 @@ namespace ArduinoSimulation
   }
   setup( );
  }
-
- //  communication::RoutingTechnique::HybridLMRoutingProtocol routing;
- //  ros::Drone::RosDroneEngineConnector Engine;
- //  ros::Internet::RosInternetMock internet;
- //  ros::WirelessSimulation::VirtualNRF24 NRF24;
 
  void VirtualArduinoGateway::setup( )
  {

@@ -291,10 +291,10 @@ namespace Meshnetwork
   bool debug = false;
   /// \brief pointer to the used RoutingTechnique
   std::unique_ptr< RoutingTechnique::IRoutingTechnique > routerTech;
-  /// \brief Wireless communication interface
-  std::unique_ptr< Wireless::IWirelessCommunication > communication;
   /// \brief Connection towards the DroneEngine
   std::unique_ptr< Drone::IDroneEngine > droneEngine;
+  /// \brief Wireless communication interface
+  std::unique_ptr< Wireless::IWirelessCommunication > communication;
 
   /// \brief The ID of the prefferedGateWay
   uint8_t prefferedGateWay = 0;

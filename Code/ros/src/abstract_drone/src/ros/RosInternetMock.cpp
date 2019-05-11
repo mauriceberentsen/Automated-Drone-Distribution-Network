@@ -17,7 +17,7 @@ namespace ros
 {
 namespace Internet
 {
- RosInternetMock::RosInternetMock( )
+ RosInternetMock::RosInternetMock( ) : meshnetworkGateway( nullptr )
  {
  }
 

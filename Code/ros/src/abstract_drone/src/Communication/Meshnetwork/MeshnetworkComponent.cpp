@@ -198,14 +198,14 @@ namespace Meshnetwork
  }
 
  void MeshnetworkComponent::informAboutMissingChild( uint8_t parent,
-                                                     uint8_t missing )
+                                                     uint8_t child )
  {
   for ( auto &chi1d : routerTech->getSetOfChildren( ) ) {
    if ( parent == chi1d ) continue;
    uint8_t towards = routerTech->getDirectionToNode( chi1d );
    if ( towards == UINT8_MAX ) continue;
    Messages::MissingMessage missingMessage( this->nodeID, this->nodeID, towards,
-                                            chi1d, missing );
+                                            chi1d, child );
    uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
    missingMessage.toPayload( buffer );
    SendMessage( buffer, towards );
@@ -223,9 +223,9 @@ namespace Meshnetwork
   communication->BroadcastMessage( buffer );
  }
 
- void MeshnetworkComponent::processRequestLocation( const uint8_t *payload )
+ void MeshnetworkComponent::processRequestLocation( const uint8_t *message )
  {
-  Messages::Message msg( payload );
+  Messages::Message msg( message );
   sendLocation( msg.getCreator( ) );
  }
 
@@ -242,14 +242,14 @@ namespace Meshnetwork
  }
 
  float MeshnetworkComponent::distanceBetweenMeAndLocation(
-     const Messages::LocationMessage &A )
+     const Messages::LocationMessage &LocMsg )
  {
   const ignition::math::Vector3< float > location = droneEngine->getLocation( );
 
   float a, b, c;
-  a = A.getLongitude( ) - location.X( );
-  b = A.getLatitude( ) - location.Y( );
-  c = A.getHeight( ) - location.Z( );
+  a = LocMsg.getLongitude( ) - location.X( );
+  b = LocMsg.getLatitude( ) - location.Y( );
+  c = LocMsg.getHeight( ) - location.Z( );
   // return the square root of (a^2 + b^2 + c^2)
   return std::sqrt( std::pow( a, 2 ) + std::pow( b, 2 ) + std::pow( c, 2 ) );
  }

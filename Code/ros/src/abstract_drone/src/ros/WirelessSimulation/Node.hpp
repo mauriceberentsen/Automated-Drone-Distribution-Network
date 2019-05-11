@@ -48,17 +48,17 @@ namespace WirelessSimulation
   void setOn( const bool on );
 
  private:
+  /// \brief ROS Publisher to the topic of this node
+  ros::Publisher connectedNRF;
+  /// \brief the current position of this drone
+  Vector3< float > position;
+  /// \brief Pointer towards the nodehandler to be ale to publish
+  std::shared_ptr< ros::NodeHandle > nodeHandle;
+  /// \brief the name of the topic this node is publing towards.
+  const std::string subtopicname;
   /// \brief ON/OFF state for the node. If off its not allowed to recieve
   /// any message
   bool on;
-  /// \brief ROS Publisher to the topic of this node
-  ros::Publisher connectedNRF;
-  /// \brief Pointer towards the nodehandler to be ale to publish
-  std::shared_ptr< ros::NodeHandle > nodeHandle;
-  /// \brief the current position of this drone
-  Vector3< float > position;
-  /// \brief the name of the topic this node is publing towards.
-  const std::string subtopicname;
  };
 }  // namespace WirelessSimulation
 }  // namespace ros
