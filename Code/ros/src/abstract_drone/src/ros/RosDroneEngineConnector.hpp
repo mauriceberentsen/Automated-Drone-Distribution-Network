@@ -42,6 +42,13 @@ namespace Drone
    */
   const ignition::math::Vector3< float > getLocation( );
 
+  void turnOn( );
+  /**
+   * @brief Turns the engine off
+   *
+   */
+  void turnOff( );
+
  private:
   /// \brief the ID of the connected engine
   uint16_t ID;

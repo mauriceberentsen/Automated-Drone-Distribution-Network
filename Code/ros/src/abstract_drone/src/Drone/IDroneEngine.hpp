@@ -18,6 +18,16 @@ class IDroneEngine
 {
 public:
  /**
+  * @brief Turns the engine on
+  *
+  */
+ virtual void turnOn( ) = 0;
+ /**
+  * @brief Turns the engine off
+  *
+  */
+ virtual void turnOff( ) = 0;
+ /**
   * @brief Set the Goal for the drone to fly to
   *
   * @param latitude

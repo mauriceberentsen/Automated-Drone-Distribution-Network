@@ -29,6 +29,11 @@ namespace Meshnetwork
  void MeshnetworkRouter::Init( )
  {
   routerTech->startRouting( this );
+  droneEngine->turnOn( );
+  auto currentLocation = droneEngine->getLocation( );
+  prefferedGateWayLocation = Messages::LocationMessage(
+      this->nodeID, this->nodeID, this->nodeID, this->nodeID,
+      currentLocation.X( ), currentLocation.Y( ), currentLocation.Z( ), 0 );
  }
 
  void MeshnetworkRouter::Stop( )

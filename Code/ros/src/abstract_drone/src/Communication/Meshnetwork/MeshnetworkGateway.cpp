@@ -25,6 +25,8 @@ namespace Meshnetwork
 
  void MeshnetworkGateway::Init( )
  {
+  droneEngine->turnOn( );
+
   internet->connect( this );
   // Since we are a gateway this is always true. In the future we could base
   // this on the fact if we are connected to the internet
@@ -38,6 +40,7 @@ namespace Meshnetwork
 
  void MeshnetworkGateway::Stop( )
  {
+  droneEngine->turnOff( );
   communication->StopAntenna( );
   internet->disconnect( );
  }

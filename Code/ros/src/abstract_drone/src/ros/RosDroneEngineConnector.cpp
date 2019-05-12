@@ -19,27 +19,6 @@ namespace Drone
  RosDroneEngineConnector::RosDroneEngineConnector( uint16_t droneID )
      : ID( droneID )
  {
-  // Initialize ros, if it has not already been initialized.
-  if ( !ros::isInitialized( ) ) {
-   int argc = 0;
-   char **argv = NULL;
-   ros::init( argc, argv, "node", ros::init_options::NoSigintHandler );
-  }
-  // Create our ROS node. This acts in a similar manner to
-  // the Gazebo node
-  this->rosNode.reset( new ros::NodeHandle( "droneEngineConnector" ) );
-  std::string connectedEngine =
-      "/Drones/" + std::to_string( this->ID ) + "/goal";
-  std::string gps_ServiceName =
-      "/Drones/" + std::to_string( this->ID ) + "/gps";
-
-  this->droneEngine = this->rosNode->advertise< abstract_drone::Location >(
-      connectedEngine, 100 );
-  ROS_INFO( "Loaded DroneEngineconnector connected to topicname:[%s]",
-            gps_ServiceName.c_str( ) );
-  // Connect to the GPS service
-  this->GPSLink = this->rosNode->serviceClient< abstract_drone::RequestGPS >(
-      gps_ServiceName.c_str( ) );
  }
 
  void RosDroneEngineConnector::setGoal( const float latitude,
@@ -69,6 +48,36 @@ namespace Drone
     return loc;
    }
   }
+ }
+
+ void RosDroneEngineConnector::turnOn( )
+ {
+  // Initialize ros, if it has not already been initialized.
+  if ( !ros::isInitialized( ) ) {
+   int argc = 0;
+   char **argv = NULL;
+   ros::init( argc, argv, "node", ros::init_options::NoSigintHandler );
+  }
+  // Create our ROS node. This acts in a similar manner to
+  // the Gazebo node
+  this->rosNode.reset( new ros::NodeHandle( "droneEngineConnector" ) );
+  std::string connectedEngine =
+      "/Drones/" + std::to_string( this->ID ) + "/goal";
+  std::string gps_ServiceName =
+      "/Drones/" + std::to_string( this->ID ) + "/gps";
+
+  this->droneEngine = this->rosNode->advertise< abstract_drone::Location >(
+      connectedEngine, 100 );
+  ROS_INFO( "Loaded DroneEngineconnector connected to topicname:[%s]",
+            gps_ServiceName.c_str( ) );
+  // Connect to the GPS service
+  this->GPSLink = this->rosNode->serviceClient< abstract_drone::RequestGPS >(
+      gps_ServiceName.c_str( ) );
+ }
+
+ void RosDroneEngineConnector::turnOff( )
+ {
+  rosNode->shutdown( );
  }
 
  RosDroneEngineConnector::~RosDroneEngineConnector( )

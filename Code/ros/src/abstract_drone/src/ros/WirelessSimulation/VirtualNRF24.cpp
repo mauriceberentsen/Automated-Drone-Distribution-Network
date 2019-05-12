@@ -140,7 +140,7 @@ namespace WirelessSimulation
     SendMessageTo( message );
    }
   } else {
-   ROS_ERROR( "Failed to call service othersInRange" );
+   //    ROS_ERROR( "Failed to call service othersInRange" );
   }
  }
 
