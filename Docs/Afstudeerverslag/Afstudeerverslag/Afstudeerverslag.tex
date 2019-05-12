@@ -118,7 +118,7 @@
 %\section*{Voorwoord}
 %\addcontentsline{toc}{section}{\protect\numberline{}Voorwoord}
 %\pagebreak
-\chapter*{Managementsamenvatting}
+\chapter*{Managementsamenvatting}\label{sec:managementsamenvatting}
 Het doel van "Drone meshnetwerk simulatie"\ is het zetten van de eerste stap in de ontwikkeling van het
 dronenetwerk. Hiervoor is de volgende opdracht opgesteld:
 \begin{quotation}
@@ -171,7 +171,7 @@ De opgeleverde software wordt onderbouwt in het software design document en de s
 
 
 
-\chapter{Inleiding}
+\chapter{Inleiding}\label{sec:inleiding}
 
 Dit document is het eindverslag van de afstudeeropdracht genaamd "Drone meshnetwerk simulatie".
 De simulatie simuleert een netwerk van drones die onderling met elkaar verbonden zijn door het gebruik van meshnetwerk technieken.
@@ -218,7 +218,7 @@ Het eindverslag is zo opgebouwd dat dit de opdracht, context en eindproducten be
 	
 \end{itemize}
 
-\chapter{Bedrijfsbeschrijving}
+\chapter{Bedrijfsbeschrijving}\label{sec:bedrijfsbeschrijving}
 
 Alten is een multinational met +- 25.000 medewerkers wereldwijd en is van origine begonnen in 1988 en in de eerste tien jaar organisch gegroeid totdat ze in 1999 een beursgenoteerd bedrijf werden.
 Vanaf het jaar 2000 hebben ze de eerste internationale dochterondernemingen gestart waarvan de eerste in Nederland in 2002 was (dit was een overname van een ander bedrijf).
@@ -237,7 +237,7 @@ Het bedrijf heeft zes kernwaarden die als volgt luiden: kennis netwerkers, techn
 Alten benadrukt dat het belangrijk is om je kennis te delen met anderen (want samen sta je sterker), dit proberen zij
 te bereiken met de zogeheten kennisgroepen. 
 
-\section{Het team}
+\section{Het team}\label{sec:het-team}
 Het team betrokken bij dit project wordt hier kort omschreven.
 
 \paragraph{Uitvoerend student: Maurice Berentsen}
@@ -268,11 +268,11 @@ Jorg Visch is een leraar op de Hogeschool van Arnhem en Nijmegen werkzaam binnen
 Chris van Uffelen is een collega van Jorg Visch en werkzaam in hetzelfde team. Hij heeft Maurice begeleidt tijdens het Object-oriented Software and Modelling project. Zijn belang bij dit project is het beoordelen of het project waardig is aan het verschaffen van het Bachelor diploma Technische Informatica. Hij doet dit in samenwerking met Jorg Visch. 
 
 
-\chapter{Opdrachtomschrijving}
+\chapter{Opdrachtomschrijving}\label{sec:opdrachtomschrijving}
 Het doel van Alten is om onderling verbonden drones te kunnen verdelen om zo een netwerk op te kunnen bouwen over een gebied. 
 Alten wil dat dit netwerk zichzelf kan onderhouden door te reageren op uitval of een slechte verbinding door de één of meerdere drones te herverdelen.
 
-\section{Probleem}
+\section{Probleem}\label{sec:probleem}
 Op dit moment is Alten in het bezit van drones maar deze kunnen niet met elkaar communiceren.
 Om te kunnen communiceren moet er een netwerkmodule toegevoegd worden aan elke drone.
 Alten wil grote netwerken kunnen opbouwen die robuust zijn en daarom wil zij gebruik maken van een zelf herstellend meshnetwerk.
@@ -288,7 +288,7 @@ Om algoritmes te testen voor het verdelen van de drones is een simulatie de oplo
 Hierbij is het dus ook van belang dat een simulatieomgeving zich realistisch gedraagt. 
 Om realistisch gedrag na te bootsen moeten de virtuele netwerk modules zich in de simulatie zich net zo gedragen als in het echt.
 
-\section{Doelstelling}
+\section{Doelstelling}\label{sec:doelstelling}
 Het doel van dit project is het zetten van de eerste stap in de ontwikkeling van het dronenetwerk.
 De eerste stap is ontwikkelen van een netwerkmodule voor het onderling verbinden van drones.
 Het is van belang dat het meshnetwerk van de drones snel kan reageren op uitval van netwerkpunten.
@@ -298,7 +298,7 @@ Voor het virtueel realiseren van de netwerkmodule moet een simulatie gebruikt wo
 Omdat er nog geen simulatiesoftware beschikbaar is wil Alten dat de student uitzoekt welke simulatiesoftware geschikt is voor het simuleren van meer dan 100 drones.
 Vervolgens kan de student deze software gebruiken om de virtuele netwerkmodules te testen.
 
-\section{Opdracht}
+\section{Opdracht}\label{sec:opdracht}
 De opdracht van dit project is de ontwikkeling van meerdere producten die bijdragen aan het behalen van het doel. 
 
 De student moet een prototype maken van een netwerkmodule die het onderlinge meshnetwerk verzorgt en zichzelf kan herstellen bij uitval of slecht signaal.
@@ -318,7 +318,7 @@ De student zal zich dus niet specialiseren in het realistisch simuleren van dron
 
 Het project is geslaagd als een prototype van het meshnetwerk is opgeleverd samen met een simulatie waarin het mesh netwerk getest kan worden met verschillende verdelingsalgoritmes.
 
-\subsection{Casus}
+\subsection{Casus}\label{sec:casus}
 Om het doel waar naartoe gewerkt moet worden te voorzien van een richting heeft Alten een casus bedacht.
 Deze casus wordt hieronder toegelicht in een schets en is voorzien van individuele situaties.
 Er wordt gedrag omschreven voor een simpel algoritme van het herstel van het meshnetwerk om aan te tonen dat dit getest kan worden in de simulatie.
@@ -341,7 +341,7 @@ In de casus komen de volgende situaties apart voor:
 	\item Punt 14 valt uit waardoor punt 15, 16 en 17 geen verbinding meer hebben met het basisstation. Het verwachte resultaat is dat de drones 15, 16 en 17 eerst met elkaar verbinden, vervolgens zal één van de drones zich verplaatsen naar punt 14. 
 \end{itemize}
 
-\section{Op te leveren resultaten voor het bedrijf en school}
+\section{Op te leveren resultaten voor het bedrijf en school}\label{sec:op-te-leveren-resultaten-voor-het-bedrijf-en-school}
 
 Aan het einde van het project levert de student de volgende producten op aan het bedrijf:
 
@@ -357,33 +357,33 @@ Aan het einde van het project levert de student de volgende producten op aan het
 Aan het einde van het project levert de student het bovenstaande plus een projectverslag op aan de Hogeschool van Arnhem en Nijmegen.
 
 
-\chapter{Methoden, technieken, platforms, tools}
+\chapter{Methoden, technieken, platforms, tools}\label{sec:methoden-technieken-platforms-tools}
 Wat gebruik je en waarom, overwogen alternatieven, waarom is de keuze gevallen op die
 tool/techniek/platform. En dan niet zozeer (of alleen) de project(management)methodiek, die is al
 uitgebreid verantwoord in het PvA als het goed is.
 
-\chapter{Uitvoer projectplan}
+\chapter{Uitvoer projectplan}\label{sec:uitvoer-projectplan}
 Wat was het plan, hoe heb je dat uitgevoerd. Waar zitten de afwijkingen en waarom? Beperkt tot
 inhoudelijk relevante zaken.
 Dit hoofdstuk behandeld hoe het plan van het project is uitgevoerd, het zal eerst kort toelichten wat het plan was. Vervolgens zal er reflectie op het plan plaats vinden.
 
-\section{Het plan}
+\section{Het plan}\label{sec:het-plan}
 
-\section{Reflectie}
+\section{Reflectie}\label{sec:reflectie}
 
 
-\chapter{Proces en aanpak}
+\chapter{Proces en aanpak}\label{sec:proces-en-aanpak}
 Wat heb je gedaan en waarom? Wat is het verband tussen de verschillende stappen die je genomen hebt in
 het proces?
-\chapter{Resultaten}
+\chapter{Resultaten}\label{sec:resultaten}
 
 %Inhoudelijk, wat heb je opgeleverd, met welke kwaliteit? Was dit ook volgens plan? Ben je afgeweken en zo
 %ja waarom?
 %(Deze laatste drie kunnen ook geïntegreerd worden)
 In de dit hoofdstuk worden de opgeleverde producten behandeld en beoordeeld op hun kwaliteit.
 
-\section{Plan van aanpak}
-Het eerste product die de student heeft opgeleverd was het plan van aanpak.
+\section{Plan van aanpak}\label{sec:plan-van-aanpak}
+Het eerste product die ik heb opgeleverd was het plan van aanpak.
 Het product kreeg zijn echte waarde na de feedback op het conceptplan.
 
 Het eerste plan was nog niet concreet genoeg in wat opgeleverd zou ging worden. 
@@ -391,26 +391,76 @@ Dit was dan ook in grote lijnen wat de feedback was vanuit de begeleiders van sc
 
 Na het verwerken van de feedback was het plan veel gerichter in wat opgeleverd zou moeten worden.
 Het plan wat er nu ligt zou uitgevoerd kunnen worden door elke ICT'er met de juiste vaardigheden.
-De kwaliteitseis die de student gesteld heeft aan het plan van aanpak was dat het moest omschrijven wat het plan van de student is en dat het voldoet aan het feedbackformulier projectplan van het \citeauthor{HANfeed} \citeyear{HANfeed} 
-  
-\section{Onderzoeksrapport}
-\section{Simulatiesoftware}
-\section{Hardwareprototype}
-\section{Software design document}
-\section{Software requirements specificatie}
+De kwaliteitseis die ik gesteld heb aan het plan van aanpak was dat het moest omschrijven wat het plan van de student is en dat het voldoet aan het feedbackformulier projectplan van het \citeauthor{HANfeed} \citeyear{HANfeed}. Deze kwaliteitseisen zijn voldaan wat dus betekend dat het op papier voldoet aan alle kwaliteit.
 
-\chapter{Evaluatie}
+Wat in mijn ogen nog beter bewijst dat het plan van aanpak een document van kwaliteit is, is dat ik gedurende het project regelmatig het plan erbij heb gepakt om beslissingen op te baseren en kwaliteit van andere producten mee te meten.
+
+\section{Broncode}\label{sec:broncode}
+De code geschreven voor dit project heeft veel aandacht van mij gekregen. 
+Er heeft veel moeite gezeten in het gebruik van Doxygen om dit volledig compleet te houden.
+Als resultaat geeft dan wel een complete documentatie bij het generen van de documentatie. 
+
+Wat wel is uitgevoerd maar naar mijn mening te weinig is toegepast is het gebruiken van unittesten.
+Dit is weinig gebruikt omdat veel code een communicatie uitvoert naar een andere netwerkcomponent.
+Er kunnen wel unittesten voor geschreven worden maar het opzetten van een basis voor zulke testen kost veel tijd.
+Toch zou ik Alten wel adviseren als ze dit project voortzetten om hier in te investeren.
+Het schrijven van een routeringstechniek is een complex proces die in de huidige implementatie nog problemen kan geven.
+Het breder toepassen van unittesten zou de kwaliteit van het meshnetwerk zeker ten goede komen. 
+
+De componenten die gebruikt worden zijn goed met elkaar aangesloten waarbij er een uitzondering is dat er een adapter gebruikt wordt om de gesimuleerde drone op een Arduino aan te sluiten. 
+
+Wat ik jammer vind maar niet mogelijk was in het project was dat er geen buildserver beschikbaar was waar een geavanceerde codeanalyse tool aan gekoppeld zit zoals coverity of sonarqube. Wel is er in het project gebruik gemaakt van de statische codechecker CPPcheck. Hoewel het geen maatstaaf is hier nul meldingen op te krijgen in verband met false positives is dat in het geval van dit project wel zo. 
+
+  
+\section{Onderzoeksrapport}\label{sec:onderzoeksrapport}
+
+Het onderzoeksverslag is een verslag die naar mijn mening inhoudelijk niet voldoende gespreide aandacht heeft gekregen. Hoewel het misschien de onderzoeksvraag beantwoord is er duidelijk te merken dat het literatuur onderzoek naar de te gebruiken hardware en simulatiesoftware veel meer tijd heeft gekregen dan de rest van het document.
+
+De hoofdvraag gesteld in het onderzoek is relevant omdat het helpt met het uitvoeren met de specifieke opdracht.
+De deelvragen daarentegen zijn niet allemaal even sterk uitgewerkt. 
+Zo is er de vraag wat nodig is om een abstracte drone te representeren. 
+Hier had ik veel onderzoek naar kunnen doen maar dit heeft geen meerwaarde. 
+Een kort overleg voldoet in dit onderwerp ook waarin besproken is van wat moet de gesimuleerde drone allemaal kunnen.
+
+Op zich is dit gezien de beschikbare tijd een prima keuze maar het haalt de kwaliteit van het onderzoek wel naar beneden.
+
+Wat goed is gedaan in het onderzoek is het gebruik van bronnen, zo zijn ze voornamelijk gebaseerd op wetenschappelijke artikelen en zijn ze ruim aanwezig.
+
+Verder merkte ik dat het fijn is voor het bedrijf dat ik de onderzoeksmethode geleerd op de HAN nog toegelicht heb aangezien lang niet iedereen hiermee bekent is. Ook het toelichten hoe onderzoek op de HAN werkt is goed onderbouwt toegelicht.
+  
+
+
+\section{Simulatiesoftware}\label{sec:simulatiesoftware}
+Tegen het einde van het project werd de simulatiesoftware opgeleverd. 
+Dit was het product waar de meeste focus en ontwikkeling in heeft gezeten.
+Dit was initieel niet het plan omdat er meer focus op het hardware prototype zou liggen.
+Gedurende het project werd de urgentie van de simulatie software steeds duidelijker.
+
+Door het gebrek aan voldoende hardware kon er niet goed getest worden hoe het netwerk zich zou gedragen bij een hoog aantal nodes.
+Daarom is er gekozen om de simulatie een hogere prioriteit te geven zodra de gesimuleerde communicatie realistisch genoeg was.
+
+Een tegenvaller van de simulatie in Gazebo was dat voor het simuleren van 100 drones en dit visueel te maken een computer met een dedicated GPU nodig is. Dit was vooraf niet verwacht omdat de drones in de simulatie alleen maar vliegende blokjes zijn. 
+
+Het opgeleverde product voldoet wel aan de wens van Alten zij wil namelijk verdeelalgoritmes kunnen testen waarbij de drones op een realistische wijze worden aangestuurd en dat is ook opgeleverd.  Verder is de simulatie voorzien van voldoende documentatie.  
+
+\section{Hardwareprototype}\label{sec:hardwareprototype}
+
+
+\section{Software design document}\label{sec:software-design-document}
+\section{Software requirements specificatie}\label{sec:software-requirements-specificatie}
+
+\chapter{Evaluatie}\label{sec:evaluatie}
 
 Evaluatie/ Reflectie / Situaties (STARR)
 Inzichten!
 Inzichten mbt proces, producten en resultaten, èn het eigen functioneren. middels een methode als STARR.
 Die methode moet dan wel goed toegepast worden.
 
-\chapter{Conclusie}
+\chapter{Conclusie}\label{sec:conclusie}
 Inhoudelijk, wat heeft het project opgeleverd, zet dat af tegen de doelstelling, heb je die gehaald?
 Afwijkingen beschrijven. Welke vervolgstappen kan het bedrijf nog nemen?
 
-\section{Advies vervolg project}
+\section{Advies vervolg project}\label{sec:advies-vervolg-project}
 
 
 \bibliographystyle{apacite}
