@@ -11,14 +11,15 @@
 #ifndef MESSAGEHPP
 #define MESSAGEHPP
 
-#include <inttypes.h>
+#include <cstdint>
 #include <string>
 namespace Communication
 {
 namespace Messages
 {
  /**
-  * @brief Used for recognizing message types when parsed into a 32 byte array
+  * @brief Used for recognizing message types when parsed into a 32 uint8_t
+  * array
   *
   */
  enum Messagetype : uint8_t {
@@ -32,7 +33,7 @@ namespace Messages
   MOVEMENT_NEGOTIATION,  // 7
  };
  /**
-  * @brief Used for helping with the place in a 32 byte array
+  * @brief Used for helping with the place in a 32 uint8_t array
   *
   */
  enum MessageHelper : uint8_t {
@@ -58,7 +59,16 @@ namespace Messages
    */
   Message( const uint8_t creator, const uint8_t from, Messagetype messagetype,
            const uint8_t to, const uint8_t forward );
+  /**
+   * @brief Construct a new Message object from a uint8_t array
+   *
+   * @param payload uint8_t array
+   */
   explicit Message( const uint8_t *payload );
+  /**
+   * @brief Destroy the Message object
+   *
+   */
   virtual ~Message( );
   /**
    * @brief Copies the the content of a message to the given payload
@@ -72,11 +82,35 @@ namespace Messages
    * @return std::string string of the message object
    */
   virtual const std::string toString( ) const;
-
+  /**
+   * @brief Get the Creator
+   *
+   * @return const uint8_t
+   */
   const uint8_t getCreator( ) const;
+  /**
+   * @brief Get the From
+   *
+   * @return const uint8_t
+   */
   const uint8_t getFrom( ) const;
+  /**
+   * @brief Get the Message Type
+   *
+   * @return const Messagetype
+   */
   const Messagetype getMessageType( ) const;
+  /**
+   * @brief Get the To
+   *
+   * @return const uint8_t
+   */
   const uint8_t getTo( ) const;
+  /**
+   * @brief Get the Forward
+   *
+   * @return const uint8_t
+   */
   const uint8_t getForward( ) const;
 
  protected:

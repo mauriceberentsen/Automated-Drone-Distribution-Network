@@ -101,9 +101,20 @@ namespace Meshnetwork
 
  void MeshnetworkRouter::sendHeartbeatToGateway( )
  {
-  if ( !sendHeartbeat( prefferedGateWay ) ) {}
+  // lets be optimisitic and wait one cycle for a response befor going to
+  // false.
+  static bool wait = false;
+  if ( sendHeartbeat( prefferedGateWay ) ) {
+   wait = !wait;
+  } else {
+   connectedToGateway = false;
+  }
   // this we be flipped back by response of the gateway
-  connectedToGateway = false;
+
+  if ( !wait ) {
+   connectedToGateway = false;
+   wait = true;
+  }
  }
 
  void MeshnetworkRouter::lostConnection( )

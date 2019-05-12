@@ -21,6 +21,7 @@ namespace Internet
   /**
    * @brief Connect to the internet service
    *
+   * @param IGC pointer to the required interface Gateway Commands
    */
   virtual void connect( Communication::Internet::IGatewayCommands *IGC ) = 0;
   /**

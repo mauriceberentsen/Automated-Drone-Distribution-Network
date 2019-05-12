@@ -56,7 +56,15 @@ namespace Meshnetwork
    *
    */
   void Stop( );
-
+  /**
+   * @brief send a request using the Meshnetwork to the drone to move it's
+   * location
+   *
+   * @param ID The id of the drone to move
+   * @param latitude the latitude to move to
+   * @param longitude the longitude to move to
+   * @param height the height to move to
+   */
   void SendGoalRequestToDrone( const uint8_t ID, const float latitude,
                                const float longitude, const uint16_t height );
 

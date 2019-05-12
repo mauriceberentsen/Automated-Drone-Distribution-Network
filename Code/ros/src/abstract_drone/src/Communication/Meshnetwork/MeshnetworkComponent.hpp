@@ -277,7 +277,7 @@ namespace Meshnetwork
   /***************** Variables *************************/
 
  public:
-  // No variables
+  // No public variables
  protected:
   /// \brief The time to wait at initialization
   const int initTime = 10;

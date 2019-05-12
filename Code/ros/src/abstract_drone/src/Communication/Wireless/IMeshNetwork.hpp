@@ -10,7 +10,7 @@
  */
 #ifndef IMESHNETWORK
 #define IMESHNETWORK
-#include <inttypes.h>
+#include <cstdint>
 namespace Communication
 {
 namespace Wireless

@@ -1,6 +1,6 @@
 /****************************/
 /*                          */
-/*    !!!WARNING!!!         */
+/*     !!!WARNING!!!        */
 /*    Test isn't ready      */
 /*                          */
 /****************************/
@@ -23,7 +23,6 @@
 #include <ros/ros.h>
 #include <chrono>
 #include <thread>
-#include <stdio.h>
 
 // To use a test fixture, derive a class from testing::Test.
 class TestRouterModule : public testing::Test

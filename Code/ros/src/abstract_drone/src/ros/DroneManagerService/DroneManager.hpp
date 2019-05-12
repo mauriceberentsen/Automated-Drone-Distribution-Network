@@ -29,6 +29,10 @@ namespace DroneManagerService
    */
   DroneManager( std::shared_ptr< NodeHandle > &_rosNode,
                 std::string &GatewayTopicName );
+  /**
+   * @brief Destroy the Drone Manager object
+   *
+   */
   ~DroneManager( );
   /**
    * @brief function to publish a request a specific drone to a given location

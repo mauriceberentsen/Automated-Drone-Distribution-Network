@@ -10,7 +10,7 @@
  */
 #ifndef IROUTINGESSENTIALS
 #define IROUTINGESSENTIALS
-#include <inttypes.h>
+#include <cstdint>
 #include <set>
 namespace Communication
 {

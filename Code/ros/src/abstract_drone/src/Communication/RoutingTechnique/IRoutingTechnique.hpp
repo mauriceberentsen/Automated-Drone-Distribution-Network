@@ -10,7 +10,7 @@
  */
 #ifndef IROUTINGTECHNIQUE
 #define IROUTINGTECHNIQUE
-#include <inttypes.h>
+#include <cstdint>
 #include <set>
 
 #include "IRoutingEssentials.hpp"

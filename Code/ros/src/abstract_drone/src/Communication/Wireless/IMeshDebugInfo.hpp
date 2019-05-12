@@ -10,7 +10,7 @@
  */
 #ifndef IMESHDEBUGINFO
 #define IMESHDEBUGINFO
-#include <inttypes.h>
+#include <cstdint>
 namespace Communication
 {
 namespace Wireless

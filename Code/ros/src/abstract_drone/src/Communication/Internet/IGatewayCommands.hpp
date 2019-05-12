@@ -10,7 +10,7 @@
  */
 #ifndef IGATEWAYCOMMANDS
 #define IGATEWAYCOMMANDS
-#include <inttypes.h>
+#include <cstdint>
 
 namespace Communication
 {
@@ -19,6 +19,10 @@ namespace Internet
  class IGatewayCommands
  {
  public:
+  /**
+   * @brief Destroy the IGatewayCommands object
+   *
+   */
   virtual ~IGatewayCommands( ){};
   /**
    * @brief Sends a goal to a drone
