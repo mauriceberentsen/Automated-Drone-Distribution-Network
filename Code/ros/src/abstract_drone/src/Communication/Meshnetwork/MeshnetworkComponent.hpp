@@ -279,8 +279,6 @@ namespace Meshnetwork
  public:
   // No public variables
  protected:
-  /// \brief The time to wait at initialization
-  const int initTime = 10;
   /// \brief The time to wait before rechecking the Component
   const int CheckConnectionTime = 10;
   /// \brief The ID of the current Node
