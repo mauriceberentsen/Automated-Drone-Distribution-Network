@@ -15,7 +15,9 @@ namespace gazebo
 namespace ArduinoSimulation
 {
  VirtualArduinoGateway::VirtualArduinoGateway( )
-     : debug( false )
+     : nodeID( 0 )
+     , droneID( 0 )
+     , debug( false )
      , meshnetworkGateway( nullptr )
      , routing( nullptr )
      , engine( nullptr )
@@ -27,7 +29,7 @@ namespace ArduinoSimulation
  VirtualArduinoGateway::~VirtualArduinoGateway( )
  {
  }
-
+ // cppcheck-suppress unusedFunction gazebo uses this function
  void VirtualArduinoGateway::Load( physics::ModelPtr _parent,
                                    sdf::ElementPtr _sdf )
  {
@@ -60,7 +62,7 @@ namespace ArduinoSimulation
       nodeID, droneID, debug, routing, engine, NRF24, internet );
   meshnetworkGateway->Init( );
  }
-
+ // cppcheck-suppress unusedFunction
  void VirtualArduinoGateway::loop( )
  {
  }

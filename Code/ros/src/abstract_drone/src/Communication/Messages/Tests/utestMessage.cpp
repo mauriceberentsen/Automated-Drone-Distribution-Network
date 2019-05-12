@@ -247,7 +247,6 @@ TEST( TestMessages, GoToLocationMessage )
  float lat = 2.045475;
  float lon = 4.045407;
  int16_t hei = 100;
- uint32_t time = 23422567;
 
  GoToLocationMessage msg( 66, 55, 44, 33, lat, lon, hei );
 
@@ -262,7 +261,6 @@ TEST( TestMessages, GoToLocationMessageToPayload )
  float lat = 2.04573144;
  float lon = 4.04278417;
  int16_t hei = 100;
- uint32_t time = 23422567;
 
  GoToLocationMessage amsg( 66, 55, 44, 33, lat, lon, hei );
  uint8_t buffer[MAX_PAYLOAD];

@@ -253,8 +253,8 @@ namespace Meshnetwork
   // return the square root of (a^2 + b^2 + c^2)
   return std::sqrt( std::pow( a, 2 ) + std::pow( b, 2 ) + std::pow( c, 2 ) );
  }
-
- /*public*/ void MeshnetworkComponent::IntroduceNode( const uint8_t other )
+ // cppcheck-suppress unusedFunction
+ void MeshnetworkComponent::IntroduceNode( const uint8_t other )
  {
   // create a Message to introduce yourself to others
   Messages::IntroduceMessage introduce( this->nodeID, this->nodeID, other,

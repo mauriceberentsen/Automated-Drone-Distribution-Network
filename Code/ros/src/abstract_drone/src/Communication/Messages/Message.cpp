@@ -36,7 +36,7 @@ namespace Messages
  Message::~Message( )
  {
  }
-
+ // cppcheck-suppress unusedFunction
  const std::string Message::toString( ) const
  {
   std::stringstream ss;
@@ -120,9 +120,11 @@ namespace Messages
   counter += sizeof( type );
   counter += sizeof( to );
   counter += sizeof( forward );
+  // cppcheck-suppress invalidPointerCast
   CopyFromCharArray( ( uint8_t * )&latitude, sizeof( latitude ), payload,
                      counter );
   counter += sizeof( latitude );
+  // cppcheck-suppress invalidPointerCast
   CopyFromCharArray( ( uint8_t * )&longitude, sizeof( longitude ), payload,
                      counter );
   counter += sizeof( longitude );
@@ -149,9 +151,11 @@ namespace Messages
   counter += sizeof( to );
   CopyToCharArray( ( uint8_t * )&forward, sizeof( forward ), payload, counter );
   counter += sizeof( forward );
+  // cppcheck-suppress invalidPointerCast
   CopyToCharArray( ( uint8_t * )&latitude, sizeof( latitude ), payload,
                    counter );
   counter += sizeof( latitude );
+  // cppcheck-suppress invalidPointerCast
   CopyToCharArray( ( uint8_t * )&longitude, sizeof( longitude ), payload,
                    counter );
   counter += sizeof( longitude );
@@ -160,7 +164,6 @@ namespace Messages
   CopyToCharArray( ( uint8_t * )&timeSincePosix, sizeof( timeSincePosix ),
                    payload, counter );
  }
-
  const std::string LocationMessage::toString( ) const
  {
   std::stringstream ss;
@@ -374,7 +377,6 @@ namespace Messages
   counter += sizeof( prefferedGateWay );
   CopyToCharArray( ( uint8_t * )&hops, sizeof( hops ), payload, counter );
  }
-
  const std::string HeartbeatMessage::toString( ) const
  {
   std::stringstream ss;
@@ -433,9 +435,11 @@ namespace Messages
   counter += sizeof( type );
   counter += sizeof( to );
   counter += sizeof( forward );
+  // cppcheck-suppress invalidPointerCast
   CopyFromCharArray( ( uint8_t * )&latitude, sizeof( latitude ), payload,
                      counter );
   counter += sizeof( latitude );
+  // cppcheck-suppress invalidPointerCast
   CopyFromCharArray( ( uint8_t * )&longitude, sizeof( longitude ), payload,
                      counter );
   counter += sizeof( longitude );
@@ -455,10 +459,11 @@ namespace Messages
   counter += sizeof( to );
   CopyToCharArray( ( uint8_t * )&forward, sizeof( forward ), payload, counter );
   counter += sizeof( forward );
-
+  // cppcheck-suppress invalidPointerCast
   CopyToCharArray( ( uint8_t * )&latitude, sizeof( latitude ), payload,
                    counter );
   counter += sizeof( latitude );
+  // cppcheck-suppress invalidPointerCast
   CopyToCharArray( ( uint8_t * )&longitude, sizeof( longitude ), payload,
                    counter );
   counter += sizeof( longitude );
@@ -515,6 +520,7 @@ namespace Messages
   counter += sizeof( type );
   counter += sizeof( to );
   counter += sizeof( forward );
+  // cppcheck-suppress invalidPointerCast
   CopyFromCharArray( ( uint8_t * )&cost, sizeof( cost ), payload, counter );
  }
 
@@ -531,6 +537,7 @@ namespace Messages
   counter += sizeof( to );
   CopyToCharArray( ( uint8_t * )&forward, sizeof( forward ), payload, counter );
   counter += sizeof( forward );
+  // cppcheck-suppress invalidPointerCast
   CopyToCharArray( ( uint8_t * )&cost, sizeof( cost ), payload, counter );
  }
 

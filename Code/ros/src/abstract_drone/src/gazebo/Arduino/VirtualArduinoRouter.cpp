@@ -15,7 +15,9 @@ namespace gazebo
 namespace ArduinoSimulation
 {
  VirtualArduinoRouter::VirtualArduinoRouter( )
-     : debug( false )
+     : nodeID( 0 )
+     , droneID( 0 )
+     , debug( false )
      , meshnetworkRouter( nullptr )
      , routing( nullptr )
      , engine( nullptr )
