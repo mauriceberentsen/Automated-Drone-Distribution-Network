@@ -207,8 +207,8 @@ namespace Messages
  }
 
  IntroduceMessage::IntroduceMessage( const uint8_t *payload )
-     : Message( payload[CREATOR], payload[FROM], PRESENT, payload[2],
-                payload[3] )
+     : Message( payload[CREATOR], payload[FROM], PRESENT, payload[TO],
+                payload[FORWARD] )
  {
   int counter = 0;
   counter += sizeof( creator );

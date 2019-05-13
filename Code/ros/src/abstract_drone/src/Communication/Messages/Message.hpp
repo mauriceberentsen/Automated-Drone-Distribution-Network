@@ -31,6 +31,7 @@ namespace Messages
   MISSING,               // 5
   MOVE_TO_LOCATION,      // 6
   MOVEMENT_NEGOTIATION,  // 7
+  BROADCAST = 254
  };
  /**
   * @brief Used for helping with the place in a 32 uint8_t array

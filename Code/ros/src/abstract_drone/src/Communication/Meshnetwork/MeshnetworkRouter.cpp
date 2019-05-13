@@ -47,6 +47,8 @@ namespace Meshnetwork
        introduce.getHopsUntilGateway( ) < this->hopsFromGatewayAway &&
        introduce.getCreator( ) != lastGoodKnownLocation.getCreator( ) ) {
    requestLocation( introduce.getCreator( ) );
+  } else if ( !introduce.getKnowGateway( ) && this->connectedToGateway ) {
+   sendHeartbeat( introduce.getCreator( ) );
   }
  }
 
@@ -101,9 +103,9 @@ namespace Meshnetwork
 
  void MeshnetworkRouter::sendHeartbeatToGateway( )
  {
-  if ( !sendHeartbeat( prefferedGateWay ) ) {}
-  // this we be flipped back by response of the gateway
+  sendHeartbeat( prefferedGateWay );
   connectedToGateway = false;
+  // this we be flipped back by response of the gateway
  }
 
  void MeshnetworkRouter::lostConnection( )

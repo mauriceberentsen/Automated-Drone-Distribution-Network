@@ -135,7 +135,6 @@ namespace WirelessSimulation
     }
 
     message[TO] = n;
-    message[FORWARD] = n;
 
     SendMessageTo( message );
    }

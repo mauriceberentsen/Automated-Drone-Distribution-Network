@@ -38,8 +38,10 @@ namespace Meshnetwork
 
  void MeshnetworkComponent::OnMsg( const uint8_t *message )
  {
-  ( message[Messages::FORWARD] == this->nodeID ) ? processMessage( message )
-                                                 : forwardMessage( message );
+  ( message[Messages::FORWARD] == this->nodeID ||
+    message[Messages::FORWARD] == Messages::BROADCAST )
+      ? processMessage( message )
+      : forwardMessage( message );
   routerTech->OtherCanCommunicateWithNode( message[Messages::FROM],
                                            message[Messages::CREATOR] );
  }
@@ -214,9 +216,9 @@ namespace Meshnetwork
 
  /*public*/ void MeshnetworkComponent::searchOtherNodesInRange( )
  {
-  Messages::IntroduceMessage introduce( this->nodeID, this->nodeID, 0, 0,
-                                        this->hopsFromGatewayAway,
-                                        this->connectedToGateway );
+  Messages::IntroduceMessage introduce(
+      this->nodeID, this->nodeID, Messages::BROADCAST, Messages::BROADCAST,
+      this->hopsFromGatewayAway, this->connectedToGateway );
   uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
   introduce.toPayload( buffer );
 
