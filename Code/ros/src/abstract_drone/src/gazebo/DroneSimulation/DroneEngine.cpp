@@ -100,9 +100,9 @@ namespace DroneSimulation
 
  void DroneEngine::ExecuteDroneMovement( )
  {
-  ROS_WARN( "call move model" );
+  ROS_WARN( "DRONE[%u] call move model", drone_id );
   if ( moving ) return;
-  ROS_WARN( "exec move model" );
+  ROS_WARN( "DRONE[%u] exec move model", drone_id );
 
   moving = true;
   ignition::math::Vector3d curVec( pose.Pos( ).X( ), pose.Pos( ).Y( ),

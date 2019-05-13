@@ -32,6 +32,9 @@ namespace DroneManagerService
   msg.latitude = latitude;
   msg.longitude = longitude;
   msg.height = height;
+  while ( internet.getNumSubscribers( ) == 0 ) {
+   internet.publish( msg );
+  }
   internet.publish( msg );
   return true;
  }
@@ -45,6 +48,9 @@ namespace DroneManagerService
   msg.latitude = req.latitude;
   msg.longitude = req.longitude;
   msg.height = req.height;
+  while ( internet.getNumSubscribers( ) == 0 ) {
+   internet.publish( msg );
+  }
   internet.publish( msg );
   return true;
  }
@@ -125,7 +131,7 @@ namespace DroneManagerService
    case 100:
     for ( int i = 1; i < 11; i++ ) {
      for ( int j = 0; j < 10; j++ ) {
-      if ( !RequestMovement( i + j, i * 5, j * 5 ) ) { return false; }
+      RequestMovement( i + j, i * 5, j * 5 );
      }
     }
     return true;
@@ -167,7 +173,14 @@ namespace DroneManagerService
            && RequestMovement( 17, 8, 26.5 );
     break;
    default:
-    return false;
+    for ( int i = 1; i < req.caseID + 1; i++ ) {
+     int row, col;
+     row = i % 2;
+     col = std::floor( i / 2 );
+     ROS_INFO( "REQUEST FOR %d", i );
+     RequestMovement( i, row * 5, col * 5 );
+    }
+    return true;
   }
  }
 }  // namespace DroneManagerService
