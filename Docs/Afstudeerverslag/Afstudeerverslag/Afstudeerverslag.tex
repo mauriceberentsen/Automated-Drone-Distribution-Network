@@ -136,11 +136,13 @@ Vervolgens is gekeken naar welke hardware gebruik zou moeten worden voor de onde
 
 Hierna is er een keuze gemaakt welke routeringstechniek gebruik moet worden waarop de conclusie was om een hybide routeringstechniek te gebruiken die als basis een reactieve protocol heeft met als toevoeging dat routes wel opgeslagen worden. De student heeft een aangepaste versie van de Lightweight Mobile Routing Protocol(LMR) toegepast. 
 
-Er is een conclusie getrokken dat het voor dit project niet nodig is om een drone volledig correct te implementeren. Een abstracte versie zal voldoen. Hier zijn regels over opgesteld waar deze aan zou moeten voldoen. 
+Er is een conclusie getrokken dat het voor dit project niet nodig is om een drone volledig te implementeren. Een abstracte versie zal voldoen. Hier zijn regels over opgesteld waar deze aan zou moeten voldoen. 
 
 Om de opdracht uit te kunnen voeren heeft de student een simulatie gemaakt waar drones zich kunnen voortbewegen en zich conform de casus opgesteld in het plan van aanpak kunnen verdelen. De drones volgen het gedrag van een meshnetwerk en er is applicatie aanwezig om op realistische wijze verzoeken te sturen naar de drones voor verplaatsing. 
 
 De opgeleverde software wordt onderbouwt in het software design document en de software requirements specificatie.
+
+Door een gebrek aan tijd heeft de focus van het project gelegen op het simuleren van de hardware. Hierdoor is er geen fysiek prototype om op te leveren.
 
 \tableofcontents
 \clearpage
@@ -358,16 +360,82 @@ Aan het einde van het project levert de student het bovenstaande plus een projec
 
 
 \chapter{Methoden, technieken, platforms, tools}\label{sec:methoden-technieken-platforms-tools}
-Wat gebruik je en waarom, overwogen alternatieven, waarom is de keuze gevallen op die
-tool/techniek/platform. En dan niet zozeer (of alleen) de project(management)methodiek, die is al
-uitgebreid verantwoord in het PvA als het goed is.
+%Wat gebruik je en waarom, overwogen alternatieven, waarom is de keuze gevallen op die
+%tool/techniek/platform. En dan niet zozeer (of alleen) de project(management)methodiek, die is al
+%uitgebreid verantwoord in het PvA als het goed is.
+Dit hoofdstuk wordt gebruikt om de methoden, technieken, platforms en tools toe te lichten.
+
+\section{Github naast Alten haar eigen Git server}
+
+Gedurende het project heb is gebruik gemaakt van een dubbele git server voor versiebeheer.
+Hiervoor is een private repository op github.com gebruikt en de de aangeboden server van Alten.
+
+Deze keuze is gemaakt omdat het afstudeerproject een belangrijk project is. 
+Zo belangrijk dat het aantal single points of failure zo laag mogelijk moest blijven.
+Om een werknemer van Alten te citeren:"Je kan gerust alleen gebruikt maken van onze server daar is nooit wat mee" bleek toch het tegendeel zie \autoref{fig:servernietbeschikbaar}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.61\linewidth]{Afbeeldingen/AltenGit.png}\end{center}
+	\caption{Alten server niet beschikbaar}
+	\label{fig:servernietbeschikbaar}
+\end{figure}
+
+Toen dit gebeurde was ik tevreden met mijn keuze om niet afhankelijk te zijn van een enkele service terwijl dit niet hoeft.
+
+\section{Game engine}
+
+Tijdens het project is gebruik gemaakt van de simulatiesoftware Gazebo. Deze softwarekeuze is gebaseerd op het onderzoek die van te voren is uitgevoerd en wordt daar ook ruim onderbouwt. Een alternatief die ik niet in het onderzoek heb meegenomen maar nog wel hier wil aankaarten is de overweging om een game engine te gebruiken. Deze keuze heb ik voor het onderzoek overwogen mee te nemen omdat game engine geavanceerde physics bevatten en gemakkelijk te gebruiken zouden zijn voor prototyping. Daarnaast heb ik voor het afstuderen begon de minor GAME gedaan waardoor ik ook al de nodige ervaring heb in het werken met game engines. De reden dat ik uiteindelijk de keuze niet meegenomen heb in het onderzoek is omdat ik wist dat game engines niet geschikt zijn om code te verwerken die zonder al te veel moeite ook op een microcontroller werken. Daarnaast zou het gebruiken van een game engine ook niet passen in mijn uitstroomrichting als embedded software developer.
+
+\section{Redmine}
+
+Voor het bijhouden en plannen van het project is gebruik gemaakt van een Redmine omgeving. 
+De keuze om deze te gebruiken is gekomen door positieve de ervaring opgedaan met Redmine tijdens het Internet of Things semester.
+Een overwogen alternatief was het gebruiken van Github projects omdat deze een gemakkelijkere koppeling zou hebben naar de commits op git dan Redmine heeft. Ook zou de service van Github projects betrouwbaarder zijn dan de door Alten gehoste Redmine server.
+
+De keuze om toch de Redmine server van Alten te gebruiken is gebaseerd op het volgende:
+\begin{itemize}
+	\item Inzichtelijker voor mijn begeleiders vanuit Alten. 
+	\item Standaard geïntegreerde Gantt planning.
+	\item Mogelijkheid voor sprint planningen.
+	\item Bij uitval is de planning tijdelijk niet inzichtelijk dit wordt niet al kritisch beschouwd.  
+\end{itemize}   
+
+
+\section{\LaTeX}
+
+De keuze om latex te gebruiken in het project is al bijna twee jaar voor het afstuderen begon gemaakt. 
+Toen de leraar Joost Kraaijeveld tijdens het semester World of Robots de mogelijkheden liet zien van Latex is er in eigen tijd meer aandacht gestoken in de markup taal.
+Het werd duidelijk dat Latex de tool was voor het schrijven van wetenschappelijke artikelen of technische documentatie.
+Hier kwam uit dat Latex veel voor je kan automatiseren zoals referenties, bibliografie en betiteling en het opstellen van formules maar dat er wel een leer curve bij zit.
+Om te voorkomen dat ik tijdens het afstuderen nog door die leercurve heen zou moeten gaan ben ik toen al begonnen met kleine documenten te schrijven in Latex voor opdrachten van semesters.
+Nadat dit meer onder knie was heb ik besloten ook mijn verslag voor de meewerkstage geschreven in Latex.
+Waarbij aangegeven werd door alle begeleiders dat het verslag er zeer netjes en verzorgd uitziet.
+Tijdens de meewerkstage heb ik ook ondervonden dat deze tool veel geschikter is voor versiebeheer dan de concurrent Microsoft Word.
+
+Tijdens het afstuderen is Word ook geen praktisch alternatief omdat het project uitgevoerd wordt met Ubuntu. 
+Daarop kan geen Word geïnstalleerd worden waarbij de linux variant van LibreOffice overblijft of de online tool van Word.
+
+Omdat ik deze beide geen waardig alternatief vond ten opzichte van Latex waar ik ondertussen aardig bekwaam in was heb ik definitief besloten tijdens het afstuderen om Latex te gebruiken
+
+
+ 
+
 
 \chapter{Uitvoer projectplan}\label{sec:uitvoer-projectplan}
-Wat was het plan, hoe heb je dat uitgevoerd. Waar zitten de afwijkingen en waarom? Beperkt tot
-inhoudelijk relevante zaken.
-Dit hoofdstuk behandeld hoe het plan van het project is uitgevoerd, het zal eerst kort toelichten wat het plan was. Vervolgens zal er reflectie op het plan plaats vinden.
+In de dit hoofdstuk wordt het plan eerst kort toegelicht, vervolgens wordt gekeken naar waar de afwijkingen zitten en waarom deze er waren.
+%Wat was het plan, hoe heb je dat uitgevoerd. Waar zitten de afwijkingen en waarom? Beperkt tot
+%inhoudelijk relevante zaken.
+%Dit hoofdstuk behandeld hoe het plan van het project is uitgevoerd, het zal eerst kort toelichten wat het plan was. Vervolgens zal er reflectie op het plan plaats vinden.
 
 \section{Het plan}\label{sec:het-plan}
+Het plan is om dit project volgens de RUP ontwikkelmethode uit te voeren. 
+Omdat er nog niet voldoende voorkennis aanwezig is voor het bouwen van de software geeft dit de ruimte om voldoende onderzoek uit te voeren en daar de kennis uit te halen. 
+Er is gepland dat de fases inception, elaboration, construction en transition een duur hadden van vijf, acht, vier en twee weken. Dit geeft de student dusdanig veel tijd voor onderzoek en het opzetten van losse prototype componenten dat er tijdens een constructiefase van 4 weken weinig problemen kunnen voorkomen. 
+
+Tijdens de elaboratie fase staat het onderzoek naar de te gebruiken hardware voorop omdat hier de te bouwen simulatie op gebaseerd moet worden.    
+Op het moment dat de hardware bekend is kan deze wanneer nodig besteld worden en kan er gekeken worden welke simulatiesoftware gebruikt moet worden.
+Als ook dit bekend is is de volgende stap het bouwen van losse componenten in de simulatie. 
+Zodra de hardware beschikbaar is kan de software die voor simulatie gemaakt is gebruikt worden op de hardware. 
 
 \section{Reflectie}\label{sec:reflectie}
 
@@ -423,8 +491,9 @@ Dit was vaak code die bestond uit lege classes of kleine stukjes proef code zoal
 
 \section{Constructiefase}
 Het voorgaande besluit hield in dat er nog zes weken de tijd was om de simulatie te realiseren voor de 80\% versie ingeleverd moest worden.
+\paragraph{Abstracte drone}
 Er is begonnen met het ontwikkelen van een de abstracte drone die voorzien was van een interface waarmee die aangestuurd kon worden zich te verplaatsen naar verschillende locaties. Wat hierin een uitdaging was was het injecteren van de drone informatie in Gazebo en het vervolgens aansturen. Dit is gedaan via een SDF beschrijving die een plugin heeft die drone voorziet van een motor. Deze motor kan vervolgens via een ros service aangesproken worden. Zo kon er vanuit een aanroep in de console of het ros programma RQT een drone verplaatst worden van positie. 
-
+\paragraph{Directe communicatie}
 Nu er drones in de simulatie mogelijk waren betekende dat er meshnetwerk componenten gekoppeld konden worden aan de drones in de simualtie.
 Er is begonnen met het schrijven van een plugin die het netwerkcomponent representeerde in de simulatie. 
 Vervolgens konden deze op twee drones 'aangesloten' worden om vervolgens deze met elkaar te laten communiceren.
@@ -435,12 +504,12 @@ Deze applicatie moet draaien om onderlinge communicatie mogelijk te maken omdat 
 In deze simulator zijn regels gesteld of het op basis van afstand het toegestaan is om een bericht te versturen.
 Een uitdaging hierin was het op de hoogte blijven van de locatie van een node. 
 Er is besloten dat dit aan de hand van een rostopic zou gebeuren zodat een drone als die zich verplaatst continue zijn nieuwe positie door kan geven. Een netwerkcomponent kan op zijn beurt op dit topic aangeven op welke drone hij aangesloten zit en op welk topic hij berichten wil ontvangen. De werking hiervan kon getest worden door drones met een directe aansturing te verplaatsen.
-
+\paragraph{Broadcast}
 Met een fysieke NRF24 is het mogelijk om op een kanaal een bericht te versturen waar iedere andere NRF24 binnen bereik.
 Zo komt er een bericht aan via een zogeheten broadcast. 
 In een simulatie werkt dit niet omdat er niet iets alle kanten opgestuurd kan worden.
-Daarom is er besloten een functie toe te voegen aan de draadloze communicatie simulator waarmee opgevraagd kan worden wie er binnen bereik is. Zo kon er toch een implmentatie gemaakt worden waar een broadcast uitgevoerd wordt.  
-
+Daarom is er besloten een functie toe te voegen aan de draadloze communicatie simulator waarmee opgevraagd kan worden wie er binnen bereik is. Zo kon er toch een implementatie gemaakt worden waar een broadcast uitgevoerd wordt.  
+\paragraph{Gateway router verbinding}
 Nu er een implementatie was in de simulatie waarmee eigenlijk alle mogelijkheden nagebootst konden worden die een fysieke antenne zou aanbieden was het tijd om een te beginnen aan het implementeren van de routeringstechniek die uit het onderzoek gekozen was.
 Een eis was dat het netwerk altijd bestaat uit minimaal één gateway en nul tot 100 routers.
 Een logische stap was dus het scheiden van de logica van het netwerkcomponent in een gateway en in een router.
@@ -454,10 +523,60 @@ Deze berichten worden onderling uitgewisseld via een heartbeat.
 	\caption{Communicatie voor bevestiging verbinding}
 	\label{fig:bevestigingverbinding}
 \end{figure}
+\paragraph{Verbinding router naar een gateway}
+Na het implementeren van een heartbeat voor een enkele router binnen bereik was de volgende stap om een heartbeat te implementeren voor een router buiten bereik. Dit hield eigenlijk in dat er een implementatie moest komen voor het doorsturen van berichten. Ook hier werd eerst simpel begonnen met twee routers en een gateway. Het eerste deel van de route was het makkelijk de gateway had namelijk altijd hetzelfde adres namelijk 0. Daarom kon er vrij snel al een implementatie gemaakt worden waar als de tussen node een bericht ontving voor 0 dat deze doorgegeven moest worden aan de gateway. De weg terug wordt nu complexer voor de gateway hij kan namelijk niet simpelweg het bericht terug sturen want dat is buiten het bereik.
+\paragraph{Routeringstechniek}
+Er moet dus een routeringstechniek gemaakt worden om bij de node te komen.
+In het geval van de gateway is er de volgende kennis aanwezig:
+\begin{itemize}
+	\item Er bestaat een router met ID 2 buiten bereik
+	\item De router met ID 1 die heeft direct of indirect een connectie met die router
+\end{itemize}
 
-Een netwerkcomponent   
+Met die kennis is er de theorie dat als het bericht dat naar router ID 2 gestuurd moet worden aan router ID 1 gegeven wordt dat deze dan wel weet hoe het bij router 2 moet aankomen.
+Deze theorie wordt toegepast in het lightweight mobile routing protocol \cite{LMR}.
+Aan het nu abstracte netwerkcomponent is een routeringstabel toegevoegd waar in opgeslagen worden welke routers een directe verbinding hebben en bij elke van die routers wordt bijgehouden met welke routers zij weer een verbinding hebben.
 
- 
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.6\linewidth]{Afbeeldingen/uitlegtabel.png}\end{center}
+	\caption{Toelichting routeringstabel}
+	\label{fig:routeringstabel}
+\end{figure}
+
+In \autoref{fig:routeringstabel} wordt geïllustreerd hoe de routeringstabellen van de gateway en verschillende routers er uitzien.
+Een nadeel van de huidige implementatie is dat er geen rekening wordt gehouden met het kortste pad door het netwerk.
+Als in \autoref{fig:routeringstabel} bijvoorbeeld de gateway een bericht wil versturen naar router nummer 8 zal dit gebeuren via de weg 0-5-7-8 in plaats van de kortste weg 0-6-8. Dit komt omdat er nu eerst gekeken wordt of het bericht voor de geadresseerde een direct aangesloten punt is, als dat niet zo is worden de tabellen van de indirecte punten nagelopen. Omdat die op numerieke volgorde de tabellen van externe punten nazoekt zal de tabel van punt 5 als eerste een routepunt geven.
+
+Wat ook opvalt aan de techniek is dat een router altijd op een manier een route weet naar een gateway toe. Dit maakt het dus altijd mogelijk om de gateway als punt aan te houden als er een communicatieweg gevonden moet worden naar een onbekend punt met als regel dat een bericht die uit de richting van een gateway komt niet teruggestuurd mag worden als er geen pad gevonden wordt.
+
+Als laatste punt over LMR moet benoemd worden dat het netwerk zich event driven onderhoudt.
+Dit houdt in dat er alleen informatie wordt rondgestuurd over nieuwe of verbroken verbindingen op het moment dat er een wijziging optreedt in het netwerk. 
+Volgens de LMR techniek wordt een verbroken verbinding pas gedetecteerd op het moment dat vinden van een pad naar een aangesloten buur niet lukt.
+Omdat de opdracht was dat het netwerk snel moet doorhebben dat een verbinding verloren is, is er toegevoegd dat elk punt periodiek de verbinding van direct aangesloten punten naloopt. 
+Deze routeringstechniek is deze voorzien van unittesten die testen of de routes daadwerkelijk gevonden worden en de tabellen juist worden bijgehouden.
+
+\paragraph{Berichten}
+Binnen het netwerk worden compacte berichten gebruikt die een vaste volgorde in een 32 byte array hebben.
+Om te zorgen dat deze berichten juist in een array gezet worden en er ook weer juist uitgehaald worden is elke type bericht voorzien een unittest.
+
+\paragraph{Drone aansturing}
+Nu er een communicatie mogelijk is tussen de netwerkcomponenten en deze in staat zijn correct te kunnen detecteren of er een verbinding naar een gateway mogelijk is kunnen de componenten aangesloten worden op de interface van de drone voor aansturing.
+Omdat de abstracte drone niet via een enkele interface aangestuurd kunnen worden is gebruik gemaakt van een adapter tussen het netwerkcomponent en de drone. 
+Ook hier is weer simpel begonnen door het eerst mogelijk te maken door het ontvangen van een bericht een doel te sturen naar een drone motor. Vervolgens kon er getest worden of dit werkte door zelf een bericht op te stellen en dit direct naar de antenne te sturen van de netwerkmodule.
+
+\paragraph{Drone manager}
+Omdat er nog geen manier was om op een simpele manier berichten het netwerk in te kunnen sturen is de dronemanager ontwikkeld. Deze applicatie start een rosservice die communiceert op een rostopic waar alle gateways naar luisteren. Omdat er alleen interesse is naar het versturen van locaties naar drones kan ook alleen dit gepubliceerd worden op het topic. Zodra een gateway een nieuw bericht ontvangt op het topic maakt hij hier een bericht van die het netwerk ingestuurd wordt met een verzoek voor verplaatsing. Op deze manier kon ook makelijker getest worden of de drone aansturing goed werkte en of een punt ver weg in het netwerk daadwerkelijk in staat was berichten van een gateway te ontvangen.
+
+\paragraph{Protocol bij een verloren verbinding met de gateway}
+De opdracht stelt dat drones zich moeten verplaatsen bij een verloren verbinding naar een alternatieve locatie om zo te proberen de verbinding te herstellen. Hier was de eerste stap om eerst te ontdekken of een netwerkmodule alleen is of dat er nog andere punten in de buurt zijn die ook een verbinding verloren zijn. Hiervoor kon de broadcast functie goed gebruikt worden. De meeste simpele implementatie kon vervolgens gemaakt worden voor de drone die in zijn eentje verloren is. Na overleg met Alten is besloten dat het voor nu voldoende was als de drone eerst terug vliegt naar het punt die verloren is gegaan om daar te zoeken naar een nieuwe verbinding met de gateway. Op het moment dat daar nog steeds geen verbinding gevonden is moet de drone terug keren naar de locatie waar de gateway staat.   
+
+Op het moment dat er groep is die verloren gaat moet er een overleg gepleegd worden tussen de drones, het heeft immers geen zin om allemaal naar een zelfde locatie te bewegen of om twee werkende netwerkmodules op een plek te parkeren. 
+Er is nu geïmplementeerd dat elke drone berekend wat zijn afstand is tot de gateway, de drone met de grootste afstand die wil verplaatsen naar een plek waar nog geen andere drone staat zal een beweging uitvoeren.  
+   
+\paragraph{Meerdere gateways in een netwerk}
+Een wens van Alten is de mogelijkheid om meerdere drones te gebruiken in een netwerk. 
+Hiervoor is logica toegevoegd aan de routers dat er een voorkeur gateway bestaat.
+Op het moment dat een router een bericht krijgt van een ander punt in het netwerk die minder hops tot aan een gateway heeft dan neemt de router het id over van de voorkeur gateway van dat punt. 
 
 \chapter{Resultaten}\label{sec:resultaten}
 
@@ -467,7 +586,7 @@ Een netwerkcomponent
 In de dit hoofdstuk worden de opgeleverde producten behandeld en beoordeeld op hun kwaliteit.
 
 \section{Plan van aanpak}\label{sec:plan-van-aanpak}
-Het eerste product die ik heb opgeleverd was het plan van aanpak.
+Het eerste product die is heb opgeleverd was het plan van aanpak.
 Het product kreeg zijn echte waarde na de feedback op het conceptplan.
 
 Het eerste plan was nog niet concreet genoeg in wat opgeleverd zou ging worden. 
@@ -491,7 +610,10 @@ Toch zou ik Alten wel adviseren als ze dit project voortzetten om hier in te inv
 Het schrijven van een routeringstechniek is een complex proces die in de huidige implementatie nog problemen kan geven.
 Het breder toepassen van unittesten zou de kwaliteit van het meshnetwerk zeker ten goede komen. 
 
-De componenten die gebruikt worden zijn goed met elkaar aangesloten waarbij er een uitzondering is dat er een adapter gebruikt wordt om de gesimuleerde drone op een Arduino aan te sluiten. 
+De componenten zijn op elkaar aangesloten door interfaces aan elkaar aan te bieden.
+Dit is gedaan om meerdere redenen. 
+Door elkaar interfaces aan te bieden bewaakt een component zijn toegang tot de publieke functies.
+Daarnaast bieden de interfaces een potentie voor het schrijven van testen omdat deze gemockt kunnen worden.  
 
 Wat ik jammer vind maar niet mogelijk was in het project was dat er geen buildserver beschikbaar was waar een geavanceerde codeanalyse tool aan gekoppeld zit zoals coverity of sonarqube. Wel is er in het project gebruik gemaakt van de statische codechecker CPPcheck. Hoewel het geen maatstaaf is hier nul meldingen op te krijgen in verband met false positives. 
 Toch is bij elke melding die CPPcheck heeft gegeven afgehandeld ofwel door het aanpassen van code of door het bewust onderdrukken van de functie. Zo zijn er op dit moment alleen meldingen onderdrukt over ongebruikte functies of een het gedeelte waar een float wordt opgeknipt in bytes.
@@ -529,6 +651,8 @@ Het opgeleverde product voldoet wel aan de wens van Alten zij wil namelijk verde
 
 \section{Hardwareprototype}\label{sec:hardwareprototype}
 
+Op dit moment is er er nog geen werkend hardware prototype. Als de tijd het toestaat ga ik hier aan werken na de 80\% versie
+
 
 \section{Software design document}\label{sec:software-design-document}
 Het software design document is zo compleet mogelijk opgeleverd.
@@ -539,31 +663,98 @@ De reden dat ik dit heb moeten doen komt door het gebruik van ros.
 Omdat er door het toepassen van ros een aantal subcomponenten van het systeem als aparte applicatie draaien.
 
 Verder als ik het design document tegen de kwaliteitseisen hou die in het plan van aanpak zijn gesteld dan voldoe ik aan de gestelde eisen. Het document komt volledig overeen met de code en alle relevante ontwerpen zijn ruimschoots vastgelegd. Wat afwijkt in het proces ten opzicht van het plan is de stap waar het domeinmodel wordt omgezet tot class diagrammen. Er is gekozen om gebruik te maken component diagrammen die de samenhang van de software overzichtelijker duidelijk maken. 
+
 \section{Software requirements specificatie}\label{sec:software-requirements-specificatie}
 Voordat er een goed design kan komen is het zaak dat er requirements opgesteld worden.
 Dit heb ik gedaan door het opstellen een software requirements specificatie.  
+Deze heb ik opgesteld door aan de hand van gesprekken met de opdrachtgever Alten.
+Hierin heb ik de gesprekstechnieken ANNA (altijd navragen nooit aannemen) en LSD (luisteren samenvatten doorvragen) toegepast zoals dit geleerd is in de professional skills lessen.  
+Vervolgens zijn de requirements opgedeelt in functionele requirements en niet functionele requirements. 
+De functionele requirements zijn door de MoSCoW methode toe te passen geprioriteerd.
+De niet functionele requirements zijn vervolgens verdeeld in categorieën uit FURPS. 
  
 \chapter{Evaluatie}\label{sec:evaluatie}
+%Evaluatie/ Reflectie / Situaties (STARR)
+%Inzichten!
+%Inzichten mbt proces, producten en resultaten, èn het eigen functioneren. middels een methode als STARR.
+%Die methode moet dan wel goed toegepast worden.
+In dit hoofdstuk worden situaties behandeld die zich tijdens de afstuderen hebben voorgedaan. 
+Hiervoor wordt de STARR (Situatie, Taak, Actie, Resultaat, Reflectie) methode toegepast. 
 
-Evaluatie/ Reflectie / Situaties (STARR)
-Inzichten!
-Inzichten mbt proces, producten en resultaten, èn het eigen functioneren. middels een methode als STARR.
-Die methode moet dan wel goed toegepast worden.
+\paragraph{Altijd navragen nooit aannemen}
+Het is mij zo vaak verteld door de HAN en toch ben ik in dit project met open ogen in gelopen.
+Deze situatie beschrijft hoe dit project flink is beïnvloed omdat ik een aanname had gedaan ten opzichte van de 80\% versie.
+
+Tijdens de eerste fase van het project moet elke student een plan van aanpak schrijven. Hierin is een belangrijk stuk de planning. Tijdens het plannen van het project heb ik de fout gemaakt om zo te plannen dat er bij een 80\% versie het project ook 80\% voltooid zou zijn. Dit leek ook allemaal logisch tot er de evaluatie kwam van een plan onder begeleiding van Jorg Visch. Pas toen kwam ik erachter dat het beter zou zijn voor de kans van slagen dat het project tijdens de 80\% versie tenminste alle elementen al zou bevatten om te kunnen slagen. 
+Op dat moment was de planning hier nog niet naar terwijl dit een plan al aardig strak gepland was.
+
+Eerst had ik nog idee dat als ik iets harder zou werken en voor zou gaan lopen op de planning dat ik nog steeds een 80\% versie zou kunnen opleveren die zou voldoen aan de wensen vanuit school. Na drie weken in het project werd het duidelijk dat dit niet genoeg zou zijn. Er moest een geschoven worden binnen de planning om het toch allemaal op orde te krijgen.
+
+Tijdens het project was er ook een terugkomdag op school, hier sprak ik met andere studenten onder andere over het 80\% inlevermoment. Zij vertelde mij dat ze al wel vroeg tijdens het schrijven van het plan van aanpak wisten dat ze zo moesten plannen dat er bij 80\% een project moest staan die waardig is voor slagen.
+
+Hieruit leerde ik dat hoe logisch iets ook klinkt dat ik nooit is zomaar moet aannemen. Het effect van de verkeerde aanname is groot geweest op mijn project terwijl die eigenlijk makkelijk voorkomen had kunnen worden. Ik had in plaats van de aanname een mail naar mijn begeleider moeten sturen met wat hij verwacht van de inlevermomenten.  
+  
+
+
+\paragraph{Afstudeereiland}
+Deze situatie kaart ik aan omdat ik het afstuderen als eenzaam heb ervaren.
+Natuurlijk zijn er de begeleiders en collega's waaronder ook oud HAN studenten aanwezig die zorgen voor de nodige gezelligheid en zijn ze allemaal bereid om mij te helpen.
+Daarnaast is het afstudeerproject ook een proeve die een student alleen moet doorlopen.
+Toch heb ik mij op een aantal momenten eenzaam gevoelt gedurende het project vandaar dat ik het afstudeereiland noem.
+
+Dit eiland komt vooral omdat de afstudeeropdracht geen directe impact heeft op de productontwikkeling binnen het bedrijf. Hierdoor collega's zijn ook niet verplicht om zich te verdiepen in het werk wat ik uitvoer. 
+
+Als student van de HAN informatica is dit voor mij voor het eerst dat ik een project alleen uitvoer. 
+Zo werden alle voorgaande projecten met ongeveer 5 mensen uitgevoerd met zelf een uitzondering in het World of Robots project die met 17 personen werd gedaan.
+Een project van 20 weken alleen is dus even wennen.
+Het heeft mij de waarde van samenwerken aan een project meer veel meer leren waarderen dan ik al deed. 
+
+Het werken op een eiland brengt meerdere nadelen met zich mee.
+Het eerste nadeel is dat het alleen werken ten kostte gaat van de kwaliteit van het product.
+Omdat er geen dagelijks contact is zoals dat bijvoorbeeld is in een daily stand up loop je niet alleen een groot risico dat wanneer een project een verkeerde richting op gaat dat dit pas laat onderkent wordt. Maar zijn er ook geen hoog frequente checks op de technieken toegepast binnen de producten.
+
+Een ander nadeel die kan optreden maar door Alten is voorkomen is dat ik makkelijk buiten de organisatie kon gaan vallen.
+Alten heeft dit voorkomen door mij overal actief bij te betrekken en mij dezelfde toegang te geven tot activiteiten die normale collega's ook hebben. Zo heb ik presentaties bijgewoond waar bijvoorbeeld een kijkje in de softwarekeuken werd gegeven van de gigant takeaway.com(thuisbezorgd.nl) maar heb ik ook met het hele team op de schaatsbaan in Enschede gestaan om te curlen. Dit was allemaal optioneel en kon ik mij zelf voor aanmelden.
+
+Een les die ik hier uit leer is dat ik meer mijn best had moeten doen om collega's inhoudelijk te betrekken bij mijn afstuderen. Dat het afstuderen alleen uitgevoerd moet worden is een feit maar dit betekend nog niet dat het eenzaam hoeft te zijn.
+
+Ik had collega's meer kunnen betrekken door presentaties te geven over inhoudelijke keuzes in het project. Dit zou hun de kans geven om gericht feedback te geven over mijn werk. Om van acties ook daden te maken heb ik ondertussen twee presentatie momenten ingepland met het volledige team in Apeldoorn.
+
+Als ik terugkijk naar wat ik nog meer had kunnen doen denk ik dat alleen maar zou kunnen adviseren aan toekomstige afstudeerders om te gaan werken aan afstudeeropdrachten die direct invloed hebben op het product van het bedrijf. Dit forceert het bedrijf om zich actief met de student bezig te houden omdat de impact van het resultaat groter is. 
+
+Het resultaat van deze presentaties zal ik later hier beschrijven nadat ze gehouden zijn
+
+
 
 \chapter{Conclusie}\label{sec:conclusie}
 %Inhoudelijk, wat heeft het project opgeleverd, zet dat af tegen de doelstelling, heb je die gehaald?
 %Afwijkingen beschrijven. Welke vervolgstappen kan het bedrijf nog nemen?
-Het project heeft een geavanceerde simulator opgeleverd voor het testen van onderling communicerende drones. Hoewel algoritme voor het opzetten van meshnetwerken nog niet volledig stabiel werkt is het product voldoende gedocumenteerd 
+Het project heeft een geavanceerde simulator opgeleverd voor het testen van onderling communicerende drones.
+Daarmee is het doel van het project behaald omdat Alten met name geïnteresseerd is in het opzetten van grootschalige netwerken door het gebruik van drones.
+In de opgeleverde simulatie kunnen ze algoritmes testen voor verdelingen en beoordelen waar routers het meest belast zouden worden.
+
+Hoewel er geen fysiek prototype in het project is opgeleverd is dat een minder groot probleem dan het lijkt. 
+De simulatie is gebouwd op basis van de eisen die de gekozen hardware opgelegd aan de software.
+Door het gebruik van een high level interface kan er elke andere communicatie middel worden aangesloten op het netwerk component.
+In theorie kan er zelf getest worden met een fysieke antenne en een gesimuleerde drone zolang de gebruikte interfaces maar kloppen.
+
 
 \section{Advies vervolg project}\label{sec:advies-vervolg-project}
 Wanneer dit project vervolgt wordt adviseer ik Alten het volgende:
 \begin{itemize}
 	\item Voorzie een volgende ontwikkelaar van een computer die een dedicated GPU aanwezig heeft zodat er grotere simulaties met gazebo gedraait kunnen worden.
-	\item Stel een buildserver voorzien van een geavanceerde code checker beschikbaar. 
-	\item Experimenteer met andere routeringsalgoritmes voordat er met fysieke apparatuur gewerkt gaat worden. Er zitten in het huidige algoritmes nog steeds bugs waardoor de communicatie niet altijd  zichzelf weet op te bouwen bij een hoog aantal hops. 
+	
+	\item Stel een buildserver voorzien van een geavanceerde code checker beschikbaar.
+	 
+	\item Experimenteer met andere routeringsalgoritmes voordat er met fysieke netwerkapparatuur gewerkt gaat worden. Er bestaat niet één oplossing voor een dynamisch netwerk. Wellicht kan er geschakeld worden van protocol zodra de netwerkpunten statisch worden in de wereld.  
+	
 	\item Geef een volgende ontwikkelaar de ruimte om een geavanceerdere test omgeving op te zetten voor geautomatiseerde testen.
+	Er kunnen scripts gemaakt worden om scenario's te testen in de verdeling van drones. Het gebruik van interface maakt het mogelijk de componenten los te testen door het gebruik van mocking.
+	
+	\item De draadloze communicatie is nu gebaseerd op onderlinge afstand tussen nodes. Het advies luidt om te onderzoeken of het haalbaar is met een simulatie met 100 communicatiepunten hier een andere techniek voor te gebruiken die bijvoorbeeld ook rekening kan houden met obstakels zodat er simulaties kunnen draaien in omgevingen met bijvoorbeeld bomen op gebouwen.
+	
+	\item Schrijf de drone engine om naar het software patroon van een state machine en voeg een functie toe in de aangeboden interface die de staat van de drone aangeeft. Zo kan de netwerkmodule nog betere beslissingen nemen of bijvoorbeeld pas timers starten na het landen van de drone.
 	\item Voordat de overstap gemaakt wordt van een abstracte drone naar een volledig gesimuleerde drone in de simulatie adviseer ik een uitbreiding tot een gesimuleerde drone die een batterijduur heeft.
-	\item De draadloze communicatie is nu gebaseerd op onderlinge afstand tussen nodes. Mijn advies is om te onderzoeken of het haalbaar is met een simulatie met zoveel onderlinge communicatie hier een andere techniek voor te gebruiken die bijvoorbeeld ook rekening kan houden met obstakels zodat er simulaties kunnen draaien in omgevingen met bijvoorbeeld bomen op gebouwen.
 \end{itemize}
 
 \bibliographystyle{apacite}
