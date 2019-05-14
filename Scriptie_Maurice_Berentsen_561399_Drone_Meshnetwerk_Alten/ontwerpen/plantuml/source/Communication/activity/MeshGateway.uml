@@ -1,0 +1,29 @@
+@startuml
+|MeshnetworkGateway|
+start
+|IWirelessCommunication|
+:startAntenna;
+|MeshnetworkGateway|
+if(debug) then (false)
+#white:nothing;
+else(true)
+|#lightgrey|IWirelessCommunication|
+:DebugingMode(true);
+|MeshnetworkGateway|
+endif
+|IInternetConnection|
+:Connect;
+|MeshnetworkGateway|
+:connectedToGateway = true;
+:prefferedGateway = this->nodeID;
+|#lightgrey|IRoutingTechnique|
+:startRouting;
+|MeshnetworkGateway|
+	while (program running) is ([time passed])
+    |IRoutingTechnique|
+    :maintainRouting;
+    |MeshnetworkGateway|
+
+    endwhile ([false])
+stop
+@enduml

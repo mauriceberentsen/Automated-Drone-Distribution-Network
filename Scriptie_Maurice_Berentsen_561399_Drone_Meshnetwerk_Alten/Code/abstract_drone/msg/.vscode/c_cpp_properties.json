@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/maurice/Workspace/Automated-Drone-Distribution-Network/Code/ros/devel/include",
+                "/opt/ros/melodic/include",
+                "/home/maurice/Workspace/Automated-Drone-Distribution-Network/Code/ros/src/abstract_drone/include",
+                "/usr/include"
+            ],
+            "name": "Linux",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

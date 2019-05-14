@@ -1,0 +1,55 @@
+@startuml
+autonumber
+participant "Node 1:MeshRouter" as 1
+participant "heartbeat:HeartbeatMessage" as 1m
+participant "routerTech:IRoutingTechnique" as 1NT
+participant "communication:IWirelessCommunication" as IWS
+note over IWS: Interface for wireless communication
+participant "Node 0:MeshGateway" as 0
+
+
+1 -> 1  +: SendHeartbeatToGateway()
+1 -> 1  +: SendHeartbeat(prefferedGateWay)  : bool
+activate 1
+1 -> 1NT ++: towards = NodeTable.getDirectionToNode(prefferedGateWay) : uint8_t
+return towards = 0 
+create 1m
+1 -> 1m : \t\t\t<<create>>\n msg = HeartbeatMessage(nodeID, nodeID, towards,\n other, connectedToGateway, prefferedGateway)
+1 -> 1 ++ : send_message(msg, towards) : bool
+1 -> IWS +: SendMessageTo( msg )
+IWS --> 0 +: OnMsg(msg)
+
+1 <- IWS --: succes : bool
+
+alt  succes == true
+1 -> 1NT :  canCommunicateWithNode( towards )
+else
+1 -> 1NT : cantCommunicateWithNode( towards )
+1 -> 1 :  informAboutMissingchild (NodeID, other)
+end
+deactivate 1
+1 -> 1 -: connectedToGateway = false
+
+deactivate 1
+deactivate 1
+
+
+0->0+:processHeartbeat(msg)
+0->0+:SendHeartbeat(msg.getCreator())
+0->IWS+:SendMessageTo(msg)
+
+deactivate 0
+deactivate 0
+
+IWS --> 1+:OnMsg(msg)
+IWS --> 0:succes : bool
+deactivate 0
+
+deactivate IWS
+1->1+:processHeartbeat(msg)
+1->1:prefferedGateWay = msg.getPrefferedGateway( );
+1->1:connectedToGateway = true;
+1->1:hopsFromGatewayAway = msg.getHops( ) + 1;
+deactivate 1
+
+@enduml

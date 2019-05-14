@@ -1,0 +1,21 @@
+@startuml
+|MeshnetworkRouter|
+start
+:Calculate points\n of movement;
+:insert self to negotiationlist;
+:inform neighbours about points;
+while(Know points of all children)  is ([false])
+endwhile ([true])
+    if(Own cost is highest) then ([true])
+        :sendGoalToEngine( lastGoodKnownLocation );
+        |#lightgray|IDroneEngine|
+		:setGoal(location);
+        |IRoutingTechnique|
+        :NodeMovedLocation;
+        |MeshnetworkRouter|
+        :lastGoodKnownLocation = \nprefferedGateWayLocation;
+    endif
+:clear negotiationlist;
+stop
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+
+participant ":DroneFactory" as DF
+participant "_sdf:ElementPtr" as sdf
+participant ":GatewayDrone" as GD
+participant ":RouterDrone" as RD
+
+DF -> sdf :  debug = Get("debug")
+DF -> sdf :  amountOfGateways = Get("amountOfGatewayDrones")
+loop i= 0 ; i < amountOfGateways : i++
+create GD
+DF -> GD : GatewayDrone( -1, i, 0, _parent:WorldPtr,debug )
+end
+
+DF -> sdf :  gridsize = Get("gridsize")
+
+DF -> sdf :  amountOfRouters = Get("amountOfRouterDrones")
+loop i= 0 ; i < amountOfRouters : i++
+DF -> DF: row = i % gridsize;
+DF -> DF: col = floor( i / gridsize );
+create RD
+DF -> RD : GatewayDrone( row, col, 0, _parent:WorldPtr,debug )
+end
+
+@enduml

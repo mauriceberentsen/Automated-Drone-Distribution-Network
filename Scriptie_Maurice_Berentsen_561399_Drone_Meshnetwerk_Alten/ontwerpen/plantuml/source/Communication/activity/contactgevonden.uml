@@ -1,0 +1,11 @@
+@startuml
+start
+:Can communicate with node;
+if(directly connected) then (true)
+:Register child;
+else (false)
+:Register informer as child;
+:Register the grandchild;
+endif
+stop
+@enduml

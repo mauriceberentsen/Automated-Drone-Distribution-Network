@@ -1,0 +1,74 @@
+@startuml
+
+package gazebo{
+    class WorldPlugin
+    class ModelPlugin
+    package DroneSimulation
+    {
+        class DroneEngine
+        {
+            -drone_id: uint8_t
+            -model: Modelptr 
+            -hasGoal: bool
+            -moving: bool
+            -speed: float
+            -rosNode: unique_ptr<NodeHandle>
+            -updateConnection: ConnectionPtr
+            -gpsService:ServiceServer
+            -rosQueueThread:rosqueueThread
+            -rosQueue:CallbackQueue
+            -wirelessSimulationPub:publisher
+            -rosSub: subscriber
+            -goal: Pose3d
+            -pose: Pose3d	
+           ----
+           +DroneEngine()
+           +setGoal(const float longitude, const float latitude, const float height)
+           +get_location (abstract_drone::RequestGPS::Request &req, abstract_drone::RequestGPS::Response &res) : bool
+           -Load (physics::ModelPtr _parent, sdf::ElementPtr _sdf)
+           -OnUpdate() 
+           -atGoal () : bool
+           -informWirelessSimulator () 
+           -OnRosMsg_Pos (const abstract_drone::LocationConstPtr &_msg)
+           -QueueThread ()
+           -BootDroneMovement ()
+        }
+        
+        class Drone <<abstract>>
+        {
+            # SdfString : string
+            # x : const float
+            # y : const float
+            # z : const float
+            # parent : const WorldPtr
+            # {static} droneID = 0: int
+            ----
+            #Drone(const float _x, const float _y,\n const float _z, physics::WorldPtr _parent)
+            #~Drone()    
+        }
+        class RouterDrone
+        {
+          +RouterDrone(const float _x, const float _y,\n const float _z, physics::WorldPtr _parent)
+          +~RouterDrone()  
+        }
+        class GatewayDrone
+        {
+          +GatewayDrone(const float _x, const float _y,\n const float _z, physics::WorldPtr _parent)
+          +~GatewayDrone()  
+        }
+        class DroneFactory
+        {
+            +Load (physics::WorldPtr _parent, sdf::ElementPtr _sdf)
+        }
+        DroneFactory"1" o-left-> "*"RouterDrone : creates >
+        DroneFactory"1" o-right-> "*"GatewayDrone : creates >
+        Drone - DroneEngine
+        Drone <|-- RouterDrone
+        Drone <|-- GatewayDrone
+    }
+    DroneFactory --|> WorldPlugin
+    DroneEngine --|> ModelPlugin
+}
+    DroneEngine -() IDroneEngine
+
+@enduml

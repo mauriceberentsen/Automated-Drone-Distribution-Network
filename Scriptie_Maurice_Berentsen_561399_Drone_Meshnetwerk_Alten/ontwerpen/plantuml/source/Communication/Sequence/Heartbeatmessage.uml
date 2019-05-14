@@ -1,0 +1,53 @@
+@startuml
+autonumber
+participant "Node 1:MeshComponent" as 1
+participant "heartbeat:HeartbeatMessage" as 1m
+participant "routerTech:ChildTableTree" as 1NT
+participant "communication:IWirelessCommunication" as SS
+note over SS: Interface for wireless communication
+participant "Node 2:MeshComponent" as 2
+
+
+[-> 1  : SendHeartbeat(other = 2) : bool
+activate 1
+1 -> 1NT ++: towards = NodeTable.getDirectionToNode(other) : uint8_t
+1NT -> 1NT : it = family.find(other) \n : iterator <<uint8_t, set<uin8_t> >>
+note over 1NT: Look if the other node is a child else look if it's a grandchild. If nothing is found return 255
+alt \t      it != family.end()
+	1 <- 1NT : it->first
+else
+	loop \t child : family
+    alt \t child.second.find(node) != child.second.end() 
+    1 <- 1NT : child.first
+    end
+    end
+	1 <- 1NT-- : 255
+end
+create 1m
+1 -> 1m : \t\t\t<<create>>\n msg = HeartbeatMessage(nodeID, nodeID, towards,\n other, connectedToGateway, prefferedGateway)
+
+
+
+1 -> 1 ++ : send_message(msg, towards) : bool
+1 -> SS+ : SendMessageTo( msg )
+SS --> 2+ : OnMsg(msg)
+
+1 <-- SS --: bool
+
+alt  response.succes == true
+1 -> 1NT :  canCommunicateWithNode( towards )
+<-- 1 : True
+else
+1 -> 1NT : cantCommunicateWithNode( towards )
+1 -> 1 :  informAboutMissingchild (NodeID, other)
+<-- 1 : False
+
+end
+deactivate 1
+deactivate 1
+
+2->2+: processHeartbeat(msg)
+
+
+deactivate 1
+@enduml

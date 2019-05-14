@@ -1,0 +1,22 @@
+@startuml
+autonumber
+participant ":RosEngineConnector" as REC
+participant "GPS:RequestGPS" as msg
+participant "GPSLink:DroneEngine" as DE
+participant "loc:Vector3" as loc
+
+[--> REC : getLocation()
+activate REC
+REC -> msg : <<create>>
+REC --> DE +: call(GPS) : bool
+note over DE : GPS gets filled with location
+DE --> REC -: response
+opt response = true
+create loc 
+REC -> loc : Vector3<float>(GPS.response.longitude,GPS.response.latitude,GPS.response.height)
+else response = false  
+REC -> loc : Vector3<float>(6,6,6)
+end
+[<-- REC :  loc
+deactivate REC
+@enduml

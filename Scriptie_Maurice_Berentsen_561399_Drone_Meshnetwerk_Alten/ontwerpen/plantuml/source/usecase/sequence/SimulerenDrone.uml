@@ -1,0 +1,17 @@
+@startuml
+
+autonumber
+actor "Dronenetwerksimulatie" as AT
+participant "Systeem" as sys
+participant "drone:Gesimuleerde\ndrone" as drone
+participant "Wereld simulatie" as SIM
+
+activate SIM
+AT -> AT : Leest configuratie
+AT -> sys +: Injecteer Drone (config)
+create drone
+sys -> drone +: <<create>> drone(config)
+sys -> drone : koppelt drone motor
+sys -> drone : koppelt netwerkcomponent
+sys -> SIM   : inject(drone)
+@enduml

@@ -1,0 +1,56 @@
+@startuml
+
+autonumber
+box "drone1"
+participant "Node1:MeshnetworkComponent" as 1
+participant "msg:Message" as msg
+
+end box
+participant "communication:IWirelessCommunication" as IWS
+box "drone2"
+participant "Node2:MeshnetworkComponent" as 2
+participant "droneEngine:DroneEngine" as DE
+participant "response:LocationMessage" as locmsg
+
+end box
+
+
+
+1-> 1 : requestLocation(other = 2)
+activate 1
+create msg
+1 -> msg ++: <<create>>\n Message(nodeID, NodeID,\n REQUESTLOCATION,\n towards,other)
+1 -> IWS +: SendMessageTo(msg)
+IWS --> 2 : OnMsg(msg)
+deactivate msg
+deactivate 1
+deactivate 1
+deactivate IWS
+
+activate 2
+    2 -> 2 +:processRequestLocation(msg)
+        2 -> 2 +:sendLocation(other = msg.getCreator())
+            2 -> DE +: getLocation()
+            return loc
+        create locmsg    
+        2 -> locmsg+ : <<create>>\nLocationMessage\n(NodeId,NodeID,towards,other,\n loc.x,loc.y,loc.z,currentTime)
+        2 -> IWS+ : SendMessageTo(response)
+        deactivate 2
+    deactivate 2
+    deactivate locmsg
+deactivate 2
+
+IWS --> 1 : OnMsg(response)
+deactivate IWS
+
+activate 1
+1 -> 1 ++:processRequestLocation(response)
+alt response.getCreator == PrefferedGateway
+1 -> 1 : saveLocationOfGateway
+else response.getCreator != PrefferedGateway
+1-> 1: saveLastGoodKnownLocation
+end
+deactivate 1
+deactivate 1
+
+@enduml

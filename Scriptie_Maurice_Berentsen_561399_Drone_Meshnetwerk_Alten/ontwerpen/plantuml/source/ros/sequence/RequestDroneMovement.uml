@@ -1,0 +1,18 @@
+@startuml
+autonumber
+actor "DroneController" as DM
+participant ":DroneManager" as DMS
+participant "msg:RequestGatewayDroneFlight" as msg
+participant "internet:RosInternetMock" as RIM
+participant "meshnetworkGateway:IGatewayCommands" as IGC
+
+DM --> DMS +: RequestMovement(Request &req,Response &res)
+create msg
+DMS -> msg : <<create>>\nRequestGatewayDroneFlight(req.ID,\nreq.latitude,req.longitude,req.height)
+DMS --> RIM +: publish(msg)
+DMS --> DM -: true
+RIM -> IGC -:  SendGoalRequestToDrone(msg.id,\nmsg.latitude,msg.longitude,height)
+
+
+
+@enduml

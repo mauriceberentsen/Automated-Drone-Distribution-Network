@@ -1,0 +1,35 @@
+@startuml
+
+autonumber
+
+actor "DroneManger" as DM
+box "drone0"
+participant "Node0:MeshnetworkGateway" as GW
+participant "msg:GoToLocationMessage" as gotolocmsg
+end box
+participant "communication:IWirelessCommunication" as WSS
+box "drone1"
+participant "Node1:MeshnetworkComunicator" as 1
+participant "droneEngine:IDroneEngine" as 1E
+participant "locmsg:LocationMessage" as locmsg
+
+end box
+
+DM --> GW ++ : sendGoalToDrone(ID = 1,\n longitude,latitude, height) 
+create gotolocmsg
+GW -> gotolocmsg+: <<create>> \nCreateGoToLocationMessage(\n\t\t\tnodeID,nodeID,towards,ID,\n\t\t\tlatitude, longitude,height)
+GW -> WSS +: sendMessage(msg)
+deactivate gotolocmsg
+WSS --> 1 +:OnMsg(msg)
+WSS --> GW : succes : bool
+deactivate GW
+deactivate WSS
+1 -> 1 +: sendGoalToEngine(msg)
+create locmsg
+1 -> locmsg +: <<create>> LocationMessage(msg)
+1 --> 1E +: setGoal(locmsg.getLongitude( ),\n\t\tlocmsg.getLatitude( ),\n\t\tlocmsg.getHeight( ))
+deactivate locmsg
+deactivate 1
+deactivate 1
+
+@enduml

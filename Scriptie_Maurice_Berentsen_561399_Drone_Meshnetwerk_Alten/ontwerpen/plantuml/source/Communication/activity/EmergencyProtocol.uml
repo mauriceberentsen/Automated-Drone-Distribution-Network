@@ -1,0 +1,25 @@
+@startuml
+
+|MeshnetworkRouter|
+start
+:StartEmergencyProtocol;
+if (connectedToGateway) then ([true])
+	:clear negotiationList;
+    stop
+else ([false])
+|#lightgray|IRoutingTechnique|
+	if(empty) then ([true])
+|MeshnetworkRouter|
+    	:sendGoalToEngine\n(lastGoodKnownLocation);
+		|IDroneEngine|
+		:setGoal(location);
+		|IRoutingTechnique|
+		:NodeMovedLocation;
+		|MeshnetworkRouter|
+		:lastGoodKnownLocation = \nprefferedGateWayLocation;
+    else ([false]) 
+    	:StartMovementNegotiation;
+    endif
+endif
+stop
+@enduml

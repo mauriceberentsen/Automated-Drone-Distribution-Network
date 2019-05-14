@@ -1,0 +1,15 @@
+@startuml
+
+autonumber
+actor "Dronenetwerksimulatie" as AT
+participant "Systeem" as sys
+
+alt 
+AT -> sys + : start(max = maximale communicatie afstand)
+sys -> sys : maxComDistance = max
+else
+AT -> sys : start()
+end
+sys -> sys : StartWirelessSimulator(maxComDistance)
+
+@enduml

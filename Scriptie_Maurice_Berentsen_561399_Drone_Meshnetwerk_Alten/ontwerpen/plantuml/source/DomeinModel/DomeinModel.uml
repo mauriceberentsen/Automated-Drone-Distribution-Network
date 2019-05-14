@@ -1,0 +1,61 @@
+@startuml
+
+class MeshnetworkComponent
+class MeshnetworkGateway
+class MeshnetworkRouter
+
+MeshnetworkGateway      --|> MeshnetworkComponent
+MeshnetworkRouter --|> MeshnetworkComponent
+
+interface WirelessCommunication
+interface InternetConnection
+
+MeshnetworkGateway o-- InternetConnection : Connects to Internet >
+MeshnetworkComponent o-- WirelessCommunication : Communicates with other drones through >
+
+(MeshnetworkComponent, WirelessCommunication) .. Message
+
+class DroneManager
+
+DroneManager -up- InternetConnection : Controls Drones via >
+
+class Arduino
+class ArduinoRouter
+class ArduinoGateway
+
+ArduinoRouter -up-|> Arduino
+ArduinoGateway      -up-|> Arduino
+
+ArduinoRouter ..> MeshnetworkRouter : <<use>>
+ArduinoGateway      ..> MeshnetworkGateway : <<use>>
+
+class NRF24
+
+WirelessCommunication ..> NRF24 : is preformed by >
+
+class Drone
+class RouterDrone
+class GatewayDrone
+
+RouterDrone     -up-|> Drone
+GatewayDrone    -up-|> Drone
+
+RouterDrone o-- ArduinoRouter
+GatewayDrone o-- ArduinoGateway
+
+class DroneEngine
+
+Drone *-left- DroneEngine 
+MeshnetworkComponent ..> DroneEngine : repositions with\n & \n gets current locations from >
+
+class ros
+
+ros ...> WirelessCommunication : simulates >
+ros ..> InternetConnection : simulates >
+
+class gazebo
+
+gazebo ..> "0..*" Drone : simulates >
+
+
+@enduml

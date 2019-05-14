@@ -792,11 +792,11 @@ Daardoor vallen een proactieve routeringstechnieken af.
 Toch is de tegenhanger reactieve routering ook geen ideale oplossing.
 Het niet opslaan van routes maakt het versturen van berichten sloom en er is geheugen aanwezig op de microcontroller voor het opslaan van routes. 
 
-Daarom is de conclusie om een zelf een hybride variant te maken van de reactieve Lightweight Mobile Routing Protocol(LMR).
+Daarom is de conclusie om een zelf een hybride variant te maken van het reactieve Lightweight Mobile Routing(LMR) protocol.
 Dit protocol wordt gebruikt omdat het een protocol is die een hop routeringstechniek gebruikt waardoor de payload klein blijft.
 De techniek is niet afhankelijk van een gateway en nodes hoeven alleen te bewust te zijn van de buren en met wie die buren verbonden zijn.
 Het protocol hoeft alleen maar aangepast te worden zodat routes opgeslagen blijven.
-Doordat deze techniek alleen routes opslaat van aangesloten buren en hun aangesloten punten zullen er geen grote routeringstabellen gecreëerd worden.
+Doordat deze techniek geen routes hoeft op te slaan van het volledige netwerk  maar allen die van hun aangesloten buren en hun aangesloten punten zullen er geen grote routeringstabellen gecreëerd worden.
 
 
 \section{Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?}
@@ -828,6 +828,8 @@ Daarom is besloten dat de drone het volgende moet kunnen in de simulatie:
 \end{itemize}
 \hrule
 
+
+
 \chapter{Experimenten}
 \label{experimenten}
 
@@ -842,8 +844,11 @@ Daarom is besloten dat de drone het volgende moet kunnen in de simulatie:
 
 \section{Hoe gedraagt een node uit het mesh netwerk zich bij slecht of geen bereik?}
 \label{experimenten:slechtofgeenbereik}
-\section{Wat kan er toegevoegd worden aan de communicatie van de netwerkmodule om snel [TODO snel definiëren] achter uitval te komen?}
+
+%TODO snel definiëren
+\section{Wat kan er toegevoegd worden aan de communicatie van de netwerkmodule om snel achter uitval te komen?}
 \label{experimenten:snelachteruitval}
+
 \chapter{Conclusie}
 
 \label{chapter:conclusie}
