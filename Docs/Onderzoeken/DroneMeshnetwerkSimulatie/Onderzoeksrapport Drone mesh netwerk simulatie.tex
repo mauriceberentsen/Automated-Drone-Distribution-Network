@@ -60,14 +60,13 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\lstset{frame=tb,
-	language=Java,
-	aboveskip=3mm,
-	belowskip=3mm,
-	showstringspaces=false,
-	columns=flexible,
-	basicstyle={\small\ttfamily},
-	numbers=none,
+
+
+\lstset { %
+	language=C++,
+	backgroundcolor=\color{black!3}, % set backgroundcolor
+	basicstyle=\footnotesize,% basic font setting
+		numbers=none,
 	numberstyle=\tiny\color{gray},
 	keywordstyle=\color{blue},
 	commentstyle=\color{dkgreen},
@@ -118,6 +117,14 @@
 %\section*{Voorwoord}
 %\addcontentsline{toc}{section}{\protect\numberline{}Voorwoord}
 %\pagebreak
+\chapter*{Samenvatting}
+
+Optioneel een samenvatting van het onderzoek. Hier kunnen anderen snel inzicht krijgen in wat jij hebt onderzocht en wat je conclusie is.
+\begin{itemize}
+	\item Kunnen derden snel inzicht krijgen in jouw onderzoek?
+	\item Staat de conclusie erin vermeld?
+\end{itemize}
+\hrule
 
 \tableofcontents
 \clearpage
@@ -146,14 +153,7 @@
 %\addcontentsline{toc}{section}{\protect\numberline{}Samenvatting}
 %\pagebreak
 
-\chapter*{Samenvatting}
 
-Optioneel een samenvatting van het onderzoek. Hier kunnen anderen snel inzicht krijgen in wat jij hebt onderzocht en wat je conclusie is.
-\begin{itemize}
-	\item Kunnen derden snel inzicht krijgen in jouw onderzoek?
-	\item Staat de conclusie erin vermeld?
-\end{itemize}
-\hrule
 
 \chapter{Inleiding}
 \label{chapter:inleiding}
@@ -663,7 +663,7 @@ Hoewel deze extreme usecase niet zal voorkomen worden de netwerk modules wel gem
 Hierdoor is het makkelijk mogelijk voor een netwerkmodule om geplaatst te worden op hoge punten. 
 Een nadeel van dit netwerk is de lage data snelheid waardoor het alleen geschikt is voor toepassingen die weinig data versturen zoals sensor netwerken.
 
-\subsection{nRF24l01+}
+\subsection{nRF24l01+}\label{sec:nrf24l01}
 De nRF24l01 long range is een transciever van Nordic Semiconductor die werkzaam is op de 2,4ghz band \cite{nRFspec}.
 De module kan gebruik maken van verschillende standen van datasnelheid: 250kbps, 1Mbps, 2Mbps.
 Hoewel het een 3,3 volt apparaat is zijn de I/O pinnen 5 volt tolerant waardoor het een veilige interface biedt aan microcontrollers zoals die van Arduino.
@@ -787,8 +787,8 @@ De routers hoeven daardoor alleen een route te bereken naar een gateway toe.
 \subsection{Conclusie}
 \label{sec:meshnetwerktechniek:Conlusie}
 Het dronenetwerk is een netwerk die vaak te maken zal hebben met verplaatsingen.
-De hele eigenschap om autonoom nodes te kunnen verplaatsen is zelf de aanleiding van het project.
-Daardoor vallen een proactieve routeringstechnieken af. 
+De hele eigenschap om autonoom nodes te kunnen verplaatsen is zelfs de aanleiding van het project.
+Daardoor vallen proactieve routeringstechnieken af. 
 Toch is de tegenhanger reactieve routering ook geen ideale oplossing.
 Het niet opslaan van routes maakt het versturen van berichten sloom en er is geheugen aanwezig op de microcontroller voor het opslaan van routes. 
 
@@ -821,28 +821,202 @@ Daarom is besloten dat de drone het volgende moet kunnen in de simulatie:
 
 \chapter{Oplossingsrichtingen}
 
-\begin{itemize}
-\item Beschrijf je hoe jouw oplossingsrichting de hoofdvraag beantwoord?
-\item Beschrijft de oplossingsrichting de mogelijkheden?
-\item Staat hier "Veld" vermeldt van de methodekaart van de HAN?
-\end{itemize}
-\hrule
 
+%\begin{itemize}
+%\item Beschrijf je hoe jouw oplossingsrichting de hoofdvraag beantwoord?
+%\item Beschrijft de oplossingsrichting de mogelijkheden?
+%\item Staat hier "Veld" vermeldt van de methodekaart van de HAN?
+%\end{itemize}
+%\hrule
+
+\section{Hybride Lightweight Mobile Routing}\label{sec:hybride-lightweight-mobile-routing}
+
+\nameref{sec:meshnetwerktechniek} heeft uitgewezen dat het implementeren van een aangepast versie van het LMR protocol aangeraden wordt als implementatie. In deze paragraaf wordt verdiepend behandeld hoe dit protocol werkt en wat er aangepast moet worden.
+
+\subsection{Hoe werkt Lightweight Mobile Routing?}
+
+Lightweight Mobile Routing is een techniek die gebruik maakt van een link reversal protocol. Dit houdt in dat een pad zich achterstevoren opbouwt.
+ 
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.45\linewidth]{Afbeeldingen/reversal.png}\end{center}
+	\caption{Voorbeeld link reversal.}
+	\label{fig:reversal}
+\end{figure} 
+
+Om dit beter uit te leggen wordt  \autoref{fig:reversal} gebruikt.
+In de meeste gevallen wanneer A een bericht naar C wil sturen gaat hij zoeken naar een pad. 
+Dit doet A door aan B en D  en E te vragen of zij C kennen wat vervolgens een heel netwerk zou doorlopen.
+In elke bericht wordt de stap van route opgeslagen waardoor in het voorbeeld C uiteindelijk een drie berichten zou krijgen namelijk A-B-C, A-B-F-C en A-E-F-C. Deze stuurt C vervolgens weer terug waarop A kan bepalen welke route hij wil nemen waarbij A-B-C aannemelijk is aangezien dit de kortste route is. 
+
+Bij link reversal werkt dit dus andersom \cite{Vainio_linkreversal}.
+Hier maakt A bekend dat hij een route wil opbouwen naar C op dezelfde wijze als hierboven alleen begint C nu met het bouwen van een route. 
+A zal dus uiteindelijk drie routes ontvangen C-B-A, C-F-B-A en C-F-E-A.
+
+Op zich lijkt dit niet zo veel anders dan wat er normaal gebeurd maar dat is waar het LMR protocol komt kijken.
+Na het versturen van een bericht naar C zijn er namelijk routes opgeslagen bij de punten te zien in \autoref{fig:reversallmr}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.5\linewidth]{Afbeeldingen/reversal-table.png}\end{center}
+	\caption{Voorbeeld LMR na het versturen van een bericht.}
+	\label{fig:reversallmr}
+\end{figure} 
+
+Nu op het moment dat A een bericht naar C wil sturen weet hij op basis van de informatie die hij heeft dat hij het bericht moet versturen naar B om het bij C terecht te laten komen.
+Stel dat de verbinding B - C wegvalt dan weet B dat als hij het bericht aan F geeft dat het bericht nog steeds aan zal komen bij C.
+Dit houdt dus is dat wanneer de verbinding B - C weg is dat A dit niet hoeft te weten want een bericht kan nog steeds succesvol verzonden worden via B.
+
+Er hoeven dus alleen berichten verstuurd te worden over verloren verbindingen op het moment dat alle wegen verloren zijn.
+In het geval van een dronenetwerk waar punten vaak veranderen zal dit aanzienlijk schelen in de hoeveelheid berichten die rondgestuurd zullen worden.
+
+\subsection{Eigen implementatie idee voor de techniek}
+
+Wat opvalt in de LMR techniek is dat er routes worden opgeslagen naar nodes toe terwijl waarop de richtingen worden bepaald.
+De routes worden opgeslagen terwijl er alleen maar interesse is in de eerste stap van de route. 
+In het voorbeeld van \autoref{fig:reversallmr} slaat A bijvoorbeeld route C-B-A en C-F-B-A op. 
+Beiden geven het zelfde effect bij het zoeken voor een een route naar C, het bericht moet aan B gegeven worden.
+
+Het idee om ruimte te bewaren is om twee soorten tabellen bij te houden. Een tabel van direct aangesloten punten waarbij elke aangesloten punt ook een eigen tabel heeft met punten waar deze directe buur mee kan communiceren. In het bovenstaande voorbeeld zou dit betekenen dat A alleen hoeft te weten dat hij via B met C en F kan communiceren. Dit bespaart ruimte in het opslaan van routes maar ook in de grote van berichten, nu hoeven er immers geen routes meer rondgestuurd te worden alleen notificaties van nieuwe verbindingen.
+
+Om te laten zien hoe deze implementatie zich vertaald naar een praktisch voorbeeld van een netwerk met een gateway en routers is er een extra afbeelding gemaakt te zien in \autoref{fig:routeringstabel}.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.6\linewidth]{Afbeeldingen/uitlegtabel.png}\end{center}
+	\caption{Toelichting routeringstabel}
+	\label{fig:routeringstabel}
+\end{figure}
+
+In \autoref{fig:routeringstabel} wordt geïllustreerd hoe de routeringstabellen van een gateway en verschillende routers er uitzien.
+Een nadeel van de huidige implementatie is dat er geen rekening wordt gehouden met het kortste pad door het netwerk.
+Als in \autoref{fig:routeringstabel} bijvoorbeeld de gateway een bericht wil versturen naar router nummer 8 zal dit gebeuren via de weg 0-5-7-8 in plaats van de kortste weg 0-6-8. Dit komt omdat er eerst gekeken wordt of het bericht voor de geadresseerde een direct aangesloten punt is, als dat niet zo is worden de tabellen van de indirecte punten nagelopen. Omdat deze op numerieke volgorde de tabellen van externe punten nazoekt zal de tabel van punt 5 als eerste een routepunt geven.
+
+\subsection{Netwerk ondersteunen met heartbeats}
+
+Een wens van Alten is dat het netwerk snel is en ook snel achter verloren verbindingen komt. 
+De huidige implementatie van LMR zal dit beiden niet zijn om twee redenen.
+LMR is event driven waardoor het alleen achter verloren verbindingen zal komen op het moment dat er een bericht geen route weet te vinden tot een punt in het netwerk.
+Daarnaast worden routes pas opgebouwd op het moment dat er een bericht over het netwerk verstuurd wordt.
+Tenslotte hebben de routers een belang bij de kennis of ze verbinding hebben met een gateway in het netwerk van Alten omdat dit hun verbindingspunt is met de buitenwereld.
+
+Een oplossing voor al deze problemen is het implementeren van een functie in elke dat router dat hij periodiek moet proberen een bericht naar een gateway te sturen. Als response op deze heartbeat zal de router ook weer een heartbeat terug moeten sturen.
+Deze oplossing zou zorgen dat het netwerk zijn routes blijft onderhouden door ze periodiek te controleren.
+Het zou ook zorgen dat een gateway altijd bekend is met alle mogelijke routes omdat hij weet welke node er in elke richting beschikbaar is. Bij het versturen van een bericht hoeft er dus niet eerst een route opgebouwd te worden.
+Tenslotte zou het sturen van een response de router meteen bewust maken of er een verbinding bestaat naar een gateway.
+
+\subsection{Conclusie}  
+
+Het veranderen van de LMR door er heartbeat aan toe te voegen maakt de techniek deels proactief. 
+Zoals al eerder beschreven is een routeringstechniek die deels proactief is en deels reactief een hybride techniek.
+Vandaar dat deze techniek onder naam zal vallen hybride lightweight mobile routing (H-LMR).
+In de huidige implementatie of die van de originele LMR wordt geen rekening gehouden met het kortste pad.
+Op het moment dat dit wel wenselijk wordt kunnen de heartbeat uit het netwerk gebruikt worden om het aantal hops te tellen die een bericht heeft ondergaan om zo te registreren hoever een node per punt verwijderd is. Een tegenzijde hiervan zou zijn dat er wel weer extra rekenkracht vereist wordt voor het zoeken van een pad.
 
 
 \chapter{Experimenten}
 \label{experimenten}
 
-\begin{itemize}
-	\item Beschrijft waarom dit experiment van belang is.
-	\item Voldoet de code van het experiment aan de opgestelde eisen?
-	\item Voldoet het programma aan de opgestelde QoS?
-	\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde eisen?
-	\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde QoS?
-\end{itemize}
-\hrule
+%\begin{itemize}
+%	\item Beschrijft waarom dit experiment van belang is.
+%	\item Voldoet de code van het experiment aan de opgestelde eisen?
+%	\item Voldoet het programma aan de opgestelde QoS?
+%	\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde eisen?
+%	\item Is gedocumenteerd waarom het programma voldoet aan de opgestelde QoS?
+%\end{itemize}
+%\hrule
 
-\section{Hoe gedraagt een node uit het mesh netwerk zich bij slecht of geen bereik?}
+\section{Test hybride lightweight mobile routing protocol}
+
+Om het aangepaste protocol van \autoref{sec:hybride-lightweight-mobile-routing} te testen zal er gebruik gemaakt worden van de simulatie.
+Uit het protocol kunnen de volgende stukken pseudo code geleerd worden.
+
+\paragraph{Ontvangen van een bericht}
+
+Met het H-LMR protocol leert een netwerkpunt van elk bericht die langskomt over andere zenders in het netwerk.
+Hierin maakt het niet uit of het bericht bestemd is voor het ontvangende punt of dat het doorgestuurd moet worden. 
+
+\begin{lstlisting}
+
+recieveMessage(message){
+	message[destination] == this->address ? processMessage(message) : forwardMessage(message);
+	
+	add the sender of the message to the direct connections
+	if(message[sender] != message[creator])
+	{
+	add the creator of the message to the indirect connection table of the sender
+	}
+}
+
+\end{lstlisting}
+
+\paragraph{Doorsturen van een bericht}
+
+Het H-LMR stelt dat wanneer een bericht aankomt die doorgestuurd moet worden dat de ontvanger zelf zoekt wie de volgende stap neemt.
+Pas als er geen volgende stap mogelijk is mag de node een informatie bericht versturen over een verloren verbinding.
+
+\begin{lstlisting}
+
+forwardMessage(message){
+int direction = getDirection(message[destination]);
+if (direction == NOT_FOUND || direction == message[sender])
+	{
+	inform the sender of the message about a invalid path
+	return;
+	}
+else 
+	{
+	Forward the message to the found direction
+	}	
+}
+
+\end{lstlisting}
+
+\paragraph{Test met zes routers en een gateway}
+
+Om het protocol te testen wordt de testopstelling gebruikt getoond in \autoref{fig:testopstelling-gateway-zes-routers}.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.6\linewidth]{Afbeeldingen/testopstelling1.png}\end{center}
+	\caption{Testopstelling met links een gateway waarna zes routers volgen}
+	\label{fig:testopstelling-gateway-zes-routers}
+\end{figure}
+
+In deze opstelling is de begin positie het netwerk zoals die getoond wordt op de afbeelding.
+In de applicatie ziet dit er als volgt uit.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/testopstellingmetzes_debug_info_fusion.png}\end{center}
+	\caption{Applicatie gazebo waar zes routers en gateway getoond wordt samen met debug informatie}
+	\label{fig:applicatie-testopstelling-gateway-zes-routers}
+\end{figure}  
+
+In \autoref{fig:applicatie-testopstelling-gateway-zes-routers} is rechts debug informatie zichtbaar.
+De eerste waarde van elke router laat zien of verbinding is met een gateway.
+In het huidige geval heeft dus elke router verbinding met een gateway.
+
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/testopstellingmetzes_debug_info_drie_is_uit.png}\end{center}
+	\caption{Debug informatie van testopstelling waar punt drie is uitgezet}
+	\label{fig:applicatie-testopstelling-gateway-zes-routers-drie-is-uit}
+\end{figure}   
+Op het moment dat punt 3 wordt uitgezet blijven punt 5 en 6 verbonden met de gateway zoals verwacht.
+In de debug informatie wordt ook een variabel getoond met de naam familySize. 
+Deze variabele is een som van alle tabellen in een node.  
+Wat opvalt na het uitzetten van punt 3 is dat punt 5 zijn familySize verkleint van 7 naar 4. 
+Dit houdt dus in dat punt 5 drie routes had opgebouwd via punt 3 waarvan één route natuurlijk 5-3 was.
+De andere routes waren naar alle waarschijnlijkheid 5-3-1 en 5-3-0.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/testopstelling1_drie_en_zes_is_uit.png}\end{center}
+	\caption{Debug informatie van testopstelling waar punt drie en zes is uitgezet}
+	\label{fig:applicatie-testopstelling-gateway-zes-routers-drie-en-zes-is-uit}
+\end{figure}
+
+\autoref{fig:applicatie-testopstelling-gateway-zes-routers-drie-en-zes-is-uit} laat zien hoe het netwerk zich gedraagt als punt zes ook wordt uitgezet.
+Zoals verwacht heeft punt 5 nog steeds een verbinding met een gateway.
+In de informatie is te zien dat punt 5 nog maar bewust is van twee routes. 
+Er kan met zekerheid gezet worden dat dit route 5-4 en 5-4-0 zullen zijn.
+
+\section{Hoe gedraagt een fysieke node uit het mesh netwerk zich bij slecht of geen bereik?}
 \label{experimenten:slechtofgeenbereik}
 
 %TODO snel definiëren
@@ -850,15 +1024,24 @@ Daarom is besloten dat de drone het volgende moet kunnen in de simulatie:
 \label{experimenten:snelachteruitval}
 
 \chapter{Conclusie}
-
 \label{chapter:conclusie}
-Conclusie uit resultaten. Herhaal en beantwoord de hoofdvraag.
-\begin{itemize}
-\item Trek een conclusie uit de resultaten van de deelvragen.
-\item Wordt de hoofdvraag beantwoord?
-\item Wat beveel je aan?
-\end{itemize}
-\hrule
+In dit hoofstuk wordt een conclusie getrokken op de vraag: Hoe kunnen een netwerkmodules een groep van ongeveer 100 drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?
+
+Dit wordt vervolgt met een advies die voortvloeit uit de kennis van dit verslag.
+
+\section{Antwoord op de hoofdvraag}
+
+Uit de experimenten is gebleken dat door het toevoegen van een mircobord die zelfstandig kan opereren aan drone een meshnetwerk opgezet kan worden. Als microbord is voor de experimenten een arduino uno gebruikt dit als mircocontroller een Atmel328 gebruikt. De microcontroller van het mircobord moet toegang hebben tot een antenne voor onderlinge communicatie waarbij het advies is om gebruik te maken van een \nameref{sec:nrf24l01} vanwege zijn bereik en snelheid. Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is de mogelijkheid voor de individuele netwerkpunten dat zij in staat zijn te kunnen verifiëren dat een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway.
+
+\section{Advies}
+Het advies uit dit onderzoek luidt als volgt:
+
+Op het moment dat Alten besluit om drones in te gaan zetten voor het verspreiden van netwerken zal zij zich bewust moeten zijn van het plan met dit netwerk.
+Het aangepast LMR protocol is geschikt voor een netwerk waarbij de drones zich verspreiden over een gebied en zich maar incidenteel verplaatsen naar een ander punt.
+Dit is zo gemaakt omdat dit zo aangegeven is door Alten.
+Op het moment dat Alten besluit dat de drone een andere gedrag moeten krijgen zoals bijvoorbeeld swarming dan is het protocol ongeschikt en is het advies om te kijken naar een reactief protocol die continue nieuwe paden berekend.
+Hetzelfde geldt als Alten besluit dat de drones altijd op een zelfde positie zullen staan, dan zal een proactief protocol een beter alternatief zijn om zo berichten over het kortste pad te kunnen sturen.    
+
 
 
 \bibliographystyle{apacite}

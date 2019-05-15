@@ -1,0 +1,15 @@
+@startuml
+participant ":HighLevelInterface" as high
+participant ":LowLevelInterface" as low
+participant "nrf:NRF24" as nrf
+
+high -> low +: sendMessage(sendAddress,ackAddress,message)
+low -> low : addAckadressToListenBuffer(ackAddress)
+low -> nrf : openWritingPipe(sendAddress)
+low -> nrf : openReadingPipe(placeInBuffer,ackAddress)                   
+low -> nrf : stopListening()
+low -> nrf : succes = write(message,32,false):bool
+low -> nrf : startListening()
+high <-- low -: succes
+
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+participant ":IWirelessCommunication" as IWC
+participant ":HighLevelInterface" as HLI
+participant ":LowLevelInterface" as LLI
+ 
+IWC -> HLI : SendMessageTo(Message)
+HLI -> HLI : to = GetToAddress:uint8_t
+HLI -> HLI : sendAdress = CreatePipelineSendAdress:uint64_t
+HLI -> HLI : ackAdress = CreatePipelineAckAdress:uint64_t 
+HLI -> LLI : succes = sendMessage(sendAddress,ackAddress,message):bool
+IWC <-- HLI : succes
+
+@enduml

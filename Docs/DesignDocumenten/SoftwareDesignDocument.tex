@@ -1688,11 +1688,91 @@ In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
 	\caption{component diagram ros}
 	\label{fig:component:NRF24}
 \end{figure}
+
+Het component diagram bestaat uit twee interfaces. Een high level interface en een low level interface ook wel de driver genoemd.
+De high level interface biedt de interface IWirelessCommunication aan. Omdat deze al volledig behandeld is in \autoref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} \nameref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} wordt deze niet nogmaals behandeld
+
+
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:NRF24:sequence}
 
+\paragraph{SetupNRF24}
+\label{DetailedDesign:NRF24:sequence:SetupNRF24}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/SetupNRF24/SetupNRF24.png}\end{center}
+	\caption{component diagram ros}
+	\label{fig:NRF24:sequence:SetupNRF24}
+\end{figure}
+
+
+\paragraph{highlevelBroadcastMessage}
+\label{DetailedDesign:NRF24:sequence:highlevelBroadcastMessage}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/highlevelBroadcastMessage/highlevelBroadcastMessage.png}\end{center}
+	\caption{component diagram ros}
+	\label{fig:NRF24:sequence:highlevelBroadcastMessage}
+\end{figure}
+
+\paragraph{highlevelSendMessage}
+\label{DetailedDesign:NRF24:sequence:highlevelSendMessage}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/highlevelSendMessage/highlevelSendMessage.png}\end{center}
+	\caption{component diagram ros}
+	\label{fig:NRF24:sequence:highlevelSendMessage}
+\end{figure}
+
+\paragraph{lowlevelBroadcastMessage}
+\label{DetailedDesign:NRF24:sequence:lowlevelBroadcastMessage}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/lowlevelBroadcastMessage/lowlevelBroadcastMessage.png}\end{center}
+	\caption{component diagram ros}
+	\label{fig:NRF24:sequence:lowlevelBroadcastMessage}
+\end{figure}
+
+\paragraph{lowlevelSendMessage}
+\label{DetailedDesign:NRF24:sequence:lowlevelSendMessage}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/lowlevelSendMessage/lowlevelSendMessage.png}\end{center}
+	\caption{component diagram ros}
+	\label{fig:NRF24:sequence:lowlevelSendMessage}
+\end{figure}
+
+\paragraph{recieveMessage}
+\label{DetailedDesign:NRF24:sequence:recieveMessage}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/recieveMessage/recieveMessage.png}\end{center}
+	\caption{component diagram ros}
+	\label{fig:NRF24:sequence:recieveMessage}
+\end{figure}
+
+
 \subsection{Activity Diagrams}
 \label{DetailedDesign:NRF24:activity}
+
+\paragraph{sendMessage}
+\label{DetailedDesign:NRF24:activity:recieveMessage}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/activity/sendMessage/sendMessage.png}\end{center}
+	\caption{component diagram ros}
+	\label{fig:NRF24:activity:sendMessage}
+\end{figure}
+
+\paragraph{setupAntenna}
+\label{DetailedDesign:NRF24:activity:setupAntenna}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/activity/setupAntenna/setupAntenna.png}\end{center}
+	\caption{component diagram ros}
+	\label{fig:NRF24:activity:setupAntenna}
+\end{figure}
+
 
 \subsection{Ontwerpkeuzes gemaakt voor het NRF24 component}
 \label{DetailedDesign:NRF24:ontwerkeuzes}

@@ -1,0 +1,16 @@
+@startuml
+
+participant "HighLevelInterface" as high
+participant "LowLevelInterface" as low
+participant "nrf:NRF24" as nrf
+
+
+loop foreach id in readbuffer 
+
+low -> nrf : available(id)
+opt available?
+low -> nrf : read(&data,sizeof(data))
+high <- low : recieveMessage(data)
+end
+end
+@enduml

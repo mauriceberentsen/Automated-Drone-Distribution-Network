@@ -1,0 +1,12 @@
+@startuml
+participant ":HighLevelInterface" as high
+participant ":LowLevelInterface" as low
+participant "nrf:NRF24" as nrf
+
+high -> low +: BroadcastMessage(message)
+low -> nrf : openWritingPipe(broadcastAddress)                   
+low -> nrf : stopListening()
+low -> nrf : write(message,32,true)
+low -> nrf -: startListening()
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+participant ":highlevelinterface" as high
+participant ":lowlevelinterface" as low
+participant "nrf:NRF24" as nrf
+
+high -> low +: start(NodeIdReadAddress, broadcastAddress )
+low -> low : setNodeIdAddress(NodeIdReadAddress)
+low -> low : setBroadcastAddress(BroadcastAddress)
+create nrf
+low -> nrf : <<create>> NRF24(7,8)
+low -> nrf : begin()
+low -> nrf : setAutoAck(true)                   
+low -> nrf : setDataRate(RF24_250KBPS)
+low -> nrf : enableAckPayload()             
+low -> nrf : setRetries(0,15)              
+low -> nrf : setPayloadSize(32)               
+low -> nrf : openWritingPipe(broadcastAddress)      
+low -> nrf : openReadingPipe(1,broadcastAddress)       
+low -> nrf : openReadingPipe(2,NodeIdReadAddress)
+low -> nrf -: startListening()
+
+
+@enduml
