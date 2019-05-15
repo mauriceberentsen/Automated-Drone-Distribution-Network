@@ -76,19 +76,19 @@ Code/ros/devel/
 
 Code/ros/install/
 
-Code/ros/src/abstract_drone/\.vscode/
+Code/ros/src/drone_meshnetwork_simulation/\.vscode/
 
-Code/ros/src/abstract_drone/build/
+Code/ros/src/drone_meshnetwork_simulation/build/
 
 Docs/\.vscode/
 
 Docs/DesignDocumenten/UML/\.vscode/
 
-Code/ros/src/abstract_drone_workspace\.code-workspace
+Code/ros/src/drone_meshnetwork_simulation_workspace\.code-workspace
 
-Code/ros/src/abstract_drone/doxygen/html/
+Code/ros/src/drone_meshnetwork_simulation/doxygen/html/
 
-Code/ros/src/abstract_drone/doxygen/xml/
+Code/ros/src/drone_meshnetwork_simulation/doxygen/xml/
 
 ScriptieMauriceBerentsen/
 
