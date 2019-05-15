@@ -184,7 +184,7 @@ Tenslotte wordt de invloed van het onderzoek op het afstudeerproject beschreven.
 \section{Hoofdvraag}
 Het doel van dit onderzoeksrapport is het beantwoorden van de volgende opgesteld hoofdvraag:
 \begin{quotation}
-\textit{Hoe kunnen een netwerkmodules een groep van ongeveer 100 drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?}	
+\textit{Hoe kunnen netwerkmodules een groep van ongeveer 100 drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?}	
 \end{quotation}
 Doordat de uitvoerende student van dit onderzoek niet beschikt over een certificaat om met drones te mogen vliegen behoudt dit onderzoek zich tot een simulatie.
 Van de netwerkmodule wordt wel een fysiek prototype ontwikkeld.
@@ -199,7 +199,7 @@ Om de hoofdvraag te kunnen beantwoorden zijn er de volgende deelvragen opgesteld
 	\item Welke mesh netwerk hardware is geschikt voor het onderling verbinden van drones?
 	\item Welke mesh netwerk techniek is geschikt voor de te gebruiken hardware?
 	\item Hoe gedraagt een node uit het mesh netwerk zich bij slecht of geen bereik?
-	\item Wat kan er toegevoegd worden aan de communicatie van de netwerkmodule om snel [TODO snel definiëren] achter uitval te komen?
+	\item Is het mogelijk voor netwerkmodule om een netwerk te herstellen door het de mogelijkheid te geven zich vrij te bewegen?
 	\item Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?
 \end{itemize}
 
@@ -829,6 +829,9 @@ Daarom is besloten dat de drone het volgende moet kunnen in de simulatie:
 %\end{itemize}
 %\hrule
 
+In dit hoofdstuk worden oplossingsrichtingen beschreven die bijdragen aan het beantwoorden van de hoofdvraag. 
+Een logisch vervolg voor elke oplossingsrichting is dat deze vervolgt wordt in het \autoref{experimenten} \nameref{experimenten} om te bewijzen dat deze oplossingsrichting werkt.
+
 \section{Hybride Lightweight Mobile Routing}\label{sec:hybride-lightweight-mobile-routing}
 
 \nameref{sec:meshnetwerktechniek} heeft uitgewezen dat het implementeren van een aangepast versie van het LMR protocol aangeraden wordt als implementatie. In deze paragraaf wordt verdiepend behandeld hoe dit protocol werkt en wat er aangepast moet worden.
@@ -909,6 +912,96 @@ Zoals al eerder beschreven is een routeringstechniek die deels proactief is en d
 Vandaar dat deze techniek onder naam zal vallen hybride lightweight mobile routing (H-LMR).
 In de huidige implementatie of die van de originele LMR wordt geen rekening gehouden met het kortste pad.
 Op het moment dat dit wel wenselijk wordt kunnen de heartbeat uit het netwerk gebruikt worden om het aantal hops te tellen die een bericht heeft ondergaan om zo te registreren hoever een node per punt verwijderd is. Een tegenzijde hiervan zou zijn dat er wel weer extra rekenkracht vereist wordt voor het zoeken van een pad.
+
+\section{Drone aansturing: Een stap terug voor netwerkherstel}
+
+Elke netwerkmodule zit aangesloten op een drone en heeft de mogelijkheid om deze aan te sturen.
+Alten wil gebruik maken van deze combinatie om zo het herstellend vermogen te vergroten van het netwerk.
+In de stuk wordt een uitwerking beschreven waar netwerkmodules zich een stap terug verplaatsen in het netwerk om zo een poging te doen een verloren verbinding te herstellen.
+
+\subsection{Een enkele drone die verloren is}
+\autoref{fig:enkel_goed} laat een lus van drones zien die met elkaar verbonden zijn en op die wijze een netwerk verspreiden. Deze situatie wordt gebruikt om het gedrag te omschrijven die uitgevoerd moet worden door de drones op het moment dat er een verbinding verloren gaat. 
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.85\linewidth]{Afbeeldingen/droneopstelling_enkel_goed.png}\end{center}
+	\caption{Situatie waar drie drones met elkaar in verbinding staan}
+	\label{fig:enkel_goed}
+\end{figure} 
+
+\paragraph{Verlies van een enkel punt}
+Op het moment dat er een enkel punt wegvalt waardoor er een drone alleen overblijft moet hij zich verplaatsen naar het weggevallen punt. Dit wordt geïllustreerd in \autoref{fig:enkel_B_kapot} waar B uitvalt waardoor A zich zal herpositioneren op de positie van B. 
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.85\linewidth]{Afbeeldingen/droneopstelling_enkel_B_kapot.png}\end{center}
+	\caption{Situatie waar drone B is uitgevallen}
+	\label{fig:enkel_B_kapot}
+\end{figure}
+
+\paragraph{Verlies van een twee punten}
+Wanneer er twee punten wegvallen zoals te zien in \autoref{fig:enkel_B_C_kapot} wordt er verwacht van de drone dat hij eerst naar punt B vliegt.
+Zodra de drone op punt B is gaat de netwerkmodule opnieuw zoeken naar een nieuwe verbinding.
+In deze situatie zal de netwerkmodule geen nieuw punt vinden waardoor de volgende stap is dat de drone terugkeert naar de gateway.  
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/droneopstelling_enkel_B_en_C_kapot.png}\end{center}
+	\caption{Situatie waar drone B en C zijn uitgevallen}
+	\label{fig:enkel_B_C_kapot}
+\end{figure}
+ 
+\subsection{Een groep drones die verloren is}
+
+Wanneer er een groep verloren gaat komt er meer kijken bij herverdelen van de drones.
+Het zou namelijk geen zinloos zijn om alle drones te verplaatsen naar een stap terug in het netwerk op het moment dat deze plek hetzelfde is voor meerdere drones.
+Om de herverdeling die uitgevoerd wordt toe te lichten wordt er vanuit gegaan dat de drones verdeelt zijn als in \autoref{fig:groep_goed}.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/droneopstelling_Groep_goed.png}\end{center}
+	\caption{Situatie waar drie drones met elkaar in verbinding staan}
+	\label{fig:groep_goed}
+\end{figure} 
+
+\paragraph{Uitval van een enkele drone die het directe aanknooppunt is voor de groep}
+De eerste situatie die wordt toegelicht is wanneer er een drone uitvalt die de laatste drone is die de groep met de rest van het netwerk verbind.
+Deze situatie wordt geschetst in \autoref{fig:groep_B_kapot}. 
+In dit figuur valt punt D uit waardoor punt A, B, en C geen verbinding meer hebben.
+Vervolgens moeten deze drie punten met elkaar communiceren wie er gaat bewegen naar punt D.
+Zij zullen alle drie de afstand communiceren die zij hebben tot de locatie van de gateway. 
+Vervolgens zal de drone de die grootste afstand heeft, in dit geval B, zich verplaatsen naar locatie D.
+Als de drone op locatie D staat kan hij een verbinding leggen met drone E waardoor A en C ook via hem weer verbinding krijgen.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.8\linewidth]{Afbeeldingen/droneopstelling_Groep_een_kapot.png}\end{center}
+	\caption{Situatie waar drone D is uitgevallen}
+	\label{fig:groep_B_kapot}
+\end{figure}
+
+\paragraph{Uitval van een enkele drone die het indirecte aanknooppunt is voor de groep}
+Als punt E uitvalt zoals te zien in \autoref{fig:groep_E_kapot} zou alleen een berekening wie het verste van de gateway afstaat betekenen dat drone B zich zou verplaatsen naar de plek van drone D.
+Dit terwijl drone D nog gewoon werkt.
+Daarom zal er in de onderhandeling over wie zich moet verplaatsten worden meegenomen of er al een andere drone op de plek staat.
+Als dit zo is sluit de drone zichzelf buiten van de onderhandeling.
+In de situatie waar drone E uitvalt zal dit dus betekenen dat drone D zich naar de positie van E verplaatst.
+Vervolgens zullen de drones A-B-C alsnog geen verbinding hebben waardoor er opnieuw onderhandeld moet worden. 
+Het resultaat moet dan zijn dat B zich verplaatst naar de oude positie van B.  
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.8\linewidth]{Afbeeldingen/droneopstelling_GroepXL_een_kapot.png}\end{center}
+	\caption{Situatie waar drone E is uitgevallen}
+	\label{fig:groep_E_kapot}
+\end{figure}
+
+\paragraph{Uitval van twee drones die het aankooppunt zijn voor de groep}
+Op het moment dat allebei de punten D en E uitvallen zullen de drones uiteindelijk allemaal terugkeren naar de gateway. 
+Het effect zal zijn dat punt A, B en C zich eerste naar punt D zullen verplaatsen en vervolgens terugkeren naar de gateway.    
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.85\linewidth]{Afbeeldingen/droneopstelling_Groep_meer_kapot.png}\end{center}
+	\caption{Situatie waar drone B en C zijn uitgevallen}
+	\label{fig:groep_B_C_kapot}
+\end{figure}
+
+
+\subsection{Conclusie}
+
+Het protocol om de drone een stap terug te laten zetten in het netwerk is een zwak protocol die wel gemakkelijk te implementeren is.
+Het is bedacht met het idee om te laten zien dat er potentie zit in het gebruiken van drones voor het bevorderen van het netwerken.
+De implementatie zal geen optimale verdeling bevorderen en geeft het netwerk alleen maar een kans om zich te herstellen op het moment dat er een enkele drone uitvalt.
 
 
 \chapter{Experimenten}
@@ -1016,12 +1109,42 @@ Zoals verwacht heeft punt 5 nog steeds een verbinding met een gateway.
 In de informatie is te zien dat punt 5 nog maar bewust is van twee routes. 
 Er kan met zekerheid gezet worden dat dit route 5-4 en 5-4-0 zullen zijn.
 
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/testopstellingmetzes_drie-vier-zes-uit.png}\end{center}
+	\caption{Debug informatie van testopstelling waar punt drie, vier en zes is uitgezet}
+	\label{fig:applicatie-testopstelling-gateway-zes-routers-drie-vier-en-zes-is-uit}
+\end{figure}
+
+In deze opstelling zijn punten 3, 4 en 6 uitgezet. In de debug informatie is te zien dat punt 5 zijn verbinding verloren is.
+Zowel punt 1 en punt 2 geven aan twee routes te kennen.
+Dit is zoals verwacht.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/testopstelling2_met_twaalf_drie_routers_uit.png}\end{center}
+	\caption{Debug informatie van testopstelling met 12 routers waar punt twee, vijf en acht is uitgezet}
+	\label{fig:applicatie-testopstelling-gateway-twaalf-routers}
+\end{figure}
+
+Als laatste opstelling is een opstelling van twaalf routers gebruikt.
+Hier zijn routers 2, 5, en 8 uitgezet om router nummer 3 te forceren via een grote omweg te communiceren naar de gateway.
+In de debug informatie is te zien dat hij hierin geslaagd is en dat er 7 hops nodig zijn voor de gateway om een route naar de router te vinden.
+Dit betekend dat er de volgende route wordt gebruikt 0-1-4-7-11-9-6-3.
+
+\paragraph{Conclusie}
+
+Het experiment waarin de aangepaste versie van LMR wordt getest bewijst dat de techniek bruikbaar is voor het dronenetwerk.
+Er zijn genoeg scenario's getest om aan te tonen dat het netwerk zichzelf kan herstellen wanneer er een verbinding verloren is gegaan.
+
+\section{Is het mogelijk voor netwerkmodule om een netwerk te herstellen door het de mogelijkheid te geven zich vrij te bewegen?}
+\label{experimenten:herstelnetwerk}
+
+
+
 \section{Hoe gedraagt een fysieke node uit het mesh netwerk zich bij slecht of geen bereik?}
 \label{experimenten:slechtofgeenbereik}
 
-%TODO snel definiëren
-\section{Wat kan er toegevoegd worden aan de communicatie van de netwerkmodule om snel achter uitval te komen?}
-\label{experimenten:snelachteruitval}
+
 
 \chapter{Conclusie}
 \label{chapter:conclusie}
@@ -1031,15 +1154,15 @@ Dit wordt vervolgt met een advies die voortvloeit uit de kennis van dit verslag.
 
 \section{Antwoord op de hoofdvraag}
 
-Uit de experimenten is gebleken dat door het toevoegen van een mircobord die zelfstandig kan opereren aan drone een meshnetwerk opgezet kan worden. Als microbord is voor de experimenten een arduino uno gebruikt dit als mircocontroller een Atmel328 gebruikt. De microcontroller van het mircobord moet toegang hebben tot een antenne voor onderlinge communicatie waarbij het advies is om gebruik te maken van een \nameref{sec:nrf24l01} vanwege zijn bereik en snelheid. Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is de mogelijkheid voor de individuele netwerkpunten dat zij in staat zijn te kunnen verifiëren dat een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway.
+Uit de experimenten is gebleken dat door het toevoegen van een mircobord die zelfstandig kan opereren aan drone een meshnetwerk opgezet kan worden van ongeveer 100 drones. Als microbord is voor de experimenten een arduino uno gebruikt dit als mircocontroller een Atmel328 gebruikt. De microcontroller van het mircobord moet toegang hebben tot een antenne voor onderlinge communicatie waarbij het advies is om gebruik te maken van een \nameref{sec:nrf24l01} vanwege zijn bereik en snelheid. Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is de mogelijkheid voor de individuele netwerkpunten dat zij in staat zijn te kunnen verifiëren dat een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway.
 
 \section{Advies}
 Het advies uit dit onderzoek luidt als volgt:
 
-Op het moment dat Alten besluit om drones in te gaan zetten voor het verspreiden van netwerken zal zij zich bewust moeten zijn van het plan met dit netwerk.
+Op het moment dat Alten besluit om drones in te gaan zetten voor het verspreiden van netwerken zal zij zich bewust moeten zijn van haar plan voor dit netwerk.
 Het aangepast LMR protocol is geschikt voor een netwerk waarbij de drones zich verspreiden over een gebied en zich maar incidenteel verplaatsen naar een ander punt.
 Dit is zo gemaakt omdat dit zo aangegeven is door Alten.
-Op het moment dat Alten besluit dat de drone een andere gedrag moeten krijgen zoals bijvoorbeeld swarming dan is het protocol ongeschikt en is het advies om te kijken naar een reactief protocol die continue nieuwe paden berekend.
+Op het moment dat Alten besluit dat de drone een andere gedrag moeten krijgen zoals bijvoorbeeld swarming dan is het protocol ongeschikt en is het advies om te kijken naar een reactief protocol die altijd nieuwe paden berekend.
 Hetzelfde geldt als Alten besluit dat de drones altijd op een zelfde positie zullen staan, dan zal een proactief protocol een beter alternatief zijn om zo berichten over het kortste pad te kunnen sturen.    
 
 
