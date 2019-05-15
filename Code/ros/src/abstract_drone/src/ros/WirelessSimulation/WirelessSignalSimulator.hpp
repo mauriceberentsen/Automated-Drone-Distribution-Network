@@ -15,9 +15,9 @@
 #include <thread>
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
-#include "abstract_drone/DroneInfo.h"
-#include "abstract_drone/WirelessMessage.h"
-#include "abstract_drone/AreaScan.h"
+#include "drone_meshnetwork_simulation/DroneInfo.h"
+#include "drone_meshnetwork_simulation/WirelessMessage.h"
+#include "drone_meshnetwork_simulation/AreaScan.h"
 
 #include "Node.hpp"
 
@@ -50,8 +50,9 @@ namespace WirelessSimulation
    * @return true servicecall succesfull
    * @return false servicecall failed
    */
-  bool send_message( abstract_drone::WirelessMessage::Request &req,
-                     abstract_drone::WirelessMessage::Response &res );
+  bool send_message(
+      drone_meshnetwork_simulation::WirelessMessage::Request &req,
+      drone_meshnetwork_simulation::WirelessMessage::Response &res );
   /**
    * @brief Since we can't just broadcast a signal towards all directions this
    * servicecall gives all nodes in range of the requested NodeID
@@ -61,8 +62,8 @@ namespace WirelessSimulation
    * @return true servicecall succesfull
    * @return false servicecall failed
    */
-  bool getNodesInRange( abstract_drone::AreaScan::Request &req,
-                        abstract_drone::AreaScan::Response &res );
+  bool getNodesInRange( drone_meshnetwork_simulation::AreaScan::Request &req,
+                        drone_meshnetwork_simulation::AreaScan::Response &res );
 
   /**
    * @brief This function is called at loading the plugin.
@@ -90,7 +91,7 @@ namespace WirelessSimulation
    *
    * @param _msg ROS message holding Node information
    */
-  void OnRosMsg( const abstract_drone::DroneInfoConstPtr &_msg );
+  void OnRosMsg( const drone_meshnetwork_simulation::DroneInfoConstPtr &_msg );
 
   /**
    * @brief  ROS helper function that processes messages

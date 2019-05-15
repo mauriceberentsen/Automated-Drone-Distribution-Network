@@ -18,8 +18,8 @@
 #include <thread>
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
-#include "abstract_drone/Location.h"
-#include "abstract_drone/RequestGPS.h"
+#include "drone_meshnetwork_simulation/Location.h"
+#include "drone_meshnetwork_simulation/RequestGPS.h"
 
 namespace gazebo
 {
@@ -50,8 +50,8 @@ namespace DroneSimulation
    * @return true Succesfull service call
    * @return false Service call had an error
    */
-  bool get_location( abstract_drone::RequestGPS::Request &req,
-                     abstract_drone::RequestGPS::Response &res );
+  bool get_location( drone_meshnetwork_simulation::RequestGPS::Request &req,
+                     drone_meshnetwork_simulation::RequestGPS::Response &res );
 
  private:
   /**
@@ -88,7 +88,8 @@ namespace DroneSimulation
    *
    * @param _msg Location message
    */
-  void OnRosMsg_Pos( const abstract_drone::LocationConstPtr &_msg );
+  void OnRosMsg_Pos(
+      const drone_meshnetwork_simulation::LocationConstPtr &_msg );
   /**
    * @brief Starts the queueing of ros messages
    *

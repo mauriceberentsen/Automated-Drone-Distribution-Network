@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(abstract_drone)
+project(drone_meshnetwork_simulation)
 
 ## Compile as C++14, supported in ROS Kinetic and newer
 add_compile_options(-std=c++14)
@@ -57,11 +57,11 @@ generate_messages(
 
 add_executable(DroneManager src/ros/DroneManagerService/DroneManagerService.cpp src/ros/DroneManagerService/DroneManager.cpp)
 target_link_libraries(DroneManager ${catkin_LIBRARIES})
-add_dependencies(DroneManager abstract_drone_gencpp abstract_drone_generate_messages_cpp)
+add_dependencies(DroneManager drone_meshnetwork_simulation_gencpp drone_meshnetwork_simulation_generate_messages_cpp)
 
-add_library(WirelessSignalSimulator src/ros/WirelessSimulation/WirelessSignalSimulatorService.cpp src/ros/WirelessSimulation/WirelessSignalSimulator.cpp src/ros/WirelessSimulation/Node.cpp)
+add_executable(WirelessSignalSimulator src/ros/WirelessSimulation/WirelessSignalSimulatorService.cpp src/ros/WirelessSimulation/WirelessSignalSimulator.cpp src/ros/WirelessSimulation/Node.cpp)
 target_link_libraries(WirelessSignalSimulator ${catkin_LIBRARIES})
-add_dependencies(WirelessSignalSimulator abstract_drone_gencpp abstract_drone_generate_messages_cpp)
+add_dependencies(WirelessSignalSimulator drone_meshnetwork_simulation_gencpp drone_meshnetwork_simulation_generate_messages_cpp)
 
 ###################################
 ## catkin specific configuration ##
@@ -75,7 +75,7 @@ add_dependencies(WirelessSignalSimulator abstract_drone_gencpp abstract_drone_ge
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
    INCLUDE_DIRS include
-#  LIBRARIES abstract_drone
+#  LIBRARIES drone_meshnetwork_simulation
    CATKIN_DEPENDS roscpp rospy std_msgs message_runtime 
    DEPENDS roscpp gazebo_ros
 )
@@ -99,7 +99,7 @@ add_library(MeshnetworkRouter SHARED       src/gazebo/Arduino/VirtualArduinoRout
                                            src/ros/RosDroneEngineConnector.cpp
                                            src/ros/WirelessSimulation/VirtualNRF24.cpp)
 target_link_libraries(MeshnetworkRouter ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(MeshnetworkRouter abstract_drone_generate_messages_cpp)
+add_dependencies(MeshnetworkRouter drone_meshnetwork_simulation_generate_messages_cpp)
 
 add_library(MeshnetworkGateway SHARED src/gazebo/Arduino/VirtualArduinoGateway.cpp
                                       src/Communication/Meshnetwork/MeshnetworkComponent.cpp
@@ -110,16 +110,16 @@ add_library(MeshnetworkGateway SHARED src/gazebo/Arduino/VirtualArduinoGateway.c
                                       src/ros/RosDroneEngineConnector.cpp
                                       src/ros/RosInternetMock.cpp)
 target_link_libraries(MeshnetworkGateway ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(MeshnetworkGateway abstract_drone_generate_messages_cpp)
+add_dependencies(MeshnetworkGateway drone_meshnetwork_simulation_generate_messages_cpp)
 
 add_library(DroneEngine SHARED src/gazebo/DroneSimulation/DroneEngine.cpp)
 target_link_libraries(DroneEngine ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(DroneEngine abstract_drone_generate_messages_cpp)
+add_dependencies(DroneEngine drone_meshnetwork_simulation_generate_messages_cpp)
 
 add_library(DroneFactory SHARED src/gazebo/DroneFactory.cpp
                                 src/gazebo/DroneSimulation/VirtualDrone.cpp)
 target_link_libraries(DroneFactory  ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(DroneFactory abstract_drone_generate_messages_cpp)
+add_dependencies(DroneFactory drone_meshnetwork_simulation_generate_messages_cpp)
 
 ###########
 ## Build ##

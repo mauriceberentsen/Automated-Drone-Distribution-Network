@@ -16,10 +16,10 @@
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
 // ros generated messages
-#include "abstract_drone/WirelessMessage.h"
-#include "abstract_drone/PowerSwitch.h"
-#include "abstract_drone/NRF24.h"
-#include "abstract_drone/NodeDebugInfo.h"
+#include "drone_meshnetwork_simulation/WirelessMessage.h"
+#include "drone_meshnetwork_simulation/PowerSwitch.h"
+#include "drone_meshnetwork_simulation/NRF24.h"
+#include "drone_meshnetwork_simulation/NodeDebugInfo.h"
 // offered interface
 #include "../../Communication/Wireless/IWirelessCommunication.hpp"
 // Required interface
@@ -88,7 +88,7 @@ namespace WirelessSimulation
    *
    * @param _msg NRF24 message
    */
-  void OnRosMsg( const abstract_drone::NRF24ConstPtr& _msg );
+  void OnRosMsg( const drone_meshnetwork_simulation::NRF24ConstPtr& _msg );
   /**
    * @brief get On state
    *
@@ -105,8 +105,9 @@ namespace WirelessSimulation
    * @return true Service call succesfull
    * @return false Service call not succesfull
    */
-  bool switchPower( abstract_drone::PowerSwitchRequest& request,
-                    abstract_drone::PowerSwitchResponse& response );
+  bool switchPower(
+      drone_meshnetwork_simulation::PowerSwitchRequest& request,
+      drone_meshnetwork_simulation::PowerSwitchResponse& response );
 
  private:
   /**

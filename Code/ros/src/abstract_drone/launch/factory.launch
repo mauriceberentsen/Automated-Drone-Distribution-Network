@@ -5,11 +5,11 @@
   <arg name="headless" default="true"/>
   <arg name="debug" default="true"/>
 
-  <node name="WirelessSignalSimulator" pkg="abstract_drone" type="WirelessSignalSimulator"/>
-  <node name="DroneManager" pkg="abstract_drone" type="DroneManager"/>
+  <node name="WirelessSignalSimulator" pkg="drone_meshnetwork_simulation" type="WirelessSignalSimulator"/>
+  <node name="DroneManager" pkg="drone_meshnetwork_simulation" type="DroneManager"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find abstract_drone)/world/factory.world"/>
+    <arg name="world_name" value="$(find drone_meshnetwork_simulation)/world/factory.world"/>
     <arg name="extra_gazebo_args" default=""/>
     <arg name="gui" default="false"/>
     <arg name="headless" default="true"/>

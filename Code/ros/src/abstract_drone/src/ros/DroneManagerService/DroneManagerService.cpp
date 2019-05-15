@@ -11,7 +11,7 @@
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
 #include "ros/subscribe_options.h"
-#include "abstract_drone/RequestDroneFlight.h"
+#include "drone_meshnetwork_simulation/RequestDroneFlight.h"
 
 #include "DroneManager.hpp"
 

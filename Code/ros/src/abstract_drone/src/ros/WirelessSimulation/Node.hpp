@@ -13,7 +13,7 @@
 
 #include <ignition/math/Vector3.hh>
 #include "ros/ros.h"
-#include "abstract_drone/NRF24.h"
+#include "drone_meshnetwork_simulation/NRF24.h"
 
 using namespace ignition::math;
 namespace ros
@@ -40,7 +40,7 @@ namespace WirelessSimulation
    *
    * @param msg THe NRF24 message
    */
-  void recieveMessage( const abstract_drone::NRF24& msg ) const;
+  void recieveMessage( const drone_meshnetwork_simulation::NRF24& msg ) const;
 
   const Vector3< float >& getPosition( ) const;
   void setPosition( const Vector3< float >& position );

@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "abstract_drone/Location.h"
-#include "abstract_drone/RequestGPS.h"
+#include "drone_meshnetwork_simulation/Location.h"
+#include "drone_meshnetwork_simulation/RequestGPS.h"
 
 #include "RosDroneEngineConnector.hpp"
 namespace ros
@@ -25,7 +25,7 @@ namespace Drone
                                         const float longitude,
                                         const float height )
  {
-  abstract_drone::Location msg;
+  drone_meshnetwork_simulation::Location msg;
   msg.latitude = latitude;
   msg.longitude = longitude;
   msg.height = height;
@@ -35,7 +35,7 @@ namespace Drone
 
  const ignition::math::Vector3< float > RosDroneEngineConnector::getLocation( )
  {
-  abstract_drone::RequestGPS GPS;
+  drone_meshnetwork_simulation::RequestGPS GPS;
   {
    if ( this->GPSLink.call( GPS ) ) {
     ignition::math::Vector3< float > loc(
@@ -66,13 +66,15 @@ namespace Drone
   std::string gps_ServiceName =
       "/Drones/" + std::to_string( this->ID ) + "/gps";
 
-  this->droneEngine = this->rosNode->advertise< abstract_drone::Location >(
-      connectedEngine, 100 );
+  this->droneEngine =
+      this->rosNode->advertise< drone_meshnetwork_simulation::Location >(
+          connectedEngine, 100 );
   ROS_INFO( "Loaded DroneEngineconnector connected to topicname:[%s]",
             gps_ServiceName.c_str( ) );
   // Connect to the GPS service
-  this->GPSLink = this->rosNode->serviceClient< abstract_drone::RequestGPS >(
-      gps_ServiceName.c_str( ) );
+  this->GPSLink =
+      this->rosNode->serviceClient< drone_meshnetwork_simulation::RequestGPS >(
+          gps_ServiceName.c_str( ) );
  }
 
  void RosDroneEngineConnector::turnOff( )

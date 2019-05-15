@@ -83,7 +83,11 @@ namespace Meshnetwork
  {
   const uint8_t other =
       routerTech->getDirectionToNode( message[Messages::FORWARD] );
-  if ( other == UINT8_MAX ) { return; }
+  if ( other == UINT8_MAX || other == message[Messages::FROM] ) {
+   informAboutMissingChild( message[Messages::FROM],
+                            message[Messages::FORWARD] );
+   return;
+  }
 
   uint8_t buffer[Messages::MAX_PAYLOAD] = {0};
   for ( int i = 0; i < Messages::MAX_PAYLOAD; i++ ) {

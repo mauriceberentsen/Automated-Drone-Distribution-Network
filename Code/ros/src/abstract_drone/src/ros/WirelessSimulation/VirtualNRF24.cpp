@@ -9,8 +9,8 @@
  *
  */
 
-#include "abstract_drone/AreaScan.h"
-#include "abstract_drone/DroneInfo.h"
+#include "drone_meshnetwork_simulation/AreaScan.h"
+#include "drone_meshnetwork_simulation/DroneInfo.h"
 
 #include "VirtualNRF24.hpp"
 #include "../../Communication/Meshnetwork/MeshnetworkComponent.hpp"
@@ -45,18 +45,19 @@ namespace WirelessSimulation
   ROS_INFO( "Start virtual antenna[%s]", Node_TopicName.c_str( ) );
 
   ros::SubscribeOptions so =
-      ros::SubscribeOptions::create< abstract_drone::NRF24 >(
+      ros::SubscribeOptions::create< drone_meshnetwork_simulation::NRF24 >(
           Node_TopicName, 1000,
           boost::bind( &VirtualNRF24::OnRosMsg, this, _1 ), ros::VoidPtr( ),
           &this->rosQueue );
 
   this->rosSub = this->rosNode->subscribe( so );
 
-  this->rosPub = this->rosNode->advertise< abstract_drone::DroneInfo >(
-      WirelessSignalSimulatorName, 100 );
+  this->rosPub =
+      this->rosNode->advertise< drone_meshnetwork_simulation::DroneInfo >(
+          WirelessSignalSimulatorName, 100 );
 
   // inform the WirelessSignalSimulator
-  abstract_drone::DroneInfo nodeinf;
+  drone_meshnetwork_simulation::DroneInfo nodeinf;
   nodeinf.nodeID = meshnetworkComponent->getNodeID( );
   nodeinf.sub = Node_TopicName;
   nodeinf.on = true;
@@ -66,13 +67,15 @@ namespace WirelessSimulation
   rosPub.publish( nodeinf );
 
   // Setup  area scanner
-  this->areaScanner = this->rosNode->serviceClient< abstract_drone::AreaScan >(
-      "/SignalSimulator/othersInRange" );
+  this->areaScanner =
+      this->rosNode->serviceClient< drone_meshnetwork_simulation::AreaScan >(
+          "/SignalSimulator/othersInRange" );
 
   // Setup communication
   this->publishService =
-      this->rosNode->serviceClient< abstract_drone::WirelessMessage >(
-          "/SignalSimulator/message" );
+      this->rosNode
+          ->serviceClient< drone_meshnetwork_simulation::WirelessMessage >(
+              "/SignalSimulator/message" );
 
   std::string powerSwitch =
       "/Nodes/" + std::to_string( meshnetworkComponent->getNodeID( ) ) +
@@ -98,7 +101,7 @@ namespace WirelessSimulation
 
  bool VirtualNRF24::SendMessageTo( const uint8_t* msg )
  {
-  abstract_drone::WirelessMessage WM;
+  drone_meshnetwork_simulation::WirelessMessage WM;
   WM.request.from = msg[FROM];
   WM.request.to = msg[TO];
   for ( int i = 0; i < MAX_PAYLOAD; i++ ) {
@@ -119,7 +122,7 @@ namespace WirelessSimulation
 
  void VirtualNRF24::BroadcastMessage( const uint8_t* msg )
  {
-  abstract_drone::AreaScan scanMsg;
+  drone_meshnetwork_simulation::AreaScan scanMsg;
   scanMsg.request.id = meshnetworkComponent->getNodeID( );
   if ( areaScanner.call( scanMsg ) ) {
    if ( scanMsg.response.near.empty( ) ) {
@@ -152,22 +155,24 @@ namespace WirelessSimulation
       "/debug";
 
   this->nodeDebugTopic =
-      this->rosNode->advertise< abstract_drone::NodeDebugInfo >( DebugInfoName,
-                                                                 100 );
+      this->rosNode->advertise< drone_meshnetwork_simulation::NodeDebugInfo >(
+          DebugInfoName, 100 );
   this->NodeDebugInfoThread =
       std::thread( std::bind( &VirtualNRF24::publishDebugInfo, this ) );
  }
 
- void VirtualNRF24::OnRosMsg( const abstract_drone::NRF24ConstPtr& _msg )
+ void VirtualNRF24::OnRosMsg(
+     const drone_meshnetwork_simulation::NRF24ConstPtr& _msg )
  {
   meshnetworkComponent->OnMsg( _msg->payload.data( ) );
  }
 
- bool VirtualNRF24::switchPower( abstract_drone::PowerSwitchRequest& request,
-                                 abstract_drone::PowerSwitchResponse& response )
+ bool VirtualNRF24::switchPower(
+     drone_meshnetwork_simulation::PowerSwitchRequest& request,
+     drone_meshnetwork_simulation::PowerSwitchResponse& response )
  {
   this->on = request.power;
-  abstract_drone::DroneInfo nodeinfo;
+  drone_meshnetwork_simulation::DroneInfo nodeinfo;
   nodeinfo.nodeID = this->meshnetworkComponent->getNodeID( );
   nodeinfo.on = this->on;
   rosPub.publish( nodeinfo );
@@ -184,7 +189,7 @@ namespace WirelessSimulation
 
  void VirtualNRF24::publishDebugInfo( )
  {
-  abstract_drone::NodeDebugInfo msg;
+  drone_meshnetwork_simulation::NodeDebugInfo msg;
   while ( this->rosNode->ok( ) ) {
    std::this_thread::sleep_for(
        std::chrono::seconds( 1 ) );  // 1hz refresh is enough

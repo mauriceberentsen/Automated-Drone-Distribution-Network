@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "abstract_drone/RequestGatewayDroneFlight.h"
+#include "drone_meshnetwork_simulation/RequestGatewayDroneFlight.h"
 #include "DroneManager.hpp"
 namespace ros
 {
@@ -18,16 +18,16 @@ namespace DroneManagerService
                              std::string &GatewayTopicName )
      : nodeHandle( _rosNode ), GatewayTopic( GatewayTopicName )
  {
-  internet =
-      this->nodeHandle->advertise< abstract_drone::RequestGatewayDroneFlight >(
-          GatewayTopic, 100 );
+  internet = this->nodeHandle->advertise<
+      drone_meshnetwork_simulation::RequestGatewayDroneFlight >( GatewayTopic,
+                                                                 100 );
  }
  DroneManager::~DroneManager( ){};
 
  bool DroneManager::RequestMovement( uint8_t ID, float latitude,
                                      float longitude, uint16_t height )
  {
-  abstract_drone::RequestGatewayDroneFlight msg;
+  drone_meshnetwork_simulation::RequestGatewayDroneFlight msg;
   msg.ID = ID;
   msg.latitude = latitude;
   msg.longitude = longitude;
@@ -40,10 +40,10 @@ namespace DroneManagerService
  }
 
  bool DroneManager::RequestMovement(
-     abstract_drone::RequestDroneFlight::Request &req,
-     abstract_drone::RequestDroneFlight::Response &res )
+     drone_meshnetwork_simulation::RequestDroneFlight::Request &req,
+     drone_meshnetwork_simulation::RequestDroneFlight::Response &res )
  {
-  abstract_drone::RequestGatewayDroneFlight msg;
+  drone_meshnetwork_simulation::RequestGatewayDroneFlight msg;
   msg.ID = req.ID;
   msg.latitude = req.latitude;
   msg.longitude = req.longitude;
@@ -56,8 +56,8 @@ namespace DroneManagerService
  }
 
  bool DroneManager::setDronesToCasus(
-     abstract_drone::CasusRequest::Request &req,
-     abstract_drone::CasusRequest::Response &res )
+     drone_meshnetwork_simulation::CasusRequest::Request &req,
+     drone_meshnetwork_simulation::CasusRequest::Response &res )
  {
   switch ( req.caseID ) {
    case 1:
@@ -134,6 +134,16 @@ namespace DroneManagerService
       RequestMovement( i + j, i * 5, j * 5 );
      }
     }
+    return true;
+
+    break;
+   case 101:
+    RequestMovement( 1, -3, 4 );
+    RequestMovement( 2, 3, 4 );
+    RequestMovement( 3, -3, 10 );
+    RequestMovement( 4, 3, 10 );
+    RequestMovement( 5, -3, 16 );
+    RequestMovement( 6, 3, 16 );
     return true;
 
     break;

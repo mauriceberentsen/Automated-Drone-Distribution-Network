@@ -21,15 +21,16 @@ namespace WirelessSimulation
      , subtopicname( _subtopicname )
      , on( true )
  {
-  connectedNRF =
-      nodeHandle->advertise< abstract_drone::NRF24 >( subtopicname, 100, true );
+  connectedNRF = nodeHandle->advertise< drone_meshnetwork_simulation::NRF24 >(
+      subtopicname, 100, true );
  }
 
  Node::~Node( )
  {
  }
 
- void Node::recieveMessage( const abstract_drone::NRF24& msg ) const
+ void Node::recieveMessage(
+     const drone_meshnetwork_simulation::NRF24& msg ) const
  {
   connectedNRF.publish( msg );
  }

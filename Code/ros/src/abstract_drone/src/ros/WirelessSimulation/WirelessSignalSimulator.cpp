@@ -42,7 +42,7 @@ namespace WirelessSimulation
   this->rosNode.reset( new ros::NodeHandle( "SignalSimulator" ) );
 
   ros::SubscribeOptions so =
-      ros::SubscribeOptions::create< abstract_drone::DroneInfo >(
+      ros::SubscribeOptions::create< drone_meshnetwork_simulation::DroneInfo >(
           Node_TopicName, 1000,
           boost::bind( &WirelessSignalSimulator::OnRosMsg, this, _1 ),
           ros::VoidPtr( ), &this->rosQueue );
@@ -62,8 +62,8 @@ namespace WirelessSimulation
  }
 
  bool WirelessSignalSimulator::send_message(
-     abstract_drone::WirelessMessage::Request &req,
-     abstract_drone::WirelessMessage::Response &res )
+     drone_meshnetwork_simulation::WirelessMessage::Request &req,
+     drone_meshnetwork_simulation::WirelessMessage::Response &res )
  {
   auto to = Network.find( req.to );
 
@@ -102,8 +102,8 @@ namespace WirelessSimulation
  }
 
  bool WirelessSignalSimulator::getNodesInRange(
-     abstract_drone::AreaScan::Request &req,
-     abstract_drone::AreaScan::Response &res )
+     drone_meshnetwork_simulation::AreaScan::Request &req,
+     drone_meshnetwork_simulation::AreaScan::Response &res )
  {
   auto from = Network.find( req.id );
   res.near.clear( );
@@ -127,7 +127,7 @@ namespace WirelessSimulation
  }
 
  void WirelessSignalSimulator::OnRosMsg(
-     const abstract_drone::DroneInfoConstPtr &_msg )
+     const drone_meshnetwork_simulation::DroneInfoConstPtr &_msg )
  {
   auto it = Network.find( _msg->nodeID );
   if ( it !=

@@ -12,7 +12,7 @@
 #define ROSDRONEENGINECONNECTOR
 // ros libary
 #include "ros/ros.h"
-#include "abstract_drone/Location.h"
+#include "drone_meshnetwork_simulation/Location.h"
 // local header
 #include "../Drone/IDroneEngine.hpp"
 

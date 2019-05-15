@@ -2,7 +2,7 @@
 
 <launch>
     <!--Drone URDF -->
-    <param name="robot_description" command="cat $(find abstract_drone)/model/drone.sdf" />
+    <param name="robot_description" command="cat $(find drone_meshnetwork_simulation)/model/drone.sdf" />
     <node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -param robot_description -model drone" />
     <!-- overwritting these args -->
     <arg name="paused" default="false"/>

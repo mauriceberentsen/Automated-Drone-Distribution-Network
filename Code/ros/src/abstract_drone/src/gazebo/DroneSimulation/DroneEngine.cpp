@@ -9,7 +9,7 @@
  *
  */
 #include "ros/subscribe_options.h"
-#include "abstract_drone/DroneInfo.h"
+#include "drone_meshnetwork_simulation/DroneInfo.h"
 
 #include "DroneEngine.hpp"
 
@@ -46,7 +46,7 @@ namespace DroneSimulation
   this->rosNode.reset( new ros::NodeHandle( "drone" ) );
 
   ros::SubscribeOptions so =
-      ros::SubscribeOptions::create< abstract_drone::Location >(
+      ros::SubscribeOptions::create< drone_meshnetwork_simulation::Location >(
           move_to_TopicName, 100,
           boost::bind( &DroneEngine::OnRosMsg_Pos, this, _1 ), ros::VoidPtr( ),
           &this->rosQueue );
@@ -54,7 +54,7 @@ namespace DroneSimulation
   this->rosSub = this->rosNode->subscribe( so );
 
   this->wirelessSimulatorPub =
-      this->rosNode->advertise< abstract_drone::DroneInfo >(
+      this->rosNode->advertise< drone_meshnetwork_simulation::DroneInfo >(
           "/WirelessSignalSimulator", 100 );
 
   this->rosQueueThread =
@@ -138,7 +138,7 @@ namespace DroneSimulation
  void DroneEngine::informWirelessSimulator( )
  {
   pose = this->model->WorldPose( );
-  abstract_drone::DroneInfo nI;
+  drone_meshnetwork_simulation::DroneInfo nI;
   nI.nodeID = this->drone_id;
   nI.position[0] = pose.Pos( ).X( );
   nI.position[1] = pose.Pos( ).Y( );
@@ -157,13 +157,15 @@ namespace DroneSimulation
   this->hasGoal = true;
  }
 
- void DroneEngine::OnRosMsg_Pos( const abstract_drone::LocationConstPtr &_msg )
+ void DroneEngine::OnRosMsg_Pos(
+     const drone_meshnetwork_simulation::LocationConstPtr &_msg )
  {
   this->setGoal( _msg->latitude, _msg->longitude, _msg->height );
  }
 
- bool DroneEngine::get_location( abstract_drone::RequestGPS::Request &req,
-                                 abstract_drone::RequestGPS::Response &res )
+ bool DroneEngine::get_location(
+     drone_meshnetwork_simulation::RequestGPS::Request &req,
+     drone_meshnetwork_simulation::RequestGPS::Response &res )
  {
   res.longitude = pose.Pos( ).X( );
   res.latitude = pose.Pos( ).Y( );

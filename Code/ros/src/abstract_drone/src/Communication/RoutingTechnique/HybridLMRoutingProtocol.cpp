@@ -104,8 +104,8 @@ namespace RoutingTechnique
  {
   family.clear( );
  }
- /*private*/ void HybridLMRoutingProtocol::RegisterGrandChildOfChild(
-     uint8_t child, uint8_t grandChild )
+ void HybridLMRoutingProtocol::RegisterGrandChildOfChild( uint8_t child,
+                                                          uint8_t grandChild )
  {
   auto it = family.find( child );
   if ( it == family.end( ) )  // unknown child requested
@@ -117,23 +117,30 @@ namespace RoutingTechnique
   }
  }
 
- /*private*/ uint8_t HybridLMRoutingProtocol::proofOfMissing( uint8_t teller,
-                                                              uint8_t child )
+ uint8_t HybridLMRoutingProtocol::proofOfMissing( uint8_t teller,
+                                                  uint8_t child )
  {
+  uint8_t removed = 0;
   // teller claims that he lost a child, check if he is talking about himself
   if ( teller == child ) {
    // delete the teller;
-   return family.erase( child );
+   removed = family.erase( child );
 
   } else {
    if ( family.find( teller ) != family.end( ) )
-    return family.at( teller ).erase( child );
+    removed = family.at( teller ).erase( child );
   }
-  return 0;
+  if ( removed == 0 )
+   return 0;
+  else if ( getDirectionToNode( child ) == UINT8_MAX ) {
+   return removed;
+  } else {
+   return 0;
+  }
  }
 
- /*private*/ void HybridLMRoutingProtocol::proofOfAvailability( uint8_t teller,
-                                                                uint8_t child )
+ void HybridLMRoutingProtocol::proofOfAvailability( uint8_t teller,
+                                                    uint8_t child )
  {
   // teller claims that he knows child, check if he is talking about himself
   if ( teller == child ) {
@@ -148,7 +155,7 @@ namespace RoutingTechnique
   }
  }
 
- /*private*/ void HybridLMRoutingProtocol::RegisterChild( uint8_t child )
+ void HybridLMRoutingProtocol::RegisterChild( uint8_t child )
  {
   auto it = family.find( child );
   if ( it == family.end( ) )  // we dont know the child add him to the family

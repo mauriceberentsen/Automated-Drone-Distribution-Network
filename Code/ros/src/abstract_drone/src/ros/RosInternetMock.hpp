@@ -16,7 +16,7 @@
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
 // gateway header
-#include "abstract_drone/RequestGatewayDroneFlight.h"
+#include "drone_meshnetwork_simulation/RequestGatewayDroneFlight.h"
 // internet interface
 #include "../Communication/Internet/IInternetConnection.hpp"
 
@@ -51,7 +51,8 @@ namespace Internet
    * @param _msg RequestGatewayDroneFlight messages
    */
   void gatewayQueue(
-      const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg );
+      const drone_meshnetwork_simulation::RequestGatewayDroneFlightConstPtr
+          &_msg );
   ros::CallbackQueue rosQueue;
   /// \brief Subscriber to the general gateway topic
   ros::Subscriber gatewaySub;

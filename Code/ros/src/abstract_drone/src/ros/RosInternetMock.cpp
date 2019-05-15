@@ -48,7 +48,7 @@ namespace Internet
       std::thread( std::bind( &RosInternetMock::QueueThread, this ) );
 
   ros::SubscribeOptions so = ros::SubscribeOptions::create<
-      abstract_drone::RequestGatewayDroneFlight >(
+      drone_meshnetwork_simulation::RequestGatewayDroneFlight >(
       "/gateway", 1000, boost::bind( &RosInternetMock::gatewayQueue, this, _1 ),
       ros::VoidPtr( ), &this->rosQueue );
 
@@ -64,7 +64,8 @@ namespace Internet
  }
 
  void RosInternetMock::gatewayQueue(
-     const abstract_drone::RequestGatewayDroneFlightConstPtr &_msg )
+     const drone_meshnetwork_simulation::RequestGatewayDroneFlightConstPtr
+         &_msg )
  {
   meshnetworkGateway->SendGoalRequestToDrone( _msg->ID, _msg->latitude,
                                               _msg->longitude, _msg->height );

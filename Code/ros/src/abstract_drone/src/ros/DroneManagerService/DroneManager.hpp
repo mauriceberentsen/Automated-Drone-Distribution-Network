@@ -12,8 +12,8 @@
 #define DRONEMANAGER
 
 #include "ros/ros.h"
-#include "abstract_drone/RequestDroneFlight.h"
-#include "abstract_drone/CasusRequest.h"
+#include "drone_meshnetwork_simulation/RequestDroneFlight.h"
+#include "drone_meshnetwork_simulation/CasusRequest.h"
 namespace ros
 {
 namespace DroneManagerService
@@ -54,8 +54,9 @@ namespace DroneManagerService
    * @return true Service call succesfull
    * @return false Could not perform service
    */
-  bool RequestMovement( abstract_drone::RequestDroneFlight::Request &req,
-                        abstract_drone::RequestDroneFlight::Response &res );
+  bool RequestMovement(
+      drone_meshnetwork_simulation::RequestDroneFlight::Request &req,
+      drone_meshnetwork_simulation::RequestDroneFlight::Response &res );
   /**
    * @brief Set the Drones to a given casus
    *
@@ -67,8 +68,9 @@ namespace DroneManagerService
    * @return true servicecall succesfull
    * @return false servicecall had an error
    */
-  bool setDronesToCasus( abstract_drone::CasusRequest::Request &req,
-                         abstract_drone::CasusRequest::Response &res );
+  bool setDronesToCasus(
+      drone_meshnetwork_simulation::CasusRequest::Request &req,
+      drone_meshnetwork_simulation::CasusRequest::Response &res );
 
  private:
   /// \brief Pointer to RosNode used for communication transport
