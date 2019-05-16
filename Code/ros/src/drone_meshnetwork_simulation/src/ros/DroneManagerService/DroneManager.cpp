@@ -219,11 +219,12 @@ namespace DroneManagerService
     break;
    default:
     for ( int i = 1; i < req.caseID + 1; i++ ) {
-     int row, col;
-     row = i % 2;
-     col = std::floor( i / 2 );
+     int row, col,width;
+     width = 10;
+     row = i % width;
+     col = std::floor( i / width );
      ROS_INFO( "REQUEST FOR %d", i );
-     RequestMovement( i, row * 5, col * 5 );
+     RequestMovement( i, row * 4, col * 4 );
     }
     return true;
   }

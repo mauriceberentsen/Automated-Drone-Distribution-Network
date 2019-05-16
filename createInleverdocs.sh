@@ -32,7 +32,8 @@ cp -R ./Docs/DesignDocumenten/UML/out/* ./Scriptie_Maurice_Berentsen_561399_Dron
 
 #zip it and ship it
 zip -r Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten.zip ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten
-clear
+zip -r Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten_zonder_mp4.zip ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten -x "*.mp4"
+echo "  "
 echo "Created Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten.zip at path:"
 readlink -f Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten.zip 
 echo "nou je hebt het geflikt upload die zip op isas en ga bier drinken ofzo"

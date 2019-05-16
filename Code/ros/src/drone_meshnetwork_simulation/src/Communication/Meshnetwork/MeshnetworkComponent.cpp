@@ -10,8 +10,8 @@
  */
 
 #include <cmath>
-#include <thread>
 #include <iostream>
+#include <thread>
 
 #include "MeshnetworkComponent.hpp"
 
@@ -83,7 +83,11 @@ namespace Meshnetwork
  {
   const uint8_t other =
       routerTech->getDirectionToNode( message[Messages::FORWARD] );
-  if ( other == UINT8_MAX || other == message[Messages::FROM] ) {
+  if ( other == UINT8_MAX ) {
+   informAboutMissingChild( this->nodeID, message[Messages::FORWARD] );
+   return;
+  }
+  if ( other == message[Messages::FROM] ) {
    informAboutMissingChild( message[Messages::FROM],
                             message[Messages::FORWARD] );
    return;
