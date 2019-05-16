@@ -175,11 +175,10 @@ namespace DroneManagerService
     break;
     case 202:
     RequestMovement( 1, -1, 4 );
-    RequestMovement( 2, -1, 10 );
-    RequestMovement( 3, -1, 16 );
-    RequestMovement( 4, -1, 22 );
-    RequestMovement( 5, -7, 20 );
-    RequestMovement( 6, 5, 20 );
+    RequestMovement( 2, -1, 12 );
+    RequestMovement( 3, -1, 18 );
+    RequestMovement( 4, 3, 15 );
+    RequestMovement( 5, -4, 15 );
     return true;
 
     break;
