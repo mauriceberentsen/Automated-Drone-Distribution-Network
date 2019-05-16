@@ -50,25 +50,26 @@
 
 \author{M.W.J. Berentsen}
 \font\myfont=cmr12 at 40pt
-\title{\myfont Drone mesh netwerk simulatie}
+\title{\myfont Drone meshnetwerk simulatie}
 \usepackage{titling}
 
-\newcommand{\subtitle}[8]{%
+\newcommand{\subtitle}[9]{%
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
 	\vskip0.5em
 	\begin{center}\large#2\end{center}
-	\begin{center}\large#3\end{center}
+	\begin{center}\normalsize#3\end{center}
 	\begin{center}\large#4\end{center}
-    \begin{center}\large#5\end{center}
-    \begin{center}\large#6\end{center}
-    \begin{center}\large#7\end{center}
-    \begin{center}\large#8\end{center}
+	\begin{center}\large#5\end{center}
+	\begin{center}\large#6\end{center}
+	\begin{center}\normalsize#7\end{center}
+	\begin{center}\normalsize#8\end{center}
+	\begin{center}\normalsize#9\end{center}
 	\vskip0.5em}%
 }
 
-\subtitle{Plan van aanpak}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 2}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Plan van aanpak}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica}{561399}{MWJ.Berentsen@student.han.nl}{Versie 2}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -78,6 +79,14 @@
 \hypersetup{colorlinks=true, urlcolor=red,citecolor=black,linkcolor=blue}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 \setcounter{tocdepth}{2}
 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\setlength\headheight{26pt} %% just to make warning go away. Adjust the value after looking into the warning.
+% \rhead{{\color{blue}\rule{1cm}{1cm}}}
+
+\rhead{\includegraphics[height=1cm]{Afbeeldingen/han.png}}
+%\rfoot{something something something}
 
 
 \begin{document}
@@ -151,7 +160,7 @@ Een samenvatting van het plan is:
 
 \begin{itemize}
 	\item Onderzoek de keuze naar het gebruik van simulatiesoftware, hardware en software meshnetwerk.
-	\item Implementeer een abstracte drone de simulatiesoftware; Bouw een prototype van het mesh netwerk en simuleer deze; Gebruik het netwerk om meerdere drones aan te sturen.
+	\item Implementeer een abstracte drone de simulatiesoftware; Bouw een prototype van het meshnetwerk en simuleer deze; Gebruik het netwerk om meerdere drones aan te sturen.
 	\item Lever een onderzoeksrapport op waarin aangetoond wordt dat de simulatie geschikt is voor de wens van Alten om verdeelalgoritmes te testen met meer dan 100 drones.
 \end{itemize}
 
@@ -242,13 +251,13 @@ De netwerkmodules moeten in de simulatie kunnen uitvallen en de onderlinge afsta
 De simulatie moet aan de hand van een script herhaalbaar zijn met eenzelfde resultaat.
 
 Alten wil graag dat de simulatiesoftware gebruik maakt van Robot Operating System (ROS) als middleware. 
-Dit wil Alten omdat zij al kennis heeft in ROS maar nog niet in combinatie met drones en mesh netwerken en door het begeleiden hier ervaring in opdoet.
+Dit wil Alten omdat zij al kennis heeft in ROS maar nog niet in combinatie met drones en meshnetwerken en door het begeleiden hier ervaring in opdoet.
 Het ervaring opdoen in ROS is geen doel van dit project en de student hoeft zich hier niet op te concentreren.
 
 Hoewel de keuze van de simulatiesoftware zich concentreert op het simuleren van een dronenetwerk zal de student alleen de netwerkmodule toevoegen aan de simulatie. 
 De student zal zich dus niet specialiseren in het realistisch simuleren van drones.
 
-Het project is geslaagd als een prototype van het meshnetwerk is opgeleverd samen met een simulatie waarin het mesh netwerk getest kan worden met verschillende verdelingsalgoritmes.
+Het project is geslaagd als een prototype van het meshnetwerk is opgeleverd samen met een simulatie waarin het meshnetwerk getest kan worden met verschillende verdelingsalgoritmes.
 
 \subsection{Casus}
 Om het doel waar naartoe gewerkt moet worden te voorzien van een richting heeft Alten een casus bedacht.
@@ -273,7 +282,7 @@ In de casus komen de volgende situaties apart voor:
 	\item Punt 14 valt uit waardoor punt 15, 16 en 17 geen verbinding meer hebben met het basisstation. Het verwachte resultaat is dat de drones 15, 16 en 17 eerst met elkaar verbinden, vervolgens zal één van de drones zich verplaatsen naar punt 14. 
 \end{itemize}
 
-\section{Op te leveren resultaten voor het bedrijf en school}
+\section[Op te leveren resultaten]{Op te leveren resultaten voor het bedrijf en school}
 
 Aan het einde van het project levert de student de volgende producten op aan het bedrijf:
 
@@ -612,13 +621,13 @@ Bij de week nummers staat een letter welke aangeeft welke RUP fase de week is te
 	\begin{tabular}[c]{@{}c@{}}3 - I-3\\ 18 feb - 22 feb\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek keuze simulatiesoftware.\\Bijwerken projectplan a.d.h.v. feedback assessor en begeleider. \end{tabular}                               \\ \hline
 	\begin{tabular}[c]{@{}c@{}}4 - I-4\\ 25 feb - 1 mrt\end{tabular}   & \begin{tabular}[c]{@{}l@{}} Onderzoek keuze netwerk prototype hardware.\end{tabular}                                 \\ \hline
 	\begin{tabular}[c]{@{}c@{}}5 - I-5\\ 11 mrt - 15 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}15 mrt: Inleveren Definitief Projectplan.\\ Onderzoek keuze netwerk prototype.\\ Vaststellen interfaces tussen componenten.\\ Afronden projectplan.\end{tabular} \\ \hline
-	\begin{tabular}[c]{@{}c@{}}6 - E-1\\ 18 mrt - 22 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Implementatie abstracte drone in simulatie software.\\ Implementatie mesh netwerk.\end{tabular}                                       \\ \hline
+	\begin{tabular}[c]{@{}c@{}}6 - E-1\\ 18 mrt - 22 mrt\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Implementatie abstracte drone in simulatie software.\\ Implementatie meshnetwerk.\end{tabular}                                       \\ \hline
 	\begin{tabular}[c]{@{}c@{}}7 - E-2\\ 25 mrt - 29 mrt\end{tabular}  & 29 maart: sprint review.                                                                                                                               \\ \hline
-	\begin{tabular}[c]{@{}c@{}}8 - E-3\\ 1 apr - 5 apr\end{tabular}    & Implementatie simulatie mesh netwerk.                                                                                                                  \\ \hline
+	\begin{tabular}[c]{@{}c@{}}8 - E-3\\ 1 apr - 5 apr\end{tabular}    & Implementatie simulatie meshnetwerk.                                                                                                                  \\ \hline
 	\begin{tabular}[c]{@{}c@{}}9 - E-4\\ 8 apr - 12 apr\end{tabular}   & 12 april sprint review.                                                                                                                                \\ \hline
 	\begin{tabular}[c]{@{}c@{}}10 - E-5\\ 15 apr - 19 apr\end{tabular} & \begin{tabular}[c]{@{}l@{}}19 april: Goede vrijdag.\\ Implementatie gedrag verdeling drones.\end{tabular}                                              \\ \hline
 	\begin{tabular}[c]{@{}c@{}}11 - E-6\\ 22 apr - 26 apr\end{tabular} & \begin{tabular}[c]{@{}l@{}}22 april: 2e paasdag.\\ 26 april: sprint review.\end{tabular}                                                               \\ \hline
-	\begin{tabular}[c]{@{}c@{}}12 - E-7\\ 6 mei - 10 mei\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek gedrag mesh netwerk bij slecht signaal.\\ Implementatie gedrag netwerk bij slecht of geen signaal.\end{tabular}   \\ \hline
+	\begin{tabular}[c]{@{}c@{}}12 - E-7\\ 6 mei - 10 mei\end{tabular}  & \begin{tabular}[c]{@{}l@{}}Onderzoek gedrag meshnetwerk bij slecht signaal.\\ Implementatie gedrag netwerk bij slecht of geen signaal.\end{tabular}   \\ \hline
 	\begin{tabular}[c]{@{}c@{}}13 - E-8\\ 13 mei - 17 mei\end{tabular} & \begin{tabular}[c]{@{}l@{}}17 mei: Inleveren Definitief 80 procent versie.\\ 17 mei: 29 sprint review.\\ Roosteren afstudeerpresentatie.\end{tabular}  \\ \hline
 	\begin{tabular}[c]{@{}c@{}}14 - C-1\\ 20 mei - 24 mei\end{tabular} & Afronden onderzoeksrapport.                                                                                                                           \\ \hline
 	\begin{tabular}[c]{@{}c@{}}15 - C-2\\ 27 mei - 31 mei\end{tabular} & \begin{tabular}[c]{@{}l@{}}29 mei: sprint review\\ 30 mei: hemelvaartsdag\\ 31 mei: dag na hemelvaart\end{tabular}                                     \\ \hline
@@ -696,7 +705,6 @@ Onderstaande risico's zijn afgevangen aangezien de student tegenmaatregelen heef
 \bibliographystyle{apacite}
 \bibliography{bilbliography.bib}
 
-\clearpage
 \appendix
 \chapter{Code guideline}
 \label{app:code}

@@ -53,22 +53,23 @@
 \title{\myfont Drone meshnetwerk simulatie}
 \usepackage{titling}
 
-\newcommand{\subtitle}[8]{%
+\newcommand{\subtitle}[9]{%
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
 	\vskip0.5em
 	\begin{center}\large#2\end{center}
-	\begin{center}\large#3\end{center}
+	\begin{center}\normalsize#3\end{center}
 	\begin{center}\large#4\end{center}
-    \begin{center}\large#5\end{center}
-    \begin{center}\large#6\end{center}
-    \begin{center}\large#7\end{center}
-    \begin{center}\large#8\end{center}
+	\begin{center}\large#5\end{center}
+	\begin{center}\large#6\end{center}
+	\begin{center}\normalsize#7\end{center}
+	\begin{center}\normalsize#8\end{center}
+	\begin{center}\normalsize#9\end{center}
 	\vskip0.5em}%
 }
 
-\subtitle{Software Requirements Specification}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Software Requirements Specification}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -78,6 +79,14 @@
 \hypersetup{colorlinks=true, urlcolor=red,citecolor=black,linkcolor=blue}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 \setcounter{tocdepth}{2}
 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\setlength\headheight{26pt} %% just to make warning go away. Adjust the value after looking into the warning.
+% \rhead{{\color{blue}\rule{1cm}{1cm}}}
+
+\rhead{\includegraphics[height=1cm]{Afbeeldingen/han.png}}
+%\rfoot{something something something}
 
 
 \begin{document}
@@ -157,25 +166,19 @@ Deze paragraaf omschrijft zowel de hardware- als softwareomgeving waarin dit pro
 
 \subsection{Ubuntu 18.04.2 LTS}
 \label{inleiding:werkomgeving:ubuntu}
-In het project wordt gebruik gemaakt van Ubuntu 18.04.2 LTS dit omdat er ondersteuning nodig is voor ROS.
+In het project wordt gebruik gemaakt van Ubuntu 18.04.2 LTS dit omdat er ondersteuning nodig is voor \nameref{inleiding:werkomgeving:ros}.
 Hoewel er een versie van ros opkomend is voor Windows zal hier op het moment geen rekening mee gehouden worden.
 De opgeleverde code wordt ontwikkeld en gecompileerd op een Ubuntu machine.
 
 
-\subsection{Arduino UNO}
-\label{inleiding:werkomgeving:arduino}
-De Arduino UNO is gekozen als ontwikkelbord die gebruikt wordt in het opzetten van de onderlinge communicatie.
-Deze Arduino is gekozen omdat deze gemakkelijk leent voor het bouwen van prototype.
-Dit doet de Arduino door zijn aanbod van 14 I/O poorten waarvan er zes bruikbaar zijn als analoge poort en het aanbieden van zowel 3.3 als 5 volt lijnen
-Hierop kan de \nameref{inleiding:werkomgeving:nrf24} aangesloten worden waarna er nog genoeg poorten overblijven voor andere hardware zoals sensoren of een internetverbinding.
+\subsection{Raspberry Pi model B+}
+\label{inleiding:werkomgeving:raspberrypi}
 
-De aanwezigheid van een 16MHz kristaloscillator geeft de UNO de eigenschap om accuraat genoeg een verschil in tijd te schatten.
-Dit belangrijk voor het systeem aangezien het beslissingen moet kunnen nemen op basis van een verstreken tijd.
+In het project wordt gebruik gemaakt van een Raspberry Pi als prototype bord.
+Deze microcomputer is voorzien van een Broadcom BCM2836 SoC en heeft een 40 pin General Purpose Input Output (GPIO).
+Hiervan zijn 27 pinnen beschikbaar voor input of output of geavanceerde technieken als PWM, SPI, I2C en of een seriële verbinding.
+Verder biedt het stroompunten aan van 3,3 of 5 volt.
 
-De Arduino voorzien van een ATmega328P die snel genoeg is voor het doorgeven van het communicatieverkeer en het nemen van beslissingen. 
-De ATmega328P heeft 32KB flash geheugen  en 1KB EEPROM beschikbaar.  
-
-Verder is de Arduino gekozen omdat deze via een USB aansluiting makkelijk geflasht kan worden en gedeeltelijk ondersteuning heeft voor C$++$
 
 \subsection{NRF24}
 \label{inleiding:werkomgeving:nrf24}
@@ -183,7 +186,7 @@ De NRF24 is gekozen door zijn prestaties ten opzichte van afstand.
 De mogelijkheid om een snelheid aan te kunnen bieden van minimaal 250 kbps op een afstand van 500 meter maakt deze module het meest geschikt voor dit project.
 Daarnaast kan de NRF24 tot zes kanalen tegelijk open houden die kunnen schakelen tussen zenden en ontvangen.
 De NRF24 is in staat om per payload tot 32 bytes te versturen. 
-Tenslotte is de NRF24 een transciever die werkt op een voltage van 3.3 volt waarbij de I/O pinnen 5 volt tolerant zijn wat het compatibel maakt met de \nameref{inleiding:werkomgeving:arduino}.
+Tenslotte is de NRF24 een transciever die werkt op een voltage van 3.3 volt waarbij de I/O pinnen 5 volt tolerant zijn wat het compatibel maakt met de \nameref{inleiding:werkomgeving:raspberrypi}.
 
 \subsection{Drone}
 \label{inleiding:werkomgeving:drone}
@@ -258,7 +261,7 @@ Een algoritme tester wil het dronenetwerk simuleren en wil daarom alleen die use
 		\nameref{Usecase:simulatiedrone} & Het systeem gaat een drone simuleren. \\ \hline
 		\hyperlink{draadlozecom}{\begin{tabular}[c]{@{}l@{}}Simuleren draadloze \\ communicatie\end{tabular}} & \begin{tabular}[c]{@{}l@{}}Het systeem gaat draadloze communicatie simuleren. \\ Hiermee kan het data communiceren.\end{tabular} \\ \hline
 		\nameref{Usecase:communicerendata} & \begin{tabular}[c]{@{}l@{}}Een actor geeft aan dat hij data wil communiceren via het\\ netwerk.\end{tabular} \\ \hline
-		\nameref{Usecase:opbouwenmeshnetwerk} & \begin{tabular}[c]{@{}l@{}}Het systeem gaat een mesh netwerk opbouwen tussen \\ aanwezige nodes.\end{tabular} \\ \hline
+		\nameref{Usecase:opbouwenmeshnetwerk} & \begin{tabular}[c]{@{}l@{}}Het systeem gaat een meshnetwerk opbouwen tussen \\ aanwezige nodes.\end{tabular} \\ \hline
 		\hyperlink{noodprotocol}{\begin{tabular}[c]{@{}l@{}}Uitvoeren noodprotocol \\ bij geen verbinding\end{tabular}} & \begin{tabular}[c]{@{}l@{}}Het systeem gaat wanneer er een bepaalde tijd geen\\ verbinding is met een gateway een noodprotocol uitvoeren\\ om het meshnetwerk te herstellen.\end{tabular} \\ \hline
 		\nameref{Usecase:ontplooien} & \begin{tabular}[c]{@{}l@{}}Een actor wil een dronenetwerk ontplooien over een gebied \\ hiervoor worden  drones aangestuurd.\end{tabular} \\ \hline
 		\nameref{Usecase:verzoekverplaatsing} & Een actor stuurt een verzoek tot het verplaatsen van een drone. \\ \hline
@@ -302,11 +305,11 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 	gazebo & Gazebo is de simulatie omgeving voor physics \\ \hline
 	Drone & \begin{tabular}[c]{@{}l@{}}Een drone kan zichzelf verplaatsen in een ruimte \\ met een DroneEngine\end{tabular} \\ \hline
 	DroneEngine & \begin{tabular}[c]{@{}l@{}}Een drone engine wordt gebruikt door de drone \\ voor verplaatsing\end{tabular} \\ \hline
-	RouterDrone & \begin{tabular}[c]{@{}l@{}}Een RouterDrone is een drone voorzien van een \\ ArduinoRouter\end{tabular} \\ \hline
-	GatewayDrone & \begin{tabular}[c]{@{}l@{}}Een RouterGateway is een drone voorzien van \\ een ArduinoGateway\end{tabular} \\ \hline
-	Arduino & Een arduino is een mircocontrollerbord \\ \hline
-	ArduinoRouter & \begin{tabular}[c]{@{}l@{}}Is een arduino voorzien van MeshnetworkRouter \\ software\end{tabular} \\ \hline
-	ArduinoGateway & \begin{tabular}[c]{@{}l@{}}Is een arduino voorzien van MeshnetworkGateway \\ software\end{tabular} \\ \hline
+	RouterDrone & \begin{tabular}[c]{@{}l@{}}Een RouterDrone is een drone voorzien van een \\ RaspberryPiRouter\end{tabular} \\ \hline
+	GatewayDrone & \begin{tabular}[c]{@{}l@{}}Een RouterGateway is een drone voorzien van \\ een RaspberryPiGateway\end{tabular} \\ \hline
+	RaspberryPi & Een RaspberryPi is een mircocomputer \\ \hline
+	RaspberryPiRouter & \begin{tabular}[c]{@{}l@{}}Is een RaspberryPi voorzien van MeshnetworkRouter \\ software\end{tabular} \\ \hline
+	RaspberryPiGateway & \begin{tabular}[c]{@{}l@{}}Is een RaspberryPi voorzien van MeshnetworkGateway \\ software\end{tabular} \\ \hline
 	MeshnetworkComponent & Is een onderdeel binnen een meshnetwerk \\ \hline
 	MeshnetworkRouter & \begin{tabular}[c]{@{}l@{}}Is een meshcomponent in staat berichten binnen het\\ netwerk door te sturen\end{tabular} \\ \hline
 	MeshnetworkGateway & \begin{tabular}[c]{@{}l@{}}Is een meshcomponent met een verbinding extern \\ van het netwerk\end{tabular} \\ \hline
@@ -856,7 +859,7 @@ hieraan wordt pas gewerkt als alle Must requirements afgehandeld zijn. Onder de 
 	\hyperlink{SIMULATIE3}{SIMULATIE3}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert de beweging van een drone.\end{tabular}       			 &M \\ \hline
 	\hyperlink{SIMULATIE4}{SIMULATIE4}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert tot 100 drones tegelijk.\end{tabular}        			 &S \\ \hline	
 	\hyperlink{SIMULATIE5}{SIMULATIE5}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert draadloze communicatie.\end{tabular}        			 &M \\ \hline	
-	\hyperlink{SIMULATIE6}{SIMULATIE6}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert een Arduino. \end{tabular}        						 &S \\ \hline	
+	\hyperlink{SIMULATIE6}{SIMULATIE6}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert een Raspberry Pi. \end{tabular}        						 &S \\ \hline	
 	\hyperlink{SIMULATIE7}{SIMULATIE7}			&\begin{tabular}[c]{@{}l@{}}Simulatie kan met een configuratiebestand gestart worden. \end{tabular}     &S \\ \hline	
 	\hyperlink{DRONE1}{DRONE1}		&\begin{tabular}[c]{@{}l@{}}Drone kan zich verplaatsen naar een positie. \end{tabular}        			 &M \\ \hline	
 	\hyperlink{DRONE2}{DRONE2}		&\begin{tabular}[c]{@{}l@{}}Drone kan een route naar positie berekenen.  \end{tabular}        			 &S \\ \hline	
@@ -904,10 +907,10 @@ Om met meerdere drones te kunnen testen moet de simulatie tot aan honderd drones
 
 Omdat het draait om een simulatie van een meshnetwerk moet er een component aanwezig zijn die zorgt dat de draadloze communicatie volgens de juiste regels verloopt.
 
-\paragraph{SIMULATIE6: Simulatie simuleert een Arduino.}
+\paragraph{SIMULATIE6: Simulatie simuleert een Raspberry Pi.}
 \hypertarget{SIMULATIE6}{}
 
-In het project wordt gebruik gemaakt van het Arduino microcontroller bord deze moet virtueel gerepresenteerd worden door de simulatie. 
+In het project wordt gebruik gemaakt van het Raspberry Pi deze moet virtueel gerepresenteerd worden door de simulatie. 
 
 \paragraph{SIMULATIE7: Simulatie kan met een configuratiebestand gestart worden.}
 \hypertarget{SIMULATIE7}{}

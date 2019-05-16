@@ -82,22 +82,23 @@
 \title{\myfont Drone meshnetwerk simulatie}
 \usepackage{titling}
 
-\newcommand{\subtitle}[8]{%
+\newcommand{\subtitle}[9]{%
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
 	\vskip0.5em
 	\begin{center}\large#2\end{center}
-	\begin{center}\large#3\end{center}
+	\begin{center}\normalsize#3\end{center}
 	\begin{center}\large#4\end{center}
-    \begin{center}\large#5\end{center}
-    \begin{center}\large#6\end{center}
-    \begin{center}\large#7\end{center}
-    \begin{center}\large#8\end{center}
+	\begin{center}\large#5\end{center}
+	\begin{center}\large#6\end{center}
+	\begin{center}\normalsize#7\end{center}
+	\begin{center}\normalsize#8\end{center}
+	\begin{center}\normalsize#9\end{center}
 	\vskip0.5em}%
 }
 
-\subtitle{Afstudeerverslag}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Afstudeerverslag}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -106,6 +107,14 @@
 
 \hypersetup{colorlinks=true, urlcolor=red,citecolor=black,linkcolor=blue}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 \setcounter{tocdepth}{2}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\setlength\headheight{26pt} %% just to make warning go away. Adjust the value after looking into the warning.
+% \rhead{{\color{blue}\rule{1cm}{1cm}}}
+
+\rhead{\includegraphics[height=1cm]{Afbeeldingen/han.png}}
 
 
 
@@ -312,13 +321,13 @@ De netwerkmodules moeten in de simulatie kunnen uitvallen en de onderlinge afsta
 De simulatie moet aan de hand van een script herhaalbaar zijn met eenzelfde resultaat.
 
 Alten wil graag dat de simulatiesoftware gebruik maakt van Robot Operating System (ROS) als middleware. 
-Dit wil Alten omdat zij al kennis heeft in ROS maar nog niet in combinatie met drones en mesh netwerken en door het begeleiden hier ervaring in opdoet.
+Dit wil Alten omdat zij al kennis heeft in ROS maar nog niet in combinatie met drones en meshnetwerken en door het begeleiden hier ervaring in opdoet.
 Het ervaring opdoen in ROS is geen doel van dit project en de student hoeft zich hier niet op te concentreren.
 
 Hoewel de keuze van de simulatiesoftware zich concentreert op het simuleren van een dronenetwerk zal de student alleen de netwerkmodule toevoegen aan de simulatie. 
 De student zal zich dus niet specialiseren in het realistisch simuleren van drones.
 
-Het project is geslaagd als een prototype van het meshnetwerk is opgeleverd samen met een simulatie waarin het mesh netwerk getest kan worden met verschillende verdelingsalgoritmes.
+Het project is geslaagd als een prototype van het meshnetwerk is opgeleverd samen met een simulatie waarin het meshnetwerk getest kan worden met verschillende verdelingsalgoritmes.
 
 \subsection{Casus}\label{sec:casus}
 Om het doel waar naartoe gewerkt moet worden te voorzien van een richting heeft Alten een casus bedacht.
@@ -343,7 +352,7 @@ In de casus komen de volgende situaties apart voor:
 	\item Punt 14 valt uit waardoor punt 15, 16 en 17 geen verbinding meer hebben met het basisstation. Het verwachte resultaat is dat de drones 15, 16 en 17 eerst met elkaar verbinden, vervolgens zal één van de drones zich verplaatsen naar punt 14. 
 \end{itemize}
 
-\section{Op te leveren resultaten voor het bedrijf en school}\label{sec:op-te-leveren-resultaten-voor-het-bedrijf-en-school}
+\section[Op te leveren resultaten]{Op te leveren resultaten voor het bedrijf en school}\label{sec:op-te-leveren-resultaten-voor-het-bedrijf-en-school}
 
 Aan het einde van het project levert de student de volgende producten op aan het bedrijf:
 
@@ -744,7 +753,7 @@ Het project heeft een geavanceerde simulator opgeleverd voor het testen van onde
 Daarmee is het doel van het project behaald omdat Alten wil kunnen experimenteren in het opzetten van grootschalige netwerken door het gebruik van drones.
 In de opgeleverde simulatie kunnen ze algoritmes testen voor verdelingen en beoordelen waar routers het meest belast zouden worden.
 
-Hoewel er geen fysiek prototype in het project is opgeleverd wat wel verwacht resultaat was, is dat geen probleem. 
+Hoewel er geen fysiek prototype in het project is opgeleverd wat wel een verwacht resultaat was, is dat geen probleem. 
 De simulatie is gebouwd op basis van de eisen die de gekozen hardware opgelegd aan de software.
 De laatste stap naar het bouwen van een hardware prototype zal hierdoor een kleine stap zijn.
  
@@ -761,7 +770,7 @@ Dit gehele verslag laat zien dat de studenten bekwaam is in het verantwoorden en
 \section{Advies vervolg project}\label{sec:advies-vervolg-project}
 Wanneer dit project vervolgt wordt adviseer ik Alten het volgende:
 \begin{itemize}
-	\item Voorzie een volgende ontwikkelaar van een computer die een dedicated GPU aanwezig heeft zodat er grotere simulaties met gazebo gedraait kunnen worden.
+	\item Voorzie een volgende ontwikkelaar van een computer die een dedicated GPU aanwezig heeft zodat er grotere simulaties met gazebo gedraaid kunnen worden.
 	
 	\item Stel een buildserver voorzien van een geavanceerde code checker beschikbaar.
 	 

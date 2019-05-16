@@ -60,22 +60,23 @@
 \title{\myfont Drone meshnetwerk simulatie}
 \usepackage{titling}
 
-\newcommand{\subtitle}[8]{%
+\newcommand{\subtitle}[9]{%
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
 	\vskip0.5em
 	\begin{center}\large#2\end{center}
-	\begin{center}\large#3\end{center}
+	\begin{center}\normalsize#3\end{center}
 	\begin{center}\large#4\end{center}
 	\begin{center}\large#5\end{center}
 	\begin{center}\large#6\end{center}
-	\begin{center}\large#7\end{center}
-	\begin{center}\large#8\end{center}
+	\begin{center}\normalsize#7\end{center}
+	\begin{center}\normalsize#8\end{center}
+	\begin{center}\normalsize#9\end{center}
 	\vskip0.5em}%
 }
 
-\subtitle{Software Design Document}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Software Design Document}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -88,6 +89,14 @@
 \newenvironment{spmatrix}[1]
 {\def\mysubscript{#1}\mathop\bgroup\begin{pmatrix}}
 	{\end{pmatrix}\egroup_{\textstyle\mathstrut\mysubscript}}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\setlength\headheight{26pt} %% just to make warning go away. Adjust the value after looking into the warning.
+% \rhead{{\color{blue}\rule{1cm}{1cm}}}
+
+\rhead{\includegraphics[height=1cm]{Afbeeldingen/han.png}}
 
 
 \begin{document}
@@ -109,7 +118,7 @@ Dit document volgt het document: \textit{"Software Design Description Template"}
 
 Het beschrijft de hoe de uiteindelijke applicatie eruit zal zien en wat de functionaliteit hiervan zal zijn. Op de manier is het voor de student maar ook betrokken partijen duidelijk wat er gerealiseerd zal worden. Het verduidelijk de werking van de sub-componenten en de onderlinge relaties. 
 
-\section{leeswijzer}
+\section{Leeswijzer}
 \label{inleiding:beschrijving:leeswijzer}
 Eerst zal een korte beschrijving gegeven worden van het doel van dit document.Daarna wordt er door middel van een tabel een begrippenlijst toegelicht. In het tweede hoofdstuk is als eerste een component diagram te vinden waarin de functionaliteit van de verschillende componenten te vinden is en de manier waarop deze componenten met elkaar communiceren. Vervolgens is de algemene flow van het programma te zien, hierin wordt duidelijk welke stappen er onder water worden genomen als er een bepaalde actie wordt uitgevoerd. In hoofdstuk drie worden alle subsystemen duidelijk uitgewerkt en worden de ontwerpen van deze systemen uitgewerkt. 
 \section{Begrippenlijst}
@@ -149,7 +158,7 @@ Tenslotte bevat het meerdere berichten die gebruikt om het netwerk te kunnen ond
 \textbf{Drone} is op dit moment een leeg component waar alleen een high level interface aanwezig is die de mogelijkheid biedt om de huidige locatie van een drone terug te geven of een nieuwe locatie als doel te geven aan de drone. 
 
 \textbf{Gazebo} is de plek waar de virtualisatie van de drone plaats vindt.
-Er kunnen virtuele router of gateway drones gemaakt worden die voorzien zijn van een virtuele arduino ingeladen met de juiste software en een virtuele drone motor.
+Er kunnen virtuele router of gateway drones gemaakt worden die voorzien zijn van een virtuele Raspberry Pi ingeladen met de juiste software en een virtuele drone motor.
 Deze worden als model plug-in gekoppeld aan de drone in een gesimuleerde wereld waar Gazebo vervolgens physics op de drones kan uitvoeren. 
 
 \textbf{ROS} is het component waar de simulatie van de communicatie plaats vindt.
@@ -158,7 +167,7 @@ De aanwezige WirelessSignalSimulator zorgt dat dit realistisch gebeurd door alle
 Dit bepaald de simulator op basis van informatie die het krijgt van Gazebo en de NRF.
 Tenslotte is er een DroneManager aanwezig die een interface aanbiedt via ros voor de ontwikkelaar om verbinding te maken met de gateways uit het netwerk.
 
-\textbf{Arduino} is het component die zich onderscheid in twee rollen, een Arduino kan de rol van gateway hebben of de rol van router in de het meshnetwerk.
+\textbf{Raspberry Pi} is het component die zich onderscheid in twee rollen, een Raspberry Pi kan de rol van gateway hebben of de rol van router in de het meshnetwerk.
 
 \textbf{NRF24} is het gebruikte component om draadloze communicatie mogelijk te maken. Het is voorzien van een driver in de vorm van een low level interface en bied zich aan via een high level interface voor communicatie.
 
@@ -276,7 +285,7 @@ Dit topic is essentieel voor de \nameref{architectural:subcomponenten:WirelessSi
 
 \section{Deployment Diagram}
 \label{DetailedDesign:deployment}
-In dit deployment diagram staan de executables (ROS nodes) die opgestart worden door de verschillende launch files, daarnaast zijn ook de twee ino files meegenomen die gebruikt worden bij de drones
+In dit deployment diagram staan de executables (ROS nodes) die opgestart worden door de verschillende launch files, daarnaast zijn ook de twee executables meegenomen die gebruikt worden op de Raspberry Pi's
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{UML/out/DeploymentDiagram/DeploymentDiagram/DeploymentDiagram.png}\end{center}
@@ -319,7 +328,7 @@ Dit component bevat de basis componenten voor het opbouwen van een meshnetwerk.
 \subsubsection{MeshnetworkComponent}
 
 \label{architectural:subcomponenten:MeshnetworkComponent}
-Een MeshnetworkComponent is de basis van elk component in het mesh netwerk.
+Een MeshnetworkComponent is de basis van elk component in het meshnetwerk.
 Het vereist routeringstechniek via de \nameref{architectural:interfaces:IRoutingTechnique}, een aansluiting naar een drone via \nameref{architectural:interfaces:IDroneEngine} en een vorm van draadloze communicatie via \nameref{architectural:interfaces:IWirelessCommunication}.
 Hij maakt gebruikt van het component \nameref{architectural:subcomponenten:Messages} om te communiceren met andere MeshnetworkComponenten.
 
@@ -890,23 +899,23 @@ Hoewel het nu nog niet van toepassing is zal gazebo uiteindelijk ook verantwoord
 \end{figure}
 
 %NAMESPACE GAZEBO
-\subsubsection{ArduinoSimulation}
-\label{architectural:subcomponenten:ArduinoSimulation}
-In de dit component wordt een arduino gesimuleerd, deze simulatie is puur functioneel en betreft alleen een gelijk gedrag met betrekking tot de Arduino sketch. 
+\subsubsection{RaspberryPiSimulation}
+\label{architectural:subcomponenten:RaspberryPiSimulation}
+In de dit component wordt een Raspberry Pi gesimuleerd, deze simulatie is puur functioneel.
 Het heeft geen effect op de clock snelheid deze is gelijk aan de computer waarop de software draait. 
 
-\subsubsection{VirtualArduino}
-\label{architectural:subcomponenten:VirtualArduino}
-Dit abstracte component verplicht elke virtuele Arduino tot het aanmaken van een setup en loop functie zoals dit ook is in Arduino sketches.
-Omdat deze Arduino altijd wordt toegevoegd aan een ander model erft dit component over van modelplugin.    
+\subsubsection{VirtualRaspberryPi}
+\label{architectural:subcomponenten:VirtualRaspberryPi}
+Dit abstracte component wordt gebruikt ter generalisatie van een Raspberry Pi
+Omdat deze Raspberry Pi altijd wordt toegevoegd aan een ander model erft dit component over van modelplugin.    
 
-\subsubsection{VirtualArduinoRouter}
-\label{architectural:subcomponenten:VirtualArduinoRouter}
-Deze \nameref{architectural:subcomponenten:VirtualArduino} is voorzien van een sketch die de arduino zich laat gedragen als in router in het meshnetwerk. 
+\subsubsection{VirtualRaspberryPiRouter}
+\label{architectural:subcomponenten:VirtualRaspberryPiRouter}
+Deze \nameref{architectural:subcomponenten:VirtualRaspberryPi} is voorzien van een applicatie die de Raspberry Pi zich laat gedragen als in router in het meshnetwerk. 
 
-\subsubsection{VirtualArduinoGateway}
-\label{architectural:subcomponenten:VirtualArduinoGateway}
-Deze \nameref{architectural:subcomponenten:VirtualArduino} is voorzien van een sketch die de arduino zich laat gedragen als in gateway in het meshnetwerk. 
+\subsubsection{VirtualRaspberryPiGateway}
+\label{architectural:subcomponenten:VirtualRaspberryPiGateway}
+Deze \nameref{architectural:subcomponenten:VirtualRaspberryPi} is voorzien van een applicatie die de Raspberry Pi zich laat gedragen als in gateway in het meshnetwerk. 
 
 
 \subsubsection{DroneSimulation}
@@ -927,10 +936,10 @@ Een virtuele drone is een abstract component die alle variabelen bevat die nodig
 
 \subsubsection{GatewayDrone}
 \label{architectural:subcomponenten:GatewayDrone}
-Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualArduinoGateway} plugin. 
+Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualRaspberryPiGateway} plugin. 
 \subsubsection{RouterDrone}
 \label{architectural:subcomponenten:RouterDrone}
-Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualArduinoRouter} plugin. 
+Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualRaspberryPiRouter} plugin. 
 
 \subsubsection{DroneFactory}
 \label{architectural:subcomponenten:DroneFactory}
@@ -1003,26 +1012,26 @@ Dit houdt dus in dat het ID van de drone verstuurd wordt en de positie waar die 
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:MeshNetwerk:sequence}
 In de onderstaande diagrammen wordt de sequentie weergeven die uitgevoerd wordt in het component gazebo. 
-Eerst worden de virtuele Arduino's behandeld waarna de dronefactory vervolgens aan bod komt. 
+Eerst worden de virtuele RaspberryPi's behandeld waarna de dronefactory vervolgens aan bod komt. 
 
-\paragraph{Opstarten virtuele arduino}
-\label{DetailedDesign:MeshNetwerk:sequence:startenarduino}
-Doordat er maar een minimaal verschil zit tussen het opstarten van een virtuele router arduino en een virtuele gateway arduino worden deze samen behandeld.
+\paragraph{Opstarten virtuele RaspberryPi}
+\label{DetailedDesign:MeshNetwerk:sequence:startenRaspberryPi}
+Doordat er maar een minimaal verschil zit tussen het opstarten van een virtuele router Raspberry Pi en een virtuele gateway Raspberry Pi worden deze samen behandeld.
 
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.90\linewidth]{UML/out/DroneSimulation/Sequence/VirtualGateway/VirtualGateway.png}\end{center}
-	\caption{Sequence diagram initialiseren van een virtuele gateway arduino}
-	\label{fig:communication:MeshNetwerk:sequence:gatewayarduino}
+	\caption{Sequence diagram initialiseren van een virtuele gateway Raspberry Pi}
+	\label{fig:communication:MeshNetwerk:sequence:gatewayRaspberryPi}
 \end{figure}
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.90\linewidth]{UML/out/DroneSimulation/Sequence/VirtualRouter/VirtualRouter.png}\end{center}
-	\caption{Sequence diagram initialiseren van een virtuele gateway arduino}
-	\label{fig:communication:MeshNetwerk:sequence:routerarduino}
+	\caption{Sequence diagram initialiseren van een virtuele gateway Raspberry Pi}
+	\label{fig:communication:MeshNetwerk:sequence:routerRaspberryPi}
 \end{figure}
 
-In beiden gevallen begint het opstarten van de virtuele arduino met het uitlezen van SDF waardes waar de parameters NodeID, DroneID en debug uit gehaald wordt.
+In beiden gevallen begint het opstarten van de virtuele Raspberry Pi met het uitlezen van SDF waardes waar de parameters NodeID, DroneID en debug uit gehaald wordt.
 Vervolgens wordt er een instantie van de routeringstechniek, DroneEngine connector, Virtuele NRF24 aangemaakt.
 In het geval van de gateway wordt er ook nog een RosInternetMock aangemaakt.
 
@@ -1103,9 +1112,9 @@ Belangrijke punten uit deze omschrijving zijn:
 
 \textbf{Material:} Hierin wordt een script aangeroepen om een kleur toe te wijzen aan de drone.
 
-\textbf{plugin name="MeshnetworkRouter" filename="libMeshnetworkRouter.so"} Deze plugin zorgt ervoor dat een drone voorzien wordt van een \nameref{architectural:subcomponenten:VirtualArduinoRouter}.
+\textbf{plugin name="MeshnetworkRouter" filename="libMeshnetworkRouter.so"} Deze plugin zorgt ervoor dat een drone voorzien wordt van een \nameref{architectural:subcomponenten:VirtualRaspberryPiRouter}.
 
-\textbf{plugin name="MeshnetworkGateway" filename="libMeshnetworkGateway.so"} Deze plugin zorgt ervoor dat een drone voorzien wordt van een \nameref{architectural:subcomponenten:VirtualArduinoGateway}. Deze plugin is niet zichtbaar in het bovenstaande SDF voorbeeld maar wordt wel gebruikt in het sdf format voor een gateway 
+\textbf{plugin name="MeshnetworkGateway" filename="libMeshnetworkGateway.so"} Deze plugin zorgt ervoor dat een drone voorzien wordt van een \nameref{architectural:subcomponenten:VirtualRaspberryPiGateway}. Deze plugin is niet zichtbaar in het bovenstaande SDF voorbeeld maar wordt wel gebruikt in het sdf format voor een gateway 
 
 \textbf{plugin filename = 'libDroneEngine.so' name ='DroneEngine'} Deze plugin zorgt ervoor dat een drone wordt voorzien van eem \nameref{architectural:subcomponenten:DroneEngine}
 

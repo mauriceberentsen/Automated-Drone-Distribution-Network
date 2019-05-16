@@ -37,13 +37,13 @@ namespace Drone{
     interface IDroneEngine
 }
 namespace gazebo{
-    namespace Arduino{
-        class  	IVirtualArduino
-        class  	VirtualArduinoCommunicator
-        class  	VirtualArduinoGateway
+    namespace RaspberryPi{
+        class  	IVirtualRaspberryPi
+        class  	VirtualRaspberryPiCommunicator
+        class  	VirtualRaspberryPiGateway
 
-        VirtualArduinoCommunicator --|> IVirtualArduino
-        VirtualArduinoGateway --|> IVirtualArduino
+        VirtualRaspberryPiCommunicator --|> IVirtualRaspberryPi
+        VirtualRaspberryPiGateway --|> IVirtualRaspberryPi
 
     }
     namespace DroneSimulation{
@@ -90,8 +90,8 @@ ros.RosInternetMock ..|> Communication.IInternetConnection
 ros.rosDroneEngineConnector ..|> Drone.IDroneEngine
 ros.rosDroneEngineConnector ..> gazebo.DroneSimulation.DroneEngine
 
-gazebo.DroneSimulation.GatewayDrone *-- gazebo.Arduino.VirtualArduinoGateway
-gazebo.DroneSimulation.RouterDrone *-- gazebo.Arduino.VirtualArduinoCommunicator
+gazebo.DroneSimulation.GatewayDrone *-- gazebo.RaspberryPi.VirtualRaspberryPiGateway
+gazebo.DroneSimulation.RouterDrone *-- gazebo.RaspberryPi.VirtualRaspberryPiCommunicator
 ros.DroneManagerService ..> ros.RosInternetMock
 
 

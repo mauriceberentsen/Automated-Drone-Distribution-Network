@@ -91,7 +91,7 @@ find_package(gazebo REQUIRED)
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} include)
 
-add_library(MeshnetworkRouter SHARED       src/gazebo/Arduino/VirtualArduinoRouter.cpp
+add_library(MeshnetworkRouter SHARED       src/gazebo/RaspberryPi/VirtualRaspberryPiRouter.cpp
                                            src/Communication/Meshnetwork/MeshnetworkComponent.cpp
                                            src/Communication/Meshnetwork/MeshnetworkRouter.cpp
                                            src/Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp
@@ -101,7 +101,7 @@ add_library(MeshnetworkRouter SHARED       src/gazebo/Arduino/VirtualArduinoRout
 target_link_libraries(MeshnetworkRouter ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(MeshnetworkRouter drone_meshnetwork_simulation_generate_messages_cpp)
 
-add_library(MeshnetworkGateway SHARED src/gazebo/Arduino/VirtualArduinoGateway.cpp
+add_library(MeshnetworkGateway SHARED src/gazebo/RaspberryPi/VirtualRaspberryPiGateway.cpp
                                       src/Communication/Meshnetwork/MeshnetworkComponent.cpp
                                       src/Communication/Meshnetwork/MeshnetworkGateway.cpp
                                       src/Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp

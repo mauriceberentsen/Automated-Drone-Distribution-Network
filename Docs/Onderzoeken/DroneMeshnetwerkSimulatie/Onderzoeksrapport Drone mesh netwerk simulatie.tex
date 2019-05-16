@@ -78,25 +78,26 @@
 
 \author{M.W.J. Berentsen}
 \font\myfont=cmr12 at 40pt
-\title{\myfont Drone mesh netwerk simulatie}
+\title{\myfont Drone meshnetwerk simulatie}
 \usepackage{titling}
 
-\newcommand{\subtitle}[8]{%
+\newcommand{\subtitle}[9]{%
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
 	\vskip0.5em
 	\begin{center}\large#2\end{center}
-	\begin{center}\large#3\end{center}
+	\begin{center}\normalsize#3\end{center}
 	\begin{center}\large#4\end{center}
-    \begin{center}\large#5\end{center}
-    \begin{center}\large#6\end{center}
-    \begin{center}\large#7\end{center}
-    \begin{center}\large#8\end{center}
+	\begin{center}\large#5\end{center}
+	\begin{center}\large#6\end{center}
+	\begin{center}\normalsize#7\end{center}
+	\begin{center}\normalsize#8\end{center}
+	\begin{center}\normalsize#9\end{center}
 	\vskip0.5em}%
 }
 
-\subtitle{Onderzoeksrapport}{HAN Arnhem}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Onderzoeksrapport}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -105,6 +106,14 @@
 
 \hypersetup{colorlinks=true, urlcolor=red,citecolor=black,linkcolor=blue}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 \setcounter{tocdepth}{2}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\setlength\headheight{26pt} %% just to make warning go away. Adjust the value after looking into the warning.
+% \rhead{{\color{blue}\rule{1cm}{1cm}}}
+
+\rhead{\includegraphics[height=1cm]{Afbeeldingen/han.png}}
 
 
 
@@ -117,14 +126,27 @@
 %\section*{Voorwoord}
 %\addcontentsline{toc}{section}{\protect\numberline{}Voorwoord}
 %\pagebreak
-\chapter*{Samenvatting}
+\chapter*{Managementsamenvatting}
 
-Optioneel een samenvatting van het onderzoek. Hier kunnen anderen snel inzicht krijgen in wat jij hebt onderzocht en wat je conclusie is.
-\begin{itemize}
-	\item Kunnen derden snel inzicht krijgen in jouw onderzoek?
-	\item Staat de conclusie erin vermeld?
-\end{itemize}
-\hrule
+%Optioneel een samenvatting van het onderzoek. Hier kunnen anderen snel inzicht krijgen in wat jij hebt onderzocht en wat je conclusie is.
+%\begin{itemize}
+%	\item Kunnen derden snel inzicht krijgen in jouw onderzoek?
+%	\item Staat de conclusie erin vermeld?
+%\end{itemize}
+%\hrule
+
+In dit onderzoek word onderzocht hoe netwerkmodules een groep van honderd drones kunnen voorzien van een onderling meshnetwerk die snel kan reageren op uitval van netwerkpunten.
+
+Literatuuronderzoek heeft aangetoond dat een nRF24l01+ de meeste potentie heeft voor het meshnetwerk vanwege zijn snelheid van 250 kbps op een afstand van 700 meter.
+
+De gekozen controller om aan te sluiten op de drone is een Raspberry Pi model 2B+. Deze is gekozen door zijn compatibiliteit met een NRF24 en rijke I/O interface. 
+De software voor het meshnetwerk is ontwikkeld voor het gebruik op een Raspberry Pi model 2B+ en geschreven in C++.   
+
+Er is een aangepaste variant van het lightweight mobile routering protocol toegepast. Door gebruik te maken van de flexibiliteit van dit reactieve protocol met een toevoeging van proactief gedrag. De proactieve toevoeging zorgt ervoor dat de wens van Alten Nederland om snel achter uitval te komen uit komt. Daarnaast zorgt de toevoeging ervoor dat routes in het netwerk al bekend zijn voordat deze nodig zijn, wat zorgt voor snellere communicatie dan wanneer er op het moment dat het nodig is nog een pad gebouwd moet worden.
+
+Om dit onderzoek te ondertussen is er een simulatie gebouwd waarin abstracte drones met daarop een aangesloten netwerkcomponent kunnen rondvliegen. Dit maakt de simulatie bruikbaar voor het testen van zowel routeringstechnieken als (her)verdelingen. 
+
+Om aan te tonen dat de mogelijkheid om een drone te kunnen verplaatsen bijdraagt aan het zelfherstellend vermogen van een meshnetwerk is er een oplossing geïmplementeerd waar de drones een stap terug nemen in het netwerk op het moment dat ze geen verbinding meer hebben.  Testen hebben aangetoont dat dit idee alleen een goede toevoeging is op het moment dat er een enkele drone uitvalt in een kritische verbinding. Op het moment dat er meer drones in een verbinding uitvallen komen de drones terug naar de gateway, waardoor er een potentieel groot deel van een netwerk wegvalt. Het doel om aan te tonen dat de simulatie bruikbaar is in het onderzoeken van (her)verdelingen is daarmee wel bewezen.
 
 \tableofcontents
 \clearpage
@@ -190,9 +212,9 @@ Om de hoofdvraag te kunnen beantwoorden zijn er de volgende deelvragen opgesteld
 \begin{itemize}
 	\item Welke simulatie software is geschikt om een netwerk van ongeveer 100 drones in na te bootsen?
 	\item Wat is de grote van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?
-	\item Welke mesh netwerk hardware is geschikt voor het onderling verbinden van drones?
-	\item Welke mesh netwerk techniek is geschikt voor de te gebruiken hardware?
-%TODO	\item Hoe gedraagt een node uit het mesh netwerk zich bij slecht of geen bereik?
+	\item Welke meshnetwerk hardware is geschikt voor het onderling verbinden van drones?
+	\item Welke meshnetwerk techniek is geschikt voor de te gebruiken hardware?
+%TODO	\item Hoe gedraagt een node uit het meshnetwerk zich bij slecht of geen bereik?
 	\item Is het mogelijk voor netwerkmodule om een netwerk te herstellen door het de mogelijkheid te geven zich vrij te bewegen?
 	\item Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?
 \end{itemize}
@@ -272,16 +294,16 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 		DR1		& De drone is een quadcopter.        \\ \hline
 		DR2		& De drone is is voorzien van een API voor aansturing op basis van coördinaten.       \\ \hline
 		DR3		& De API sluit aan op de middleware ROS melodic.        \\ \hline
-		DR4		& De drone is bruikbaar binnen de gekozen simulatie software.        \\ \hline%TODO gekozen software toevoegen
+		DR4		& De drone is bruikbaar binnen de gekozen simulatie software Gazebo.        \\ \hline
 		DR5		& De drone moet een kleine goedkope drone representeren.        \\ \hline
 		\hypertarget{ph1}{PH1}		& Ondersteunt een bereik van minimaal 500 meter.  \\ \hline
 		\hypertarget{ph2}{PH2}		& Ondersteunt het gebruik van grid networking om tot een mesh te kunnen komen.  \\ \hline
 		\hypertarget{ph3}{PH3}		& Maakt gebruik van een openbare bandbreedte.\\ \hline
 		\hypertarget{ph4}{PH4}		& Voorziet zichzelf van een draadloos netwerk en leunt dus niet op technieken zoals 4G\\ \hline
 		\hypertarget{ph5}{PH5}		& Is een product ontwikkeld voor low energy toepassingen. \\ \hline
-		PS1		& Ondersteunt een mesh netwerk van minimaal 100 nodes. \\ \hline
+		PS1		& Ondersteunt een meshnetwerk van minimaal 100 nodes. \\ \hline
 		PS2		& Het netwerk is zelf herstellend. \\ \hline
-		PS3		& Ondersteunt het draaien op een raspberry pi of een ardunio (UNO of NANO). \\ \hline
+		PS3		& Ondersteunt het draaien op een Raspberry Pi model 2B+ \\ \hline
 		PS4		& Ondersteunt het versturen van zelfgemaakte berichten. \\ \hline
 		
 	\caption{Opgestelde criteria}
@@ -555,7 +577,7 @@ Dit zou voldoende ruimte moeten geven doordat er één 32 bits waarde of twee 16
 
 Daarmee is de conclusie dat de maximale grootte 21 byte is voor een bericht om nuttig te zijn voor een aansturingssysteem.
 
-\section{Welke mesh netwerk hardware is geschikt voor het onderling verbinden van drones?}
+\section{Welke meshnetwerk hardware is geschikt voor het onderling verbinden van drones?}
 \label{sec:meshnetwerkkeuze}
 
 Om een onderling netwerk op te bouwen is hardware nodig. 
@@ -590,7 +612,7 @@ Vertaalt naar een topologie zou dit er als \autoref{fig:toplogieboom} uitzien.
 
 Een probleem wat uit deze twee voorbeelden duidelijk wordt is de grens van het bereik. 
 Deze is namelijk alleen uit te breiden in door het toevoegen van extra netwerkpunten.
-De mesh netwerk techniek is een oplossing voor dit probleem.
+De meshnetwerk techniek is een oplossing voor dit probleem.
 In een meshnetwerk zijn de apparaten in staat om direct met elkaar te verbinden. 
 Zo is elk apparaat in het netwerk direct een uitbreiding in het bereik van het netwerk doordat het informatie kan doorgeven.
 
@@ -601,7 +623,7 @@ Tenslotte voegt het ook een afhankelijkheid toe omdat bijvoorbeeld de televisie 
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.3\linewidth]{meshclass}\end{center}
-	\caption{Verbanden tussen de rollen in een mesh netwerk}
+	\caption{Verbanden tussen de rollen in een meshnetwerk}
 	\label{fig:meshrol}
 \end{figure}
 
@@ -618,7 +640,7 @@ Het grote nadeel van dat het communiceren naar dit type onmogelijk is en het dus
 	\item \textbf{Type B} is een variant van type A welke na het zenden van een bericht enige tijd online blijft om een berichten te kunnen ontvangen. 
 Een voordeel is dat deze dus wel op afstand aan te sturen is maar nog steeds is deze alleen een gebruiker van het netwerk.
 	\item \textbf{Type C} is de minst zuinige variant van de nodes doordat hij altijd aan staat.
-Het nadeel is dus dat deze het meest stroom verbruikt daarin tegen kan deze node wel de belangrijke rol krijgen van router en biedt vergroot daarmee het mesh netwerk.
+Het nadeel is dus dat deze het meest stroom verbruikt daarin tegen kan deze node wel de belangrijke rol krijgen van router en biedt vergroot daarmee het meshnetwerk.
 \end{itemize}
 
 In het geval van de opdracht wordt alleen gekeken naar type C nodes omdat er interesse is naar de dynamische plaatsing van dit type.
@@ -641,7 +663,7 @@ Deze is gebasseerd op de LoRa fysieke laag (PHY)\cite{LoRAMOD} implementatie om 
 LoRaWAN is een netwerkstandaard opgezet voor telecom providers om het mogelijk te maken netwerken op te zetten voor communicatie over afstanden tot 15km.
 Alleen het LoRaWAN maakt gebruikt van een ster topologie doordat nodes maar 1 hop kunnen maken naar een gateway van het netwerk.
 Een andere nadeel die het LoRa netwerk heeft is dat ondanks de grote afstand die het kan afleggen door de spreidingsfactor te vergroten en de gevoeligheid van de ontvanger te verhogen dit ten koste gaat van de snelheid van de datadoorvoer.
-\citeA{LoraMesh} hebben in onderzoek gedaan naar de mogelijk om het LoRa PHY netwerk te gebruiken als mesh netwerk en ook aangetoond dat dit werkt.
+\citeA{LoraMesh} hebben in onderzoek gedaan naar de mogelijk om het LoRa PHY netwerk te gebruiken als meshnetwerk en ook aangetoond dat dit werkt.
 Het doel van hun onderzoek was om door middel van mesh technieken LoRa geschikter te maken voor verstedelijkt gebied zonder het toevoegen van extra gateways. 
 Een nadeel wat ze beschrijven in de conclusie is het aantal nodes wat ze kunnen verwerken verkleind wordt.
 Dit komt door de degradatie van timing prestaties waarin ze stellen dat periode $p$ die een bericht nodig heeft om verstuurd te worden naar de gateway de volgende regel volgt ($p = 2h\cdot t$) waarbij $h$ het aantal hops is die het bericht maakt en $t$ de frametijd. Om de frametijd te berekenen geldt het volgende: $frametijd = \frac{framelengte}{bitsnelheid}$. 
@@ -650,7 +672,7 @@ Een voorwaarde van het gebruik van dit netwerk is dus wel dat de framelengte kle
 
 \subsubsection*{LPWAN LoRa samengevat}
 Als er gekeken wordt naar LPWAN oplossingen is LoRa PHY de enige noemenswaardige oplossing voor dit project.
-\citeA{LoraMesh} hebben al aangetoond dat een mesh netwerk op bais van LoRa mogelijk is waardoor het risico afneemt in de haalbaarheid van dit onderzoek.
+\citeA{LoraMesh} hebben al aangetoond dat een meshnetwerk op bais van LoRa mogelijk is waardoor het risico afneemt in de haalbaarheid van dit onderzoek.
 Een voordeel van dit netwerk is de afstand die de netwerkmodules van elkaar kunnen staan die met deze techniek kan oplopen tot meer dan 10 kilometer afhankelijk van de hoeveelheid en frequentie van de data die verstuurd moet worden.
 Een ander voordeel van deze techniek is dat het signaal enorme afstanden kan halen bij een vrije line of sight waarbij het wereldrecord zelf op 702 kilometer staat door een weerballon op 38 kilometer hoogte te gebruiken \cite{LoRARecord}.
 Hoewel deze extreme usecase niet zal voorkomen worden de netwerk modules wel gemaakt om aan drone gekoppeld te worden.
@@ -660,7 +682,7 @@ Een nadeel van dit netwerk is de lage data snelheid waardoor het alleen geschikt
 \subsection{nRF24l01+}\label{sec:nrf24l01}
 De nRF24l01 long range is een transciever van Nordic Semiconductor die werkzaam is op de 2,4ghz band \cite{nRFspec}.
 De module kan gebruik maken van verschillende standen van datasnelheid: 250kbps, 1Mbps, 2Mbps.
-Hoewel het een 3,3 volt apparaat is zijn de I/O pinnen 5 volt tolerant waardoor het een veilige interface biedt aan microcontrollers zoals die van Arduino. Daarnaast is door het aanbod van 3,3 volt I/O geschikt voor het gebruik op een raspberry.
+Hoewel het een 3,3 volt apparaat is zijn de I/O pinnen 5 volt tolerant waardoor het een veilige interface biedt aan microcontrollers. Daarnaast is door het aanbod van 3,3 volt I/O geschikt voor het gebruik op een Raspberry Pi.
 
 Er zijn van de module twee varianten met een gelijke interface. 
 Er is een module (nRF24l01) voor korte afstand en een module (nRF24l01+pa+lna) voor lange afstanden vaak aangeduid als nRF24l01+.
@@ -709,6 +731,14 @@ Omdat beide modules voldoen aan de gestelde eisen en in staat zijn de gewenste p
 Hij ziet een betere business case in een netwerk met een hogere dichtheid maar dan ook een hogere snelheid.
 Daarom zal er in dit project gebruik gemaakt worden van de nRF24l01+.
 
+
+\section{Aansturing nRF24 met een Raspbery Pi Model B+}
+
+\autoref{sec:meshnetwerkkeuze} heeft als uitkomst gegeven dat er voor de communicatie een nRF24l01+ gebruikt moet worden.
+Deze moet alleen ook aangestuurd worden en dit kan op verschillende manieren.
+Voor nu heeft Alten aangegeven zij graag wil dat dit gedaan wordt op een Raspbery Pi Model 2B+.
+Deze heeft zij al beschikbaar en wil eerst weten of het mogelijk is op een Rasperry pi voordat zij gaat investeren in ontwikkeling op een microcontroller.
+De ontwikkeling op een Raspberry Pi model 2B+ sluit aan op de requirements gesteld aan het project en wordt op wens van de student uitgevoerd in C++.
 
 
 \section{Welke routeringstechniek is geschikt voor de te gebruiken hardware?}
@@ -791,6 +821,8 @@ Dit protocol wordt gebruikt omdat het een protocol is die een hop routeringstech
 De techniek is niet afhankelijk van een gateway en nodes hoeven alleen te bewust te zijn van de buren en met wie die buren verbonden zijn.
 Het protocol hoeft alleen maar aangepast te worden zodat routes opgeslagen blijven.
 Doordat deze techniek geen routes hoeft op te slaan van het volledige netwerk  maar allen die van hun aangesloten buren en hun aangesloten punten zullen er geen grote routeringstabellen gecreëerd worden.
+
+ 
 
 
 \section{Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?}
@@ -1252,7 +1284,7 @@ De negatief punten van het protocol:
 	\item Het overleg wordt gebaseerd op afstand tot de gateway. Als er bijvoorbeeld uitrol is van drones die verdeelt zijn in een hoefijzer gaat dit problemen opleveren omdat de afstand dan juist kleiner is.
 \end{itemize} 
 
-%TODO\section{Hoe gedraagt een fysieke node uit het mesh netwerk zich bij slecht of geen bereik?}
+%TODO\section{Hoe gedraagt een fysieke node uit het meshnetwerk zich bij slecht of geen bereik?}
 %\label{experimenten:slechtofgeenbereik}
 
 
@@ -1279,7 +1311,7 @@ Dit is zo gemaakt omdat dit zo aangegeven is door Alten.
 Op het moment dat Alten besluit dat de drone een andere gedrag moeten krijgen zoals bijvoorbeeld swarming dan is het protocol ongeschikt en is het advies om te kijken naar een reactief protocol die altijd nieuwe paden berekend.
 Hetzelfde geldt als Alten besluit dat de drones altijd op een zelfde positie zullen staan, dan zal een proactief protocol een beter alternatief zijn om zo berichten over het kortste pad te kunnen sturen.    
 
-Dit onderzoek heeft daarnaast aangetoond dat de simulatiesoftware gebruikt kan worden voor het testen van geautomatiseerde herverdelingen bij uitval van netwerkpunten. Het advies luid wel om het huidige geïmplementeerde protocol niet te gebruiken aangezien deze negatieve kenmerken heeft die kritisch kunnen zijn in het bereik van het netwerk.
+Dit onderzoek heeft daarnaast aangetoond dat de simulatiesoftware gebruikt kan worden voor het testen van geautomatiseerde herverdelingen bij uitval van netwerkpunten. Het advies luid wel om het huidige geïmplementeerde herstelprotocol niet te gebruiken aangezien deze kritieke negatieve kenmerken heeft. 
 
 \bibliographystyle{apacite}
 \bibliography{bilbliography.bib}

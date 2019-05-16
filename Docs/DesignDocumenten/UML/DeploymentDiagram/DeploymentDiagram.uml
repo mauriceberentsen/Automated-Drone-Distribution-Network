@@ -1,6 +1,6 @@
 @startuml
-artifact ArduinoRouter  <<ino file>> as ArduinoRouter
-artifact ArduinoGateway  <<ino file>> as ArduinoGateway
+artifact RaspberryPiRouter  <<executable>> as RaspberryPiRouter
+artifact RaspberryPiGateway  <<executable>> as RaspberryPiGateway
 
 rectangle empty_world.launch <<launch file>> as empty_world
 rectangle factory.launch <<launch file>> as factory
