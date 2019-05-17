@@ -34,6 +34,7 @@
 \usepackage{pdfpages}
 \usepackage{afterpage}
 \usepackage{siunitx}
+\sisetup{per-mode=symbol,per-symbol = p,binary-units=true } 
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
@@ -384,8 +385,8 @@ Om onderling te onderhandelen tussen de nodes wie er actie moet ondernemen wordt
 \label{architectural:subcomponenten:RoutingTechnique}
 Dit component voorziet het meshnetwerk van een routing techniek wat dus inhoudt dat dit het component is die de communicatieroutes opbouwt naar andere punten in het netwerk.
 
-\subsubsection{ChildTableTree}
-\label{architectural:subcomponenten:ChildTableTree}
+\subsubsection{LightweightMobileRoutingProtocol}
+\label{architectural:subcomponenten:LightweightMobileRoutingProtocol}
 Deze techniek is een hybride meshnetwerk routing techniek waarbij een node de buren die deze heeft ziet als een kind.
 Als een node een nieuw kind heeft vertelt hij dit aan zijn buren.
 Omdat een node door zijn buren ook gezien wordt als kind registreren deze zijn nieuwe kind dus als kleinkind.
@@ -847,7 +848,9 @@ Deze paragraaf beschrijft acties die de applicatie onderneemt bij het ontvangen 
 In het acitvity diagram is te zien dat er bij het ontvangen van een bericht eerst wordt gekeken of het bericht geadresseerd is voor de ontvangende node.
 Als die niet zo is dan wordt het bericht doorgestuurd naar een volgend punt.
 
-Wanneer het wel geadresseerd is voor de ontvangende node dan gaat het de functie in om het bericht te verwerken. Hoe het bericht verwerkt wordt is afhankelijk van het type die het bericht bij zich draagt. Dit wordt gedaan aan de hand van een switch case.
+Wanneer het wel geadresseerd is voor de ontvangende node dan gaat het de functie in om het bericht te verwerken. Hoe het bericht verwerkt wordt is afhankelijk van het type die het bericht bij zich draagt. Dit wordt gedaan aan de hand van een switch case. 
+
+Voordat de functie verlaten wordt zal altijd de routeringstechniek geïnformeerd worden over de communicatie.
 
 \paragraph{Routeringstechniek voor het vinden van een pad tot het adres}
 \label{DetailedDesign:Communicatie:Activity:routeringtechniek:aanvraag}
@@ -882,6 +885,29 @@ Als er indirect een nieuw contact wordt gevonden dan wordt de gene die dit aange
 \label{DetailedDesign:Communicatie:ontwerkeuzes}
 In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
 
+\subsubsection{Directe aanroep van verplaatsing voor de routeringstechniek}
+
+Zodra het meshnetwerk component besloten heeft dat hij zich gaat verplaatsen roep hij direct de functie aan waarmee de \nameref{architectural:interfaces:IRoutingTechnique} geïnformeerd wordt tot een verplaatsing.
+Deze keuze is gemaakt zodat de routeringstechniek meteen weet dat alle routes die hij heeft opgebouwd ongeldig zijn geworden.
+Het alternatief was om deze aanroep pas te doen op het moment dat een drone geland is.
+Deze keuze is niet overwogen omdat de huidige \nameref{architectural:interfaces:IDroneEngine} nog geen ondersteuning heeft van het doorgeven van een staat van de drone.
+Op het moment dat de aanroep bij het landen dus zou moeten gebeuren moet er ook een state machine in de drone engine geïmplementeerd worden. 
+ 
+\subsubsection{Locaties onthouden door het hele bericht op te slaan}
+
+Op het moment dat een meshnetwerk component een locatie wil onthouden van de gateway of het component die een stap terug staat in het netwerk doet hij dit door het gehele bericht van het locatieverzoek te onthouden.
+Door dit is er wellicht een klein stuk opgeslagen data die niet gebruikt wordt maar er blijft op een overzichtelijke manier wel data onthouden die er toe doet. 
+Zo kan er in het bericht gezien worden van wie er een locatie is opgeslagen en ook hoe oud dit bericht is.
+In een toekomstige applicatie kan het misschien nodig zijn om op basis van de leeftijd van het bericht andere beslissingen te maken.  
+
+\subsubsection{Het gebruik van een messagehelper enum}
+
+Een enum in C++ heeft de eigenschap dat elk nummer er maar één keer in mag voorkomen. 
+Deze eigenschap wordt gebruikt voor het overzichtelijk toewijzen van plekken in de array van de payload. 
+Door dit te doen kan er tijdens het ontwikkelen gemakkelijk gebruikt gemaakt worden van de namen in de enum.
+Mochten er ooit plekken veranderen in het bericht hoeft dit ook maar op één plek aangepast te worden.
+Tevens kan de enum ook gebruikt worden voor het defineren van het maximale aantal bytes die een array mag bevatten. 
+
 %\subsubsection{}
 
 \section{Design Sub-Systeem gazebo}
@@ -907,7 +933,7 @@ Het heeft geen effect op de clock snelheid deze is gelijk aan de computer waarop
 
 \subsubsection{VirtualRaspberryPi}
 \label{architectural:subcomponenten:VirtualRaspberryPi}
-Dit abstracte component wordt gebruikt ter generalisatie van een Raspberry Pi
+Dit abstracte component wordt gebruikt ter generalisatie van een Raspberry Pi.
 Omdat deze Raspberry Pi altijd wordt toegevoegd aan een ander model erft dit component over van modelplugin.    
 
 \subsubsection{VirtualRaspberryPiRouter}
@@ -1184,7 +1210,7 @@ Als deze volledige animatie is ingesteld wordt dit verstuurd naar het model om u
 \subsection{Ontwerpkeuzes gemaakt voor het gazebo component}
 \label{DetailedDesign:gazebo:ontwerkeuzes}
 In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
-
+\subsubsection{Abstracte Raspberry Pi}
 
 \section{Design Sub-System ros}
 \label{DetailedDesign:WirelessSimulatie}
@@ -1733,58 +1759,78 @@ Voor een stabieler voltage wordt een condensator van \SI{4.7}{\micro\farad} aanb
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:NRF24:sequence}
 
-\paragraph{SetupNRF24}
+\paragraph{Starten van de NRF24 driver}
 \label{DetailedDesign:NRF24:sequence:SetupNRF24}
 
+Op het moment dat de driver van de NRF24 gestart wordt moet deze de NRF module correct instellen.
+Het instellen gebeurd door het volgende uit te voeren.
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/SetupNRF24/SetupNRF24.png}\end{center}
-	\caption{component diagram ros}
+	\begin{center}\includegraphics[width=.9\linewidth]{UML/out/NRF24/sequence/SetupNRF24/SetupNRF24.png}\end{center}
+	\caption{Sequence diagram instellen NRF24.}
 	\label{fig:NRF24:sequence:SetupNRF24}
 \end{figure}
 
+Op het moment dat de NRF24 gestart wordt moet hij over twee adressen geïnformeerd worden.
+Het adres uniek voor deze nRF24 en het algemene broadcast adres waar alle nRF24's op werken.
+Omdat de NRF24 driver een rij van adressen heeft die hij allemaal in de gaten moet houden wordt een aparte functie gebruik voor het instellen van de adressen.
+Vervolgens kan de driver een instantie maken van de NRF24.
+De libary van de NRF24 vereist dat als eerste functie altijd begin() aangeroepen wordt.
+De acknowlegdement wordt aangezet waarmee er geverifieerd kan worden dat een bericht is aangekomen.
+De snelheid van de band wordt ingesteld op \SI{250}{\kilo\bit\per\second}  en de payload grootte op het maximaal toegestaande van 32 bytes.
+Vervolgens wordt het broadcast adres ingesteld als schrijfadres en worden de eerste twee leesadressen ingesteld op het broadcast adres en het eigen adres van de node.
+Tenslotte wordt de NRF verzocht om te starten met luisteren waarna de functie eindigt.
 
-\paragraph{highlevelBroadcastMessage}
+\paragraph{Broadcast message op de high level interface}
 \label{DetailedDesign:NRF24:sequence:highlevelBroadcastMessage}
-
+Het broadcasten van een message is een functie die de high level interface aanbiedt.
+Hier komt zoals te zien in \autoref{fig:NRF24:sequence:highlevelBroadcastMessage} weinig bij kijken aangezien het bericht direct doorgegeven kan worden aan de driver.
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/highlevelBroadcastMessage/highlevelBroadcastMessage.png}\end{center}
-	\caption{component diagram ros}
+	\begin{center}\includegraphics[width=.7\linewidth]{UML/out/NRF24/sequence/highlevelBroadcastMessage/highlevelBroadcastMessage.png}\end{center}
+	\caption{Sequence diagram broadcast message op de high level interface.}
 	\label{fig:NRF24:sequence:highlevelBroadcastMessage}
 \end{figure}
 
-\paragraph{highlevelSendMessage}
-\label{DetailedDesign:NRF24:sequence:highlevelSendMessage}
-
-\begin{figure}[H]
-	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/highlevelSendMessage/highlevelSendMessage.png}\end{center}
-	\caption{component diagram ros}
-	\label{fig:NRF24:sequence:highlevelSendMessage}
-\end{figure}
-
-\paragraph{lowlevelBroadcastMessage}
+\paragraph{Broadcast message op de low level interface}
 \label{DetailedDesign:NRF24:sequence:lowlevelBroadcastMessage}
-
+Zodra de low level interface aangeroepen wordt om een bericht te broadcasten open hij de pipe naar het algemene roadcast adres, stop hij met luisteren, verstuurt het bericht en begint daarna weer met luisteren.
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/lowlevelBroadcastMessage/lowlevelBroadcastMessage.png}\end{center}
-	\caption{component diagram ros}
+	\begin{center}\includegraphics[width=.8\linewidth]{UML/out/NRF24/sequence/lowlevelBroadcastMessage/lowlevelBroadcastMessage.png}\end{center}
+	\caption{Sequence diagram broadcast message op de low level interface.}
 	\label{fig:NRF24:sequence:lowlevelBroadcastMessage}
 \end{figure}
 
-\paragraph{lowlevelSendMessage}
-\label{DetailedDesign:NRF24:sequence:lowlevelSendMessage}
+\paragraph{Bericht versturen high level interface }
+\label{DetailedDesign:NRF24:sequence:highlevelSendMessage}
+Als de high level interface verzocht wordt tot het versturen van een bericht naar een specifiek adres creëert de high level interface het adres op basis van het id voor het sturen en ontvangen acknowledgement. Nadat dit aangemaakt is wordt het bericht samen met de twee adressen doorgegeven aan de driver.
+De functie geeft een boolean terug op basis van het aangegeven succes van de driver.
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/highlevelSendMessage/highlevelSendMessage.png}\end{center}
+	\caption{Sequence diagram bericht versturen high level interface }
+	\label{fig:NRF24:sequence:highlevelSendMessage}
+\end{figure}
 
+
+\paragraph{Bericht versturen low level interface}
+\label{DetailedDesign:NRF24:sequence:lowlevelSendMessage}
+Wanneer de low level interface verzocht wordt om een bericht te versturen voegt hij eerst het acknowledgement adres toe aan zijn lijst met adressen waar hij naar luistert. 
+Vervolgens wordt het adres waar naartoe geschreven moet worden ingesteld op de schrijf pipe en het adres waar de acknowledgement op ontvangen wordt ook toegewezen op een pipe.
+Tenslotte wordt het bericht verstuurd terwijl er tijdelijk gestopt wordt met luisteren.
+De functie retourneert of het zenden gelukt is op basis van de acknowledgement.    
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/lowlevelSendMessage/lowlevelSendMessage.png}\end{center}
-	\caption{component diagram ros}
+	\caption{Sequence diagram bericht versturen low level interface}
 	\label{fig:NRF24:sequence:lowlevelSendMessage}
 \end{figure}
 
-\paragraph{recieveMessage}
+\paragraph{Het ontvangen van een bericht}
 \label{DetailedDesign:NRF24:sequence:recieveMessage}
 
+De driver van de NRF24 zal constant de adressen aangemeld in het buffer controleren of er een bericht beschikbaar is. 
+Zodra dit het geval is geeft de driver dit bericht door aan de high level interface.
+
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/recieveMessage/recieveMessage.png}\end{center}
-	\caption{component diagram ros}
+	\begin{center}\includegraphics[width=.99\linewidth]{UML/out/NRF24/sequence/recieveMessage/recieveMessage.png}\end{center}
+	\caption{Sequence diagram }
 	\label{fig:NRF24:sequence:recieveMessage}
 \end{figure}
 
@@ -1792,23 +1838,33 @@ Voor een stabieler voltage wordt een condensator van \SI{4.7}{\micro\farad} aanb
 \subsection{Activity Diagrams}
 \label{DetailedDesign:NRF24:activity}
 
-\paragraph{sendMessage}
-\label{DetailedDesign:NRF24:activity:recieveMessage}
-
-\begin{figure}[H]
-	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/activity/sendMessage/sendMessage.png}\end{center}
-	\caption{component diagram ros}
-	\label{fig:NRF24:activity:sendMessage}
-\end{figure}
-
 \paragraph{setupAntenna}
 \label{DetailedDesign:NRF24:activity:setupAntenna}
-
+Op het moment dat de antenne aangezet wordt via de interface die de NRF24 aanbiedt zal er het volgende ondernomen worden zichtbaar in \autoref{fig:NRF24:activity:setupAntenna}
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/activity/setupAntenna/setupAntenna.png}\end{center}
-	\caption{component diagram ros}
+	\caption{Activity diagram }
 	\label{fig:NRF24:activity:setupAntenna}
 \end{figure}
+Op het moment dat de antenne gestart wordt roept deze de driver aan op de antenne fysiek op te starten en te initialiseren.
+Vervolgens zal de driver zolang die aan staat continue elke pipeline controleren of er een bericht beschikbaar is. 
+Als die dit zo is geeft de low level interface die via de high level interface terug op de vereiste interface \nameref{DetailedDesign:CommunicatieComponentDiagram:interface:IMeshnetwork} 
+
+
+\paragraph{sendMessage}
+\label{DetailedDesign:NRF24:activity:recieveMessage}
+Voor het versturen van een bericht loop het NRF24 component meerdere stappen door. Deze worden onder \autoref{fig:NRF24:activity:sendMessage} toegelicht.
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/activity/sendMessage/sendMessage.png}\end{center}
+	\caption{Activity diagram }
+	\label{fig:NRF24:activity:sendMessage}
+\end{figure}
+Zodra de \nameref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} verzocht wordt tot het versturen van een bericht komt het bericht eerst aan in de high level interface.
+De haalt uit het bericht wie de geadresseerde is en maakt hiervoor een pipeline adres aan en een adres voor het ontvangen van een bevestiging.
+Waarna dit gedaan is geeft de high level interface dit door aan de driver.
+Die zal op zijn beurt de adressen juist registeren en vervolgens het bericht versturen.
+Op het sturen van een bericht zal meteen een bevestiging ontvangen worden of dit goed is gegaan.
+Het resultaat wordt teruggegeven aan de \nameref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication}.
 
 
 \subsection{Ontwerpkeuzes gemaakt voor het NRF24 component}

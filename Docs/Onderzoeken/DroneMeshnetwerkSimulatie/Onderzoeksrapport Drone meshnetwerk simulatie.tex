@@ -328,16 +328,16 @@ Voor het onderzoek wordt gebruik gemaakt van een simulatie omgeving.
 Welke software gebruikt moet worden staat vastgesteld in deze paragraaf.
 De keuze van software wordt bepaald door het uitvoeren van de bieb onderzoeksmethode. 
 In de \autoref{tab:criteria} staan de criteria toegelicht waar de simulatiesoftware aan moet voldoen.
-Als hoofdcriteria wordt een lijst opgesteld met simulatoren die ondersteuning hebben voor ROS.
+Als hoofdcriteria wordt een lijst opgesteld met simulatoren, die ondersteuning hebben voor ROS.
 Vervolgens worden deze aan de hand van een kruistabel onderworpen aan de andere criteria.
 Deze techniek is gebaseerd op de "Comparison Chart" van \cite{CMDmethod} uit de "\textit{CMD Methods Pack}"
 
 De kandidaten zijn:
 \begin{itemize}
 	\item \href{https://www.energid.com/actin}{Actin} is een simulatie framework van het bedrijf Energid. Het is in staat om de beweging van verschillende robots gelijktijdig aan te sturen.
-	\item \href{http://gazebosim.org/}{Gazebo} is een opensource robot simulatie framework bijzonder geschikt voor het simuleren van robotica in outdoor omgevingen door de uitgebreide Physics Engine Support.
+	\item \href{http://gazebosim.org/}{Gazebo} is een open source robot simulatie framework bijzonder geschikt voor het simuleren van robotica in outdoor-omgevingen door de uitgebreide Physics Engine Support.
 	\item \href{http://www.coppeliarobotics.com/}{V-REP (Virtual Robot Experimentation Platform)} is een platform geschikt voor het snel bouwen van robot prototypes.
-	\item \href{https://cyberbotics.com/}{Webots} is een open source-ontwikkelomgeving die wordt gebruikt voor het modelleren, programmeren en simuleren van mobiele robots.
+	\item \href{https://cyberbotics.com/}{Webots} is een open source ontwikkelomgeving die wordt gebruikt voor het modelleren, programmeren en simuleren van mobiele robots.
 	\item \href{http://openrave.org/}{OpenRAVE} biedt een ontwikkelomgeving voor het testen van motion planning algoritmes aan de hand van simulaties.
 \end{itemize}
 
@@ -365,12 +365,12 @@ In de \autoref{tab:kruissimkeuze} komt de simulatiesoftware van Gazebo en Webots
 Het is nu zaak om te uit te zoeken welke van de twee het meest geschikt is voor het uitvoeren van dit onderzoek.
 
 \subsection{Gazebo of Webots?}
-In januari 2018 hebben \citeauthor{RobotCompare} een publicatie geschreven waarin zij drie simulatoren vergelijken in het aanbod van features en performance. 
+In januari 2018 hebben \citeauthor{RobotCompare} een publicatie geschreven waarin zij drie simulatoren vergelijken in het aanbod van features en performance\cite{RobotCompare}. 
 Zij hebben een vergelijking gedaan tussen V-REP, Gazebo en ARGoS. 
-ARGoS is niet meegenomen in de overweging omdat het geen ondersteuning heeft voor ROS.
+ARGoS is niet meegenomen in de overweging voor het huidige onderzoek omdat het geen ondersteuning heeft voor ROS.
 
-In de conclusie van de publicatie komt Webots als het meest gebruiksvriendelijk naar voren in het gebruik en is in het bezit van de meeste features.
-Het grote nadeel van Webots is dat het veel kracht vraagt van de computer waardoor het niet geschikt is voor de simulatie van veel drones tegelijk.
+Uit de resultaten van de publicatie blijkt dat Webots als het meest gebruiksvriendelijk naar voren in het gebruik en is in het bezit van de meeste features.
+Het grote nadeel van Webots is dat het veel kracht vraagt van de computer, waardoor het niet geschikt is voor de simulatie van meerdere drones tegelijk.
 
 Daarmee komt de keuze uit op Gazebo. 
 De resultaten in de publicatie van \citeA{RobotCompare} tonen aan dat de software in staat is om veel drones tegelijk aan te kunnen sturen.
@@ -390,17 +390,17 @@ Om een keuze te kunnen maken waar de hardware en het bijhorende protocol aan moe
 
 Het doel van de berichten is om ze zo kort als mogelijk samen te stellen. 
 Daarom is het belangrijk om de structuur van de berichten zo klein mogelijk te houden.
-Om deze reden wordt niet gekeken naar een tekstuele serialisatie mogelijkheden zoals XML, YAML, JSON maar naar binaire mogelijkheden omdat deze veel efficienter zijn \cite{binary}.
+Om deze reden wordt niet gekeken naar een tekstuele serialisatie mogelijkheden zoals XML, YAML, JSON maar naar binaire mogelijkheden, omdat deze veel efficienter zijn \cite{binary}.
 
 \subsection{Binaire serialisatie voor het samenstellen van berichten} 
 
 "Binary Serialization is converting the object in binary format and being able to store it in a storage medium"\cite{binary}. 
-Het binair samenstellen van informatie is een efficiënte manier omdat de data met een minimale overhead wordt samengesteld \cite{binaryMessaging}.
+Het binair samenstellen van informatie is een efficiënte manier, omdat de data met een minimale overhead wordt samengesteld \cite{binaryMessaging}.
 Het nadeel die deze wijze met zich meebrengt is dat het resultaat van het bericht niet meer makkelijk leesbaar is voor mensen.
 Voor dit project ligt daar geen focus op dus is dit nadeel te verwaarlozen.
 
 \citeA{binaryMessaging} hebben onderzoek gedaan naar een efficiënte manier van de inzet van binaire berichten ter vervanging van tekstuele serialisatie.
-Hoewel dat in het huidige onderzoek niet het geval is kan er wel geleerd worden hoe de berichten gebruikt worden.
+Hoewel dat in het huidige onderzoek niet het geval is, kan er wel geleerd worden hoe de berichten gebruikt worden.
 \citeA{binaryMessaging} tonen in hun onderzoek aan dat berichten vaak een herhalende structuur hebben en dat dit een onnodige overhead creëert in de berichten.
 Een voorbeeld maken \citeA{binaryMessaging} zichtbaar in \autoref{fig:jsonxml} waarover zij het volgende zeggen: "While JSON  compared  with  XML,  eliminated  parameter  name redundancy, it keeps repeating (red box) the definition of each field  for  each  serialized  element  (green  box)". 
 \begin{figure}[H]
@@ -415,7 +415,7 @@ Deze flexibiliteit is alleen niet van toepassing op het doel van dit project, da
 Voor nu wordt er vanuit gegaan dat 1 byte genoeg zal zijn omdat de communicatiesoftware van de netwerkmodule niet meer dan 256 ($2^{8}$) berichtentypes hoeft te ondersteunen.
 Mocht het blijken dat dit toch niet genoeg is kan er er een byte toegevoegd worden waardoor er 65536 ($2^{16}$) types mogelijk zouden zijn.
 Daarnaast moet een bericht om nuttig te zijn voor het netwerk altijd aan een apparaat gekoppeld kunnen worden.
-De opdracht gaat over een netwerk van ongeveer 100 drones wat ruim past in een byte
+De opdracht gaat over een netwerk van ongeveer 100 drones wat ruim past in een byte.
 Daarom wordt er gekozen om een byte te gebruiken wat 255 unieke ID's mogelijk zou maken. 
 Hiermee komt het eerste deel van het bericht dus al tot stand het telt nu minimaal 2 bytes.
 
@@ -480,9 +480,9 @@ Dit is 4 bytes per float en exclusief de separator.
 \subsubsection*{Hoogte van de drone}
 \citeA{GPSheight} hebben onderzoek gedaan naar de accuraatheid van de hoogtebepaling bij drones. 
 Uit dit onderzoek is gebleken dat een continue vliegende drone een hoogte accuraatheid heeft van ongeveer twee meter.
-Hieruit is te halen dat het geen zin heeft om op centimeter niveau de hoogte van een drone aan te geven.
+Hieruit is te halen dat het geen zin heeft om op 'centimeter niveau' de hoogte van een drone aan te geven.
 Op het moment dat er een signed integer van 16 bits gebruikt zou worden kan er een afstand van 32.767 meter zowel boven als onder zeeniveau verstuurd worden.
-Het is een realistische waarde om te gebruiken aangezien de grootste hoogte die gebruik kan worden dan 32 kilometer is.
+Het is een realistische waarde om te gebruiken, aangezien de grootste hoogte die gebruik kan worden dan 32 kilometer is.
 Deze hoogte is al ver in de stratosfeer en zelfs al boven het niveau die een weerballon haalt. 
 De keuze om een signed integer te gebruiken is om ondersteuning te bieden aan plekken onder het zeeniveau waarvan Nederland een goed voorbeeld is.
 
@@ -515,18 +515,20 @@ Een systeem kan met dit bericht in ieder geval elke drone afzonderlijk in kaart 
 \label{tab:locatiebericht} 
 \end{table}
 In \ref{tab:locatiebericht} is het aantal bytes te zien benodigd voor een locatie bericht.
-Concluderend wordt voor dit bericht een grootte van minimaal 16 bytes gebruikt.
+Als conclusie is bepaald dat voor dit bericht een grootte van minimaal 16 bytes gebruikt.
  
 \subsection{Wat is de grootte van een bericht waarin een netwerkmodule zijn verbinding met anderen aangeeft?}
 
-Een van de wensen van de Alten is het in kaart brengen van de onderlinge verbindingen van de modules in het drone netwerk. 
+Eén van de wensen van de Alten is het in kaart brengen van de onderlinge verbindingen van de modules in het drone netwerk. 
 Als voorbeeld hoe dit eruit kan zien is de schets afkomstig van de casus uit het plan van aanpak toegevoegd als bijlage te vinden in \autoref{app:schetsNetwerk}.
 De informatie van de locatie van de netwerkpunten zijn al bekend door het gebruik van het bericht in \autoref{sub:locatie}
 Wat overblijft als onbekende informatie is de onderlinge verbinding.
 
 In het netwerk kunnen twee rollen verdeeld worden.
-De rol van zender aan het device die informatie wil versturen naar het basis station.
-Of de rol van ontvanger aan het device die de informatie van zender ontvangt.
+\begin{itemize}
+\item De rol van zender aan het device die informatie wil versturen naar het basis station.
+\item De rol van ontvanger aan het device die de informatie van zender ontvangt.
+\end{itemize}
 Een device die beide rollen kan aannemen wordt een transceiver genoemd.
 Als werkbaar voorbeeld wordt het netwerk uit de \nameref{app:schetsNetwerk} gebruikt.
 De ontvangers en zenders zijn verdeelt in \autoref{tab:ontvangerzender}.
@@ -628,7 +630,7 @@ Zo is elk apparaat in het netwerk direct een uitbreiding in het bereik van het n
 Er zitten aan een meshnetwerk ook nadelen.
 Omdat er nu meerdere routes van en naar een apparaat zijn komt er een extra protocol bij kijken welke route genomen moet worden wat extra complexiteit toevoegt.
 Daarnaast zal het draadloze verkeer verhoogt worden waardoor uiteindelijk apparaten elkaar zullen verstoren.
-Tenslotte voegt het ook een afhankelijkheid toe omdat bijvoorbeeld de televisie in het tuinhuisje de laptop in de keuken gebruikt als stap naar het modem.
+Tenslotte voegt het ook een afhankelijkheid toe, omdat bijvoorbeeld de televisie in het tuinhuisje de laptop in de keuken gebruikt als stap naar het modem.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.3\linewidth]{meshclass}\end{center}
@@ -652,32 +654,31 @@ Een voordeel is dat deze dus wel op afstand aan te sturen is maar nog steeds is 
 Het nadeel is dus dat deze het meest stroom verbruikt daarin tegen kan deze node wel de belangrijke rol krijgen van router en biedt vergroot daarmee het meshnetwerk.
 \end{itemize}
 
-In het geval van de opdracht wordt alleen gekeken naar type C nodes omdat er interesse is naar de dynamische plaatsing van dit type.
+In het geval van de opdracht wordt alleen gekeken naar type C nodes, omdat er interesse is naar de dynamische plaatsing van dit type.
 
 
 
 
 \subsection{Keuze in LPWAN hardware}
-De gestelde eisen over bereik en energieverbruik zijn een logische stap om een verdieping uit te voeren in low-power wide-area network (LPWAN) netwerken.
-Twee kandidaten worden in het opvolgende stuk behandeld. 
+De gestelde eisen over bereik en energieverbruik zijn een logische stap om een verdieping uit te voeren in low-power wide-area network (LPWAN) netwerken. 
 
-\subsubsection{LoRa}
 In de publicatie van \cite{LoraConnect} wordt het LoRaWAN netwerk onderzocht.
 Ook worden daar de grootste concurrenten van het LoRaWAN netwerk benoemd namelijk \href{https://www.sigfox.com/en}{SigFox} en Narrowband IoT (NB-IoT).
-Ondanks het feit dat deze protocollen niet interessant zijn voor het project omdat ze in de verkeerde OSI-laag vallen namelijk de netwerklaag is het wel interessant om te kijken welke techniek deze gebruiken.
-NB-IoT valt direct af als interesse doordat het gebruikt maakt van mobiele communicatie en dus niet zou voldoen aan criteria \hyperlink{ph4}{PH4}.
-Daarna valt SiGFox ook af simpelweg omdat het gebruik maar beperkt openbaar is gemaakt waardoor het niet geschikt is om een meshnetwerk mee te bouwen. 
-
+Ondanks het feit dat deze protocollen niet interessant zijn voor het project, omdat ze in de verkeerde OSI-laag vallen, is de netwerklaag wel interessant om te bekijken welke technieken er gebruikt worden.
+NB-IoT valt direct af als oplossing doordat het gebruikt maakt van mobiele communicatie en dus niet zou voldoen aan criteria \hyperlink{ph4}{PH4}.
+Daarna valt SiGFox ook af simpelweg, omdat het gebruik maar beperkt openbaar is gemaakt waardoor het niet geschikt is om een meshnetwerk mee te bouwen. 
 Dan blijft uit deze publicatie het LoRaWAN netwerk over. 
-Deze is gebasseerd op de LoRa fysieke laag (PHY)\cite{LoRAMOD} implementatie om de communicatie af te handelen.
-LoRaWAN is een netwerkstandaard opgezet voor telecom providers om het mogelijk te maken netwerken op te zetten voor communicatie over afstanden tot 15km.
-Alleen het LoRaWAN maakt gebruikt van een ster topologie doordat nodes maar 1 hop kunnen maken naar een gateway van het netwerk.
+
+\subsubsection{LoRa}
+Het LoRaWAN netwerk is gebasseerd op de LoRa fysieke laag (PHY)\cite{LoRAMOD} implementatie om de communicatie af te handelen.
+LoRaWAN is een netwerkstandaard opgezet voor telecom providers om het mogelijk te maken netwerken op te zetten voor communicatie over afstanden tot \SI{15}{\kilo\meter}.
+Alleen het LoRaWAN maakt gebruikt van een ster topologie doordat nodes maar één hop kunnen maken naar een gateway van het netwerk.
 Een andere nadeel die het LoRa netwerk heeft is dat ondanks de grote afstand die het kan afleggen door de spreidingsfactor te vergroten en de gevoeligheid van de ontvanger te verhogen dit ten koste gaat van de snelheid van de datadoorvoer.
 \citeA{LoraMesh} hebben in onderzoek gedaan naar de mogelijk om het LoRa PHY netwerk te gebruiken als meshnetwerk en ook aangetoond dat dit werkt.
 Het doel van hun onderzoek was om door middel van mesh technieken LoRa geschikter te maken voor verstedelijkt gebied zonder het toevoegen van extra gateways. 
 Een nadeel wat ze beschrijven in de conclusie is het aantal nodes wat ze kunnen verwerken verkleind wordt.
 Dit komt door de degradatie van timing prestaties waarin ze stellen dat periode $p$ die een bericht nodig heeft om verstuurd te worden naar de gateway de volgende regel volgt ($p = 2h\cdot t$) waarbij $h$ het aantal hops is die het bericht maakt en $t$ de frametijd. Om de frametijd te berekenen geldt het volgende: $frametijd = \frac{framelengte}{bitsnelheid}$. 
-Voordeel van het gebruik die een mesh kan hebben ten opzichte van een ster netwerk is dat het een hogere bitsnelheid kan behouden omdat er kleinere afstanden overbrugt hoeven te worden waardoor de frametijd alsnog klein kan blijven.
+Voordeel van het gebruik die een mesh kan hebben ten opzichte van een ster netwerk is dat het een hogere bitsnelheid kan behouden, omdat er kleinere afstanden overbrugt hoeven te worden waardoor de frametijd alsnog klein kan blijven.
 Een voorwaarde van het gebruik van dit netwerk is dus wel dat de framelengte klein moet zijn waardoor het niet geschikt is voor het verwerken van grote berichten zoals afbeeldingen video of andere grote bestanden.
 
 \paragraph*{LoRa samengevat}
@@ -699,7 +700,7 @@ Er is een module (nRF24l01) voor korte afstand en een module (nRF24l01+pa+lna) v
 De module voor lange afstanden beschikt over een power amplifier en een low noise amplifier wat het een beter zend en ontvangst vermogen geeft.
 De module heeft volgens de specificaties een theoretisch bereik van 1100 meter bij vrij zicht.
 Er zijn verschillende video's op youtube waar aangetoond wordt dat deze afstand gehaald wordt.
-Zo wordt in de video (\href{https://www.youtube.com/watch?v=lR60toEjHl8}{https://www.youtube.com/watch?v=lR60toEjHl8}) van iforce2d een afstand overbrugt van 700m met een data rate van 250kbps \cite{nrfAfstand}.
+Zo wordt in de \href{https://www.youtube.com/watch?v=lR60toEjHl8}{video (https://www.youtube.com/watch?v=lR60toEjHl8}) van iforce2d een afstand overbrugt van 700m met een data rate van 250kbps \cite{nrfAfstand}.
 Het zal in ieder geval voldoende zijn om de eis van 500 meter te overbruggen.  
 
 \begin{figure}[H]
@@ -707,7 +708,7 @@ Het zal in ieder geval voldoende zijn om de eis van 500 meter te overbruggen.
 	\caption{Werking van verbindingen nRF24l01. Afkomstig van \href{https://www.instructables.com/id/NRF24L01-Multiceiver-Network}{https://www.instructables.com/id/NRF24L01-Multiceiver-Network}, 18 maart 2019}
 	\label{fig:nrfchannel}
 \end{figure}
-Hij kan tot zes adressen tegelijk onderhouden die kunnen schakelen tussen een RX (ontvang) en TX (zend) stand. 
+De nRF24l01+ kan tot zes adressen tegelijk onderhouden die kunnen schakelen tussen een RX (ontvang) en TX (zend) stand. 
 \autoref{fig:nrfchannel} laat het gebruik van adressen zien, hierin is te zien dat een adres is opgebouwd uit 5 bytes.
 Dit levert een totaal op van 10782039375 ($255^{5}$) unieke adressen.
 Het grote aantal zal waarschijnlijk nooit bereikt worden door de complexiteit die de topologie van een dusdanig netwerk geeft.
@@ -746,8 +747,8 @@ Daarom zal er in dit project gebruik gemaakt worden van de nRF24l01+.
 
 \autoref{sec:meshnetwerkkeuze} heeft als uitkomst gegeven dat er voor de communicatie een nRF24l01+ gebruikt moet worden.
 Deze moet alleen ook aangestuurd worden en dit kan op verschillende manieren.
-Voor nu heeft Alten aangegeven zij graag wil dat dit gedaan wordt op een Raspbery Pi Model 2B+.
-Deze heeft zij al beschikbaar en wil eerst weten of het mogelijk is op een Rasperry pi voordat zij gaat investeren in ontwikkeling op een microcontroller.
+Voor nu heeft Alten aangegeven dat zij graag wil dat dit gedaan wordt op een Raspbery Pi Model 2B+.
+Deze heeft Alten al beschikbaar en wil eerst weten of het mogelijk is op een Rasperry pi voordat Alten gaat investeren in ontwikkeling op een microcontroller.
 De ontwikkeling op een Raspberry Pi model 2B+ sluit aan op de requirements gesteld aan het project en wordt op wens van de student uitgevoerd in C++.
 
 
@@ -785,13 +786,13 @@ In de huidige situatie zijn er 21 verbindingen in het netwerk tussen de nodes.
 Er zijn 14 punten aanwezig in het netwerk minimaal zullen er dus voor het op de hoogte brengen van bestaande verbindingen 294 ($14 \times 21$) berichten rondgestuurd moeten worden. 
 
 Vervolgens kan er een pad gemaakt worden waarover een bericht verstuurd kan worden.
-Dit voorbeeld laat goed zien dat deze routingstechniek zijn voordeel haalt wanneer de nodes stil blijven staan omdat er dan niet opnieuw berichten verstuurd hoeven te worden. 
+Dit voorbeeld laat goed zien dat deze routingstechniek zijn voordeel haalt wanneer de nodes stil blijven staan, omdat er dan niet opnieuw berichten verstuurd hoeven te worden. 
  
 \subsection{Reactieve routeringstechniek}
 \label{sec:meshnetwerktechniek:reactieve}
 
 Een reactieve routeringstechniek is een methode waarbij de nodes geen routes opslaan maar op aanvraag routes opbouwen. 
-Dit scheelt in het gebruik van geheugen en het heeft minder berichten bij het initialiseren van het netwerk. Daarentegen kost het deze techniek meer tijd om een bericht te versturen omdat er voordat er een bericht verstuurd kan worden eerst een route opgebouwd moet worden.
+Dit scheelt in het gebruik van geheugen en het heeft minder berichten bij het initialiseren van het netwerk. Daarentegen kost het deze techniek meer tijd om een bericht te versturen, omdat er voordat er een bericht verstuurd kan worden eerst een route opgebouwd moet worden.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=0.45\linewidth]{Afbeeldingen/reactive.png}\end{center}
@@ -827,7 +828,7 @@ Toch is de tegenhanger reactieve routering ook geen ideale oplossing.
 Het niet opslaan van routes maakt het versturen van berichten sloom en er is geheugen aanwezig op de microcontroller voor het opslaan van routes. 
 
 Daarom is de conclusie om een zelf een hybride variant te maken van het reactieve Lightweight Mobile Routing(LMR) protocol.
-Dit protocol wordt gebruikt omdat het een protocol is die een hop routeringstechniek gebruikt waardoor de payload klein blijft.
+Dit protocol wordt gebruikt, omdat het een protocol is die een hop routeringstechniek gebruikt waardoor de payload klein blijft.
 De techniek is niet afhankelijk van een gateway en nodes hoeven alleen te bewust te zijn van de buren en met wie die buren verbonden zijn.
 Het protocol hoeft alleen maar aangepast te worden zodat routes opgeslagen blijven.
 Doordat deze techniek geen routes hoeft op te slaan van het volledige netwerk  maar allen die van hun aangesloten buren en hun aangesloten punten zullen er geen grote routeringstabellen gecreëerd worden.
@@ -934,7 +935,7 @@ Een wens van Alten is dat het netwerk snel is en ook snel achter verloren verbin
 De huidige implementatie van LMR zal dit beiden niet zijn om twee redenen.
 LMR is event driven waardoor het alleen achter verloren verbindingen zal komen op het moment dat er een bericht geen route weet te vinden tot een punt in het netwerk.
 Daarnaast worden routes pas opgebouwd op het moment dat er een bericht over het netwerk verstuurd wordt.
-Tenslotte hebben de routers een belang bij de kennis of ze verbinding hebben met een gateway in het netwerk van Alten omdat dit hun verbindingspunt is met de buitenwereld.
+Tenslotte hebben de routers een belang bij de kennis of ze verbinding hebben met een gateway in het netwerk van Alten, omdat dit hun verbindingspunt is met de buitenwereld.
 
 Een oplossing voor al deze problemen is het implementeren van een functie in elke router dat periodiek moet proberen een bericht naar een gateway te sturen. Als response op deze heartbeat zal de router ook weer een heartbeat terug moeten sturen.
 Deze oplossing zou zorgen dat het netwerk zijn routes blijft onderhouden door ze periodiek te controleren.
@@ -1308,9 +1309,9 @@ Dit wordt vervolgt met een advies die voortvloeit uit de kennis van dit verslag.
 
 \section{Antwoord op de hoofdvraag}
 
-Uit de experimenten is gebleken dat door het toevoegen van een controller die zelfstandig kan opereren aan een drone een meshnetwerk opgezet kan worden van honderd drones. De controller moet toegang hebben tot een antenne voor onderlinge communicatie waarbij het advies is om gebruik te maken van een \nameref{sec:nrf24l01} vanwege zijn bereik en snelheid. Het onderzoek heeft nog niet de fase bereikt waarin de nRF module in de praktijk getest is. De radio module is een populaire keuze in het gebruik van low power meshnetwerken waardoor het aannemelijk is dat deze zal werken.
+uit de resultaten van dit onderzoek is gebleken dat door het toevoegen van een controller die zelfstandig kan opereren aan een drone een meshnetwerk opgezet kan worden van honderd drones. De controller moet toegang hebben tot een antenne voor onderlinge communicatie waarbij het advies is om gebruik te maken van een \nameref{sec:nrf24l01} vanwege zijn bereik en snelheid. Het onderzoek heeft nog niet de fase bereikt waarin de nRF module in de praktijk getest is. De radio module is een populaire keuze in het gebruik van low power meshnetwerken waardoor het aannemelijk is dat deze zal werken.
 
-Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is de mogelijkheid voor de individuele netwerkpunten dat zij in staat zijn te kunnen verifiëren dat een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway. 
+Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is de mogelijkheid voor de individuele netwerkpunten dat deze in staat zijn te kunnen verifiëren dat een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway. 
 
 \section{Advies}
 Het advies uit dit onderzoek luidt als volgt:
@@ -1321,7 +1322,7 @@ Dit is zo gemaakt omdat dit zo aangegeven is door Alten.
 Op het moment dat Alten besluit dat de drone een andere gedrag moeten krijgen zoals bijvoorbeeld swarming dan is het protocol ongeschikt en is het advies om te kijken naar een reactief protocol die altijd nieuwe paden berekend.
 Hetzelfde geldt als Alten besluit dat de drones altijd op een zelfde positie zullen staan, dan zal een proactief protocol een beter alternatief zijn om zo berichten over het kortste pad te kunnen sturen.    
 
-Dit onderzoek heeft daarnaast aangetoond dat de simulatiesoftware gebruikt kan worden voor het testen van geautomatiseerde herverdelingen bij uitval van netwerkpunten. Het advies luid wel om het huidige geïmplementeerde herstelprotocol niet te gebruiken aangezien deze kritieke negatieve kenmerken heeft. 
+Dit onderzoek heeft daarnaast aangetoond dat de simulatiesoftware gebruikt kan worden voor het testen van geautomatiseerde herverdelingen bij uitval van netwerkpunten. Het advies luidt wel om het huidige geïmplementeerde herstelprotocol niet te gebruiken, aangezien deze kritieke negatieve kenmerken heeft. 
 
 \bibliographystyle{apacite}
 \bibliography{bilbliography.bib}

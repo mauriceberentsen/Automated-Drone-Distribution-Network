@@ -7,7 +7,7 @@ high -> low +: start(NodeIdReadAddress, broadcastAddress )
 low -> low : setNodeIdAddress(NodeIdReadAddress)
 low -> low : setBroadcastAddress(BroadcastAddress)
 create nrf
-low -> nrf : <<create>> NRF24(7,8)
+low -> nrf : <<create>> NRF24()
 low -> nrf : begin()
 low -> nrf : setAutoAck(true)                   
 low -> nrf : setDataRate(RF24_250KBPS)
