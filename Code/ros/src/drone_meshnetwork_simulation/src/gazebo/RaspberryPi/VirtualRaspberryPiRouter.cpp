@@ -48,10 +48,10 @@ namespace RaspberryPiSimulation
   if ( _sdf->HasElement( "Debug" ) ) {
    this->debug = _sdf->Get< bool >( "Debug" );
   }
-  setup( );
+  StartSoftware( );
  }
 
- void VirtualRaspberryPiRouter::setup( )
+ void VirtualRaspberryPiRouter::StartSoftware( )
  {
   routing = new Communication::RoutingTechnique::HybridLMRoutingProtocol( );
   engine = new ros::Drone::RosDroneEngineConnector( droneID );
@@ -61,9 +61,6 @@ namespace RaspberryPiSimulation
   meshnetworkRouter->Init( );
  }
 
- void VirtualRaspberryPiRouter::loop( )
- {
- }
 
 }  // namespace RaspberryPiSimulation
 

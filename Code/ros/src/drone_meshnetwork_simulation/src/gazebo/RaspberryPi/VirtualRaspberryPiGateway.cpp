@@ -49,10 +49,10 @@ namespace RaspberryPiSimulation
   if ( _sdf->HasElement( "Debug" ) ) {
    this->debug = _sdf->Get< bool >( "Debug" );
   }
-  setup( );
+  StartSoftware( );
  }
 
- void VirtualRaspberryPiGateway::setup( )
+ void VirtualRaspberryPiGateway::StartSoftware( )
  {
   routing = new Communication::RoutingTechnique::HybridLMRoutingProtocol( );
   engine = new ros::Drone::RosDroneEngineConnector( droneID );
@@ -62,10 +62,7 @@ namespace RaspberryPiSimulation
       nodeID, droneID, debug, routing, engine, NRF24, internet );
   meshnetworkGateway->Init( );
  }
- // cppcheck-suppress unusedFunction
- void VirtualRaspberryPiGateway::loop( )
- {
- }
+
 
 }  // namespace RaspberryPiSimulation
 

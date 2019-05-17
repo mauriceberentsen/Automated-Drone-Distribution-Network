@@ -26,12 +26,8 @@ namespace RaspberryPiSimulation
    * @brief Should be called one time at start up
    *
    */
-  virtual void setup( ) = 0;
-  /**
-   * @brief Should be filled with code that loops
-   *
-   */
-  virtual void loop( ) = 0;
+  virtual void StartSoftware( ) = 0;
+
  };
 
 }  // namespace RaspberryPiSimulation

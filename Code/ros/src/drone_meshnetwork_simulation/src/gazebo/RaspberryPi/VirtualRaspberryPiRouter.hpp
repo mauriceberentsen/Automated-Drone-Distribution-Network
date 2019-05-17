@@ -39,12 +39,8 @@ namespace RaspberryPiSimulation
    * @brief Initializes the Meshnetwork Communicator
    *
    */
-  void setup( );
-  /**
-   * @brief Not implemented
-   *
-   */
-  void loop( );
+  void StartSoftware( );
+
 
  private:
   /// \brief The nodeID for the gateway
