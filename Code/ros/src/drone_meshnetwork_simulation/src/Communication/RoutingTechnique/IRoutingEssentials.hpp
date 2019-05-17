@@ -1,5 +1,5 @@
 /**
- * @file IRoutingTechnique.hpp
+ * @file IRoutingEssentials.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
  * @brief Interface for Routing Techniques
  * @version 1.0

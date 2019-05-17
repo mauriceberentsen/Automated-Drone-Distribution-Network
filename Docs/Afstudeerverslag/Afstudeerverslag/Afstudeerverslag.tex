@@ -142,57 +142,68 @@ Er is gekozen om dit te doen in de softwarecombinatie ROS + Gazebo omdat dit het
 
 Om een betere keuze te kunnen maken welke hardware gebruikt zou moeten worden voor onderlinge communicatie is er eerst gekeken wat de grootte van de payload is die verstuurd zou moeten worden om nuttig te zijn in een netwerk.
 
-Vervolgens is gekeken naar welke hardware gebruik zou moeten worden voor de onderlinge communicatie. Hier is gekozen voor een nog onbekend microcontrollerbord met een daarop aangesloten radio module nRF24l01+.
+Vervolgens is gekeken naar welke hardware gebruik zou moeten worden voor de onderlinge communicatie. Hier is gekozen voor een Raspeberry Pi model 2B+ met een daarop aangesloten radio module nRF24l01+.
 
-Hierna is er een keuze gemaakt welke routeringstechniek gebruik moet worden waarop de conclusie was om een hybide routeringstechniek te gebruiken die als basis een reactieve protocol heeft met als toevoeging dat routes wel opgeslagen worden. De student heeft een aangepaste versie van de Lightweight Mobile Routing Protocol(LMR) toegepast. 
+Hierna is er een keuze gemaakt welke routeringstechniek gebruik moet worden waarop de conclusie was om een hybride routeringstechniek te gebruiken die als basis een reactieve protocol heeft met als toevoeging dat richtingen opgeslagen worden. De student heeft een aangepaste versie van de Lightweight Mobile Routing Protocol(LMR) toegepast. 
 
 Er is een conclusie getrokken dat het voor dit project niet nodig is om een drone volledig te implementeren. Een abstracte versie zal voldoen. Hier zijn regels over opgesteld waar deze aan zou moet voldoen. 
 
 Om de opdracht uit te kunnen voeren heeft de student een simulatie gemaakt waar drones zich kunnen voortbewegen en zich conform de casus opgesteld in het plan van aanpak kunnen verdelen. De drones volgen het gedrag van een meshnetwerk en er is applicatie aanwezig om op realistische wijze verzoeken te sturen naar de drones voor verplaatsing. 
 
-De opgeleverde software wordt onderbouwt in het software design document en de software requirements specificatie.
+De opgeleverde software wordt onderbouwd in het software design document en de software requirements specificatie.
 
 Door een gebrek aan tijd heeft de focus van het project gelegen op het simuleren van de hardware. Hierdoor is er geen fysiek prototype opgeleverd.
 
 \tableofcontents
 \clearpage
-%\section*{Begrippenlijst}
+\chapter*{Begrippenlijst}
+\label{inleiding:begrippenlijst}
 
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
-%\begin{table}[H]
-%\centering
-
-%\label{begrippen}
-%\begin{tabular}{|l|l|}
-%\hline
-%\rowcolor[HTML]{C0C0C0}
-%Term        & Omschrijving                                                         \\ \hline
-%term        & Omschrijving                                                      	\\ \hline
-
-%\end{tabular}
-%\caption{Begrippenlijst}
-%\end{table}
-
-%\clearpage
-
-%\section*{Samenvatting}
-%\addcontentsline{toc}{section}{\protect\numberline{}Samenvatting}
-%\pagebreak
-
+\begin{longtable}[c]{|l|l|}
+	\hline
+	\rowcolor[HTML]{9B9B9B} 
+	Term & Beschrijving \\ \hline
+	\endhead
+	%
+	Acknowlegdement & \begin{tabular}[c]{@{}l@{}}Term die gebruikt wordt voor het bevestigen van het ontvangst\\ van een bericht.\end{tabular} \\ \hline
+	Adapter & \begin{tabular}[c]{@{}l@{}}Een ontwerppatroon die gebruikt wordt om niet passende \\interfaces op elkaar aan te sluiten.\end{tabular} \\ \hline
+	Broadcast & Het rond sturen van een bericht die iedereen mag ontvangen. \\ \hline
+	Byte & Een samenstelling van 8 bits. \\ \hline
+	Condensator & \begin{tabular}[c]{@{}l@{}}Een elektrische component  om spanningsschommelingen af te\\ vlakken.\end{tabular} \\ \hline
+	Debug & \begin{tabular}[c]{@{}l@{}}Term die slaat op debugger, vaak informatie die gebruikt \\ wordt om gedrag te vinden binnen een applicatie.\end{tabular} \\ \hline
+	Gateway & Een toegangspunt tot een netwerk. \\ \hline
+	Gazebo & Simulatiesoftware met ondersteuning voor physics. \\ \hline
+	GPS & Systeem voor locatie en tijd bepaling. \\ \hline
+	\begin{tabular}[c]{@{}l@{}}High level\\interface\end{tabular} & Versimpelde interface die functie extern aanbiedt. \\ \hline
+	Low level interface & \begin{tabular}[c]{@{}l@{}}Interface die meestal op een high level aangesloten wordt is een\\  direct aanspreekpunt op de hardware.\end{tabular} \\ \hline
+	nRF24l01+ & Radio transciever module werkzaam op de 2,4Ghz band. \\ \hline
+	Physics engine & Software die natuurwetten toepast op virtuele objecten. \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Raspeberry Pi \\ model 2B+\end{tabular} & Micro computer geschikt voor prototyping. \\ \hline
+	Ros & \begin{tabular}[c]{@{}l@{}}Robot operating system. Wordt gebruikt voor de transportlaag \\ naar zowel virtuele als gesimuleerde robots.\end{tabular} \\ \hline
+	Rosservice & Een request response mechanisme gebruikt door ros nodes. \\ \hline
+	Rostopic & Publicatie voor het gebruik van een subscriber patroon binnen ros. \\ \hline
+	Router & Netwerkcomponent die berichten kan doorsturen. \\ \hline
+	Routeringstechniek & \begin{tabular}[c]{@{}l@{}}Techniek die gebruikt voor het opbouwen van een pad binnen\\ een netwerk.\end{tabular} \\ \hline
+	RQT & Programma aangeboden door ros voor aansluiting op ros nodes. \\ \hline
+	SDF & \begin{tabular}[c]{@{}l@{}}XML format gebruikt voor het inladen van objecten en werelden\\ in gazebo\end{tabular} \\ \hline
+	Seriële verbinding & Een communicatieverbinding het meest bekend van USB. \\ \hline
+	Simulatie software & Software die fysieke objecten nabootst in software. \\ \hline
+	Unittest & Geautomatiseerde test die functie test op resultaat. \\ \hline
+	\caption{Begrippenlijst}
+	\label{tab:begrippenlijst}\\
+\end{longtable}
 
 
 \chapter{Inleiding}\label{sec:inleiding}
 
 Dit document is het eindverslag van de afstudeeropdracht genaamd "Drone meshnetwerk simulatie".
 De simulatie simuleert een netwerk van drones die onderling met elkaar verbonden zijn door het gebruik van meshnetwerk technieken.
-De simulatie dient een tweevoudig doel: Allereerst kunnen er met de simulatie verdeelalgoritmes getest worden. Het tweede doel is het optimaliseren het netwerk om zo de stabiliteit hiervan te kunnen optimaliseren.
+De simulatie dient een tweevoudig doel: Allereerst kunnen er met de simulatie verdeelalgoritmes getest worden. Het tweede doel is het simuleren van het netwerk om zo de stabiliteit hiervan te kunnen optimaliseren.
 
 Het doel van dit document is het aantonen van de volwassenheid van het project en de opgeleverde deelproducten conform de vijf beroepscompetenties.
 Dit wordt bewezen aan de hand van de producten die zijn gerealiseerd of handelingen die zijn verricht tijdens de afstudeerstage. In dit document wordt regelmatig verwezen naar andere documenten zoals het plan van aanpak, onderzoekrapport, software design document en de software requirements. Dit wordt gedaan omdat deze documenten ook aantonen dat de student zich HBO waardig heeft gedragen tijdens dit project.  
 
-Het eindverslag is zo opgebouwd dat dit de opdracht, context en eindproducten beschrijven en hoe de student bezig is geweest conform de vijf beroepscompetenties.
+Het eindverslag is zo opgebouwd dat dit de opdracht, context en eindproducten beschrijft en hoe de student bezig is geweest conform de vijf beoordelingscriteria.
 
 \begin{itemize}
 	\item Bedrijfsbeschrijving.
@@ -746,7 +757,6 @@ Ik had collega's meer kunnen betrekken door presentaties te geven over inhoudeli
 Als ik terugkijk naar wat ik nog meer had kunnen doen denk ik dat alleen maar zou kunnen adviseren aan toekomstige afstudeerders om te gaan werken aan afstudeeropdrachten die direct invloed hebben op het product van het bedrijf. Dit forceert het bedrijf om zich actief met de student bezig te houden omdat de impact van het resultaat groter is. 
 
 Het resultaat van deze presentaties zal ik later hier beschrijven nadat ze gehouden zijn
-
 
 
 \chapter{Conclusie}\label{sec:conclusie}
