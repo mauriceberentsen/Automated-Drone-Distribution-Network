@@ -74,6 +74,9 @@ To run the launchfile enter the following command.
 ```sh
 roslaunch drone_meshnetwork_simulation factory.launch 
 ```
+The id of the drone start with 1 that goes up with 1 for eacht drones.
+It starts with creating gateways and after that the routers.
+
 
 To visually see what is happening in the simulation boot the gazebo client by using.
 
@@ -93,7 +96,8 @@ rqt
  - Write more Tests
  - Implement improved abstract drone
  - Setup buildserver for ROS package
- - Used improved code checker
+ - Use improved code checker
+ - Come up with a better drone distribution system
 
 
 **Free Software**
