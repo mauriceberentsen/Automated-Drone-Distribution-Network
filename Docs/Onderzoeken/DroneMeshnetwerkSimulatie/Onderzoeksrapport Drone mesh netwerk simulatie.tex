@@ -36,7 +36,8 @@
 \usepackage{pdfpages}
 \usepackage{booktabs}
 \usepackage{listings}
-
+\usepackage{siunitx}
+\sisetup{per-mode=symbol,per-symbol = p,binary-units=true } 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 \titleformat{\chapter}[hang]{\huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Large\bfseries}
@@ -85,8 +86,8 @@
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
-	\vskip0.5em
 	\begin{center}\large#2\end{center}
+	\vskip0.5em
 	\begin{center}\normalsize#3\end{center}
 	\begin{center}\large#4\end{center}
 	\begin{center}\large#5\end{center}
@@ -95,9 +96,11 @@
 	\begin{center}\normalsize#8\end{center}
 	\begin{center}\normalsize#9\end{center}
 	\vskip0.5em}%
+	\rfoot{{\footnotesize \textbf{#1}}}
 }
 
-\subtitle{Onderzoeksrapport}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Onderzoeksrapport}{Versie 1.0}{Alten Nederland B.V.}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica - Embedded Software Developement }{MWJ.Berentsen@student.han.nl}{Studentnummer: 561399}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -137,7 +140,7 @@
 
 In dit onderzoek word onderzocht hoe netwerkmodules een groep van honderd drones kunnen voorzien van een onderling meshnetwerk die snel kan reageren op uitval van netwerkpunten.
 
-Literatuuronderzoek heeft aangetoond dat een nRF24l01+ de meeste potentie heeft voor het meshnetwerk vanwege zijn snelheid van 250 kbps op een afstand van 700 meter.
+Literatuuronderzoek heeft aangetoond dat een nRF24l01+ de meeste potentie heeft voor het meshnetwerk vanwege zijn snelheid van \SI{250}{\kilo\bit\per\second} op een afstand van 700 meter.
 
 De gekozen controller om aan te sluiten op de drone is een Raspberry Pi model 2B+. Deze is gekozen door zijn compatibiliteit met een NRF24 en rijke I/O interface. 
 De software voor het meshnetwerk is ontwikkeld voor het gebruik op een Raspberry Pi model 2B+ en geschreven in C++.   
@@ -146,7 +149,7 @@ Er is een aangepaste variant van het lightweight mobile routering protocol toege
 
 Om dit onderzoek te ondertussen is er een simulatie gebouwd waarin abstracte drones met daarop een aangesloten netwerkcomponent kunnen rondvliegen. Dit maakt de simulatie bruikbaar voor het testen van zowel routeringstechnieken als (her)verdelingen. 
 
-Om aan te tonen dat de mogelijkheid om een drone te kunnen verplaatsen bijdraagt aan het zelfherstellend vermogen van een meshnetwerk is er een oplossing geïmplementeerd waar de drones een stap terug nemen in het netwerk op het moment dat ze geen verbinding meer hebben.  Testen hebben aangetoont dat dit idee alleen een goede toevoeging is op het moment dat er een enkele drone uitvalt in een kritische verbinding. Op het moment dat er meer drones in een verbinding uitvallen komen de drones terug naar de gateway, waardoor er een potentieel groot deel van een netwerk wegvalt. Het doel om aan te tonen dat de simulatie bruikbaar is in het onderzoeken van (her)verdelingen is daarmee wel bewezen.
+Om aan te tonen dat de mogelijkheid om een drone te kunnen verplaatsen bijdraagt aan het zelfherstellend vermogen van een meshnetwerk is er een oplossing geïmplementeerd waar de drones een stap terug nemen in het netwerk op het moment dat ze geen verbinding meer hebben.  Testen hebben aangetoond dat dit idee alleen een goede toevoeging is op het moment dat er een enkele drone uitvalt in een kritische verbinding. Op het moment dat er meer drones in een verbinding uitvallen komen de drones terug naar de gateway, waardoor er een potentieel groot deel van een netwerk wegvalt. Het doel om aan te tonen dat de simulatie bruikbaar is in het onderzoeken van (her)verdelingen is daarmee wel bewezen.
 
 \tableofcontents
 \clearpage
@@ -210,7 +213,7 @@ Van de netwerkmodule wordt wel een fysiek prototype ontwikkeld.
 Om de hoofdvraag te kunnen beantwoorden zijn er de volgende deelvragen opgesteld:
 
 \begin{itemize}
-	\item Welke simulatie software is geschikt om een netwerk van ongeveer 100 drones in na te bootsen?
+	\item Welke simulatiesoftware is geschikt om een netwerk van ongeveer 100 drones in na te bootsen?
 	\item Wat is de grote van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?
 	\item Welke meshnetwerk hardware is geschikt voor het onderling verbinden van drones?
 	\item Welke meshnetwerk techniek is geschikt voor de te gebruiken hardware?
@@ -253,7 +256,13 @@ Daarom past de werkplaats onderzoeksruimte goed bij dit onderzoek.
 
 \section{Invloed op het project}
 
+Het onderzoek is van invloed op het project waarin de opdracht is om een simulatie van drones voorzien van een netwerkmodule te bouwen.
+De kennis die uit dit onderzoek wordt gehaald beïnvloed de keuzes in het gebruik van zowel hardware als software. 
+Zo zal er gekeken worden hoe groot een bericht mag zijn wat van invloed is op de software die berichten gebruikt.
+Er wordt onderzoek gedaan welke antenne geschikt is voor het project wat de hardwarekeuze beïnvloed.
+Tenslotte wordt er ook onderzocht welke simulatiesoftware gebruikt moet worden wat van grote invloed is op het project.
 
+Daarnaast worden er in dit onderzoek ook oplossingsrichtingen bedacht die geïmplementeerd en getest zullen worden in de gebouwde software. 
 
 \chapter{Criteria}
 \label{chapter:criteria}
@@ -267,7 +276,7 @@ Daarom past de werkplaats onderzoeksruimte goed bij dit onderzoek.
 In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat deze betekenen wordt eerst toegelicht:
 \begin{itemize}
 	\item ALG: Een algemene eis die in elke onderzoek meegenomen moet worden.
-	\item SK: Een eis die gesteld worden in de keuze naar simulatie software.
+	\item SK: Een eis die gesteld worden in de keuze naar simulatiesoftware.
 	\item DR: Een eis voor de te gebruiken drone in de simulatie.
 	\item PH: Eisen opgesteld aan de prototype hardware.
 	\item PS: Eisen opgesteld aan de prototype software.
@@ -281,10 +290,10 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 	%
 	\endhead
 		\hypertarget{alg1}{ALG1}	&Is voorzien van API documentatie.        \\ \hline
-		\hypertarget{alg2}{ALG2}	&Ondersteunt aansturing vanuit C++ .    \\ \hline
-		\hypertarget{alg3}{ALG3}	&\begin{tabular}[c]{@{}l@{}}Heeft ondersteuning voor het Linux platform Ubuntu 18.04\end{tabular}        \\ \hline
-		\hypertarget{alg4}{ALG4}	&Software is gratis in gebruik voor studenten        \\ \hline
-		\hypertarget{sk1}{SK1}		&\begin{tabular}[c]{@{}l@{}}Heeft ondersteuning voor UAV (unmanned air vehicle) ook wel drone genoemd\end{tabular} \\ \hline
+		\hypertarget{alg2}{ALG2}	&Ondersteunt aansturing vanuit C++.    \\ \hline
+		\hypertarget{alg3}{ALG3}	&\begin{tabular}[c]{@{}l@{}}Heeft ondersteuning voor het Linux platform Ubuntu 18.04.\end{tabular}        \\ \hline
+		\hypertarget{alg4}{ALG4}	&Software is gratis in gebruik voor studenten.        \\ \hline
+		\hypertarget{sk1}{SK1}		&\begin{tabular}[c]{@{}l@{}}Heeft ondersteuning voor UAV (unmanned air vehicle) ook wel drone genoemd.\end{tabular} \\ \hline
 		\hypertarget{sk2}{SK2}		&\begin{tabular}[c]{@{}l@{}}Ondersteunt de simulatie van locatie bepaling sensoren zoals GPS.\end{tabular}        \\ \hline
 		\hypertarget{sk3}{SK3}		&\begin{tabular}[c]{@{}l@{}}Heeft een kant en klare oplossing voor simulatie van externe krachten zoals wind.\end{tabular}        \\ \hline
 		\hypertarget{sk4}{SK4}		& Heeft een ingebouwde pathfinding oplossing.        \\ \hline
@@ -294,12 +303,12 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 		DR1		& De drone is een quadcopter.        \\ \hline
 		DR2		& De drone is is voorzien van een API voor aansturing op basis van coördinaten.       \\ \hline
 		DR3		& De API sluit aan op de middleware ROS melodic.        \\ \hline
-		DR4		& De drone is bruikbaar binnen de gekozen simulatie software Gazebo.        \\ \hline
+		DR4		& De drone is bruikbaar binnen de gekozen simulatiesoftware Gazebo.        \\ \hline
 		DR5		& De drone moet een kleine goedkope drone representeren.        \\ \hline
 		\hypertarget{ph1}{PH1}		& Ondersteunt een bereik van minimaal 500 meter.  \\ \hline
 		\hypertarget{ph2}{PH2}		& Ondersteunt het gebruik van grid networking om tot een mesh te kunnen komen.  \\ \hline
 		\hypertarget{ph3}{PH3}		& Maakt gebruik van een openbare bandbreedte.\\ \hline
-		\hypertarget{ph4}{PH4}		& Voorziet zichzelf van een draadloos netwerk en leunt dus niet op technieken zoals 4G\\ \hline
+		\hypertarget{ph4}{PH4}		& Voorziet zichzelf van een draadloos netwerk en leunt dus niet op technieken zoals 4G.\\ \hline
 		\hypertarget{ph5}{PH5}		& Is een product ontwikkeld voor low energy toepassingen. \\ \hline
 		PS1		& Ondersteunt een meshnetwerk van minimaal 100 nodes. \\ \hline
 		PS2		& Het netwerk is zelf herstellend. \\ \hline
@@ -313,12 +322,12 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 \chapter{Literatuur}
 
 
-\section{Welke simulatie software is geschikt om een drone in na te bootsen?}
+\section[Welke simulatiesoftware?]{Welke simulatiesoftware is geschikt om een drone in na te bootsen?}
 \label{sec:welkesim}
 Voor het onderzoek wordt gebruik gemaakt van een simulatie omgeving.
 Welke software wordt gebruik staat vastgesteld in deze paragraaf.
 De keuze van software wordt bepaald door het uitvoeren van de bieb onderzoeksmethode. 
-In de \autoref{tab:criteria} staan de criteria toegelicht waar de simulatie software aan moet voldoen.
+In de \autoref{tab:criteria} staan de criteria toegelicht waar de simulatiesoftware aan moet voldoen.
 Als hoofdcriteria wordt een lijst opgesteld met simulatoren die ondersteuning hebben voor ROS.
 Vervolgens worden deze aan de hand van een kruistabel onderworpen aan de andere criteria.
 Deze techniek is gebaseerd op de "Comparison Chart" van \cite{CMDmethod} uit de "\textit{CMD Methods Pack}"
@@ -352,7 +361,7 @@ De kandidaten zijn:
 	\label{tab:kruissimkeuze}%
 \end{table}%
 
-In de \autoref{tab:kruissimkeuze} komt de simulatie software van Gazebo en Webots naar voren als enige simulatoren die voldoen aan alle gestelde eisen.
+In de \autoref{tab:kruissimkeuze} komt de simulatiesoftware van Gazebo en Webots naar voren als enige simulatoren die voldoen aan alle gestelde eisen.
 Het is nu zaak om te uit te zoeken welke van de twee het meest geschikt is voor het uitvoeren van dit onderzoek.
 
 \subsection{Gazebo of Webots?}
@@ -373,7 +382,7 @@ Voor het onderzoek wordt Gazebo gebruikt omdat het voldoet aan de gestelde \name
 De meest recente versie van Gazebo, die niet meer beta is op 19 februari 2019, is Gazebo 9.
 Deze versie vereist het gebruik van ROS Melodic volgens haar eigen website  (\href{http://gazebosim.org/tutorials?tut=ros_wrapper_versions}{zie link}).
 
-\section{Wat is de grootte van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?}
+\section[Welke grootte voor de payload?]{Wat is de grootte van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?}
 
 De payload is het gedeelte van een bericht die vrij is naar de gebruiker om invulling te geven.
 De maximale grote van een payload verschilt per protocol.
@@ -577,7 +586,7 @@ Dit zou voldoende ruimte moeten geven doordat er één 32 bits waarde of twee 16
 
 Daarmee is de conclusie dat de maximale grootte 21 byte is voor een bericht om nuttig te zijn voor een aansturingssysteem.
 
-\section{Welke meshnetwerk hardware is geschikt voor het onderling verbinden van drones?}
+\section[Welke meshnetwerk hardware?]{Welke meshnetwerk hardware is geschikt voor het onderling verbinden van drones?}
 \label{sec:meshnetwerkkeuze}
 
 Om een onderling netwerk op te bouwen is hardware nodig. 
@@ -732,7 +741,7 @@ Hij ziet een betere business case in een netwerk met een hogere dichtheid maar d
 Daarom zal er in dit project gebruik gemaakt worden van de nRF24l01+.
 
 
-\section{Aansturing nRF24 met een Raspbery Pi Model B+}
+\section[nRF24 met Raspbery Pi Model B+]{Aansturing nRF24 met een Raspbery Pi Model B+}
 
 \autoref{sec:meshnetwerkkeuze} heeft als uitkomst gegeven dat er voor de communicatie een nRF24l01+ gebruikt moet worden.
 Deze moet alleen ook aangestuurd worden en dit kan op verschillende manieren.
@@ -741,7 +750,7 @@ Deze heeft zij al beschikbaar en wil eerst weten of het mogelijk is op een Raspe
 De ontwikkeling op een Raspberry Pi model 2B+ sluit aan op de requirements gesteld aan het project en wordt op wens van de student uitgevoerd in C++.
 
 
-\section{Welke routeringstechniek is geschikt voor de te gebruiken hardware?}
+\section[Welke routeringstechniek?]{Welke routeringstechniek is geschikt voor de te gebruiken hardware?}
 \label{sec:meshnetwerktechniek}
 
 Het netwerk wordt opgebouwd door het toepassen van een meshnetwerktechniek.
@@ -828,7 +837,7 @@ Doordat deze techniek geen routes hoeft op te slaan van het volledige netwerk  m
 \section{Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?}
 \label{sec:dronekeuze}
 
-In \autoref{sec:welkesim} is geconcludeerd dat als simulatie software ROS melodic met Gazebo9 wordt gebruikt.
+In \autoref{sec:welkesim} is geconcludeerd dat als simulatiesoftware ROS melodic met Gazebo9 wordt gebruikt.
 Hierin kwam naar voren dat niet elke drone package gebruikt kan worden doordat ze specifiek gemaakt zijn voor de versie van ROS.
 Omdat het project de focus heeft op de werking van netwerkmodules voldoet een abstracte versie van een drone.
 Zo hoeft deze bijvoorbeeld op dit moment nog niet realistisch te vliegen.
@@ -939,7 +948,7 @@ Vandaar dat deze techniek onder naam zal vallen hybride lightweight mobile routi
 In de huidige implementatie of die van de originele LMR wordt geen rekening gehouden met het kortste pad.
 Op het moment dat dit wel wenselijk wordt kunnen de heartbeat uit het netwerk gebruikt worden om het aantal hops te tellen die een bericht heeft ondergaan om zo te registreren hoever een node per punt verwijderd is. Een tegenzijde hiervan zou zijn dat er wel weer extra rekenkracht vereist wordt voor het zoeken van een pad.
 
-\section{Drone aansturing: Een stap terug voor netwerkherstel}\label{sec:drone-aansturing-een-stap-terug-voor-netwerkherstel}
+\section{Een stap terug voor netwerkherstel}\label{sec:drone-aansturing-een-stap-terug-voor-netwerkherstel}
 
 Elke netwerkmodule zit aangesloten op een drone en heeft de mogelijkheid om deze aan te sturen.
 Alten wil gebruik maken van deze combinatie om zo het herstellend vermogen te vergroten van het netwerk.
@@ -1042,7 +1051,7 @@ De implementatie zal geen optimale verdeling bevorderen en geeft het netwerk all
 %\end{itemize}
 %\hrule
 
-\section{Test hybride lightweight mobile routing protocol}
+\section{Hybride lightweight mobile routing protocol}
 
 Om het aangepaste protocol van \autoref{sec:hybride-lightweight-mobile-routing} te testen zal er gebruik gemaakt worden van de simulatie.
 Uit het protocol kunnen de volgende stukken pseudo code geleerd worden.
@@ -1165,7 +1174,7 @@ Dit betekend dat er de volgende route wordt gebruikt 0-1-4-7-11-9-6-3.
 Het experiment waarin de aangepaste versie van LMR wordt getest bewijst dat de techniek bruikbaar is voor het dronenetwerk.
 Er zijn genoeg scenario's getest om aan te tonen dat het netwerk zichzelf kan herstellen wanneer er een verbinding verloren is gegaan.
 
-\section{Is het mogelijk voor netwerkmodule om een netwerk te herstellen door het de mogelijkheid te geven zich vrij te bewegen?}
+\section[Netwerkherstel door beweging  drone]{Is het mogelijk voor netwerkmodule om een netwerk te herstellen door het de mogelijkheid te geven zich vrij te bewegen?}
 \label{experimenten:herstelnetwerk}
 
 In \autoref{sec:drone-aansturing-een-stap-terug-voor-netwerkherstel} wordt een voorstel gedaan voor het herstellen van het netwerk door drones een stap terug te laten nemen in het netwerk. Eerste wordt er kort toegelicht wat er toegevoegd moet worden aan de modules om dit mogelijk te maken. Vervolgens worden de bedacht scenario's test. Vervolgens zal in de conclusie een oordeel gegeven worden over de effectiviteit van het voorstel.

@@ -33,7 +33,7 @@
 \newcommand{\hsp}{\hspace{20pt}}
 \usepackage{pdfpages}
 \usepackage{afterpage}
-
+\usepackage{siunitx}
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
@@ -64,8 +64,8 @@
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
-	\vskip0.5em
 	\begin{center}\large#2\end{center}
+	\vskip0.5em
 	\begin{center}\normalsize#3\end{center}
 	\begin{center}\large#4\end{center}
 	\begin{center}\large#5\end{center}
@@ -74,9 +74,10 @@
 	\begin{center}\normalsize#8\end{center}
 	\begin{center}\normalsize#9\end{center}
 	\vskip0.5em}%
+	\rfoot{{\footnotesize \textbf{#1}}}
 }
 
-\subtitle{Software Design Document}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Software Design Document}{Versie 1.0}{Alten Nederland B.V.}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica - Embedded Software Developement }{MWJ.Berentsen@student.han.nl}{Studentnummer: 561399}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -1701,6 +1702,33 @@ In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
 Het component diagram bestaat uit twee interfaces. Een high level interface en een low level interface ook wel de driver genoemd.
 De high level interface biedt de interface IWirelessCommunication aan. Omdat deze al volledig behandeld is in \autoref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} \nameref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} wordt deze niet nogmaals behandeld
 
+\subsection{Aansluiting NRF24}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.5\linewidth]{Afbeeldingen/fritzing_raspberry_nrf.png}\end{center}
+	\caption{Aansluiting nRF24 op een Raspberry Pi}
+	\label{fig:component:aansluting}
+\end{figure}
+
+Voor een stabielere voltage wordt een condensator van \SI{4.7}{\micro\farad} aanbevolen direct aangesloten op de ground en voltage poort van de nRF
+
+\begin{table}[H]
+	\centering
+		\begin{tabular}{|l|c|r|}
+			\hline
+			\rowcolor[HTML]{C0C0C0} 
+			Raspberry Pi & NRF24L01+ & Color \\ \hline
+			6 / GND & GND & Zwart \\ \hline
+			1 / 3.3V DC & VCC & Rood \\ \hline
+			22 / GPIO25 & CE & Oranje \\ \hline
+			24 / GPIO 8 & CSN/CS & Geel \\ \hline
+			23 / GPIO11 / SPI\_CLK & SCK & Groen \\ \hline
+			19 / GPIO10 / SPI\_MOSI & MOSI & Blauw \\ \hline
+			21 / GPIO9 / SPI\_MISO & MISO & Paars \\ \hline
+		\end{tabular}%
+	\caption{Aansluitingen NRF24l01+ op een Raspberry Pi model 2B+}
+	\label{tab:raspberry-nrf-aanslutingen}
+\end{table}
 
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:NRF24:sequence}

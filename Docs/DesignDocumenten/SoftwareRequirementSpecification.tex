@@ -33,7 +33,8 @@
 \definecolor{gray75}{gray}{0.75}
 \newcommand{\hsp}{\hspace{20pt}}
 \usepackage{pdfpages}
-
+\usepackage{siunitx}
+\sisetup{per-mode=symbol,per-symbol = p,binary-units=true } 
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
@@ -57,8 +58,8 @@
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
-	\vskip0.5em
 	\begin{center}\large#2\end{center}
+	\vskip0.5em
 	\begin{center}\normalsize#3\end{center}
 	\begin{center}\large#4\end{center}
 	\begin{center}\large#5\end{center}
@@ -67,9 +68,10 @@
 	\begin{center}\normalsize#8\end{center}
 	\begin{center}\normalsize#9\end{center}
 	\vskip0.5em}%
+	\rfoot{{\footnotesize \textbf{#1}}}
 }
 
-\subtitle{Software Requirements Specification}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica}{561399}{MWJ.Berentsen@student.han.nl}{Versie 1}{Alten Nederland B.V.}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Software Requirement Specificatie}{Versie 2.1}{Alten Nederland B.V.}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica - Embedded Software Developement }{MWJ.Berentsen@student.han.nl}{Studentnummer: 561399}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt plus 2pt minus 1pt}
@@ -86,7 +88,7 @@
 % \rhead{{\color{blue}\rule{1cm}{1cm}}}
 
 \rhead{\includegraphics[height=1cm]{Afbeeldingen/han.png}}
-%\rfoot{something something something}
+
 
 
 \begin{document}
@@ -183,7 +185,7 @@ Verder biedt het stroompunten aan van 3,3 of 5 volt.
 \subsection{NRF24}
 \label{inleiding:werkomgeving:nrf24}
 De NRF24 is gekozen door zijn prestaties ten opzichte van afstand.
-De mogelijkheid om een snelheid aan te kunnen bieden van minimaal 250 kbps op een afstand van 500 meter maakt deze module het meest geschikt voor dit project.
+De mogelijkheid om een snelheid aan te kunnen bieden van minimaal \SI{250}{\kilo\bit\per\second} op een afstand van 500 meter maakt deze module het meest geschikt voor dit project.
 Daarnaast kan de NRF24 tot zes kanalen tegelijk open houden die kunnen schakelen tussen zenden en ontvangen.
 De NRF24 is in staat om per payload tot 32 bytes te versturen. 
 Tenslotte is de NRF24 een transciever die werkt op een voltage van 3.3 volt waarbij de I/O pinnen 5 volt tolerant zijn wat het compatibel maakt met de \nameref{inleiding:werkomgeving:raspberrypi}.
@@ -210,7 +212,7 @@ Deze mogelijkheid was daarom ook een hoofdreden om Gazebo te gebruiken.
 \subsection{Catkin}
 \label{inleiding:werkomgeving:catkin}
 
-\href{http://wiki.ros.org/catkin}{Catkin} is de ingebouwde standaard build tool van ROS. De tool is een combinatie van CMake en door ROS geschreven python scripst. Deze wordt gebruikt in het project om de simulatie software mee te bouwen. 
+\href{http://wiki.ros.org/catkin}{Catkin} is de ingebouwde standaard build tool van ROS. De tool is een combinatie van CMake en door ROS geschreven python scripst. Deze wordt gebruikt in het project om de simulatiesoftware mee te bouwen. 
 
 
 \subsection{Gtest (Google unittest)}
@@ -843,7 +845,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 \end{figure}
 
 
-\chapter{functionele requirements }
+\chapter{Functionele requirements }
 Voor dit project zijn er requirements opgesteld. Deze requirements zijn opgesteld a.d.h.v. de MoSCoW methode, hiervoor is gekozen om de requirements
 te prioriteren. De Must requirements moeten voor het einde van het project gerealiseerd worden. De overige requirements hebben een lagere prioriteit en
 hieraan wordt pas gewerkt als alle Must requirements afgehandeld zijn. Onder de tabel is per requirement een toelichting te vinden.
@@ -1052,7 +1054,7 @@ Een algoritme tester moet casus situaties kunnen testen deze casus mag aangeroep
 	%\endfirsthead
 	%
 	\endhead
-	\hyperlink{QUA1}{QUA1}			&\begin{tabular}[c]{@{}l@{}} Het netwerk moet een minimale snelheid van 100kbps ondersteunen \end{tabular}\\ \hline
+	\hyperlink{QUA1}{QUA1}			&\begin{tabular}[c]{@{}l@{}} Het netwerk moet een minimale snelheid van \SI{100}{\kilo\bit\per\second} ondersteunen \end{tabular}\\ \hline
 	\caption{Non-functionele requirements quality}
 	\label{tab:nietfunctionelecriteria:quality}
 \end{longtable}
