@@ -2,7 +2,7 @@
 autonumber
 participant "Node 1:MeshComponent" as 1
 participant "heartbeat:HeartbeatMessage" as 1m
-participant "routerTech:ChildTableTree" as 1NT
+participant "routerTech:HybrideLMRouting" as 1NT
 participant "communication:IWirelessCommunication" as SS
 note over SS: Interface for wireless communication
 participant "Node 2:MeshComponent" as 2

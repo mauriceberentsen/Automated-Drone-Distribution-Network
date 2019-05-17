@@ -2,7 +2,7 @@
 participant ":VirtualGateway" as VG
 
 participant "meshgateway:MeshnetworkGateway" as VG
-participant "routing:ChildTableTree" as routing
+participant "routing:HybrideLMRouting" as routing
 participant "engine:RosDroneEngineConnector" as engine
 participant "communication:VirtualNRF24" as NRF24
 participant "internet:RosInternetMock" as internet
@@ -12,7 +12,7 @@ VG -> VG : Load(physics::ModelPtr _parent,\nsdf::ElementPtr _sdf)
 note over VG : Get the nodeID,\ndroneID and debug\n from SDF
 
 create routing
-VG -> routing : <<create>> ChildTableTree( )
+VG -> routing : <<create>> HybrideLMRouting( )
 create engine
 VG -> engine : <<create>> RosDroneEngineConnector( droneID )
 create NRF24

@@ -26,8 +26,8 @@ namespace Communication{
     }
     namespace RoutingTechnique{
         interface IRoutingTechnique
-        class ChildTableTree
-        ChildTableTree ..|> IRoutingTechnique
+        class HybrideLMRouting
+        HybrideLMRouting ..|> IRoutingTechnique
     }
     namespace Wireless{
         interface IWirelessCommunication

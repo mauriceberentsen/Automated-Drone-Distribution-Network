@@ -2,7 +2,7 @@
 |MeshCommunicator|
 start
 :onMsg;
-if(forward == this->nodeID) then (true)
+if(forward == this->nodeID || forward == BROADCAST) then (true)
 :processMessage;
 if (case: LOCATION) then ([true])
 :processLocation;
@@ -22,5 +22,6 @@ endif
 else (false)
 :forward message;
 endif
+:Update routing table;
 stop
 @enduml

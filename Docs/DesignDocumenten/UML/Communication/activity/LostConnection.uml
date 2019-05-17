@@ -18,7 +18,7 @@ else ([false])
     	|IRoutingTechnique|
 		:Remove gateway from \nknown connections;
 		|MeshnetworkRouter|		
-       	:Inform children about \nlost connection;
+       	:Inform others about \nlost connection;
 		:Save time noticed offline;
         :Start Timer;
     endif

@@ -25,7 +25,7 @@ endif
     :maintainRouting;
     |MeshnetworkRouter|
     if(connectedToGateway) then([true])
-    :sendHeartbeatToGateway;
+
     	if(knowGatewayLocation) then ([false])
         :requestLocation(gateway);
         endif
