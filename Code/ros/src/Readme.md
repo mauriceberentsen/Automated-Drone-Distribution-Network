@@ -19,10 +19,10 @@ Drone meshnetwork simulation uses a number of free to use software distributions
 
 ### Building the software
 
-Drone meshnetwork simulation requires [ROS Melodic] and [Gazebo] ( *Comes with ros-melodic-desktop-full* ) to be installed and the user has followed the [ROS Tutorials]
+Drone meshnetwork simulation requires [ROS Melodic] and [Gazebo] ( *Comes with ros-melodic-desktop-full* ) to be installed and the user has followed the [ROS Tutorials].
 By following the ROS tutorials the user will have basic knowledge of use the Catkin Workspace the comes with ROS.
 
-Start with placing the package in the catkin_workspace
+Start with placing the package in the catkin_workspace.
 
 ```sh
 $ cp -R drone_meshnetwork_simulation <your_catkin_workspace>/src
@@ -44,7 +44,7 @@ $ catkin_make drone_meshnetwork_simulation
 ```
 
 ### Configuration
-To configure the amount of routers and gateways drones edit the provided drone_meshnetwork_simulation/world/factory.world file
+To configure the amount of routers and gateways drones edit the provided drone_meshnetwork_simulation/world/factory.world file.
 
 ```xml
 <?xml version="1.0"?>
@@ -69,19 +69,19 @@ To configure the amount of routers and gateways drones edit the provided drone_m
 ### Using the software
 
 There is a launchfile provided that starts a gazebo server filled with drones in the role of routers or gateways.
-To run the launchfile enter the following command 
+To run the launchfile enter the following command. 
 
 ```sh
 roslaunch drone_meshnetwork_simulation factory.launch 
 ```
 
-To visually see what is happening in the simulation boot the gazebo client by using
+To visually see what is happening in the simulation boot the gazebo client by using.
 
 ```sh
 gzlient 
 ```
 
-The easiest way to control the drones is by using the rqt service caller and topic monitor, run rqt by using
+The easiest way to control the drones is by using the rqt service caller and topic monitor, run rqt by using.
 
 ```sh
 rqt
@@ -90,7 +90,7 @@ rqt
 
 ### Todos
 
- - Write MORE Tests
+ - Write more Tests
  - Implement improved abstract drone
  - Setup buildserver for ROS package
  - Used improved code checker
