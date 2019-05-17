@@ -5,7 +5,7 @@ cp ./Docs/Afstudeerverslag/Afstudeerverslag/Afstudeerverslag.pdf ./Scriptie_Maur
 cp ./Docs/DesignDocumenten/SoftwareDesignDocument.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
 cp ./Docs/DesignDocumenten/SoftwareRequirementSpecification.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
 cp ./Docs/DesignDocumenten/SoftwareRequirementSpecification.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
-cp ./Docs/Onderzoeken/DroneMeshnetwerkSimulatie/Onderzoeksrapport\ Drone\ mesh\ netwerk\ simulatie.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
+cp ./Docs/Onderzoeken/DroneMeshnetwerkSimulatie/Onderzoeksrapport\ Drone\ meshnetwerk\ simulatie.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
 #copy templates to directory
 mkdir -p ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Templates
 cp -R ./Docs/Plan\ van\ aanpak/Templates/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Templates/

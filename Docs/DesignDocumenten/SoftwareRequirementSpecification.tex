@@ -186,7 +186,7 @@ Verder biedt het stroompunten aan van 3,3 of 5 volt.
 \label{inleiding:werkomgeving:nrf24}
 De NRF24 is gekozen door zijn prestaties ten opzichte van afstand.
 De mogelijkheid om een snelheid aan te kunnen bieden van minimaal \SI{250}{\kilo\bit\per\second} op een afstand van 500 meter maakt deze module het meest geschikt voor dit project.
-Daarnaast kan de NRF24 tot zes kanalen tegelijk open houden die kunnen schakelen tussen zenden en ontvangen.
+Daarnaast kan de NRF24 tot zes adressen tegelijk onderhouden die kunnen schakelen tussen zenden en ontvangen.
 De NRF24 is in staat om per payload tot 32 bytes te versturen. 
 Tenslotte is de NRF24 een transciever die werkt op een voltage van 3.3 volt waarbij de I/O pinnen 5 volt tolerant zijn wat het compatibel maakt met de \nameref{inleiding:werkomgeving:raspberrypi}.
 
@@ -304,23 +304,23 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 	{{\bfseries Table \thetable\ continued from previous page}} \\
 	\endhead
 	%
-	gazebo & Gazebo is de simulatie omgeving voor physics \\ \hline
-	Drone & \begin{tabular}[c]{@{}l@{}}Een drone kan zichzelf verplaatsen in een ruimte \\ met een DroneEngine\end{tabular} \\ \hline
-	DroneEngine & \begin{tabular}[c]{@{}l@{}}Een drone engine wordt gebruikt door de drone \\ voor verplaatsing\end{tabular} \\ \hline
-	RouterDrone & \begin{tabular}[c]{@{}l@{}}Een RouterDrone is een drone voorzien van een \\ RaspberryPiRouter\end{tabular} \\ \hline
-	GatewayDrone & \begin{tabular}[c]{@{}l@{}}Een RouterGateway is een drone voorzien van \\ een RaspberryPiGateway\end{tabular} \\ \hline
-	RaspberryPi & Een RaspberryPi is een mircocomputer \\ \hline
-	RaspberryPiRouter & \begin{tabular}[c]{@{}l@{}}Is een RaspberryPi voorzien van MeshnetworkRouter \\ software\end{tabular} \\ \hline
-	RaspberryPiGateway & \begin{tabular}[c]{@{}l@{}}Is een RaspberryPi voorzien van MeshnetworkGateway \\ software\end{tabular} \\ \hline
-	MeshnetworkComponent & Is een onderdeel binnen een meshnetwerk \\ \hline
-	MeshnetworkRouter & \begin{tabular}[c]{@{}l@{}}Is een meshcomponent in staat berichten binnen het\\ netwerk door te sturen\end{tabular} \\ \hline
-	MeshnetworkGateway & \begin{tabular}[c]{@{}l@{}}Is een meshcomponent met een verbinding extern \\ van het netwerk\end{tabular} \\ \hline
-	InternetConnection & Is een  verbinding naar het wereldwijde web \\ \hline
-	DroneManager & Een manager voor het aansturen van drones \\ \hline
-	ros & \begin{tabular}[c]{@{}l@{}}Middleware voor het aansturen van fysieke of\\  gesimuleerde drones\end{tabular} \\ \hline
-	Message & Een bericht gebruikt voor communicatie \\ \hline
-	WirelessCommunication & Communicatie type die door de lucht verloopt \\ \hline
-	NRF24 & Een radio transceiver bruikbaar voor communicatie \\ \hline
+	gazebo & Gazebo is de simulatie omgeving voor physics. \\ \hline
+	Drone & \begin{tabular}[c]{@{}l@{}}Een drone kan zichzelf verplaatsen in een ruimte \\ met een DroneEngine.\end{tabular} \\ \hline
+	DroneEngine & \begin{tabular}[c]{@{}l@{}}Een drone engine wordt gebruikt door de drone \\ voor verplaatsing.\end{tabular} \\ \hline
+	RouterDrone & \begin{tabular}[c]{@{}l@{}}Een RouterDrone is een drone voorzien van een \\ RaspberryPiRouter.\end{tabular} \\ \hline
+	GatewayDrone & \begin{tabular}[c]{@{}l@{}}Een RouterGateway is een drone voorzien van \\ een RaspberryPiGateway.\end{tabular} \\ \hline
+	RaspberryPi & Een RaspberryPi is een mircocomputer. \\ \hline
+	RaspberryPiRouter & \begin{tabular}[c]{@{}l@{}}Is een RaspberryPi voorzien van MeshnetworkRouter. \\ software\end{tabular} \\ \hline
+	RaspberryPiGateway & \begin{tabular}[c]{@{}l@{}}Is een RaspberryPi voorzien van MeshnetworkGateway. \\ software\end{tabular} \\ \hline
+	MeshnetworkComponent & Is een onderdeel binnen een meshnetwerk. \\ \hline
+	MeshnetworkRouter & \begin{tabular}[c]{@{}l@{}}Is een meshcomponent in staat berichten binnen het\\ netwerk door te sturen.\end{tabular} \\ \hline
+	MeshnetworkGateway & \begin{tabular}[c]{@{}l@{}}Is een meshcomponent met een verbinding extern \\ van het netwerk.\end{tabular} \\ \hline
+	InternetConnection & Is een  verbinding naar het wereldwijde web. \\ \hline
+	DroneManager & Een manager voor het aansturen van drones. \\ \hline
+	ros & \begin{tabular}[c]{@{}l@{}}Middleware voor het aansturen van fysieke of\\  gesimuleerde drones.\end{tabular} \\ \hline
+	Message & Een bericht gebruikt voor communicatie.\\ \hline
+	WirelessCommunication & Communicatie type die door de lucht verloopt. \\ \hline
+	NRF24 & Een radio transceiver bruikbaar voor communicatie. \\ \hline
 	\caption{Toelichting domeinmodel}
 	\label{tab:domeinmodel}\\
 \end{longtable}
@@ -338,13 +338,13 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 	\begin{tabular}{|l|}
 		\hline
 		Usecase: Simuleren dronenetwerk 				                                                                             \\ \hline
-		Doel: De actor wil een dronenetwerk simuleren om algritmes te testen zonder fysieke drones                                    \\ \hline
+		Doel: De actor wil een dronenetwerk simuleren om algritmes te testen zonder fysieke drones.                                    \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase:  De usecase start een simulatie op waarin een instelbaar aantal\\
 								 drones gesimuleerd worden welke onderling kunnen communiceren via een gesimuleerde\\
 								 draadloze communicatieweg. Hiermee creëren zij een meshnetwerk. \end{tabular} \\ \hline
 		Primary actor:  \nameref{inleiding:gebruikers:algoritmetester}                                                               \\ \hline
 		Preconditions: Er is aangegeven hoeveel routers en gateway gesimuleerd moeten worden.                                         \\ \hline
-		Postconditions: De simulatie van de drones en de communicatie is opgestart                                                     \\ \hline
+		Postconditions: De simulatie van de drones en de communicatie is opgestart.                                                     \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -514,11 +514,11 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		1. Geeft bericht om te verzenden & 2. Zet bericht om in overdraagbare data  \\ \hline
-		& 3. Opent verbinding met ontvanger                         \\ \hline
-		& 4. Verstuurd bericht naar ontvanger                        \\ \hline
-5. Krijgt notificatie van slagen & 6. Ontvangend syteem zet data terug naar bericht \\ \hline
-		 & 7. Ontvanger ontvangt bericht                         \\ \hline
+		1. Geeft bericht om te verzenden. & 2. Zet bericht om in overdraagbare data.  \\ \hline
+		& 3. Opent verbinding met ontvanger.                         \\ \hline
+		& 4. Verstuurd bericht naar ontvanger.                        \\ \hline
+5. Krijgt notificatie van slagen. & 6. Ontvangend syteem zet data terug naar bericht. \\ \hline
+		 & 7. Ontvanger ontvangt bericht.                         \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -530,8 +530,8 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		& 3. Kan geen verbinding openen met ontvanger                        \\ \hline
-	4. Krijgt notificatie van het niet slagen	&                         \\ \hline
+		& 3. Kan geen verbinding openen met ontvanger.                        \\ \hline
+	4. Krijgt notificatie van het niet slagen.	&                         \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -798,7 +798,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		Purpose: Het aansturen van een drone wordt gebruikt om een drone te verplaatsen.                                                                               \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: Elke drone kan aangestuurd worden om zicht te verplaatsen.\\Die wordt altijd uitgevoerd vanaf het aangesloten netwerkcomponent. Daarom moet er\\vanuit een extern punt altijd een verzoek gestuurd worden voor een verplaatsing of vanaf de\\aangesloten module zelf komen. {}\end{tabular} \\ \hline
 		Primary actor: \nameref{Usecase:verzoekverplaatsing}, \nameref{Usecase:noodprotocol}.                                        \\ \hline
-		Preconditions: Drone is in staat zich te verplaatsen                                                                         \\ \hline
+		Preconditions: Drone is in staat zich te verplaatsen.                                                                         \\ \hline
 		Postconditions: Drone heeft zich verplaatst naar de verzochte positie.                                                                   \\ \hline
 	\end{tabular}
 \end{table}
@@ -862,7 +862,8 @@ hieraan wordt pas gewerkt als alle Must requirements afgehandeld zijn. Onder de 
 	\hyperlink{SIMULATIE4}{SIMULATIE4}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert tot 100 drones tegelijk.\end{tabular}        			 &S \\ \hline	
 	\hyperlink{SIMULATIE5}{SIMULATIE5}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert draadloze communicatie.\end{tabular}        			 &M \\ \hline	
 	\hyperlink{SIMULATIE6}{SIMULATIE6}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert een Raspberry Pi. \end{tabular}        						 &S \\ \hline	
-	\hyperlink{SIMULATIE7}{SIMULATIE7}			&\begin{tabular}[c]{@{}l@{}}Simulatie kan met een configuratiebestand gestart worden. \end{tabular}     &S \\ \hline	
+	\hyperlink{SIMULATIE7}{SIMULATIE7}			&\begin{tabular}[c]{@{}l@{}}Een gesimuleerde Raspberry Pi houdt zich aan de snelheidslimieten\\ van een Raspberry Pi model 2B+ \end{tabular}        						 &W \\ \hline	
+	\hyperlink{SIMULATIE8}{SIMULATIE8}			&\begin{tabular}[c]{@{}l@{}}Simulatie kan met een configuratiebestand gestart worden. \end{tabular}     &S \\ \hline	
 	\hyperlink{DRONE1}{DRONE1}		&\begin{tabular}[c]{@{}l@{}}Drone kan zich verplaatsen naar een positie. \end{tabular}        			 &M \\ \hline	
 	\hyperlink{DRONE2}{DRONE2}		&\begin{tabular}[c]{@{}l@{}}Drone kan een route naar positie berekenen.  \end{tabular}        			 &S \\ \hline	
 	\hyperlink{DRONE3}{DRONE3}		&\begin{tabular}[c]{@{}l@{}}Drone kan een locatie aanbieden.  \end{tabular}        						 &M \\ \hline	
@@ -912,10 +913,15 @@ Omdat het draait om een simulatie van een meshnetwerk moet er een component aanw
 \paragraph{SIMULATIE6: Simulatie simuleert een Raspberry Pi.}
 \hypertarget{SIMULATIE6}{}
 
-In het project wordt gebruik gemaakt van het Raspberry Pi deze moet virtueel gerepresenteerd worden door de simulatie. 
+In het project wordt gebruik gemaakt van het Raspberry Pi model 2B+ deze moet virtueel gerepresenteerd worden door de simulatie.
 
-\paragraph{SIMULATIE7: Simulatie kan met een configuratiebestand gestart worden.}
+\paragraph{SIMULATIE7: Een gesimuleerde Raspberry Pi houdt zich aan de snelheidslimieten van een Raspberry Pi model 2B+.}
 \hypertarget{SIMULATIE7}{}
+
+De gesimuleerde Raspberry Pi zal zich niet houden aan de clock snelheid van een echte Raspberry Pi model 2B+.
+
+\paragraph{SIMULATIE8: Simulatie kan met een configuratiebestand gestart worden.}
+\hypertarget{SIMULATIE8}{}
 
 Om het starten van simulaties gemakkelijk te maken voor de algoritmetester moet het mogelijk zijn simulaties via een configuratie op te starten.
 
@@ -979,7 +985,7 @@ Om de stabiliteit van het netwerk te vergroten moet het mogelijk zijn het netwer
 Onderstaand worden alle functionele requirements van de algoritme testapplicatie toegelicht.
 \paragraph{ALGORITME1: Algoritmetester kan drones verdelen.}
 \hypertarget{ALGORITME1}{}
-Een algoritme tester moet om zijn algoritme te kunnen testen drones kunnen verplaatsen, dit mag via een api.
+Een algoritme tester moet om zijn algoritme te kunnen testen drones kunnen verplaatsen, dit mag via een aangeboden interface gebeuren.
 \paragraph{ALGORITME2: Algoritmetester kan een casus met een verdeling starten}
 \hypertarget{ALGORITME2}{}
 Een algoritme tester moet casus situaties kunnen testen deze casus mag aangeroepen worden via een api. 
