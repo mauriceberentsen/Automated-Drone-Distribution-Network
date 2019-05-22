@@ -16,12 +16,15 @@
 #include <RF24/RF24.h>
 #include <thread>
 
+//#include "NRF24HighLevelInterface.hpp"
+
+class NRF24HighLevelInterface;
 enum state {SENDING,RECEIVING,OFF};
 
 class NRF24LowLevelInterface
 {
 public:
-    NRF24LowLevelInterface(/* args */);
+    NRF24LowLevelInterface(NRF24HighLevelInterface* interface);
     ~NRF24LowLevelInterface();
 
     void Start(const uint64_t _NodeIdReadAddress,const  uint64_t _broadcastAddress);
@@ -38,6 +41,7 @@ private:
     std::thread antennaThread;
     uint64_t NodeIdReadAddress;
     uint64_t broadcastAddress;
+    NRF24HighLevelInterface* highLevelInterface;
 };
 
 

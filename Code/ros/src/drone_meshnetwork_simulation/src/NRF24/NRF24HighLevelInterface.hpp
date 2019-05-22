@@ -12,14 +12,24 @@
 #ifndef NRF24HIGHLEVELINTERFACE
 #define NRF24HIGHLEVELINTERFACE
 
-#include "NRF24LowLevelInterface.hpp"
 
-class NRF24HighLevelInterface
+#include "../Communication/Wireless/IWirelessCommunication.hpp"
+#include "../Communication/Wireless/IMeshNetwork.hpp"
+#include "../Communication/Wireless/IMeshDebugInfo.hpp"
+
+class NRF24LowLevelInterface;
+
+class NRF24HighLevelInterface : public Communication::Wireless::IWirelessCommunication
 {
 public:
     NRF24HighLevelInterface(/* args */);
     ~NRF24HighLevelInterface();
-  void StartAntenna( uint8_t nodeID/*Communication::Wireless::IMeshNetwork* IMN*/ );
+   /**
+   * @brief Start the communication pipe of the NRF24
+   *
+   * @param MC Reference to the connected MeshnetworkComponent
+   */
+  void StartAntenna( Communication::Wireless::IMeshNetwork* IMN );
   /**
    * @brief Stop the Antenna
    *
@@ -39,12 +49,14 @@ public:
    * @param msg message to be sent
    */
   void BroadcastMessage( const uint8_t* msg );
-  /**
-   * @brief Set debugging mode
+    /**
+   * @brief debuging activation
    *
-   * @param IMD Pointer to the debug interface of a meshcomponent
-   * @param on on/off state
+   * @param debug Pointer to the debug interface of the meshnetworkComponent
+   * @param on state
    */
+  void DebugingMode( Communication::Wireless::IMeshDebugInfo* debug,
+                     const bool on = true );
   /**
    * @brief Get ON/OFF state
    *
@@ -52,10 +64,17 @@ public:
    * @return false OFF
    */
   const bool On( );
+
+  void OnMessage(const uint8_t* message);
 private:
     const uint64_t addressRange = 0x544d526800LL;
-    NRF24LowLevelInterface low;
+    const uint8_t ackStart = 120;
+    NRF24LowLevelInterface* lowLevelInterface;
     bool on;
+    /// \brief The connected Meshnetwork Interface used for messages
+    Communication::Wireless::IMeshNetwork* meshnetworkComponent;
+    /// \brief Interface providing debug info about the meshnetwork
+    Communication::Wireless::IMeshDebugInfo* debuginfo;
 };
 
 

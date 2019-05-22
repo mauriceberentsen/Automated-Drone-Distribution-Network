@@ -1,22 +1,17 @@
-#include "NRF24HighLevelInterface.hpp"
-#include <iostream>
+#include "MockNetworkComponent.hpp"
+
+
 int main(int argc, char const *argv[])
 {
+    uint8_t id = 12;
+    uint8_t other = 3;
+    MockNetworkComponent mock(id,other);
+    
     NRF24HighLevelInterface high;
-    high.StartAntenna(12);
-    uint8_t buf[32] = {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3}; 
-
+    
     while (true)
     {
-        static int D = 0;
-        ++D;
-        if(D > 1000000000)
-        {
-	std::cout<<"Send"<<std::endl;
-        if(high.SendMessageTo(buf))
-	{std::cout<<"Success"<<std::endl;}
-        D = 0;
-        }
+        mock.DoStuf();
     }
     
     return 0;

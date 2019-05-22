@@ -10,10 +10,11 @@
  */
 #include <iostream>
 #include <thread>
+#include "NRF24HighLevelInterface.hpp"
 #include "NRF24LowLevelInterface.hpp"
 
-NRF24LowLevelInterface::NRF24LowLevelInterface(/* args */)
-    : radio(RF24(25, 8, BCM2835_SPI_SPEED_8MHZ))
+NRF24LowLevelInterface::NRF24LowLevelInterface(NRF24HighLevelInterface* _highLevelInterface)
+    : highLevelInterface(_highLevelInterface),radio(RF24(25, 8, BCM2835_SPI_SPEED_8MHZ))
 {
 }
 
@@ -39,12 +40,12 @@ void NRF24LowLevelInterface::Start(const uint64_t _NodeIdReadAddress,
     this->antennaThread = std::thread(std::bind(
                         &NRF24LowLevelInterface::runAntenna, this));
 }
-void NRF24LowLevelInterface::BroadcastMessage(const uint8_t *message)
+void NRF24LowLevelInterface::BroadcastMessage(const uint8_t *message) 
 {
     currentState = SENDING;
     radio.openWritingPipe(broadcastAddress);
     radio.stopListening();
-    radio.writeFast(message, 32, true);
+    radio.write(message, 32, true);
     radio.startListening();
     currentState = RECEIVING;
 }
@@ -106,9 +107,10 @@ void NRF24LowLevelInterface::HandleIncomingMessages()
         radio.read(&data[i], 32);
         ++i;
         i = i % 100;
-        for (int x = 0; x < 32; x++)
-            std::cout << (int)data[i - 1][x];
-        std::cout << std::endl;
+        highLevelInterface->OnMessage(data[i-1]);
+        // for (int x = 0; x < 32; x++)
+        //     std::cout << (int)data[i - 1][x];
+        // std::cout << std::endl;
     }
 }
 

@@ -10,9 +10,13 @@
  */
 
 #include "NRF24HighLevelInterface.hpp"
+#include "../Communication/Messages/Message.hpp"
+#include "NRF24LowLevelInterface.hpp"
 
+using namespace Communication::Messages;
 
-NRF24HighLevelInterface::NRF24HighLevelInterface(/* args */)
+NRF24HighLevelInterface::NRF24HighLevelInterface()
+:lowLevelInterface(new NRF24LowLevelInterface(this))
 {
 }
 
@@ -20,9 +24,11 @@ NRF24HighLevelInterface::~NRF24HighLevelInterface()
 {
 }
 
-void NRF24HighLevelInterface::StartAntenna( uint8_t nodeID/*Communication::Wireless::IMeshNetwork* IMN*/ )
+void NRF24HighLevelInterface::StartAntenna( Communication::Wireless::IMeshNetwork* IMN )
 {
-    low.Start(addressRange+nodeID,addressRange);
+    meshnetworkComponent = IMN;
+    uint8_t node = meshnetworkComponent->getNodeID();
+    lowLevelInterface->Start(addressRange+node,addressRange);
     on = true;
 }
 
@@ -33,13 +39,25 @@ void NRF24HighLevelInterface::StopAntenna()
 
 bool NRF24HighLevelInterface::SendMessageTo(const uint8_t *msg)
 {
-    return low.SendMessage(addressRange+msg[3],addressRange+msg[3]+120, msg);
+    return lowLevelInterface->SendMessage(addressRange+msg[TO],addressRange+msg[TO]+ackStart, msg);
 }
 
 void NRF24HighLevelInterface::BroadcastMessage(const uint8_t *msg) 
 {
-    low.BroadcastMessage(msg);
+    lowLevelInterface->BroadcastMessage(msg);
 
 }
 
-const bool NRF24HighLevelInterface::On() { return on; }
+const bool NRF24HighLevelInterface::On(){ return on; }
+
+ void NRF24HighLevelInterface::DebugingMode(
+     Communication::Wireless::IMeshDebugInfo* debug, const bool on )
+ {
+     debuginfo = debug;
+ }
+
+ void NRF24HighLevelInterface::OnMessage(const uint8_t* message)
+ {
+     meshnetworkComponent->OnMsg(message);
+ }
+
