@@ -241,7 +241,7 @@ namespace Meshnetwork
 
  void MeshnetworkComponent::sendLocation( const uint8_t other )
  {
-  const ignition::math::Vector3< float > location = droneEngine->getLocation( );
+  const Vector3< float > location = droneEngine->getLocation( );
   uint8_t towards = routerTech->getDirectionToNode( other );
   Messages::LocationMessage msg( this->nodeID, this->nodeID, towards, other,
                                  location.X( ), location.Y( ), location.Z( ),
@@ -254,7 +254,7 @@ namespace Meshnetwork
  float MeshnetworkComponent::distanceBetweenMeAndLocation(
      const Messages::LocationMessage &LocMsg )
  {
-  const ignition::math::Vector3< float > location = droneEngine->getLocation( );
+  const Vector3< float > location = droneEngine->getLocation( );
 
   float a, b, c;
   a = LocMsg.getLongitude( ) - location.X( );

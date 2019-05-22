@@ -10,7 +10,7 @@
  */
 #ifndef IDRONEENGINE
 #define IDRONEENGINE
-#include <ignition/math/Vector3.hh>
+#include "../Vector/Vector3.hpp"
 
 namespace Drone
 {
@@ -39,10 +39,10 @@ public:
  /**
   * @brief Get the Location of the drone
   *
-  * @return const ignition::math::Vector3< float > Current location of the
+  * @return const Vector3< float > Current location of the
   * drone
   */
- virtual const ignition::math::Vector3< float > getLocation( ) = 0;
+ virtual const Vector3< float > getLocation( ) = 0;
 
 protected:
 private:

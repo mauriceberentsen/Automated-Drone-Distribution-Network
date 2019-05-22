@@ -44,7 +44,7 @@ public:
     bool operator==(const Vector3<T>& rhs);
 
 
-    float Distance(const Vector3<T>& rhs);
+    float Distance(const Vector3<T>& rhs) const;
 
 private:
     T x;

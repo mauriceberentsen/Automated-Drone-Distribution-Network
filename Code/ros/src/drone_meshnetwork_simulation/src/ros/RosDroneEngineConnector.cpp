@@ -33,16 +33,16 @@ namespace Drone
   droneEngine.publish( msg );
  }
 
- const ignition::math::Vector3< float > RosDroneEngineConnector::getLocation( )
+ const Vector3< float > RosDroneEngineConnector::getLocation( )
  {
   drone_meshnetwork_simulation::RequestGPS GPS;
   {
    if ( this->GPSLink.call( GPS ) ) {
-    ignition::math::Vector3< float > loc(
+    Vector3< float > loc(
         GPS.response.longitude, GPS.response.latitude, GPS.response.height );
     return loc;
    } else {
-    ignition::math::Vector3< float > loc( 6, 6, 6 );
+    Vector3< float > loc( 6, 6, 6 );
     // TODO Come up with some beter implementation when no gps service is
     // avaiable
     return loc;

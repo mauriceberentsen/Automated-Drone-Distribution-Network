@@ -11,11 +11,11 @@
 #ifndef NODEHPP
 #define NODEHPP
 
-#include <ignition/math/Vector3.hh>
+#include "../../Vector/Vector3.hpp"
 #include "ros/ros.h"
 #include "drone_meshnetwork_simulation/NRF24.h"
 
-using namespace ignition::math;
+
 namespace ros
 {
 namespace WirelessSimulation

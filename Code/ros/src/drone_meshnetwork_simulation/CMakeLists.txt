@@ -163,6 +163,10 @@ catkin_add_gtest(${PROJECT_NAME}-HybridLMRoutingProtocol-test src/Communication/
 catkin_add_gtest(${PROJECT_NAME}-GatewayDrone-test src/Communication/Messages/Tests/utestMessage.cpp
                                                      src/Communication/Messages/Message.cpp
 )
+
+catkin_add_gtest(${PROJECT_NAME}-Vector3-test  src/Vector/TestVector3.cpp 
+                                                
+)
 # catkin_add_gtest(${PROJECT_NAME}-MeshRouter-test src/Communication/Meshnetwork/tests/utestMeshRouter.cpp)
 
 # if(TARGET ${PROJECT_NAME}-MeshRouter-test)

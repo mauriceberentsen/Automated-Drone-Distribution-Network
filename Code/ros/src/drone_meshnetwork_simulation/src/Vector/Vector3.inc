@@ -127,7 +127,7 @@ bool Vector3<T>::operator==(const Vector3<T>& rhs)
 }
 
 template <typename T>
-float Vector3<T>::Distance(const Vector3<T>& rhs)
+float Vector3<T>::Distance(const Vector3<T>& rhs) const
 {
     Vector3<T> difference(*this);
     difference -= rhs;

@@ -37,10 +37,10 @@ namespace Drone
   /**
    * @brief Get the Location of the drone
    *
-   * @return const ignition::math::Vector3< float > Current location of the
+   * @return const Vector3< float > Current location of the
    * drone
    */
-  const ignition::math::Vector3< float > getLocation( );
+  const Vector3< float > getLocation( );
 
   void turnOn( );
   /**
