@@ -1,0 +1,139 @@
+\hypertarget{group__Porting__GPIO}{}\section{Porting\+: G\+P\+IO}
+\label{group__Porting__GPIO}\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__Porting__GPIO_ga872483872ed4d11f46192619106a188c}{G\+P\+IO} ()
+\item 
+static void \hyperlink{group__Porting__GPIO_gad3451cca241dbbf42bf381129385a35c}{open} (int port, int D\+DR)
+\item 
+static void \hyperlink{group__Porting__GPIO_ga1b8cf31be61995207728f653ec11421f}{close} (int port)
+\item 
+static int \hyperlink{group__Porting__GPIO_ga783c8d81b91f178759766e7e62ea4b17}{read} (int port)
+\item 
+static void \hyperlink{group__Porting__GPIO_ga957694ca061e30268dd8a4b28a08e59b}{write} (int port, int value)
+\item 
+virtual \hyperlink{group__Porting__GPIO_gaef320e8e437ed827b571a212fc242a28}{$\sim$\+G\+P\+IO} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const int \hyperlink{group__Porting__GPIO_gac39c2a3ce71b0df667c227292d4ab30c}{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT} = 1
+\item 
+static const int \hyperlink{group__Porting__GPIO_gafbf58b193d0f84db90a843e00f27367c}{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN} = 0
+\item 
+static const int \hyperlink{group__Porting__GPIO_ga18fd76f29528fc97aadcdb78495ff6bf}{O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH} = 1
+\item 
+static const int \hyperlink{group__Porting__GPIO_gaa29a50f0f8fc0a62076c7f4bc7dc70db}{O\+U\+T\+P\+U\+T\+\_\+\+L\+OW} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Example of \hyperlink{gpio_8h}{gpio.\+h} class declaration for G\+P\+IO portability 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__Porting__GPIO_ga872483872ed4d11f46192619106a188c}\label{group__Porting__GPIO_ga872483872ed4d11f46192619106a188c}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!G\+P\+IO@{G\+P\+IO}}
+\index{G\+P\+IO@{G\+P\+IO}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{G\+P\+I\+O()}{GPIO()}}
+{\footnotesize\ttfamily G\+P\+IO (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{group__Porting__GPIO_gad3451cca241dbbf42bf381129385a35c}\label{group__Porting__GPIO_gad3451cca241dbbf42bf381129385a35c}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!open@{open}}
+\index{open@{open}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{open()}{open()}}
+{\footnotesize\ttfamily static void open (\begin{DoxyParamCaption}\item[{int}]{port,  }\item[{int}]{D\+DR }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Similar to Arduino \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pin\+Mode(pin,mode)}; 
+\begin{DoxyParams}{Parameters}
+{\em port} & \\
+\hline
+{\em D\+DR} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__Porting__GPIO_ga1b8cf31be61995207728f653ec11421f}\label{group__Porting__GPIO_ga1b8cf31be61995207728f653ec11421f}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!close@{close}}
+\index{close@{close}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily static void close (\begin{DoxyParamCaption}\item[{int}]{port }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__Porting__GPIO_ga783c8d81b91f178759766e7e62ea4b17}\label{group__Porting__GPIO_ga783c8d81b91f178759766e7e62ea4b17}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!read@{read}}
+\index{read@{read}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{read()}{read()}}
+{\footnotesize\ttfamily static int read (\begin{DoxyParamCaption}\item[{int}]{port }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Similar to Arduino digital\+Read(pin); 
+\begin{DoxyParams}{Parameters}
+{\em port} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__Porting__GPIO_ga957694ca061e30268dd8a4b28a08e59b}\label{group__Porting__GPIO_ga957694ca061e30268dd8a4b28a08e59b}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!write@{write}}
+\index{write@{write}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily static void write (\begin{DoxyParamCaption}\item[{int}]{port,  }\item[{int}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Similar to Arduino \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digital\+Write(pin,state)}; 
+\begin{DoxyParams}{Parameters}
+{\em port} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__Porting__GPIO_gaef320e8e437ed827b571a212fc242a28}\label{group__Porting__GPIO_gaef320e8e437ed827b571a212fc242a28}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!````~G\+P\+IO@{$\sim$\+G\+P\+IO}}
+\index{````~G\+P\+IO@{$\sim$\+G\+P\+IO}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{$\sim$\+G\+P\+I\+O()}{~GPIO()}}
+{\footnotesize\ttfamily virtual $\sim$\hyperlink{group__Porting__GPIO_ga872483872ed4d11f46192619106a188c}{G\+P\+IO} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\subsection{Variable Documentation}
+\mbox{\Hypertarget{group__Porting__GPIO_gac39c2a3ce71b0df667c227292d4ab30c}\label{group__Porting__GPIO_gac39c2a3ce71b0df667c227292d4ab30c}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT@{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT}}
+\index{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT@{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT}{DIRECTION\_OUT}}
+{\footnotesize\ttfamily const int D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT = 1\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 24 of file gpio.\+h.
+
+\mbox{\Hypertarget{group__Porting__GPIO_gafbf58b193d0f84db90a843e00f27367c}\label{group__Porting__GPIO_gafbf58b193d0f84db90a843e00f27367c}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN@{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN}}
+\index{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN@{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN}{DIRECTION\_IN}}
+{\footnotesize\ttfamily const int D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 25 of file gpio.\+h.
+
+\mbox{\Hypertarget{group__Porting__GPIO_ga18fd76f29528fc97aadcdb78495ff6bf}\label{group__Porting__GPIO_ga18fd76f29528fc97aadcdb78495ff6bf}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH@{O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH}}
+\index{O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH@{O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH}{OUTPUT\_HIGH}}
+{\footnotesize\ttfamily const int O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH = 1\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 27 of file gpio.\+h.
+
+\mbox{\Hypertarget{group__Porting__GPIO_gaa29a50f0f8fc0a62076c7f4bc7dc70db}\label{group__Porting__GPIO_gaa29a50f0f8fc0a62076c7f4bc7dc70db}} 
+\index{Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}!O\+U\+T\+P\+U\+T\+\_\+\+L\+OW@{O\+U\+T\+P\+U\+T\+\_\+\+L\+OW}}
+\index{O\+U\+T\+P\+U\+T\+\_\+\+L\+OW@{O\+U\+T\+P\+U\+T\+\_\+\+L\+OW}!Porting\+: G\+P\+IO@{Porting\+: G\+P\+IO}}
+\subsubsection{\texorpdfstring{O\+U\+T\+P\+U\+T\+\_\+\+L\+OW}{OUTPUT\_LOW}}
+{\footnotesize\ttfamily const int O\+U\+T\+P\+U\+T\+\_\+\+L\+OW = 0\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 28 of file gpio.\+h.
+

@@ -1,0 +1,408 @@
+\hypertarget{timingSearch3pin_8ino-example}{}\section{timing\+Search3pin.\+ino}
+{\bfseries New\+: Contributed by \href{https://github.com/tong67}{\tt https\+://github.\+com/tong67}}~\newline
+ This is an example of how to determine the correct timing for A\+Ttiny when using only 3-\/pins
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{This program is free software; you can redistribute it and/or}
+\textcolor{comment}{modify it under the terms of the GNU General Public License}
+\textcolor{comment}{version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{}
+\textcolor{comment}{    timingSearch3pin.ino by tong67 ( https://github.com/tong67 )}
+\textcolor{comment}{    This sketch can be used to determine the best settleTime values to use in RF24::csn().}
+\textcolor{comment}{    The used settleTimeValues are 100/20. Depend on used RC combiniation and voltage drop by LED.}
+\textcolor{comment}{    It is setup to be completely selfcontained, copied defines and code from RF24 library.}
+\textcolor{comment}{    The ATtiny85 uses the tiny-core by CodingBadly (https://code.google.com/p/arduino-tiny/)}
+\textcolor{comment}{    (Intermediate) results are written to TX (PB3, pin 2). For schematic see rf24ping85.ino }
+\textcolor{comment}{*/}
+
+\textcolor{comment}{// nRF24L01.h copy}
+
+\textcolor{comment}{/* Memory Map */}
+\textcolor{preprocessor}{#define CONFIG      0x00}
+\textcolor{preprocessor}{#define EN\_AA       0x01}
+\textcolor{preprocessor}{#define EN\_RXADDR   0x02}
+\textcolor{preprocessor}{#define SETUP\_AW    0x03}
+\textcolor{preprocessor}{#define SETUP\_RETR  0x04}
+\textcolor{preprocessor}{#define RF\_CH       0x05}
+\textcolor{preprocessor}{#define RF\_SETUP    0x06}
+\textcolor{preprocessor}{#define STATUS      0x07}
+\textcolor{preprocessor}{#define OBSERVE\_TX  0x08}
+\textcolor{preprocessor}{#define CD          0x09}
+\textcolor{preprocessor}{#define RX\_ADDR\_P0  0x0A}
+\textcolor{preprocessor}{#define RX\_ADDR\_P1  0x0B}
+\textcolor{preprocessor}{#define RX\_ADDR\_P2  0x0C}
+\textcolor{preprocessor}{#define RX\_ADDR\_P3  0x0D}
+\textcolor{preprocessor}{#define RX\_ADDR\_P4  0x0E}
+\textcolor{preprocessor}{#define RX\_ADDR\_P5  0x0F}
+\textcolor{preprocessor}{#define TX\_ADDR     0x10}
+\textcolor{preprocessor}{#define RX\_PW\_P0    0x11}
+\textcolor{preprocessor}{#define RX\_PW\_P1    0x12}
+\textcolor{preprocessor}{#define RX\_PW\_P2    0x13}
+\textcolor{preprocessor}{#define RX\_PW\_P3    0x14}
+\textcolor{preprocessor}{#define RX\_PW\_P4    0x15}
+\textcolor{preprocessor}{#define RX\_PW\_P5    0x16}
+\textcolor{preprocessor}{#define FIFO\_STATUS 0x17}
+\textcolor{preprocessor}{#define DYNPD       0x1C}
+\textcolor{preprocessor}{#define FEATURE     0x1D}
+
+\textcolor{comment}{/* Bit Mnemonics */}
+\textcolor{preprocessor}{#define MASK\_RX\_DR  6}
+\textcolor{preprocessor}{#define MASK\_TX\_DS  5}
+\textcolor{preprocessor}{#define MASK\_MAX\_RT 4}
+\textcolor{preprocessor}{#define EN\_CRC      3}
+\textcolor{preprocessor}{#define CRCO        2}
+\textcolor{preprocessor}{#define PWR\_UP      1}
+\textcolor{preprocessor}{#define PRIM\_RX     0}
+\textcolor{preprocessor}{#define ENAA\_P5     5}
+\textcolor{preprocessor}{#define ENAA\_P4     4}
+\textcolor{preprocessor}{#define ENAA\_P3     3}
+\textcolor{preprocessor}{#define ENAA\_P2     2}
+\textcolor{preprocessor}{#define ENAA\_P1     1}
+\textcolor{preprocessor}{#define ENAA\_P0     0}
+\textcolor{preprocessor}{#define ERX\_P5      5}
+\textcolor{preprocessor}{#define ERX\_P4      4}
+\textcolor{preprocessor}{#define ERX\_P3      3}
+\textcolor{preprocessor}{#define ERX\_P2      2}
+\textcolor{preprocessor}{#define ERX\_P1      1}
+\textcolor{preprocessor}{#define ERX\_P0      0}
+\textcolor{preprocessor}{#define AW          0}
+\textcolor{preprocessor}{#define ARD         4}
+\textcolor{preprocessor}{#define ARC         0}
+\textcolor{preprocessor}{#define PLL\_LOCK    4}
+\textcolor{preprocessor}{#define RF\_DR       3}
+\textcolor{preprocessor}{#define RF\_PWR      6}
+\textcolor{preprocessor}{#define RX\_DR       6}
+\textcolor{preprocessor}{#define TX\_DS       5}
+\textcolor{preprocessor}{#define MAX\_RT      4}
+\textcolor{preprocessor}{#define RX\_P\_NO     1}
+\textcolor{preprocessor}{#define TX\_FULL     0}
+\textcolor{preprocessor}{#define PLOS\_CNT    4}
+\textcolor{preprocessor}{#define ARC\_CNT     0}
+\textcolor{preprocessor}{#define TX\_REUSE    6}
+\textcolor{preprocessor}{#define FIFO\_FULL   5}
+\textcolor{preprocessor}{#define TX\_EMPTY    4}
+\textcolor{preprocessor}{#define RX\_FULL     1}
+\textcolor{preprocessor}{#define RX\_EMPTY    0}
+\textcolor{preprocessor}{#define DPL\_P5      5}
+\textcolor{preprocessor}{#define DPL\_P4      4}
+\textcolor{preprocessor}{#define DPL\_P3      3}
+\textcolor{preprocessor}{#define DPL\_P2      2}
+\textcolor{preprocessor}{#define DPL\_P1      1}
+\textcolor{preprocessor}{#define DPL\_P0      0}
+\textcolor{preprocessor}{#define EN\_DPL      2}
+\textcolor{preprocessor}{#define EN\_ACK\_PAY  1}
+\textcolor{preprocessor}{#define EN\_DYN\_ACK  0}
+
+\textcolor{comment}{/* Instruction Mnemonics */}
+\textcolor{preprocessor}{#define R\_REGISTER    0x00}
+\textcolor{preprocessor}{#define W\_REGISTER    0x20}
+\textcolor{preprocessor}{#define REGISTER\_MASK 0x1F}
+\textcolor{preprocessor}{#define ACTIVATE      0x50}
+\textcolor{preprocessor}{#define R\_RX\_PL\_WID   0x60}
+\textcolor{preprocessor}{#define R\_RX\_PAYLOAD  0x61}
+\textcolor{preprocessor}{#define W\_TX\_PAYLOAD  0xA0}
+\textcolor{preprocessor}{#define W\_ACK\_PAYLOAD 0xA8}
+\textcolor{preprocessor}{#define FLUSH\_TX      0xE1}
+\textcolor{preprocessor}{#define FLUSH\_RX      0xE2}
+\textcolor{preprocessor}{#define REUSE\_TX\_PL   0xE3}
+\textcolor{preprocessor}{#define RF24\_NOP      0xFF}
+
+\textcolor{comment}{/* Non-P omissions */}
+\textcolor{preprocessor}{#define LNA\_HCURR   0}
+
+\textcolor{comment}{/* P model memory Map */}
+\textcolor{preprocessor}{#define RPD         0x09}
+\textcolor{preprocessor}{#define W\_TX\_PAYLOAD\_NO\_ACK  0xB0}
+
+\textcolor{comment}{/* P model bit Mnemonics */}
+\textcolor{preprocessor}{#define RF\_DR\_LOW   5}
+\textcolor{preprocessor}{#define RF\_DR\_HIGH  3}
+\textcolor{preprocessor}{#define RF\_PWR\_LOW  1}
+\textcolor{preprocessor}{#define RF\_PWR\_HIGH 2}
+\textcolor{comment}{/****************************************************************************/}
+
+\textcolor{comment}{//ATTiny support code pulled in from https://github.com/jscrane/RF24}
+\textcolor{preprocessor}{#if defined(\_\_AVR\_ATtiny25\_\_) || defined(\_\_AVR\_ATtiny45\_\_) || defined(\_\_AVR\_ATtiny85\_\_)}
+\textcolor{comment}{// see http://gammon.com.au/spi}
+\textcolor{preprocessor}{#   define DI   0  // D0, pin 5  Data In}
+\textcolor{preprocessor}{#   define DO   1  // D1, pin 6  Data Out (this is *not* MOSI)}
+\textcolor{preprocessor}{#   define USCK 2  // D2, pin 7  Universal Serial Interface clock}
+\textcolor{preprocessor}{#   define SS   3  // D3, pin 2  Slave Select}
+\textcolor{preprocessor}{#elif defined(\_\_AVR\_ATtiny24\_\_) || defined(\_\_AVR\_ATtiny44\_\_) || defined(\_\_AVR\_ATtiny84\_\_)}
+\textcolor{comment}{// these depend on the core used (check pins\_arduino.h)}
+\textcolor{comment}{// this is for jeelabs' one (based on google-code core)}
+\textcolor{preprocessor}{#   define DI   4   // PA6}
+\textcolor{preprocessor}{#   define DO   5   // PA5}
+\textcolor{preprocessor}{#   define USCK 6   // PA4}
+\textcolor{preprocessor}{#   define SS   3   // PA7}
+\textcolor{preprocessor}{#endif}
+
+\textcolor{preprocessor}{#if defined (ARDUINO) && !defined (\_\_arm\_\_)}
+\textcolor{preprocessor}{    #if defined(\_\_AVR\_ATtiny25\_\_) || defined(\_\_AVR\_ATtiny45\_\_) || defined(\_\_AVR\_ATtiny85\_\_) ||
+       defined(\_\_AVR\_ATtiny24\_\_) || defined(\_\_AVR\_ATtiny44\_\_) || defined(\_\_AVR\_ATtiny84\_\_)}
+\textcolor{preprocessor}{        #define RF24\_TINY}
+\textcolor{preprocessor}{    #else}
+\textcolor{comment}{//      #include <SPI.h>}
+\textcolor{preprocessor}{    #endif}
+\textcolor{preprocessor}{#endif}
+
+\textcolor{preprocessor}{#if defined(RF24\_TINY)}
+\textcolor{preprocessor}{#include <stdio.h>}
+\textcolor{preprocessor}{#include <Arduino.h>}
+\textcolor{preprocessor}{#include <avr/pgmspace.h>}
+
+\textcolor{preprocessor}{#define SPI\_CLOCK\_DIV4 0x00}
+\textcolor{preprocessor}{#define SPI\_CLOCK\_DIV16 0x01}
+\textcolor{preprocessor}{#define SPI\_CLOCK\_DIV64 0x02}
+\textcolor{preprocessor}{#define SPI\_CLOCK\_DIV128 0x03}
+\textcolor{preprocessor}{#define SPI\_CLOCK\_DIV2 0x04}
+\textcolor{preprocessor}{#define SPI\_CLOCK\_DIV8 0x05}
+\textcolor{preprocessor}{#define SPI\_CLOCK\_DIV32 0x06}
+\textcolor{comment}{//#define SPI\_CLOCK\_DIV64 0x07}
+
+\textcolor{preprocessor}{#define SPI\_MODE0 0x00}
+\textcolor{preprocessor}{#define SPI\_MODE1 0x04}
+\textcolor{preprocessor}{#define SPI\_MODE2 0x08}
+\textcolor{preprocessor}{#define SPI\_MODE3 0x0C}
+
+\textcolor{preprocessor}{#define SPI\_MODE\_MASK 0x0C  // CPOL = bit 3, CPHA = bit 2 on SPCR}
+\textcolor{preprocessor}{#define SPI\_CLOCK\_MASK 0x03  // SPR1 = bit 1, SPR0 = bit 0 on SPCR}
+\textcolor{preprocessor}{#define SPI\_2XCLOCK\_MASK 0x01  // SPI2X = bit 0 on SPSR}
+
+\textcolor{keyword}{class }SPIClass \{
+\textcolor{keyword}{public}:
+  \textcolor{keyword}{static} byte \hyperlink{group__Porting__SPI_gad8a210abb2138c105350cc91972edfa9}{transfer}(byte \_data);
+
+  \textcolor{comment}{// SPI Configuration methods}
+
+  \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} attachInterrupt();
+  \textcolor{keyword}{inline} \textcolor{keyword}{static} \textcolor{keywordtype}{void} detachInterrupt(); \textcolor{comment}{// Default}
+
+  \textcolor{keyword}{static} \textcolor{keywordtype}{void} \hyperlink{group__Porting__SPI_gaf79095574842d60a6297aa5b01b6185f}{begin}(); \textcolor{comment}{// Default}
+  \textcolor{keyword}{static} \textcolor{keywordtype}{void} end();
+
+\textcolor{comment}{//  static void setBitOrder(uint8\_t);}
+\textcolor{comment}{//  static void setDataMode(uint8\_t);}
+\textcolor{comment}{//  static void setClockDivider(uint8\_t);}
+\};
+\textcolor{keyword}{extern} SPIClass \hyperlink{group__Porting__SPI_gacd293e741d829f9578b8c5ee49833608}{SPI};
+
+\textcolor{preprocessor}{#endif }\textcolor{comment}{/* RF24\_TINY */}\textcolor{preprocessor}{}
+
+
+\textcolor{preprocessor}{#if defined(RF24\_TINY)}
+
+\textcolor{keywordtype}{void} \hyperlink{group__Porting__SPI_gaf79095574842d60a6297aa5b01b6185f}{SPIClass::begin}() \{
+  \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digitalWrite}(SS, \hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});
+  \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pinMode}(USCK, \hyperlink{group__Porting__General_ga61a3c9a18380aafb6e430e79bf596557}{OUTPUT});
+  \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pinMode}(DO, \hyperlink{group__Porting__General_ga61a3c9a18380aafb6e430e79bf596557}{OUTPUT});
+  \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pinMode}(SS, \hyperlink{group__Porting__General_ga61a3c9a18380aafb6e430e79bf596557}{OUTPUT});
+  \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pinMode}(DI, \hyperlink{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}{INPUT});
+  USICR = \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(USIWM0);
+\}
+
+byte \hyperlink{group__Porting__SPI_gad8a210abb2138c105350cc91972edfa9}{SPIClass::transfer}(byte b) \{
+  USIDR = b;
+  USISR = \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(USIOIF);
+  \textcolor{keywordflow}{do}
+    USICR = \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(USIWM0) | \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(USICS1) | \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(USICLK) | \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(USITC);
+  \textcolor{keywordflow}{while} ((USISR & \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(USIOIF)) == 0);
+  \textcolor{keywordflow}{return} USIDR;
+\}
+
+\textcolor{keywordtype}{void} SPIClass::end() \{\}
+
+\textcolor{preprocessor}{#endif }\textcolor{comment}{/* RF24\_TINY */}\textcolor{preprocessor}{}
+
+\textcolor{comment}{/****************************************************************************/}
+uint8\_t ce\_pin; 
+uint8\_t csn\_pin; 
+uint8\_t csnHighSettle = 255;
+uint8\_t csnLowSettle = 255;
+\textcolor{comment}{/****************************************************************************/}
+\textcolor{keywordtype}{void} ce(\textcolor{keywordtype}{bool} level) \{
+  \textcolor{keywordflow}{if} (ce\_pin != csn\_pin) \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digitalWrite}(ce\_pin,level);
+\}
+
+\textcolor{comment}{/****************************************************************************/}
+\textcolor{keywordtype}{void} setCsnHighSettle(uint8\_t level) \{
+  csnHighSettle = level;
+\}
+
+\textcolor{comment}{/****************************************************************************/}
+\textcolor{keywordtype}{void} setCsnLowSettle(uint8\_t level) \{
+  csnLowSettle = level;
+\}
+\textcolor{comment}{/****************************************************************************/}
+\textcolor{keywordtype}{void} csn(\textcolor{keywordtype}{bool} mode) \{
+    \textcolor{keywordflow}{if} (ce\_pin != csn\_pin) \{
+        \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digitalWrite}(csn\_pin,mode);
+    \} \textcolor{keywordflow}{else} \{
+        \textcolor{keywordflow}{if} (mode == \hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH}) \{
+            PORTB |= (1<<PINB2);    \textcolor{comment}{// SCK->CSN HIGH}
+            \hyperlink{group__Porting__General_ga9384257bf5d5c1aae675b22cc3ecb91a}{delayMicroseconds}(csnHighSettle);  \textcolor{comment}{// allow csn to settle}
+        \} \textcolor{keywordflow}{else} \{
+            PORTB &= ~(1<<PINB2);   \textcolor{comment}{// SCK->CSN LOW}
+            \hyperlink{group__Porting__General_ga9384257bf5d5c1aae675b22cc3ecb91a}{delayMicroseconds}(csnLowSettle);  \textcolor{comment}{// allow csn to settle}
+        \}
+    \}   
+\}
+
+\textcolor{comment}{/****************************************************************************/}
+uint8\_t read\_register(uint8\_t reg)
+\{
+  csn(\hyperlink{group__Porting__General_gab811d8c6ff3a505312d3276590444289}{LOW});
+  SPI.transfer( \hyperlink{nRF24L01_8h_afb0b251378d3b14c508e51fd2c3157d6}{R\_REGISTER} | ( \hyperlink{nRF24L01_8h_a866fc0cef05f3c63ba55a555f63648a2}{REGISTER\_MASK} & reg ) );
+  uint8\_t result = SPI.transfer(0xff);
+  csn(\hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});
+  \textcolor{keywordflow}{return} result;
+\}
+
+\textcolor{comment}{/****************************************************************************/}
+uint8\_t write\_register2(uint8\_t reg, uint8\_t value)
+\{
+  uint8\_t status;
+
+  csn(\hyperlink{group__Porting__General_gab811d8c6ff3a505312d3276590444289}{LOW});
+  status = SPI.transfer( \hyperlink{nRF24L01_8h_a3b68b214d5753039d2c156ad57cd7153}{W\_REGISTER} | ( \hyperlink{nRF24L01_8h_a866fc0cef05f3c63ba55a555f63648a2}{REGISTER\_MASK} & reg ) );
+  SPI.transfer(value);
+  csn(\hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});
+  \textcolor{keywordflow}{return} status;
+\}
+
+\textcolor{comment}{/****************************************************************************/}
+\textcolor{preprocessor}{#if defined(RF24\_TINY)}
+\textcolor{preprocessor}{#define CE\_PIN   3}
+\textcolor{preprocessor}{#define CSN\_PIN  3}
+\textcolor{preprocessor}{#else}
+\textcolor{preprocessor}{#define CE\_PIN   7}
+\textcolor{preprocessor}{#define CSN\_PIN  8}
+\textcolor{preprocessor}{#endif}
+
+\textcolor{preprocessor}{#define MAX\_HIGH    100}
+\textcolor{preprocessor}{#define MAX\_LOW     100}
+\textcolor{preprocessor}{#define MINIMAL     8}
+
+\textcolor{keywordtype}{void} setup(\textcolor{keywordtype}{void}) \{
+  uint8\_t status;
+
+  \textcolor{comment}{// start serial port and SPI}
+  Serial.begin(9600);
+  SPI.begin();
+
+  \textcolor{comment}{// configure ce and scn as output when used}
+  ce\_pin = CE\_PIN;
+  csn\_pin = CSN\_PIN;
+
+  setCsnHighSettle(MAX\_HIGH);
+  setCsnLowSettle(MAX\_LOW);
+  \textcolor{comment}{// csn is used in SPI transfers. Set to LOW at start and HIGH after transfer. Set to HIGH to reflect no
+       transfer active}
+  \textcolor{comment}{// SPI command are accepted in Power Down state.}
+  \textcolor{comment}{// ce represent PRX (LOW) or PTX (HIGH) mode apart from register settings. Start in PRX mode.  }
+  ce(\hyperlink{group__Porting__General_gab811d8c6ff3a505312d3276590444289}{LOW});
+  csn(\hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});
+
+  \textcolor{comment}{// nRF24L01 goes from to Power Down state 100ms after Power on Reset ( Vdd > 1.9V) or when PWR\_UP is 0 in
+       config register }
+  \textcolor{comment}{// Goto Power Down state (Powerup or force) and set in transmit mode}
+  write\_register2(CONFIG, read\_register(CONFIG) & ~\hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(\hyperlink{nRF24L01_8h_af0dbd9e4c17ba0db357fcb2cedd4aa6d}{PWR\_UP}) & ~\hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(
+      \hyperlink{nRF24L01_8h_a0b4d92f3ecccb150d4cb1cb5d0f9d4e6}{PRIM\_RX}));
+  \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(100);
+  
+  \textcolor{comment}{// Goto Standby-I}
+  \textcolor{comment}{// Technically we require 4.5ms Tpd2stby+ 14us as a worst case. We'll just call it 5ms for good measure.}
+  \textcolor{comment}{// WARNING: Delay is based on P-variant whereby non-P *may* require different timing.}
+  write\_register2(CONFIG, read\_register(CONFIG) | \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(\hyperlink{nRF24L01_8h_af0dbd9e4c17ba0db357fcb2cedd4aa6d}{PWR\_UP}));
+  \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(5) ;
+
+  \textcolor{comment}{// Goto Standby-II}
+  ce(\hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});
+  Serial.print(\textcolor{stringliteral}{"Scanning for optimal setting time for scn"});
+\}
+
+
+\textcolor{keywordtype}{void} loop(\textcolor{keywordtype}{void}) \{
+  uint8\_t status;
+  uint8\_t i;
+  uint8\_t j;
+  uint8\_t k;
+  \textcolor{keywordtype}{bool} success = \textcolor{keyword}{true};
+  uint8\_t csnHigh = MAX\_HIGH;
+  uint8\_t csnLow = MAX\_LOW;
+  uint8\_t bottom\_success;
+  \textcolor{keywordtype}{bool} bottom\_found;
+  uint8\_t value[] = \{5,10\};
+  uint8\_t limit[] = \{MAX\_HIGH,MAX\_LOW\};
+  uint8\_t advice[] = \{MAX\_HIGH,MAX\_LOW\};
+  
+  \textcolor{comment}{// check max values give correct behavior}
+  \textcolor{keywordflow}{for} (k=0;k<2;k++) \{
+    bottom\_found = \textcolor{keyword}{false};
+    bottom\_success = 0;
+    \textcolor{keywordflow}{while}(bottom\_success < 255) \{
+      setCsnHighSettle(limit[0]);
+      setCsnLowSettle(limit[1]);
+      \textcolor{comment}{// check current values}
+      i = 0;
+      \textcolor{keywordflow}{while}(i<255 & success) \{
+        \textcolor{keywordflow}{for} (j=0;j<2;j++) \{
+          write\_register2(\hyperlink{nRF24L01_8h_aa84a282351a2c9b83dd653df6ac59216}{EN\_AA}, value[j]);
+          status = read\_register(\hyperlink{nRF24L01_8h_aa84a282351a2c9b83dd653df6ac59216}{EN\_AA});
+          \textcolor{keywordflow}{if} (value[j] != status) \{
+            success = \textcolor{keyword}{false};
+          \}
+        \}
+        i++;
+      \}
+      \textcolor{comment}{// process result of current values }
+      \textcolor{keywordflow}{if} (!success) \{
+        Serial.print(\textcolor{stringliteral}{"Settle NOK. csnHigh="});
+        Serial.print(limit[0],DEC);
+        Serial.print(\textcolor{stringliteral}{" csnLow="}); 
+        Serial.println(limit[1],DEC);
+        limit[k]++;
+        bottom\_found = \textcolor{keyword}{true};
+        bottom\_success = 0;
+        success = \textcolor{keyword}{true};
+      \} \textcolor{keywordflow}{else} \{
+        Serial.print(\textcolor{stringliteral}{"Settle OK. csnHigh="});
+        Serial.print(limit[0],DEC);
+        Serial.print(\textcolor{stringliteral}{" csnLow="}); 
+        Serial.println(limit[1],DEC);
+        \textcolor{keywordflow}{if} (!bottom\_found) \{
+          limit[k]--;
+          \textcolor{keywordflow}{if} (limit[k] == MINIMAL) \{
+            bottom\_found = \textcolor{keyword}{true};
+            bottom\_success = 0;
+            success = \textcolor{keyword}{true};
+          \}
+        \} \textcolor{keywordflow}{else} \{
+          bottom\_success++;
+        \}
+      \}
+    \}
+    Serial.print(\textcolor{stringliteral}{"Settle value found for "});
+    \textcolor{keywordflow}{if} (k == 0) \{
+      Serial.print(\textcolor{stringliteral}{"csnHigh: "});
+    \} \textcolor{keywordflow}{else} \{
+      Serial.print(\textcolor{stringliteral}{"csnLow: "});
+    \}
+    Serial.println(limit[k],DEC);
+    advice[k] = limit[k] + (limit[k] / 10);
+    limit[k] = 100;
+  \}
+  Serial.print(\textcolor{stringliteral}{"Adviced Settle times are: csnHigh="});
+  Serial.print(advice[0],DEC);
+  Serial.print(\textcolor{stringliteral}{" csnLow="}); 
+  Serial.println(advice[1],DEC);
+  \textcolor{keywordflow}{while} (\textcolor{keyword}{true})
+  \{
+    ;
+  \}
+\}
+
+\end{DoxyCodeInclude}
+ 

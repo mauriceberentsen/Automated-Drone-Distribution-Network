@@ -1,0 +1,112 @@
+\hypertarget{rf24ping85_8ino-example}{}\section{rf24ping85.\+ino}
+{\bfseries New\+: Contributed by \href{https://github.com/tong67}{\tt https\+://github.\+com/tong67}}~\newline
+ This is an example of how to use the \hyperlink{classRF24}{R\+F24} class to communicate with A\+Ttiny85 and other node. ~\newline
+
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{This program is free software; you can redistribute it and/or}
+\textcolor{comment}{modify it under the terms of the GNU General Public License}
+\textcolor{comment}{version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{}
+\textcolor{comment}{    rf24ping85.ino by tong67 ( https://github.com/tong67 )}
+\textcolor{comment}{    This is an example of how to use the RF24 class to communicate with ATtiny85 and other node.}
+\textcolor{comment}{    Write this sketch to an ATtiny85. It will act like the 'transmit' mode of GettingStarted.ino}
+\textcolor{comment}{    Write GettingStarted.ino sketch to UNO (or other board or RPi) and put the node in 'receiver' mode.}
+\textcolor{comment}{    The ATtiny85 will transmit a counting number every second starting from 1.}
+\textcolor{comment}{    The ATtiny85 uses the tiny-core by CodingBadly (https://code.google.com/p/arduino-tiny/)}
+\textcolor{comment}{    When direct use of 3v3 does not work (UNO boards have bad 3v3 line) use 5v with LED (1.8V ~ 2.2V drop)}
+\textcolor{comment}{    For low power consumption solutions floating pins (SCK and MOSI) should be pulled high or low with eg.
+       10K}
+\textcolor{comment}{}
+\textcolor{comment}{    ** Hardware configuration **}
+\textcolor{comment}{    ATtiny25/45/85 Pin map with CE\_PIN 3 and CSN\_PIN 4}
+\textcolor{comment}{                                 +-\(\backslash\)/-+}
+\textcolor{comment}{                   NC      PB5  1|o   |8  Vcc --- nRF24L01  VCC, pin2 --- LED --- 5V}
+\textcolor{comment}{    nRF24L01  CE, pin3 --- PB3  2|    |7  PB2 --- nRF24L01  SCK, pin5}
+\textcolor{comment}{    nRF24L01 CSN, pin4 --- PB4  3|    |6  PB1 --- nRF24L01 MOSI, pin7}
+\textcolor{comment}{    nRF24L01 GND, pin1 --- GND  4|    |5  PB0 --- nRF24L01 MISO, pin6}
+\textcolor{comment}{                                 +----+}
+\textcolor{comment}{}
+\textcolor{comment}{    ATtiny25/45/85 Pin map with CE\_PIN 3 and CSN\_PIN 3 => PB3 and PB4 are free to use for application}
+\textcolor{comment}{    Circuit idea from http://nerdralph.blogspot.ca/2014/01/nrf24l01-control-with-3-attiny85-pins.html}
+\textcolor{comment}{    Original RC combination was 1K/100nF. 22K/10nF combination worked better.}
+\textcolor{comment}{    For best settletime delay value in RF24::csn() the timingSearch3pin.ino scatch can be used.}
+\textcolor{comment}{    This configuration is enabled when CE\_PIN and CSN\_PIN are equal, e.g. both 3}
+\textcolor{comment}{    Because CE is always high the power consumption is higher than for 5 pins solution}
+\textcolor{comment}{                                                                                            ^^}
+\textcolor{comment}{                                 +-\(\backslash\)/-+           nRF24L01   CE, pin3 ------|              //}
+\textcolor{comment}{                           PB5  1|o   |8  Vcc --- nRF24L01  VCC, pin2 ------x----------x--|<|-- 5V}
+\textcolor{comment}{                   NC      PB3  2|    |7  PB2 --- nRF24L01  SCK, pin5 --|<|---x-[22k]--|  LED}
+\textcolor{comment}{                   NC      PB4  3|    |6  PB1 --- nRF24L01 MOSI, pin6  1n4148 |}
+\textcolor{comment}{    nRF24L01 GND, pin1 -x- GND  4|    |5  PB0 --- nRF24L01 MISO, pin7         |}
+\textcolor{comment}{                        |        +----+                                       |}
+\textcolor{comment}{                        |-----------------------------------------------||----x-- nRF24L01 CSN, pin4 }
+\textcolor{comment}{                                                                       10nF}
+\textcolor{comment}{}
+\textcolor{comment}{    ATtiny24/44/84 Pin map with CE\_PIN 8 and CSN\_PIN 7}
+\textcolor{comment}{    Schematic provided and successfully tested by Carmine Pastore (https://github.com/Carminepz)}
+\textcolor{comment}{                                  +-\(\backslash\)/-+}
+\textcolor{comment}{    nRF24L01  VCC, pin2 --- VCC  1|o   |14 GND --- nRF24L01  GND, pin1}
+\textcolor{comment}{                            PB0  2|    |13 AREF}
+\textcolor{comment}{                            PB1  3|    |12 PA1}
+\textcolor{comment}{                            PB3  4|    |11 PA2 --- nRF24L01   CE, pin3}
+\textcolor{comment}{                            PB2  5|    |10 PA3 --- nRF24L01  CSN, pin4}
+\textcolor{comment}{                            PA7  6|    |9  PA4 --- nRF24L01  SCK, pin5}
+\textcolor{comment}{    nRF24L01 MOSI, pin7 --- PA6  7|    |8  PA5 --- nRF24L01 MISO, pin6}
+\textcolor{comment}{                                  +----+}
+\textcolor{comment}{*/}
+
+\textcolor{comment}{// CE and CSN are configurable, specified values for ATtiny85 as connected above}
+\textcolor{preprocessor}{#define CE\_PIN 3}
+\textcolor{preprocessor}{#define CSN\_PIN 4}
+\textcolor{comment}{//#define CSN\_PIN 3 // uncomment for ATtiny85 3 pins solution}
+
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+
+\hyperlink{classRF24}{RF24} radio(CE\_PIN, CSN\_PIN);
+
+byte addresses[][6] = \{
+  \textcolor{stringliteral}{"1Node"},\textcolor{stringliteral}{"2Node"}\};
+\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} payload = 0;
+
+\textcolor{keywordtype}{void} setup() \{
+  \textcolor{comment}{// Setup and configure rf radio}
+  radio.begin(); \textcolor{comment}{// Start up the radio}
+  radio.setAutoAck(1); \textcolor{comment}{// Ensure autoACK is enabled}
+  radio.setRetries(15,15); \textcolor{comment}{// Max delay between retries & number of retries}
+  radio.openWritingPipe(addresses[1]); \textcolor{comment}{// Write to device address '2Node'}
+  radio.openReadingPipe(1,addresses[0]); \textcolor{comment}{// Read on pipe 1 for device address '1Node'}
+  radio.startListening(); \textcolor{comment}{// Start listening}
+\}
+
+\textcolor{keywordtype}{void} loop(\textcolor{keywordtype}{void})\{
+  
+  radio.stopListening(); \textcolor{comment}{// First, stop listening so we can talk.}
+  payload++;
+  radio.write( &payload, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+  radio.startListening(); \textcolor{comment}{// Now, continue listening}
+
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} started\_waiting\_at = micros(); \textcolor{comment}{// Set up a timeout period, get the current microseconds}
+  \textcolor{keywordtype}{boolean} timeout = \textcolor{keyword}{false}; \textcolor{comment}{// Set up a variable to indicate if a response was received or not}
+
+  \textcolor{keywordflow}{while} ( !radio.available() )\{ \textcolor{comment}{// While nothing is received}
+    \textcolor{keywordflow}{if} (micros() - started\_waiting\_at > 200000 )\{ \textcolor{comment}{// If waited longer than 200ms, indicate timeout and exit
+       while loop}
+      timeout = \textcolor{keyword}{true};
+      \textcolor{keywordflow}{break};
+    \}
+
+  \}
+
+  \textcolor{keywordflow}{if} ( !timeout )\{ \textcolor{comment}{// Describe the results}
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time; \textcolor{comment}{// Grab the response, compare, and send to debugging spew}
+    radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+  \}
+
+  \textcolor{comment}{// Try again 1s later}
+  \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(1000);
+\}
+\end{DoxyCodeInclude}
+ 

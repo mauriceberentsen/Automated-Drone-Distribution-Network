@@ -1,0 +1,1627 @@
+\hypertarget{classRF24}{}\section{R\+F24 Class Reference}
+\label{classRF24}\index{R\+F24@{R\+F24}}
+
+
+{\ttfamily \#include $<$R\+F24.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{Indent}\textbf{ Primary public interface}\par
+{\em These are the main methods you need to operate the chip }\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classRF24_af564e19261afb56005d2411d0c7b05de}{R\+F24} (uint16\+\_\+t \+\_\+cepin, uint16\+\_\+t \+\_\+cspin)
+\item 
+\hyperlink{classRF24_a085d99c986effa19b01c030e2b1439ce}{R\+F24} (uint16\+\_\+t \+\_\+cepin, uint16\+\_\+t \+\_\+cspin, uint32\+\_\+t spispeed)
+\item 
+virtual \hyperlink{classRF24_a56311ab4c4042525c166e81e0a09890c}{$\sim$\+R\+F24} ()
+\item 
+bool \hyperlink{classRF24_a048a20c73c7d9b2e02dcbae6fb9c4ba8}{begin} (void)
+\item 
+bool \hyperlink{classRF24_ac224c55270d26dbe7b4f3492ea3056b5}{is\+Chip\+Connected} ()
+\item 
+void \hyperlink{classRF24_a30a2733a3889bdc331fe2d2f4f0f7b39}{start\+Listening} (void)
+\item 
+void \hyperlink{classRF24_a6f144d73fc447c8ac2d1a4166210fd88}{stop\+Listening} (void)
+\item 
+bool \hyperlink{classRF24_a127105eb7a3b351cfe777c1cec50627a}{available} (void)
+\item 
+void \hyperlink{classRF24_a8e2eacacfba96426c192066f04054c5b}{read} (void $\ast$buf, uint8\+\_\+t len)
+\item 
+bool \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write} (const void $\ast$buf, uint8\+\_\+t len)
+\item 
+void \hyperlink{classRF24_af2e409e62d49a23e372a70b904ae30e1}{open\+Writing\+Pipe} (const uint8\+\_\+t $\ast$address)
+\item 
+void \hyperlink{classRF24_a9edc910ccc1ffcff56814b08faca5535}{open\+Reading\+Pipe} (uint8\+\_\+t number, const uint8\+\_\+t $\ast$address)
+\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Deprecated}\par
+{\em Methods provided for backwards compabibility. }\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classRF24_aa7e8523f86f9f8f20c274e0c89a5fd45}{open\+Reading\+Pipe} (uint8\+\_\+t number, uint64\+\_\+t address)
+\item 
+void \hyperlink{classRF24_a50c8e68ee840e1860a31dbdc83afbd77}{open\+Writing\+Pipe} (uint64\+\_\+t address)
+\item 
+uint8\+\_\+t \hyperlink{classRF24_a575c061519e7820e1850ad380c617d95}{flush\+\_\+rx} (void)
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classRF24_a5a669f1c68203d5317f8f452a2bff1b5}{begin\+Transaction} ()
+\item 
+void \hyperlink{classRF24_a2b196efad61a1b8a9bf493150901edb4}{end\+Transaction} ()
+\end{DoxyCompactItemize}
+\subsection*{Advanced Operation}
+\label{_amgrpaf32cf1216e734b82e2b52429dae0bf6}%
+ Methods you can use to drive the chip in more advanced ways \begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classRF24_a2e40fe66d1231a333aa2534e8491f828}{failure\+Detected}
+\item 
+void \hyperlink{classRF24_adc95213ed4c8569a90eb33122e16cea6}{print\+Details} (void)
+\item 
+bool \hyperlink{classRF24_ace7dd139fabc16b77cb8325faa07620f}{available} (uint8\+\_\+t $\ast$pipe\+\_\+num)
+\item 
+bool \hyperlink{classRF24_ad22e44fe1a68747872fcb304a407fd30}{rx\+Fifo\+Full} ()
+\item 
+void \hyperlink{classRF24_aa0a51923a09ba4f3478aba9be0f8a6a1}{power\+Down} (void)
+\item 
+void \hyperlink{classRF24_a5cdaf47aa0edd6dca1b9a8bb7972a1a3}{power\+Up} (void)
+\item 
+bool \hyperlink{classRF24_a23bfe6502d74bb5bbccb3a7f2ba2b5ea}{write} (const void $\ast$buf, uint8\+\_\+t len, const bool multicast)
+\item 
+bool \hyperlink{classRF24_a47b2516993481b58e724d1274a7fd9cb}{write\+Fast} (const void $\ast$buf, uint8\+\_\+t len)
+\item 
+bool \hyperlink{classRF24_ad16d53de0327c0b41d170cbda4bf41af}{write\+Fast} (const void $\ast$buf, uint8\+\_\+t len, const bool multicast)
+\item 
+bool \hyperlink{classRF24_ae6fd8d5ee490d54ae1cb2e8fefee535f}{write\+Blocking} (const void $\ast$buf, uint8\+\_\+t len, uint32\+\_\+t timeout)
+\item 
+bool \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{tx\+Stand\+By} ()
+\item 
+bool \hyperlink{classRF24_ab7f54decbe9d06cb026a5d3dfb505116}{tx\+Stand\+By} (uint32\+\_\+t timeout, bool start\+Tx=0)
+\item 
+void \hyperlink{classRF24_a65619238c25036c3de72dc2c1a1c6e52}{write\+Ack\+Payload} (uint8\+\_\+t pipe, const void $\ast$buf, uint8\+\_\+t len)
+\item 
+bool \hyperlink{classRF24_a30c2736fd0df9c8128cef408c8b88e92}{is\+Ack\+Payload\+Available} (void)
+\item 
+void \hyperlink{classRF24_afb97dc4bdf4d2d84ea44060ac5b4ed89}{what\+Happened} (bool \&tx\+\_\+ok, bool \&tx\+\_\+fail, bool \&rx\+\_\+ready)
+\item 
+void \hyperlink{classRF24_acd19843064cb70ec23507412e519e4ef}{start\+Fast\+Write} (const void $\ast$buf, uint8\+\_\+t len, const bool multicast, bool start\+Tx=1)
+\item 
+void \hyperlink{classRF24_aa27519fc289920094422033e0bbf8cf9}{start\+Write} (const void $\ast$buf, uint8\+\_\+t len, const bool multicast)
+\item 
+void \hyperlink{classRF24_aeaf7fa54d3ab2a85ce215b4bf6ae933b}{re\+Use\+TX} ()
+\item 
+uint8\+\_\+t \hyperlink{classRF24_adb7915b1d2661a82137573344f659e81}{flush\+\_\+tx} (void)
+\item 
+bool \hyperlink{classRF24_ad0d522ccf39493510e64bf1740be790d}{test\+Carrier} (void)
+\item 
+bool \hyperlink{classRF24_a821285f3b54553f4402eb3fd0ac6d6c1}{test\+R\+PD} (void)
+\item 
+bool \hyperlink{classRF24_a35e5f1533b7753806c42b76e782d917e}{is\+Valid} ()
+\item 
+void \hyperlink{classRF24_a9944d93994a80037e3586f340f5e0107}{close\+Reading\+Pipe} (uint8\+\_\+t pipe)
+\end{DoxyCompactItemize}
+\subsection*{Optional Configurators}
+\label{_amgrpe1a83b99ec8153e5baf680edeeed1586}%
+ Methods you can use to get or set the configuration of the chip. None are required. Calling \hyperlink{classRF24_a048a20c73c7d9b2e02dcbae6fb9c4ba8}{begin()} sets up a reasonable set of defaults. \begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \hyperlink{classRF24_a958fb99f54415101ca008ab11b3bfe79}{tx\+Delay}
+\item 
+uint32\+\_\+t \hyperlink{classRF24_ad08121bf844f08dbe53f51576b7c4066}{cs\+Delay}
+\item 
+void \hyperlink{classRF24_ad5aea7f9a3bd9c7d357fb296ce751f21}{set\+Address\+Width} (uint8\+\_\+t a\+\_\+width)
+\item 
+void \hyperlink{classRF24_a4c6d3959c8320e64568395f4ef507aef}{set\+Retries} (uint8\+\_\+t \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}, uint8\+\_\+t count)
+\item 
+void \hyperlink{classRF24_a5e6e5a5f6c85d2638381cab2c0f3702e}{set\+Channel} (uint8\+\_\+t channel)
+\item 
+uint8\+\_\+t \hyperlink{classRF24_a6a66a94609309e17edaa1919e66cea0a}{get\+Channel} (void)
+\item 
+void \hyperlink{classRF24_a343e5d23477181011dea030fafb1954f}{set\+Payload\+Size} (uint8\+\_\+t size)
+\item 
+uint8\+\_\+t \hyperlink{classRF24_a0aa0c7cbe3d38fef4722f3f1d2d6c5f1}{get\+Payload\+Size} (void)
+\item 
+uint8\+\_\+t \hyperlink{classRF24_a65963ed8d8fd45f847e2f673995b85e1}{get\+Dynamic\+Payload\+Size} (void)
+\item 
+void \hyperlink{classRF24_abf8efced2ee9edbcc6510878b20edc1b}{enable\+Ack\+Payload} (void)
+\item 
+void \hyperlink{classRF24_a443888504975d7441d6452a09d09a8fa}{enable\+Dynamic\+Payloads} (void)
+\item 
+void \hyperlink{classRF24_a486c4c47a6973614ae595ae96f221165}{disable\+Dynamic\+Payloads} (void)
+\item 
+void \hyperlink{classRF24_a6253607ac2a1995af91a35cea6899c31}{enable\+Dynamic\+Ack} ()
+\item 
+bool \hyperlink{classRF24_a62846750b82682beb7593719eb60ed60}{is\+P\+Variant} (void)
+\item 
+void \hyperlink{classRF24_aec71746d59da978bcbb975167886a2cc}{set\+Auto\+Ack} (bool enable)
+\item 
+void \hyperlink{classRF24_a60dba9e558f3620ab489af68ea3dea9c}{set\+Auto\+Ack} (uint8\+\_\+t pipe, bool enable)
+\item 
+void \hyperlink{classRF24_adedac579590a668ae97baccab284de8a}{set\+P\+A\+Level} (uint8\+\_\+t level)
+\item 
+uint8\+\_\+t \hyperlink{classRF24_af7c4dcd84466168c5816382ceb366067}{get\+P\+A\+Level} (void)
+\item 
+bool \hyperlink{classRF24_aeb9920e7a95699748b003c4a839b0814}{set\+Data\+Rate} (\hyperlink{RF24_8h_a82745de4aa1251b7561564b3ed1d6522}{rf24\+\_\+datarate\+\_\+e} speed)
+\item 
+\hyperlink{RF24_8h_a82745de4aa1251b7561564b3ed1d6522}{rf24\+\_\+datarate\+\_\+e} \hyperlink{classRF24_a72a7b11dafe8ffab6135f243decce0d7}{get\+Data\+Rate} (void)
+\item 
+void \hyperlink{classRF24_a89f626fc4a58dd997153bcc0f8198b9e}{set\+C\+R\+C\+Length} (\hyperlink{RF24_8h_adbe00719f3f835c82bd007081d040a7e}{rf24\+\_\+crclength\+\_\+e} length)
+\item 
+\hyperlink{RF24_8h_adbe00719f3f835c82bd007081d040a7e}{rf24\+\_\+crclength\+\_\+e} \hyperlink{classRF24_aba4ca91b829afcd94a4c11e0343e3796}{get\+C\+R\+C\+Length} (void)
+\item 
+void \hyperlink{classRF24_a5eacd9ecfbc19864801d714c292cf8be}{disable\+C\+RC} (void)
+\item 
+void \hyperlink{classRF24_abf68b9b0c9cd17179e9e144c3e7f9c45}{mask\+I\+RQ} (bool tx\+\_\+ok, bool tx\+\_\+fail, bool rx\+\_\+ready)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Driver for n\+R\+F24\+L01(+) 2.\+4\+G\+Hz Wireless Transceiver \begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{gettingstarted_8cpp-example}{gettingstarted.\+cpp}, \hyperlink{GettingStarted_8ino-example}{Getting\+Started.\+ino}, \hyperlink{gettingstarted_call_response_8cpp-example}{gettingstarted\+\_\+call\+\_\+response.\+cpp}, \hyperlink{GettingStarted_CallResponse_8ino-example}{Getting\+Started\+\_\+\+Call\+Response.\+ino}, \hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}, \hyperlink{GettingStarted_HandlingFailures_8ino-example}{Getting\+Started\+\_\+\+Handling\+Failures.\+ino}, \hyperlink{pingpair_ack_8ino-example}{pingpair\+\_\+ack.\+ino}, \hyperlink{pingpair_dyn_8cpp-example}{pingpair\+\_\+dyn.\+cpp}, \hyperlink{pingpair_dyn_8ino-example}{pingpair\+\_\+dyn.\+ino}, \hyperlink{pingpair_irq_8ino-example}{pingpair\+\_\+irq.\+ino}, \hyperlink{pingpair_irq_simple_8ino-example}{pingpair\+\_\+irq\+\_\+simple.\+ino}, \hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, \hyperlink{rf24ping85_8ino-example}{rf24ping85.\+ino}, \hyperlink{scanner_8ino-example}{scanner.\+ino}, \hyperlink{starping_8pde-example}{starping.\+pde}, \hyperlink{transfer_8cpp-example}{transfer.\+cpp}, \hyperlink{Transfer_8ino-example}{Transfer.\+ino}, and \hyperlink{TransferTimeouts_8ino-example}{Transfer\+Timeouts.\+ino}.\end{Desc}
+
+
+Definition at line 51 of file R\+F24.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classRF24_af564e19261afb56005d2411d0c7b05de}\label{classRF24_af564e19261afb56005d2411d0c7b05de}} 
+\index{R\+F24@{R\+F24}!R\+F24@{R\+F24}}
+\index{R\+F24@{R\+F24}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{R\+F24()}{RF24()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily R\+F24\+::\+R\+F24 (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{\+\_\+cepin,  }\item[{uint16\+\_\+t}]{\+\_\+cspin }\end{DoxyParamCaption})}
+
+Arduino Constructor
+
+Creates a new instance of this driver. Before using, you create an instance and send in the unique pins that this chip is connected to.
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+cepin} & The pin attached to Chip Enable on the RF module \\
+\hline
+{\em \+\_\+cspin} & The pin attached to Chip Select \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 435 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a085d99c986effa19b01c030e2b1439ce}\label{classRF24_a085d99c986effa19b01c030e2b1439ce}} 
+\index{R\+F24@{R\+F24}!R\+F24@{R\+F24}}
+\index{R\+F24@{R\+F24}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{R\+F24()}{RF24()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily R\+F24\+::\+R\+F24 (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{\+\_\+cepin,  }\item[{uint16\+\_\+t}]{\+\_\+cspin,  }\item[{uint32\+\_\+t}]{spispeed }\end{DoxyParamCaption})}
+
+Optional Linux Constructor
+
+Creates a new instance of this driver. Before using, you create an instance and send in the unique pins that this chip is connected to.
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+cepin} & The pin attached to Chip Enable on the RF module \\
+\hline
+{\em \+\_\+cspin} & The pin attached to Chip Select \\
+\hline
+{\em spispeed} & For R\+Pi, the S\+PI speed in M\+HZ ie\+: B\+C\+M2835\+\_\+\+S\+P\+I\+\_\+\+S\+P\+E\+E\+D\+\_\+8\+M\+HZ \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 446 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a56311ab4c4042525c166e81e0a09890c}\label{classRF24_a56311ab4c4042525c166e81e0a09890c}} 
+\index{R\+F24@{R\+F24}!````~R\+F24@{$\sim$\+R\+F24}}
+\index{````~R\+F24@{$\sim$\+R\+F24}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{$\sim$\+R\+F24()}{~RF24()}}
+{\footnotesize\ttfamily virtual R\+F24\+::$\sim$\+R\+F24 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line 128 of file R\+F24.\+h.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classRF24_a5a669f1c68203d5317f8f452a2bff1b5}\label{classRF24_a5a669f1c68203d5317f8f452a2bff1b5}} 
+\index{R\+F24@{R\+F24}!begin\+Transaction@{begin\+Transaction}}
+\index{begin\+Transaction@{begin\+Transaction}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{begin\+Transaction()}{beginTransaction()}}
+{\footnotesize\ttfamily void R\+F24\+::begin\+Transaction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+S\+PI transactions
+
+Common code for S\+PI transactions including C\+SN toggle 
+
+Definition at line 85 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a2b196efad61a1b8a9bf493150901edb4}\label{classRF24_a2b196efad61a1b8a9bf493150901edb4}} 
+\index{R\+F24@{R\+F24}!end\+Transaction@{end\+Transaction}}
+\index{end\+Transaction@{end\+Transaction}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{end\+Transaction()}{endTransaction()}}
+{\footnotesize\ttfamily void R\+F24\+::end\+Transaction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 94 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a048a20c73c7d9b2e02dcbae6fb9c4ba8}\label{classRF24_a048a20c73c7d9b2e02dcbae6fb9c4ba8}} 
+\index{R\+F24@{R\+F24}!begin@{begin}}
+\index{begin@{begin}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily bool R\+F24\+::begin (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Begin operation of the chip
+
+Call this in setup(), before calling any other methods. 
+\begin{DoxyCode}
+radio.begin() 
+\end{DoxyCode}
+ \begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 589 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_ac224c55270d26dbe7b4f3492ea3056b5}\label{classRF24_ac224c55270d26dbe7b4f3492ea3056b5}} 
+\index{R\+F24@{R\+F24}!is\+Chip\+Connected@{is\+Chip\+Connected}}
+\index{is\+Chip\+Connected@{is\+Chip\+Connected}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{is\+Chip\+Connected()}{isChipConnected()}}
+{\footnotesize\ttfamily bool R\+F24\+::is\+Chip\+Connected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Checks if the chip is connected to the S\+PI bus 
+
+Definition at line 715 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a30a2733a3889bdc331fe2d2f4f0f7b39}\label{classRF24_a30a2733a3889bdc331fe2d2f4f0f7b39}} 
+\index{R\+F24@{R\+F24}!start\+Listening@{start\+Listening}}
+\index{start\+Listening@{start\+Listening}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{start\+Listening()}{startListening()}}
+{\footnotesize\ttfamily void R\+F24\+::start\+Listening (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Start listening on the pipes opened for reading.
+
+
+\begin{DoxyEnumerate}
+\item Be sure to call \hyperlink{classRF24_a9edc910ccc1ffcff56814b08faca5535}{open\+Reading\+Pipe()} first.
+\item Do not call \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()} while in this mode, without first calling \hyperlink{classRF24_a6f144d73fc447c8ac2d1a4166210fd88}{stop\+Listening()}.
+\item Call \hyperlink{classRF24_a127105eb7a3b351cfe777c1cec50627a}{available()} to check for incoming traffic, and \hyperlink{classRF24_a8e2eacacfba96426c192066f04054c5b}{read()} to get it.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+Open reading pipe 1 \textcolor{keyword}{using} address CCCECCCECC
+ 
+byte address[] = \{ 0xCC,0xCE,0xCC,0xCE,0xCC \};
+radio.openReadingPipe(1,address);
+radio.startListening();
+\end{DoxyCode}
+ \begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 728 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a6f144d73fc447c8ac2d1a4166210fd88}\label{classRF24_a6f144d73fc447c8ac2d1a4166210fd88}} 
+\index{R\+F24@{R\+F24}!stop\+Listening@{stop\+Listening}}
+\index{stop\+Listening@{stop\+Listening}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{stop\+Listening()}{stopListening()}}
+{\footnotesize\ttfamily void R\+F24\+::stop\+Listening (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Stop listening for incoming messages, and switch to transmit mode.
+
+Do this before calling \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()}. 
+\begin{DoxyCode}
+radio.stopListening();
+radio.write(&data,\textcolor{keyword}{sizeof}(data));
+\end{DoxyCode}
+ \begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 759 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a127105eb7a3b351cfe777c1cec50627a}\label{classRF24_a127105eb7a3b351cfe777c1cec50627a}} 
+\index{R\+F24@{R\+F24}!available@{available}}
+\index{available@{available}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{available()}{available()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool R\+F24\+::available (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Check whether there are bytes available to be read 
+\begin{DoxyCode}
+\textcolor{keywordflow}{if}(radio.available())\{
+  radio.read(&data,\textcolor{keyword}{sizeof}(data));
+\}
+\end{DoxyCode}
+ \begin{DoxyReturn}{Returns}
+True if there is a payload available, false if none is 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 1092 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a8e2eacacfba96426c192066f04054c5b}\label{classRF24_a8e2eacacfba96426c192066f04054c5b}} 
+\index{R\+F24@{R\+F24}!read@{read}}
+\index{read@{read}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{read()}{read()}}
+{\footnotesize\ttfamily void R\+F24\+::read (\begin{DoxyParamCaption}\item[{void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+Read the available payload
+
+The size of data read is the fixed payload size, see \hyperlink{classRF24_a0aa0c7cbe3d38fef4722f3f1d2d6c5f1}{get\+Payload\+Size()}
+
+\begin{DoxyNote}{Note}
+I specifically chose \textquotesingle{}void$\ast$\textquotesingle{} as a data type to make it easier for beginners to use. No casting needed.
+
+No longer boolean. Use available to determine if packets are available. Interrupt flags are now cleared during reads instead of when calling \hyperlink{classRF24_a127105eb7a3b351cfe777c1cec50627a}{available()}.
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to a buffer where the data should be written \\
+\hline
+{\em len} & Maximum number of bytes to read into the buffer\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+\textcolor{keywordflow}{if}(radio.available())\{
+  radio.read(&data,\textcolor{keyword}{sizeof}(data));
+\}
+\end{DoxyCode}
+ \begin{DoxyReturn}{Returns}
+No return value. Use \hyperlink{classRF24_a127105eb7a3b351cfe777c1cec50627a}{available()}. 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 1119 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}\label{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}} 
+\index{R\+F24@{R\+F24}!write@{write}}
+\index{write@{write}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool R\+F24\+::write (\begin{DoxyParamCaption}\item[{const void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+Be sure to call \hyperlink{classRF24_af2e409e62d49a23e372a70b904ae30e1}{open\+Writing\+Pipe()} first to set the destination of where to write to.
+
+This blocks until the message is successfully acknowledged by the receiver or the timeout/retransmit maxima are reached. In the current configuration, the max delay here is 60-\/70ms.
+
+The maximum size of data written is the fixed payload size, see \hyperlink{classRF24_a0aa0c7cbe3d38fef4722f3f1d2d6c5f1}{get\+Payload\+Size()}. However, you can write less, and the remainder will just be filled with zeroes.
+
+T\+X/\+R\+X/\+RT interrupt flags will be cleared every time write is called
+
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to the data to be sent \\
+\hline
+{\em len} & Number of bytes to be sent\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+radio.stopListening();
+radio.write(&data,\textcolor{keyword}{sizeof}(data));
+\end{DoxyCode}
+ \begin{DoxyReturn}{Returns}
+True if the payload was delivered successfully false if not 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 863 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_af2e409e62d49a23e372a70b904ae30e1}\label{classRF24_af2e409e62d49a23e372a70b904ae30e1}} 
+\index{R\+F24@{R\+F24}!open\+Writing\+Pipe@{open\+Writing\+Pipe}}
+\index{open\+Writing\+Pipe@{open\+Writing\+Pipe}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{open\+Writing\+Pipe()}{openWritingPipe()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void R\+F24\+::open\+Writing\+Pipe (\begin{DoxyParamCaption}\item[{const uint8\+\_\+t $\ast$}]{address }\end{DoxyParamCaption})}
+
+New\+: Open a pipe for writing via byte array. Old addressing format retained for compatibility.
+
+Only one writing pipe can be open at once, but you can change the address you\textquotesingle{}ll write to. Call \hyperlink{classRF24_a6f144d73fc447c8ac2d1a4166210fd88}{stop\+Listening()} first.
+
+Addresses are assigned via a byte array, default is 5 byte address length s $\ast$ 
+\begin{DoxyCode}
+uint8\_t addresses[][6] = \{\textcolor{stringliteral}{"1Node"},\textcolor{stringliteral}{"2Node"}\};
+radio.openWritingPipe(addresses[0]);
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+uint8\_t address[] = \{ 0xCC,0xCE,0xCC,0xCE,0xCC \};
+radio.openWritingPipe(address);
+address[0] = 0x33;
+radio.openReadingPipe(1,address);
+\end{DoxyCode}
+ \begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_ad5aea7f9a3bd9c7d357fb296ce751f21}{set\+Address\+Width}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The address of the pipe to open. Coordinate these pipe addresses amongst nodes on the network. \\
+\hline
+\end{DoxyParams}
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 1160 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a9edc910ccc1ffcff56814b08faca5535}\label{classRF24_a9edc910ccc1ffcff56814b08faca5535}} 
+\index{R\+F24@{R\+F24}!open\+Reading\+Pipe@{open\+Reading\+Pipe}}
+\index{open\+Reading\+Pipe@{open\+Reading\+Pipe}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{open\+Reading\+Pipe()}{openReadingPipe()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void R\+F24\+::open\+Reading\+Pipe (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{number,  }\item[{const uint8\+\_\+t $\ast$}]{address }\end{DoxyParamCaption})}
+
+Open a pipe for reading
+
+Up to 6 pipes can be open for reading at once. Open all the required reading pipes, and then call \hyperlink{classRF24_a30a2733a3889bdc331fe2d2f4f0f7b39}{start\+Listening()}.
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_af2e409e62d49a23e372a70b904ae30e1}{open\+Writing\+Pipe} 
+
+\hyperlink{classRF24_ad5aea7f9a3bd9c7d357fb296ce751f21}{set\+Address\+Width}
+\end{DoxySeeAlso}
+\begin{DoxyNote}{Note}
+Pipes 0 and 1 will store a full 5-\/byte address. Pipes 2-\/5 will technically only store a single byte, borrowing up to 4 additional bytes from pipe \#1 per the assigned address width. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Pipes 1-\/5 should share the same address, except the first byte. Only the first byte in the array should be unique, e.\+g. 
+\begin{DoxyCode}
+uint8\_t addresses[][6] = \{\textcolor{stringliteral}{"1Node"},\textcolor{stringliteral}{"2Node"}\};
+\hyperlink{classRF24_a9edc910ccc1ffcff56814b08faca5535}{openReadingPipe}(1,addresses[0]);
+\hyperlink{classRF24_a9edc910ccc1ffcff56814b08faca5535}{openReadingPipe}(2,addresses[1]);
+\end{DoxyCode}
+
+
+Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and then \hyperlink{classRF24_a30a2733a3889bdc331fe2d2f4f0f7b39}{start\+Listening()}, it will overwrite the writing pipe. Ergo, do an \hyperlink{classRF24_af2e409e62d49a23e372a70b904ae30e1}{open\+Writing\+Pipe()} again before \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()}.
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em number} & Which pipe\# to open, 0-\/5. \\
+\hline
+{\em address} & The 24, 32 or 40 bit address of the pipe to open. \\
+\hline
+\end{DoxyParams}
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 1225 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_adc95213ed4c8569a90eb33122e16cea6}\label{classRF24_adc95213ed4c8569a90eb33122e16cea6}} 
+\index{R\+F24@{R\+F24}!print\+Details@{print\+Details}}
+\index{print\+Details@{print\+Details}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{print\+Details()}{printDetails()}}
+{\footnotesize\ttfamily void R\+F24\+::print\+Details (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Print a giant block of debugging information to stdout
+
+\begin{DoxyWarning}{Warning}
+Does nothing if stdout is not defined. See fdevopen in stdio.\+h The \hyperlink{printf_8h}{printf.\+h} file is included with the library for Arduino. 
+\begin{DoxyCode}
+\textcolor{preprocessor}{#include <\hyperlink{printf_8h}{printf.h}>}
+setup()\{
+ Serial.begin(115200);
+ \hyperlink{printf_8h_afc0d9ca32710dff550ebe56ab6b39d23}{printf\_begin}();
+ ...
+\}
+\end{DoxyCode}
+ 
+\end{DoxyWarning}
+
+
+Definition at line 530 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_ace7dd139fabc16b77cb8325faa07620f}\label{classRF24_ace7dd139fabc16b77cb8325faa07620f}} 
+\index{R\+F24@{R\+F24}!available@{available}}
+\index{available@{available}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{available()}{available()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool R\+F24\+::available (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{pipe\+\_\+num }\end{DoxyParamCaption})}
+
+Test whether there are bytes available to be read in the F\+I\+FO buffers.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em pipe\+\_\+num} & Which pipe has the payload available\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+uint8\_t pipeNum;
+\textcolor{keywordflow}{if}(radio.available(&pipeNum))\{
+  radio.read(&data,\textcolor{keyword}{sizeof}(data));
+  Serial.print(\textcolor{stringliteral}{"Got data on pipe"});
+  Serial.println(pipeNum);
+\}
+\end{DoxyCode}
+ \begin{DoxyReturn}{Returns}
+True if there is a payload available, false if none is 
+\end{DoxyReturn}
+
+
+Definition at line 1099 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_ad22e44fe1a68747872fcb304a407fd30}\label{classRF24_ad22e44fe1a68747872fcb304a407fd30}} 
+\index{R\+F24@{R\+F24}!rx\+Fifo\+Full@{rx\+Fifo\+Full}}
+\index{rx\+Fifo\+Full@{rx\+Fifo\+Full}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{rx\+Fifo\+Full()}{rxFifoFull()}}
+{\footnotesize\ttfamily bool R\+F24\+::rx\+Fifo\+Full (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Check if the radio needs to be read. Can be used to prevent data loss \begin{DoxyReturn}{Returns}
+True if all three 32-\/byte radio buffers are full 
+\end{DoxyReturn}
+
+
+Definition at line 988 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_aa0a51923a09ba4f3478aba9be0f8a6a1}\label{classRF24_aa0a51923a09ba4f3478aba9be0f8a6a1}} 
+\index{R\+F24@{R\+F24}!power\+Down@{power\+Down}}
+\index{power\+Down@{power\+Down}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{power\+Down()}{powerDown()}}
+{\footnotesize\ttfamily void R\+F24\+::power\+Down (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Enter low-\/power mode
+
+To return to normal power mode, call \hyperlink{classRF24_a5cdaf47aa0edd6dca1b9a8bb7972a1a3}{power\+Up()}.
+
+\begin{DoxyNote}{Note}
+After calling \hyperlink{classRF24_a30a2733a3889bdc331fe2d2f4f0f7b39}{start\+Listening()}, a basic radio will consume about 13.\+5mA at max PA level. During active transmission, the radio will consume about 11.\+5mA, but this will be reduced to 26uA (.026mA) between sending. In full power\+Down mode, the radio will consume approximately 900nA (.0009mA)
+\end{DoxyNote}
+
+\begin{DoxyCode}
+radio.powerDown();
+avr\_enter\_sleep\_mode(); \textcolor{comment}{// Custom function to sleep the device}
+radio.powerUp();
+\end{DoxyCode}
+ 
+
+Definition at line 787 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a5cdaf47aa0edd6dca1b9a8bb7972a1a3}\label{classRF24_a5cdaf47aa0edd6dca1b9a8bb7972a1a3}} 
+\index{R\+F24@{R\+F24}!power\+Up@{power\+Up}}
+\index{power\+Up@{power\+Up}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{power\+Up()}{powerUp()}}
+{\footnotesize\ttfamily void R\+F24\+::power\+Up (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Leave low-\/power mode -\/ required for normal radio operation after calling \hyperlink{classRF24_aa0a51923a09ba4f3478aba9be0f8a6a1}{power\+Down()}
+
+To return to low power mode, call \hyperlink{classRF24_aa0a51923a09ba4f3478aba9be0f8a6a1}{power\+Down()}. \begin{DoxyNote}{Note}
+This will take up to 5ms for maximum compatibility 
+\end{DoxyNote}
+
+
+Definition at line 796 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a23bfe6502d74bb5bbccb3a7f2ba2b5ea}\label{classRF24_a23bfe6502d74bb5bbccb3a7f2ba2b5ea}} 
+\index{R\+F24@{R\+F24}!write@{write}}
+\index{write@{write}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{write()}{write()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool R\+F24\+::write (\begin{DoxyParamCaption}\item[{const void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len,  }\item[{const bool}]{multicast }\end{DoxyParamCaption})}
+
+Write for single N\+O\+A\+CK writes. Optionally disables acknowledgements/autoretries for a single write.
+
+\begin{DoxyNote}{Note}
+\hyperlink{classRF24_a6253607ac2a1995af91a35cea6899c31}{enable\+Dynamic\+Ack()} must be called to enable this feature
+\end{DoxyNote}
+Can be used with \hyperlink{classRF24_abf8efced2ee9edbcc6510878b20edc1b}{enable\+Ack\+Payload()} to request a response \begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a6253607ac2a1995af91a35cea6899c31}{enable\+Dynamic\+Ack()} 
+
+\hyperlink{classRF24_aec71746d59da978bcbb975167886a2cc}{set\+Auto\+Ack()} 
+
+\hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to the data to be sent \\
+\hline
+{\em len} & Number of bytes to be sent \\
+\hline
+{\em multicast} & Request A\+CK (0), N\+O\+A\+CK (1) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 827 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a47b2516993481b58e724d1274a7fd9cb}\label{classRF24_a47b2516993481b58e724d1274a7fd9cb}} 
+\index{R\+F24@{R\+F24}!write\+Fast@{write\+Fast}}
+\index{write\+Fast@{write\+Fast}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{write\+Fast()}{writeFast()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool R\+F24\+::write\+Fast (\begin{DoxyParamCaption}\item[{const void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+This will not block until the 3 F\+I\+FO buffers are filled with data. Once the F\+I\+F\+Os are full, write\+Fast will simply wait for success or timeout, and return 1 or 0 respectively. From a user perspective, just keep trying to send the same data. The library will keep auto retrying the current payload using the built in functionality. \begin{DoxyWarning}{Warning}
+It is important to never keep the n\+R\+F24\+L01 in TX mode and F\+I\+FO full for more than 4ms at a time. If the auto retransmit is enabled, the n\+R\+F24\+L01 is never in TX mode long enough to disobey this rule. Allow the F\+I\+FO to clear by issuing \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{tx\+Stand\+By()} or ensure appropriate time between transmissions.
+\end{DoxyWarning}
+
+\begin{DoxyCode}
+Example (Partial blocking):
+
+        radio.\hyperlink{classRF24_a47b2516993481b58e724d1274a7fd9cb}{writeFast}(&buf,32);  \textcolor{comment}{// Writes 1 payload to the buffers}
+        \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{txStandBy}();               \textcolor{comment}{// Returns 0 if failed. 1 if success. Blocks only until MAX\_RT
+       timeout or success. Data flushed on fail.}
+
+        radio.writeFast(&buf,32);  \textcolor{comment}{// Writes 1 payload to the buffers}
+        \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{txStandBy}(1000);           \textcolor{comment}{// Using extended timeouts, returns 1 if success. Retries
+       failed payloads for 1 seconds before returning 0.}
+\end{DoxyCode}
+
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{tx\+Stand\+By()} 
+
+\hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()} 
+
+\hyperlink{classRF24_ae6fd8d5ee490d54ae1cb2e8fefee535f}{write\+Blocking()}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to the data to be sent \\
+\hline
+{\em len} & Number of bytes to be sent \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the payload was delivered successfully false if not 
+\end{DoxyReturn}
+
+
+Definition at line 946 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_ad16d53de0327c0b41d170cbda4bf41af}\label{classRF24_ad16d53de0327c0b41d170cbda4bf41af}} 
+\index{R\+F24@{R\+F24}!write\+Fast@{write\+Fast}}
+\index{write\+Fast@{write\+Fast}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{write\+Fast()}{writeFast()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool R\+F24\+::write\+Fast (\begin{DoxyParamCaption}\item[{const void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len,  }\item[{const bool}]{multicast }\end{DoxyParamCaption})}
+
+Write\+Fast for single N\+O\+A\+CK writes. Disables acknowledgements/autoretries for a single write.
+
+\begin{DoxyNote}{Note}
+\hyperlink{classRF24_a6253607ac2a1995af91a35cea6899c31}{enable\+Dynamic\+Ack()} must be called to enable this feature 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a6253607ac2a1995af91a35cea6899c31}{enable\+Dynamic\+Ack()} 
+
+\hyperlink{classRF24_aec71746d59da978bcbb975167886a2cc}{set\+Auto\+Ack()}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to the data to be sent \\
+\hline
+{\em len} & Number of bytes to be sent \\
+\hline
+{\em multicast} & Request A\+CK (0) or N\+O\+A\+CK (1) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 912 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_ae6fd8d5ee490d54ae1cb2e8fefee535f}\label{classRF24_ae6fd8d5ee490d54ae1cb2e8fefee535f}} 
+\index{R\+F24@{R\+F24}!write\+Blocking@{write\+Blocking}}
+\index{write\+Blocking@{write\+Blocking}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{write\+Blocking()}{writeBlocking()}}
+{\footnotesize\ttfamily bool R\+F24\+::write\+Blocking (\begin{DoxyParamCaption}\item[{const void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len,  }\item[{uint32\+\_\+t}]{timeout }\end{DoxyParamCaption})}
+
+This function extends the auto-\/retry mechanism to any specified duration. It will not block until the 3 F\+I\+FO buffers are filled with data. If so the library will auto retry until a new payload is written or the user specified timeout period is reached. \begin{DoxyWarning}{Warning}
+It is important to never keep the n\+R\+F24\+L01 in TX mode and F\+I\+FO full for more than 4ms at a time. If the auto retransmit is enabled, the n\+R\+F24\+L01 is never in TX mode long enough to disobey this rule. Allow the F\+I\+FO to clear by issuing \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{tx\+Stand\+By()} or ensure appropriate time between transmissions.
+\end{DoxyWarning}
+
+\begin{DoxyCode}
+Example (Full blocking):
+
+        radio.\hyperlink{classRF24_ae6fd8d5ee490d54ae1cb2e8fefee535f}{writeBlocking}(&buf,32,1000); \textcolor{comment}{//Wait up to 1 second to write 1 payload to the
+       buffers}
+        \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{txStandBy}(1000);                   \textcolor{comment}{//Wait up to 1 second for the payload to send. Return 1
+       if ok, 0 if failed.}
+                                           \textcolor{comment}{//Blocks only until user timeout or success. Data flushed on
+       fail.}
+\end{DoxyCode}
+ \begin{DoxyNote}{Note}
+If used from within an interrupt, the interrupt should be disabled until completion, and sei(); called to enable \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis()}. 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{tx\+Stand\+By()} 
+
+\hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()} 
+
+\hyperlink{classRF24_a47b2516993481b58e724d1274a7fd9cb}{write\+Fast()}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to the data to be sent \\
+\hline
+{\em len} & Number of bytes to be sent \\
+\hline
+{\em timeout} & User defined timeout in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the payload was loaded into the buffer successfully false if not 
+\end{DoxyReturn}
+
+
+Definition at line 869 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a12cc453453c94969d4d3f0edb3778c83}\label{classRF24_a12cc453453c94969d4d3f0edb3778c83}} 
+\index{R\+F24@{R\+F24}!tx\+Stand\+By@{tx\+Stand\+By}}
+\index{tx\+Stand\+By@{tx\+Stand\+By}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{tx\+Stand\+By()}{txStandBy()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool R\+F24\+::tx\+Stand\+By (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+This function should be called as soon as transmission is finished to drop the radio back to S\+T\+A\+N\+D\+B\+Y-\/I mode. If not issued, the radio will remain in S\+T\+A\+N\+D\+B\+Y-\/\+II mode which, per the data sheet, is not a recommended operating mode.
+
+\begin{DoxyNote}{Note}
+When transmitting data in rapid succession, it is still recommended by the manufacturer to drop the radio out of TX or S\+T\+A\+N\+D\+B\+Y-\/\+II mode if there is time enough between sends for the F\+I\+F\+Os to empty. This is not required if auto-\/ack is enabled.
+\end{DoxyNote}
+Relies on built-\/in auto retry functionality.
+
+
+\begin{DoxyCode}
+Example (Partial blocking):
+
+        radio.\hyperlink{classRF24_a47b2516993481b58e724d1274a7fd9cb}{writeFast}(&buf,32);
+        radio.writeFast(&buf,32);
+        radio.writeFast(&buf,32);  \textcolor{comment}{//Fills the FIFO buffers up}
+        \textcolor{keywordtype}{bool} ok = \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{txStandBy}();     \textcolor{comment}{//Returns 0 if failed. 1 if success.}
+                                   \textcolor{comment}{//Blocks only until MAX\_RT timeout or success. Data flushed on fail.}
+\end{DoxyCode}
+ \begin{DoxySeeAlso}{See also}
+tx\+Stand\+By(unsigned long timeout) 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+True if transmission is successful 
+\end{DoxyReturn}
+
+
+Definition at line 993 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_ab7f54decbe9d06cb026a5d3dfb505116}\label{classRF24_ab7f54decbe9d06cb026a5d3dfb505116}} 
+\index{R\+F24@{R\+F24}!tx\+Stand\+By@{tx\+Stand\+By}}
+\index{tx\+Stand\+By@{tx\+Stand\+By}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{tx\+Stand\+By()}{txStandBy()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool R\+F24\+::tx\+Stand\+By (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{timeout,  }\item[{bool}]{start\+Tx = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+This function allows extended blocking and auto-\/retries per a user defined timeout 
+\begin{DoxyCode}
+Fully Blocking Example:
+
+     radio.writeFast(&buf,32);
+     radio.writeFast(&buf,32);
+     radio.writeFast(&buf,32);   \textcolor{comment}{//Fills the FIFO buffers up}
+     \textcolor{keywordtype}{bool} ok = \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{txStandBy}(1000);  \textcolor{comment}{//Returns 0 if failed after 1 second of retries. 1 if success.}
+                                 \textcolor{comment}{//Blocks only until user defined timeout or success. Data flushed on fail.}
+\end{DoxyCode}
+ \begin{DoxyNote}{Note}
+If used from within an interrupt, the interrupt should be disabled until completion, and sei(); called to enable \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis()}. 
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em timeout} & Number of milliseconds to retry failed payloads \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if transmission is successful 
+\end{DoxyReturn}
+
+
+Definition at line 1021 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a65619238c25036c3de72dc2c1a1c6e52}\label{classRF24_a65619238c25036c3de72dc2c1a1c6e52}} 
+\index{R\+F24@{R\+F24}!write\+Ack\+Payload@{write\+Ack\+Payload}}
+\index{write\+Ack\+Payload@{write\+Ack\+Payload}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{write\+Ack\+Payload()}{writeAckPayload()}}
+{\footnotesize\ttfamily void R\+F24\+::write\+Ack\+Payload (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{pipe,  }\item[{const void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+Write an ack payload for the specified pipe
+
+The next time a message is received on {\ttfamily pipe}, the data in {\ttfamily buf} will be sent back in the acknowledgement. \begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_abf8efced2ee9edbcc6510878b20edc1b}{enable\+Ack\+Payload()} 
+
+\hyperlink{classRF24_a443888504975d7441d6452a09d09a8fa}{enable\+Dynamic\+Payloads()} 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+Only three of these can be pending at any time as there are only 3 F\+I\+FO buffers.~\newline
+ Dynamic payloads must be enabled. 
+\end{DoxyWarning}
+\begin{DoxyNote}{Note}
+Ack payloads are handled automatically by the radio chip when a payload is received. Users should generally write an ack payload as soon as \hyperlink{classRF24_a30a2733a3889bdc331fe2d2f4f0f7b39}{start\+Listening()} is called, so one is available when a regular payload is received. 
+
+Ack payloads are dynamic payloads. This only works on pipes 0\&1 by default. Call \hyperlink{classRF24_a443888504975d7441d6452a09d09a8fa}{enable\+Dynamic\+Payloads()} to enable on all pipes.
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em pipe} & Which pipe\# (typically 1-\/5) will get this response. \\
+\hline
+{\em buf} & Pointer to data that is sent \\
+\hline
+{\em len} & Length of the data to send, up to 32 bytes max. Not affected by the static payload set by \hyperlink{classRF24_a343e5d23477181011dea030fafb1954f}{set\+Payload\+Size()}. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1346 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a30c2736fd0df9c8128cef408c8b88e92}\label{classRF24_a30c2736fd0df9c8128cef408c8b88e92}} 
+\index{R\+F24@{R\+F24}!is\+Ack\+Payload\+Available@{is\+Ack\+Payload\+Available}}
+\index{is\+Ack\+Payload\+Available@{is\+Ack\+Payload\+Available}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{is\+Ack\+Payload\+Available()}{isAckPayloadAvailable()}}
+{\footnotesize\ttfamily bool R\+F24\+::is\+Ack\+Payload\+Available (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Determine if an ack payload was received in the most recent call to \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()}. The regular \hyperlink{classRF24_a127105eb7a3b351cfe777c1cec50627a}{available()} can also be used.
+
+Call \hyperlink{classRF24_a8e2eacacfba96426c192066f04054c5b}{read()} to retrieve the ack payload.
+
+\begin{DoxyReturn}{Returns}
+True if an ack payload is available. 
+\end{DoxyReturn}
+
+
+Definition at line 1377 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_afb97dc4bdf4d2d84ea44060ac5b4ed89}\label{classRF24_afb97dc4bdf4d2d84ea44060ac5b4ed89}} 
+\index{R\+F24@{R\+F24}!what\+Happened@{what\+Happened}}
+\index{what\+Happened@{what\+Happened}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{what\+Happened()}{whatHappened()}}
+{\footnotesize\ttfamily void R\+F24\+::what\+Happened (\begin{DoxyParamCaption}\item[{bool \&}]{tx\+\_\+ok,  }\item[{bool \&}]{tx\+\_\+fail,  }\item[{bool \&}]{rx\+\_\+ready }\end{DoxyParamCaption})}
+
+Call this when you get an interrupt to find out why
+
+Tells you what caused the interrupt, and clears the state of interrupts.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em tx\+\_\+ok} & The send was successful (T\+X\+\_\+\+DS) \\
+\hline
+\mbox{\tt out}  & {\em tx\+\_\+fail} & The send failed, too many retries (M\+A\+X\+\_\+\+RT) \\
+\hline
+\mbox{\tt out}  & {\em rx\+\_\+ready} & There is a message waiting to be read (R\+X\+\_\+\+DS) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1131 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_acd19843064cb70ec23507412e519e4ef}\label{classRF24_acd19843064cb70ec23507412e519e4ef}} 
+\index{R\+F24@{R\+F24}!start\+Fast\+Write@{start\+Fast\+Write}}
+\index{start\+Fast\+Write@{start\+Fast\+Write}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{start\+Fast\+Write()}{startFastWrite()}}
+{\footnotesize\ttfamily void R\+F24\+::start\+Fast\+Write (\begin{DoxyParamCaption}\item[{const void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len,  }\item[{const bool}]{multicast,  }\item[{bool}]{start\+Tx = {\ttfamily 1} }\end{DoxyParamCaption})}
+
+Non-\/blocking write to the open writing pipe used for buffered writes
+
+\begin{DoxyNote}{Note}
+Optimization\+: This function now leaves the CE pin high, so the radio will remain in TX or S\+T\+A\+N\+D\+B\+Y-\/\+II Mode until a \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{tx\+Stand\+By()} command is issued. Can be used as an alternative to \hyperlink{classRF24_aa27519fc289920094422033e0bbf8cf9}{start\+Write()} if writing multiple payloads at once. 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+It is important to never keep the n\+R\+F24\+L01 in TX mode with F\+I\+FO full for more than 4ms at a time. If the auto retransmit/auto\+Ack is enabled, the n\+R\+F24\+L01 is never in TX mode long enough to disobey this rule. Allow the F\+I\+FO to clear by issuing \hyperlink{classRF24_a12cc453453c94969d4d3f0edb3778c83}{tx\+Stand\+By()} or ensure appropriate time between transmissions.
+\end{DoxyWarning}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()} 
+
+\hyperlink{classRF24_a47b2516993481b58e724d1274a7fd9cb}{write\+Fast()} 
+
+\hyperlink{classRF24_aa27519fc289920094422033e0bbf8cf9}{start\+Write()} 
+
+\hyperlink{classRF24_ae6fd8d5ee490d54ae1cb2e8fefee535f}{write\+Blocking()}
+\end{DoxySeeAlso}
+For single no\+Ack writes see\+: \begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a6253607ac2a1995af91a35cea6899c31}{enable\+Dynamic\+Ack()} 
+
+\hyperlink{classRF24_aec71746d59da978bcbb975167886a2cc}{set\+Auto\+Ack()}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to the data to be sent \\
+\hline
+{\em len} & Number of bytes to be sent \\
+\hline
+{\em multicast} & Request A\+CK (0) or N\+O\+A\+CK (1) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the payload was delivered successfully false if not 
+\end{DoxyReturn}
+
+
+Definition at line 957 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_aa27519fc289920094422033e0bbf8cf9}\label{classRF24_aa27519fc289920094422033e0bbf8cf9}} 
+\index{R\+F24@{R\+F24}!start\+Write@{start\+Write}}
+\index{start\+Write@{start\+Write}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{start\+Write()}{startWrite()}}
+{\footnotesize\ttfamily void R\+F24\+::start\+Write (\begin{DoxyParamCaption}\item[{const void $\ast$}]{buf,  }\item[{uint8\+\_\+t}]{len,  }\item[{const bool}]{multicast }\end{DoxyParamCaption})}
+
+Non-\/blocking write to the open writing pipe
+
+Just like \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()}, but it returns immediately. To find out what happened to the send, catch the I\+RQ and then call \hyperlink{classRF24_afb97dc4bdf4d2d84ea44060ac5b4ed89}{what\+Happened()}.
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()} 
+
+\hyperlink{classRF24_a47b2516993481b58e724d1274a7fd9cb}{write\+Fast()} 
+
+\hyperlink{classRF24_acd19843064cb70ec23507412e519e4ef}{start\+Fast\+Write()} 
+
+\hyperlink{classRF24_afb97dc4bdf4d2d84ea44060ac5b4ed89}{what\+Happened()}
+\end{DoxySeeAlso}
+For single no\+Ack writes see\+: \begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a6253607ac2a1995af91a35cea6899c31}{enable\+Dynamic\+Ack()} 
+
+\hyperlink{classRF24_aec71746d59da978bcbb975167886a2cc}{set\+Auto\+Ack()}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to the data to be sent \\
+\hline
+{\em len} & Number of bytes to be sent \\
+\hline
+{\em multicast} & Request A\+CK (0) or N\+O\+A\+CK (1) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 971 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_aeaf7fa54d3ab2a85ce215b4bf6ae933b}\label{classRF24_aeaf7fa54d3ab2a85ce215b4bf6ae933b}} 
+\index{R\+F24@{R\+F24}!re\+Use\+TX@{re\+Use\+TX}}
+\index{re\+Use\+TX@{re\+Use\+TX}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{re\+Use\+T\+X()}{reUseTX()}}
+{\footnotesize\ttfamily void R\+F24\+::re\+Use\+TX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+This function is mainly used internally to take advantage of the auto payload re-\/use functionality of the chip, but can be beneficial to users as well.
+
+The function will instruct the radio to re-\/use the data in the F\+I\+FO buffers, and instructs the radio to re-\/send once the timeout limit has been reached. Used by write\+Fast and write\+Blocking to initiate retries when a TX failure occurs. Retries are automatically initiated except with the standard \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()}. This way, data is not flushed from the buffer until switching between modes.
+
+\begin{DoxyNote}{Note}
+This is to be used A\+F\+T\+ER auto-\/retry fails if wanting to resend using the built-\/in payload reuse features. After issuing \hyperlink{classRF24_aeaf7fa54d3ab2a85ce215b4bf6ae933b}{re\+Use\+T\+X()}, it will keep reending the same payload forever or until a payload is written to the F\+I\+FO, or a flush\+\_\+tx command is given. 
+\end{DoxyNote}
+
+
+Definition at line 903 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_adb7915b1d2661a82137573344f659e81}\label{classRF24_adb7915b1d2661a82137573344f659e81}} 
+\index{R\+F24@{R\+F24}!flush\+\_\+tx@{flush\+\_\+tx}}
+\index{flush\+\_\+tx@{flush\+\_\+tx}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{flush\+\_\+tx()}{flush\_tx()}}
+{\footnotesize\ttfamily uint8\+\_\+t R\+F24\+::flush\+\_\+tx (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Empty the transmit buffer. This is generally not required in standard operation. May be required in specific cases after \hyperlink{classRF24_a6f144d73fc447c8ac2d1a4166210fd88}{stop\+Listening()} , if operating at 250\+K\+B\+PS data rate.
+
+\begin{DoxyReturn}{Returns}
+Current value of status register 
+\end{DoxyReturn}
+
+
+Definition at line 343 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_ad0d522ccf39493510e64bf1740be790d}\label{classRF24_ad0d522ccf39493510e64bf1740be790d}} 
+\index{R\+F24@{R\+F24}!test\+Carrier@{test\+Carrier}}
+\index{test\+Carrier@{test\+Carrier}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{test\+Carrier()}{testCarrier()}}
+{\footnotesize\ttfamily bool R\+F24\+::test\+Carrier (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Test whether there was a carrier on the line for the previous listening period.
+
+Useful to check for interference on the current channel.
+
+\begin{DoxyReturn}{Returns}
+true if was carrier, false if not 
+\end{DoxyReturn}
+
+
+Definition at line 1420 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a821285f3b54553f4402eb3fd0ac6d6c1}\label{classRF24_a821285f3b54553f4402eb3fd0ac6d6c1}} 
+\index{R\+F24@{R\+F24}!test\+R\+PD@{test\+R\+PD}}
+\index{test\+R\+PD@{test\+R\+PD}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{test\+R\+P\+D()}{testRPD()}}
+{\footnotesize\ttfamily bool R\+F24\+::test\+R\+PD (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Test whether a signal (carrier or otherwise) greater than or equal to -\/64d\+Bm is present on the channel. Valid only on n\+R\+F24\+L01P (+) hardware. On n\+R\+F24\+L01, use \hyperlink{classRF24_ad0d522ccf39493510e64bf1740be790d}{test\+Carrier()}.
+
+Useful to check for interference on the current channel and channel hopping strategies.
+
+
+\begin{DoxyCode}
+\textcolor{keywordtype}{bool} goodSignal = radio.testRPD();
+\textcolor{keywordflow}{if}(radio.available())\{
+   Serial.println(goodSignal ? \textcolor{stringliteral}{"Strong signal > 64dBm"} : \textcolor{stringliteral}{"Weak signal < 64dBm"} );
+   radio.read(0,0);
+\}
+\end{DoxyCode}
+ \begin{DoxyReturn}{Returns}
+true if signal =$>$ -\/64d\+Bm, false if not 
+\end{DoxyReturn}
+
+
+Definition at line 1427 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a35e5f1533b7753806c42b76e782d917e}\label{classRF24_a35e5f1533b7753806c42b76e782d917e}} 
+\index{R\+F24@{R\+F24}!is\+Valid@{is\+Valid}}
+\index{is\+Valid@{is\+Valid}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{is\+Valid()}{isValid()}}
+{\footnotesize\ttfamily bool R\+F24\+::is\+Valid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Test whether this is a real radio, or a mock shim for debugging. Setting either pin to 0xff is the way to indicate that this is not a real radio.
+
+\begin{DoxyReturn}{Returns}
+true if this is a legitimate radio 
+\end{DoxyReturn}
+
+
+Definition at line 648 of file R\+F24.\+h.
+
+\mbox{\Hypertarget{classRF24_a9944d93994a80037e3586f340f5e0107}\label{classRF24_a9944d93994a80037e3586f340f5e0107}} 
+\index{R\+F24@{R\+F24}!close\+Reading\+Pipe@{close\+Reading\+Pipe}}
+\index{close\+Reading\+Pipe@{close\+Reading\+Pipe}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{close\+Reading\+Pipe()}{closeReadingPipe()}}
+{\footnotesize\ttfamily void R\+F24\+::close\+Reading\+Pipe (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{pipe }\end{DoxyParamCaption})}
+
+Close a pipe after it has been previously opened. Can be safely called without having previously opened a pipe. 
+\begin{DoxyParams}{Parameters}
+{\em pipe} & Which pipe \# to close, 0-\/5. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1253 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_ad5aea7f9a3bd9c7d357fb296ce751f21}\label{classRF24_ad5aea7f9a3bd9c7d357fb296ce751f21}} 
+\index{R\+F24@{R\+F24}!set\+Address\+Width@{set\+Address\+Width}}
+\index{set\+Address\+Width@{set\+Address\+Width}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+Address\+Width()}{setAddressWidth()}}
+{\footnotesize\ttfamily void R\+F24\+::set\+Address\+Width (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{a\+\_\+width }\end{DoxyParamCaption})}
+
+Set the address width from 3 to 5 bytes (24, 32 or 40 bit)
+
+
+\begin{DoxyParams}{Parameters}
+{\em a\+\_\+width} & The address width to use\+: 3,4 or 5 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1211 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a4c6d3959c8320e64568395f4ef507aef}\label{classRF24_a4c6d3959c8320e64568395f4ef507aef}} 
+\index{R\+F24@{R\+F24}!set\+Retries@{set\+Retries}}
+\index{set\+Retries@{set\+Retries}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+Retries()}{setRetries()}}
+{\footnotesize\ttfamily void R\+F24\+::set\+Retries (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{delay,  }\item[{uint8\+\_\+t}]{count }\end{DoxyParamCaption})}
+
+Set the number and delay of retries upon failed submit
+
+
+\begin{DoxyParams}{Parameters}
+{\em delay} & How long to wait between each retry, in multiples of 250us, max is 15. 0 means 250us, 15 means 4000us. \\
+\hline
+{\em count} & How many retries before giving up, max 15 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1586 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a5e6e5a5f6c85d2638381cab2c0f3702e}\label{classRF24_a5e6e5a5f6c85d2638381cab2c0f3702e}} 
+\index{R\+F24@{R\+F24}!set\+Channel@{set\+Channel}}
+\index{set\+Channel@{set\+Channel}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+Channel()}{setChannel()}}
+{\footnotesize\ttfamily void R\+F24\+::set\+Channel (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{channel }\end{DoxyParamCaption})}
+
+Set RF communication channel
+
+
+\begin{DoxyParams}{Parameters}
+{\em channel} & Which RF channel to communicate on, 0-\/125 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 455 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a6a66a94609309e17edaa1919e66cea0a}\label{classRF24_a6a66a94609309e17edaa1919e66cea0a}} 
+\index{R\+F24@{R\+F24}!get\+Channel@{get\+Channel}}
+\index{get\+Channel@{get\+Channel}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{get\+Channel()}{getChannel()}}
+{\footnotesize\ttfamily uint8\+\_\+t R\+F24\+::get\+Channel (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Get RF communication channel
+
+\begin{DoxyReturn}{Returns}
+The currently configured RF Channel 
+\end{DoxyReturn}
+
+
+Definition at line 461 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a343e5d23477181011dea030fafb1954f}\label{classRF24_a343e5d23477181011dea030fafb1954f}} 
+\index{R\+F24@{R\+F24}!set\+Payload\+Size@{set\+Payload\+Size}}
+\index{set\+Payload\+Size@{set\+Payload\+Size}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+Payload\+Size()}{setPayloadSize()}}
+{\footnotesize\ttfamily void R\+F24\+::set\+Payload\+Size (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{size }\end{DoxyParamCaption})}
+
+Set Static Payload Size
+
+This implementation uses a pre-\/stablished fixed payload size for all transmissions. If this method is never called, the driver will always transmit the maximum payload size (32 bytes), no matter how much was sent to \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The number of bytes in the payload \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 468 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a0aa0c7cbe3d38fef4722f3f1d2d6c5f1}\label{classRF24_a0aa0c7cbe3d38fef4722f3f1d2d6c5f1}} 
+\index{R\+F24@{R\+F24}!get\+Payload\+Size@{get\+Payload\+Size}}
+\index{get\+Payload\+Size@{get\+Payload\+Size}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{get\+Payload\+Size()}{getPayloadSize()}}
+{\footnotesize\ttfamily uint8\+\_\+t R\+F24\+::get\+Payload\+Size (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Get Static Payload Size
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classRF24_a343e5d23477181011dea030fafb1954f}{set\+Payload\+Size()}
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+The number of bytes in the payload 
+\end{DoxyReturn}
+
+
+Definition at line 475 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a65963ed8d8fd45f847e2f673995b85e1}\label{classRF24_a65963ed8d8fd45f847e2f673995b85e1}} 
+\index{R\+F24@{R\+F24}!get\+Dynamic\+Payload\+Size@{get\+Dynamic\+Payload\+Size}}
+\index{get\+Dynamic\+Payload\+Size@{get\+Dynamic\+Payload\+Size}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{get\+Dynamic\+Payload\+Size()}{getDynamicPayloadSize()}}
+{\footnotesize\ttfamily uint8\+\_\+t R\+F24\+::get\+Dynamic\+Payload\+Size (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Get Dynamic Payload Size
+
+For dynamic payloads, this pulls the size of the payload off the chip
+
+\begin{DoxyNote}{Note}
+Corrupt packets are now detected and flushed per the manufacturer. 
+\begin{DoxyCode}
+\textcolor{keywordflow}{if}(radio.available())\{
+  \textcolor{keywordflow}{if}(radio.getDynamicPayloadSize() < 1)\{
+    \textcolor{comment}{// Corrupt payload has been flushed}
+    \textcolor{keywordflow}{return}; 
+  \}
+  radio.read(&data,\textcolor{keyword}{sizeof}(data));
+\}
+\end{DoxyCode}
+
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+Payload length of last-\/received dynamic payload 
+\end{DoxyReturn}
+
+
+Definition at line 1068 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_abf8efced2ee9edbcc6510878b20edc1b}\label{classRF24_abf8efced2ee9edbcc6510878b20edc1b}} 
+\index{R\+F24@{R\+F24}!enable\+Ack\+Payload@{enable\+Ack\+Payload}}
+\index{enable\+Ack\+Payload@{enable\+Ack\+Payload}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{enable\+Ack\+Payload()}{enableAckPayload()}}
+{\footnotesize\ttfamily void R\+F24\+::enable\+Ack\+Payload (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Enable custom payloads on the acknowledge packets
+
+Ack payloads are a handy way to return data back to senders without manually changing the radio modes on both units.
+
+\begin{DoxyNote}{Note}
+Ack payloads are dynamic payloads. This only works on pipes 0\&1 by default. Call \hyperlink{classRF24_a443888504975d7441d6452a09d09a8fa}{enable\+Dynamic\+Payloads()} to enable on all pipes. 
+\end{DoxyNote}
+
+
+Definition at line 1311 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a443888504975d7441d6452a09d09a8fa}\label{classRF24_a443888504975d7441d6452a09d09a8fa}} 
+\index{R\+F24@{R\+F24}!enable\+Dynamic\+Payloads@{enable\+Dynamic\+Payloads}}
+\index{enable\+Dynamic\+Payloads@{enable\+Dynamic\+Payloads}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{enable\+Dynamic\+Payloads()}{enableDynamicPayloads()}}
+{\footnotesize\ttfamily void R\+F24\+::enable\+Dynamic\+Payloads (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Enable dynamically-\/sized payloads
+
+This way you don\textquotesingle{}t always have to send large packets just to send them once in a while. This enables dynamic payloads on A\+LL pipes. 
+
+Definition at line 1270 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a486c4c47a6973614ae595ae96f221165}\label{classRF24_a486c4c47a6973614ae595ae96f221165}} 
+\index{R\+F24@{R\+F24}!disable\+Dynamic\+Payloads@{disable\+Dynamic\+Payloads}}
+\index{disable\+Dynamic\+Payloads@{disable\+Dynamic\+Payloads}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{disable\+Dynamic\+Payloads()}{disableDynamicPayloads()}}
+{\footnotesize\ttfamily void R\+F24\+::disable\+Dynamic\+Payloads (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Disable dynamically-\/sized payloads
+
+This disables dynamic payloads on A\+LL pipes. Since Ack Payloads requires Dynamic Payloads, Ack Payloads are also disabled. If dynamic payloads are later re-\/enabled and ack payloads are desired then \hyperlink{classRF24_abf8efced2ee9edbcc6510878b20edc1b}{enable\+Ack\+Payload()} must be called again as well. 
+
+Definition at line 1290 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a6253607ac2a1995af91a35cea6899c31}\label{classRF24_a6253607ac2a1995af91a35cea6899c31}} 
+\index{R\+F24@{R\+F24}!enable\+Dynamic\+Ack@{enable\+Dynamic\+Ack}}
+\index{enable\+Dynamic\+Ack@{enable\+Dynamic\+Ack}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{enable\+Dynamic\+Ack()}{enableDynamicAck()}}
+{\footnotesize\ttfamily void R\+F24\+::enable\+Dynamic\+Ack (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Enable dynamic A\+C\+Ks (single write multicast or unicast) for chosen messages
+
+\begin{DoxyNote}{Note}
+To enable full multicast or per-\/pipe multicast, use \hyperlink{classRF24_aec71746d59da978bcbb975167886a2cc}{set\+Auto\+Ack()}
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+This M\+U\+ST be called prior to attempting single write N\+O\+A\+CK calls 
+\begin{DoxyCode}
+radio.enableDynamicAck();
+radio.write(&data,32,1);  \textcolor{comment}{// Sends a payload with no acknowledgement requested}
+radio.write(&data,32,0);  \textcolor{comment}{// Sends a payload using auto-retry/autoACK}
+\end{DoxyCode}
+ 
+\end{DoxyWarning}
+
+
+Definition at line 1332 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a62846750b82682beb7593719eb60ed60}\label{classRF24_a62846750b82682beb7593719eb60ed60}} 
+\index{R\+F24@{R\+F24}!is\+P\+Variant@{is\+P\+Variant}}
+\index{is\+P\+Variant@{is\+P\+Variant}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{is\+P\+Variant()}{isPVariant()}}
+{\footnotesize\ttfamily bool R\+F24\+::is\+P\+Variant (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Determine whether the hardware is an n\+R\+F24\+L01+ or not.
+
+\begin{DoxyReturn}{Returns}
+true if the hardware is n\+R\+F24\+L01+ (or compatible) and false if its not. 
+\end{DoxyReturn}
+
+
+Definition at line 1384 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_aec71746d59da978bcbb975167886a2cc}\label{classRF24_aec71746d59da978bcbb975167886a2cc}} 
+\index{R\+F24@{R\+F24}!set\+Auto\+Ack@{set\+Auto\+Ack}}
+\index{set\+Auto\+Ack@{set\+Auto\+Ack}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+Auto\+Ack()}{setAutoAck()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void R\+F24\+::set\+Auto\+Ack (\begin{DoxyParamCaption}\item[{bool}]{enable }\end{DoxyParamCaption})}
+
+Enable or disable auto-\/acknowlede packets
+
+This is enabled by default, so it\textquotesingle{}s only needed if you want to turn it off for some reason.
+
+
+\begin{DoxyParams}{Parameters}
+{\em enable} & Whether to enable (true) or disable (false) auto-\/acks \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1391 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a60dba9e558f3620ab489af68ea3dea9c}\label{classRF24_a60dba9e558f3620ab489af68ea3dea9c}} 
+\index{R\+F24@{R\+F24}!set\+Auto\+Ack@{set\+Auto\+Ack}}
+\index{set\+Auto\+Ack@{set\+Auto\+Ack}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+Auto\+Ack()}{setAutoAck()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void R\+F24\+::set\+Auto\+Ack (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{pipe,  }\item[{bool}]{enable }\end{DoxyParamCaption})}
+
+Enable or disable auto-\/acknowlede packets on a per pipeline basis.
+
+AA is enabled by default, so it\textquotesingle{}s only needed if you want to turn it off/on for some reason on a per pipeline basis.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pipe} & Which pipeline to modify \\
+\hline
+{\em enable} & Whether to enable (true) or disable (false) auto-\/acks \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1401 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_adedac579590a668ae97baccab284de8a}\label{classRF24_adedac579590a668ae97baccab284de8a}} 
+\index{R\+F24@{R\+F24}!set\+P\+A\+Level@{set\+P\+A\+Level}}
+\index{set\+P\+A\+Level@{set\+P\+A\+Level}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+P\+A\+Level()}{setPALevel()}}
+{\footnotesize\ttfamily void R\+F24\+::set\+P\+A\+Level (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{level }\end{DoxyParamCaption})}
+
+Set Power Amplifier (PA) level to one of four levels\+: R\+F24\+\_\+\+P\+A\+\_\+\+M\+IN, R\+F24\+\_\+\+P\+A\+\_\+\+L\+OW, R\+F24\+\_\+\+P\+A\+\_\+\+H\+I\+GH and R\+F24\+\_\+\+P\+A\+\_\+\+M\+AX
+
+The power levels correspond to the following output levels respectively\+: N\+R\+F24\+L01\+: -\/18d\+Bm, -\/12d\+Bm,-\/6d\+BM, and 0d\+Bm
+
+S\+I24\+R1\+: -\/6d\+Bm, 0d\+Bm, 3d\+BM, and 7d\+Bm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em level} & Desired PA level. \\
+\hline
+\end{DoxyParams}
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}.\end{Desc}
+
+
+Definition at line 1434 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_af7c4dcd84466168c5816382ceb366067}\label{classRF24_af7c4dcd84466168c5816382ceb366067}} 
+\index{R\+F24@{R\+F24}!get\+P\+A\+Level@{get\+P\+A\+Level}}
+\index{get\+P\+A\+Level@{get\+P\+A\+Level}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{get\+P\+A\+Level()}{getPALevel()}}
+{\footnotesize\ttfamily uint8\+\_\+t R\+F24\+::get\+P\+A\+Level (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Fetches the current PA level.
+
+N\+R\+F24\+L01\+: -\/18d\+Bm, -\/12d\+Bm, -\/6d\+Bm and 0d\+Bm S\+I24\+R1\+: -\/6d\+Bm, 0d\+Bm, 3d\+Bm, 7d\+Bm
+
+\begin{DoxyReturn}{Returns}
+Returns values 0 to 3 representing the PA Level. 
+\end{DoxyReturn}
+
+
+Definition at line 1451 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_aeb9920e7a95699748b003c4a839b0814}\label{classRF24_aeb9920e7a95699748b003c4a839b0814}} 
+\index{R\+F24@{R\+F24}!set\+Data\+Rate@{set\+Data\+Rate}}
+\index{set\+Data\+Rate@{set\+Data\+Rate}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+Data\+Rate()}{setDataRate()}}
+{\footnotesize\ttfamily bool R\+F24\+::set\+Data\+Rate (\begin{DoxyParamCaption}\item[{\hyperlink{RF24_8h_a82745de4aa1251b7561564b3ed1d6522}{rf24\+\_\+datarate\+\_\+e}}]{speed }\end{DoxyParamCaption})}
+
+Set the transmission data rate
+
+\begin{DoxyWarning}{Warning}
+setting R\+F24\+\_\+250\+K\+B\+PS will fail for non-\/plus units
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em speed} & R\+F24\+\_\+250\+K\+B\+PS for 250kbs, R\+F24\+\_\+1\+M\+B\+PS for 1\+Mbps, or R\+F24\+\_\+2\+M\+B\+PS for 2\+Mbps \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the change was successful 
+\end{DoxyReturn}
+
+
+Definition at line 1459 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a72a7b11dafe8ffab6135f243decce0d7}\label{classRF24_a72a7b11dafe8ffab6135f243decce0d7}} 
+\index{R\+F24@{R\+F24}!get\+Data\+Rate@{get\+Data\+Rate}}
+\index{get\+Data\+Rate@{get\+Data\+Rate}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{get\+Data\+Rate()}{getDataRate()}}
+{\footnotesize\ttfamily \hyperlink{RF24_8h_a82745de4aa1251b7561564b3ed1d6522}{rf24\+\_\+datarate\+\_\+e} R\+F24\+::get\+Data\+Rate (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Fetches the transmission data rate
+
+\begin{DoxyReturn}{Returns}
+Returns the hardware\textquotesingle{}s currently configured datarate. The value is one of 250kbs, R\+F24\+\_\+1\+M\+B\+PS for 1\+Mbps, or R\+F24\+\_\+2\+M\+B\+PS, as defined in the rf24\+\_\+datarate\+\_\+e enum. 
+\end{DoxyReturn}
+
+
+Definition at line 1509 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a89f626fc4a58dd997153bcc0f8198b9e}\label{classRF24_a89f626fc4a58dd997153bcc0f8198b9e}} 
+\index{R\+F24@{R\+F24}!set\+C\+R\+C\+Length@{set\+C\+R\+C\+Length}}
+\index{set\+C\+R\+C\+Length@{set\+C\+R\+C\+Length}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{set\+C\+R\+C\+Length()}{setCRCLength()}}
+{\footnotesize\ttfamily void R\+F24\+::set\+C\+R\+C\+Length (\begin{DoxyParamCaption}\item[{\hyperlink{RF24_8h_adbe00719f3f835c82bd007081d040a7e}{rf24\+\_\+crclength\+\_\+e}}]{length }\end{DoxyParamCaption})}
+
+Set the C\+RC length ~\newline
+C\+RC checking cannot be disabled if auto-\/ack is enabled 
+\begin{DoxyParams}{Parameters}
+{\em length} & R\+F24\+\_\+\+C\+R\+C\+\_\+8 for 8-\/bit or R\+F24\+\_\+\+C\+R\+C\+\_\+16 for 16-\/bit \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1536 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_aba4ca91b829afcd94a4c11e0343e3796}\label{classRF24_aba4ca91b829afcd94a4c11e0343e3796}} 
+\index{R\+F24@{R\+F24}!get\+C\+R\+C\+Length@{get\+C\+R\+C\+Length}}
+\index{get\+C\+R\+C\+Length@{get\+C\+R\+C\+Length}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{get\+C\+R\+C\+Length()}{getCRCLength()}}
+{\footnotesize\ttfamily \hyperlink{RF24_8h_adbe00719f3f835c82bd007081d040a7e}{rf24\+\_\+crclength\+\_\+e} R\+F24\+::get\+C\+R\+C\+Length (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Get the C\+RC length ~\newline
+C\+RC checking cannot be disabled if auto-\/ack is enabled \begin{DoxyReturn}{Returns}
+R\+F24\+\_\+\+C\+R\+C\+\_\+\+D\+I\+S\+A\+B\+L\+ED if disabled or R\+F24\+\_\+\+C\+R\+C\+\_\+8 for 8-\/bit or R\+F24\+\_\+\+C\+R\+C\+\_\+16 for 16-\/bit 
+\end{DoxyReturn}
+
+
+Definition at line 1559 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a5eacd9ecfbc19864801d714c292cf8be}\label{classRF24_a5eacd9ecfbc19864801d714c292cf8be}} 
+\index{R\+F24@{R\+F24}!disable\+C\+RC@{disable\+C\+RC}}
+\index{disable\+C\+RC@{disable\+C\+RC}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{disable\+C\+R\+C()}{disableCRC()}}
+{\footnotesize\ttfamily void R\+F24\+::disable\+C\+RC (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Disable C\+RC validation
+
+\begin{DoxyWarning}{Warning}
+C\+RC cannot be disabled if auto-\/ack/\+E\+SB is enabled. 
+\end{DoxyWarning}
+
+
+Definition at line 1579 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_abf68b9b0c9cd17179e9e144c3e7f9c45}\label{classRF24_abf68b9b0c9cd17179e9e144c3e7f9c45}} 
+\index{R\+F24@{R\+F24}!mask\+I\+RQ@{mask\+I\+RQ}}
+\index{mask\+I\+RQ@{mask\+I\+RQ}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{mask\+I\+R\+Q()}{maskIRQ()}}
+{\footnotesize\ttfamily void R\+F24\+::mask\+I\+RQ (\begin{DoxyParamCaption}\item[{bool}]{tx\+\_\+ok,  }\item[{bool}]{tx\+\_\+fail,  }\item[{bool}]{rx\+\_\+ready }\end{DoxyParamCaption})}
+
+The radio will generate interrupt signals when a transmission is complete, a transmission fails, or a payload is received. This allows users to mask those interrupts to prevent them from generating a signal on the interrupt pin. Interrupts are enabled on the radio chip by default.
+
+
+\begin{DoxyCode}
+Mask all interrupts except the receive interrupt:
+
+radio.maskIRQ(1,1,0);
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em tx\+\_\+ok} & Mask transmission complete interrupts \\
+\hline
+{\em tx\+\_\+fail} & Mask transmit failure interrupts \\
+\hline
+{\em rx\+\_\+ready} & Mask payload received interrupts \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1056 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_aa7e8523f86f9f8f20c274e0c89a5fd45}\label{classRF24_aa7e8523f86f9f8f20c274e0c89a5fd45}} 
+\index{R\+F24@{R\+F24}!open\+Reading\+Pipe@{open\+Reading\+Pipe}}
+\index{open\+Reading\+Pipe@{open\+Reading\+Pipe}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{open\+Reading\+Pipe()}{openReadingPipe()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void R\+F24\+::open\+Reading\+Pipe (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{number,  }\item[{uint64\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+Open a pipe for reading \begin{DoxyNote}{Note}
+For compatibility with old code only, see new function
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Pipes 1-\/5 should share the first 32 bits. Only the least significant byte should be unique, e.\+g. 
+\begin{DoxyCode}
+\hyperlink{classRF24_a9edc910ccc1ffcff56814b08faca5535}{openReadingPipe}(1,0xF0F0F0F0AA);
+\hyperlink{classRF24_a9edc910ccc1ffcff56814b08faca5535}{openReadingPipe}(2,0xF0F0F0F066);
+\end{DoxyCode}
+
+
+Pipe 0 is also used by the writing pipe. So if you open pipe 0 for reading, and then \hyperlink{classRF24_a30a2733a3889bdc331fe2d2f4f0f7b39}{start\+Listening()}, it will overwrite the writing pipe. Ergo, do an \hyperlink{classRF24_af2e409e62d49a23e372a70b904ae30e1}{open\+Writing\+Pipe()} again before \hyperlink{classRF24_a4cd4c198a47704db20b6b5cf0731cd58}{write()}.
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em number} & Which pipe\# to open, 0-\/5. \\
+\hline
+{\em address} & The 40-\/bit address of the pipe to open. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1184 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a50c8e68ee840e1860a31dbdc83afbd77}\label{classRF24_a50c8e68ee840e1860a31dbdc83afbd77}} 
+\index{R\+F24@{R\+F24}!open\+Writing\+Pipe@{open\+Writing\+Pipe}}
+\index{open\+Writing\+Pipe@{open\+Writing\+Pipe}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{open\+Writing\+Pipe()}{openWritingPipe()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void R\+F24\+::open\+Writing\+Pipe (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{address }\end{DoxyParamCaption})}
+
+Open a pipe for writing \begin{DoxyNote}{Note}
+For compatibility with old code only, see new function
+\end{DoxyNote}
+Addresses are 40-\/bit hex values, e.\+g.\+:
+
+
+\begin{DoxyCode}
+\hyperlink{classRF24_af2e409e62d49a23e372a70b904ae30e1}{openWritingPipe}(0xF0F0F0F0F0);
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The 40-\/bit address of the pipe to open. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1145 of file R\+F24.\+cpp.
+
+\mbox{\Hypertarget{classRF24_a575c061519e7820e1850ad380c617d95}\label{classRF24_a575c061519e7820e1850ad380c617d95}} 
+\index{R\+F24@{R\+F24}!flush\+\_\+rx@{flush\+\_\+rx}}
+\index{flush\+\_\+rx@{flush\+\_\+rx}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{flush\+\_\+rx()}{flush\_rx()}}
+{\footnotesize\ttfamily uint8\+\_\+t R\+F24\+::flush\+\_\+rx (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+Empty the receive buffer
+
+\begin{DoxyReturn}{Returns}
+Current value of status register 
+\end{DoxyReturn}
+
+
+Definition at line 336 of file R\+F24.\+cpp.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classRF24_a2e40fe66d1231a333aa2534e8491f828}\label{classRF24_a2e40fe66d1231a333aa2534e8491f828}} 
+\index{R\+F24@{R\+F24}!failure\+Detected@{failure\+Detected}}
+\index{failure\+Detected@{failure\+Detected}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{failure\+Detected}{failureDetected}}
+{\footnotesize\ttfamily bool R\+F24\+::failure\+Detected}
+
+Enable error detection by un-\/commenting \#define F\+A\+I\+L\+U\+R\+E\+\_\+\+H\+A\+N\+D\+L\+I\+NG in \hyperlink{RF24__config_8h}{R\+F24\+\_\+config.\+h} If a failure has been detected, it usually indicates a hardware issue. By default the library will cease operation when a failure is detected. This should allow advanced users to detect and resolve intermittent hardware issues.
+
+In most cases, the radio must be re-\/enabled via radio.\+begin(); and the appropriate settings applied after a failure occurs, if wanting to re-\/enable the device immediately.
+
+Usage\+: (Failure handling must be enabled per above) 
+\begin{DoxyCode}
+\textcolor{keywordflow}{if}(radio.failureDetected)\{ 
+  radio.begin();                       \textcolor{comment}{// Attempt to re-configure the radio with defaults}
+  radio.failureDetected = 0;           \textcolor{comment}{// Reset the detection value}
+  radio.openWritingPipe(addresses[1]); \textcolor{comment}{// Re-configure pipe addresses}
+  radio.openReadingPipe(1,addresses[0]);
+  report\_failure();                    \textcolor{comment}{// Blink leds, send a message, etc. to indicate failure}
+\}
+\end{DoxyCode}
+ 
+
+Definition at line 678 of file R\+F24.\+h.
+
+\mbox{\Hypertarget{classRF24_a958fb99f54415101ca008ab11b3bfe79}\label{classRF24_a958fb99f54415101ca008ab11b3bfe79}} 
+\index{R\+F24@{R\+F24}!tx\+Delay@{tx\+Delay}}
+\index{tx\+Delay@{tx\+Delay}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{tx\+Delay}{txDelay}}
+{\footnotesize\ttfamily uint32\+\_\+t R\+F24\+::tx\+Delay}
+
+The driver will delay for this duration when \hyperlink{classRF24_a6f144d73fc447c8ac2d1a4166210fd88}{stop\+Listening()} is called
+
+When responding to payloads, faster devices like A\+R\+M(\+R\+Pi) are much faster than Arduino\+:
+\begin{DoxyEnumerate}
+\item Arduino sends data to R\+Pi, switches to RX mode
+\item The R\+Pi receives the data, switches to TX mode and sends before the Arduino radio is in RX mode
+\item If Auto\+A\+CK is disabled, this can be set as low as 0. If A\+A/\+E\+SB enabled, set to 100uS minimum on R\+Pi
+\end{DoxyEnumerate}
+
+\begin{DoxyWarning}{Warning}
+If set to 0, ensure 130uS delay after \hyperlink{classRF24_a6f144d73fc447c8ac2d1a4166210fd88}{stop\+Listening()} and before any sends 
+\end{DoxyWarning}
+
+
+Definition at line 936 of file R\+F24.\+h.
+
+\mbox{\Hypertarget{classRF24_ad08121bf844f08dbe53f51576b7c4066}\label{classRF24_ad08121bf844f08dbe53f51576b7c4066}} 
+\index{R\+F24@{R\+F24}!cs\+Delay@{cs\+Delay}}
+\index{cs\+Delay@{cs\+Delay}!R\+F24@{R\+F24}}
+\subsubsection{\texorpdfstring{cs\+Delay}{csDelay}}
+{\footnotesize\ttfamily uint32\+\_\+t R\+F24\+::cs\+Delay}
+
+On all devices but Linux and A\+T\+Tiny, a small delay is added to the C\+SN toggling function
+
+This is intended to minimise the speed of S\+PI polling due to radio commands
+
+If using interrupts or timed requests, this can be set to 0 Default\+:5 
+
+Definition at line 947 of file R\+F24.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{RF24_8h}{R\+F24.\+h}\item 
+\hyperlink{RF24_8cpp}{R\+F24.\+cpp}\end{DoxyCompactItemize}

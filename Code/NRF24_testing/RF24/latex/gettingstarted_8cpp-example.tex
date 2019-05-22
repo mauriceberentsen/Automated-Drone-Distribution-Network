@@ -1,0 +1,227 @@
+\hypertarget{gettingstarted_8cpp-example}{}\section{gettingstarted.\+cpp}
+{\bfseries For Linux}~\newline
+ {\bfseries Updated\+: T\+M\+Rh20 2014 }~\newline
+
+
+This is an example of how to use the \hyperlink{classRF24}{R\+F24} class to communicate on a basic level. Configure and write this sketch to two different nodes. Put one of the nodes into \textquotesingle{}transmit\textquotesingle{} mode by connecting with the serial monitor and ~\newline
+ sending a \textquotesingle{}T\textquotesingle{}. The ping node sends the current time to the pong node, which responds by sending the value back. The ping node can then see how long the whole cycle took. ~\newline
+ \begin{DoxyNote}{Note}
+For a more efficient call-\/response scenario see the Getting\+Started\+\_\+\+Call\+Response.\+ino example.
+\end{DoxyNote}
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>}
+\textcolor{comment}{}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{}
+\textcolor{comment}{ 03/17/2013 : Charles-Henri Hallard (http://hallard.me)}
+\textcolor{comment}{              Modified to use with Arduipi board http://hallard.me/arduipi}
+\textcolor{comment}{                          Changed to use modified bcm2835 and RF24 library}
+\textcolor{comment}{TMRh20 2014 - Updated to work with optimized RF24 Arduino library}
+\textcolor{comment}{}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <cstdlib>}
+\textcolor{preprocessor}{#include <iostream>}
+\textcolor{preprocessor}{#include <sstream>}
+\textcolor{preprocessor}{#include <string>}
+\textcolor{preprocessor}{#include <unistd.h>}
+\textcolor{preprocessor}{#include <\hyperlink{RF24_8h}{RF24/RF24.h}>}
+
+\textcolor{keyword}{using namespace }\hyperlink{namespacestd}{std};
+\textcolor{comment}{//}
+\textcolor{comment}{// Hardware configuration}
+\textcolor{comment}{// Configure the appropriate pins for your connections}
+
+\textcolor{comment}{/****************** Raspberry Pi ***********************/}
+
+\textcolor{comment}{// Radio CE Pin, CSN Pin, SPI Speed}
+\textcolor{comment}{// See http://www.airspayce.com/mikem/bcm2835/group\_\_constants.html#ga63c029bd6500167152db4e57736d0939 and
+       the related enumerations for pin information.}
+
+\textcolor{comment}{// Setup for GPIO 22 CE and CE0 CSN with SPI Speed @ 4Mhz}
+\textcolor{comment}{//RF24 radio(RPI\_V2\_GPIO\_P1\_22, BCM2835\_SPI\_CS0, BCM2835\_SPI\_SPEED\_4MHZ);}
+
+\textcolor{comment}{// NEW: Setup for RPi B+}
+\textcolor{comment}{//RF24 radio(RPI\_BPLUS\_GPIO\_J8\_15,RPI\_BPLUS\_GPIO\_J8\_24, BCM2835\_SPI\_SPEED\_8MHZ);}
+
+\textcolor{comment}{// Setup for GPIO 15 CE and CE0 CSN with SPI Speed @ 8Mhz}
+\textcolor{comment}{//RF24 radio(RPI\_V2\_GPIO\_P1\_15, RPI\_V2\_GPIO\_P1\_24, BCM2835\_SPI\_SPEED\_8MHZ);}
+\hyperlink{classRF24}{RF24} radio(25,8, BCM2835\_SPI\_SPEED\_8MHZ);
+
+\textcolor{comment}{// RPi generic:}
+\textcolor{comment}{//RF24 radio(22,0);}
+
+\textcolor{comment}{/*** RPi Alternate ***/}
+\textcolor{comment}{//Note: Specify SPI BUS 0 or 1 instead of CS pin number.}
+\textcolor{comment}{// See http://tmrh20.github.io/RF24/RPi.html for more information on usage}
+
+\textcolor{comment}{//RPi Alternate, with MRAA}
+\textcolor{comment}{//RF24 radio(15,0);}
+
+\textcolor{comment}{//RPi Alternate, with SPIDEV - Note: Edit RF24/arch/BBB/spi.cpp and  set 'this->device =
+       "/dev/spidev0.0";;' or as listed in /dev}
+\textcolor{comment}{//RF24 radio(22,0);}
+
+
+\textcolor{comment}{/****************** Linux (BBB,x86,etc) ***********************/}
+
+\textcolor{comment}{// See http://tmrh20.github.io/RF24/pages.html for more information on usage}
+\textcolor{comment}{// See http://iotdk.intel.com/docs/master/mraa/ for more information on MRAA}
+\textcolor{comment}{// See https://www.kernel.org/doc/Documentation/spi/spidev for more information on SPIDEV}
+
+\textcolor{comment}{// Setup for ARM(Linux) devices like BBB using spidev (default is "/dev/spidev1.0" )}
+\textcolor{comment}{//RF24 radio(115,0);}
+
+\textcolor{comment}{//BBB Alternate, with mraa}
+\textcolor{comment}{// CE pin = (Header P9, Pin 13) = 59 = 13 + 46 }
+\textcolor{comment}{//Note: Specify SPI BUS 0 or 1 instead of CS pin number. }
+\textcolor{comment}{//RF24 radio(59,0);}
+
+\textcolor{comment}{/********** User Config *********/}
+\textcolor{comment}{// Assign a unique identifier for this node, 0 or 1}
+\textcolor{keywordtype}{bool} radioNumber = 1;
+
+\textcolor{comment}{/********************************/}
+
+\textcolor{comment}{// Radio pipe addresses for the 2 nodes to communicate.}
+\textcolor{keyword}{const} uint8\_t pipes[][6] = \{\textcolor{stringliteral}{"1Node"},\textcolor{stringliteral}{"2Node"}\};
+
+
+\textcolor{keywordtype}{int} main(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}** argv)\{
+
+  \textcolor{keywordtype}{bool} role\_ping\_out = \textcolor{keyword}{true}, role\_pong\_back = \textcolor{keyword}{false};
+  \textcolor{keywordtype}{bool} role = role\_pong\_back;
+
+  cout << \textcolor{stringliteral}{"RF24/examples/GettingStarted/\(\backslash\)n"};
+
+  \textcolor{comment}{// Setup and configure rf radio}
+  radio.begin();
+
+  \textcolor{comment}{// optionally, increase the delay between retries & # of retries}
+  radio.setRetries(15,15);
+  \textcolor{comment}{// Dump the configuration of the rf unit for debugging}
+  radio.printDetails();
+
+
+\textcolor{comment}{/********* Role chooser ***********/}
+
+  printf(\textcolor{stringliteral}{"\(\backslash\)n ************ Role Setup ***********\(\backslash\)n"});
+  \textcolor{keywordtype}{string} input = \textcolor{stringliteral}{""};
+  \textcolor{keywordtype}{char} myChar = \{0\};
+  cout << \textcolor{stringliteral}{"Choose a role: Enter 0 for pong\_back, 1 for ping\_out (CTRL+C to exit) \(\backslash\)n>"};
+  getline(cin,input);
+
+  \textcolor{keywordflow}{if}(input.length() == 1) \{
+    myChar = input[0];
+    \textcolor{keywordflow}{if}(myChar == \textcolor{charliteral}{'0'})\{
+        cout << \textcolor{stringliteral}{"Role: Pong Back, awaiting transmission "} << endl << endl;
+    \}\textcolor{keywordflow}{else}\{  cout << \textcolor{stringliteral}{"Role: Ping Out, starting transmission "} << endl << endl;
+        role = role\_ping\_out;
+    \}
+  \}
+\textcolor{comment}{/***********************************/}
+  \textcolor{comment}{// This simple sketch opens two pipes for these two nodes to communicate}
+  \textcolor{comment}{// back and forth.}
+
+    \textcolor{keywordflow}{if} ( !radioNumber )    \{
+      radio.openWritingPipe(pipes[0]);
+      radio.openReadingPipe(1,pipes[1]);
+    \} \textcolor{keywordflow}{else} \{
+      radio.openWritingPipe(pipes[1]);
+      radio.openReadingPipe(1,pipes[0]);
+    \}
+    
+    radio.startListening();
+    
+    \textcolor{comment}{// forever loop}
+    \textcolor{keywordflow}{while} (1)
+    \{
+        \textcolor{keywordflow}{if} (role == role\_ping\_out)
+        \{
+            \textcolor{comment}{// First, stop listening so we can talk.}
+            radio.stopListening();
+
+            \textcolor{comment}{// Take the time, and send it.  This will block until complete}
+
+            printf(\textcolor{stringliteral}{"Now sending...\(\backslash\)n"});
+            \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} time = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+
+            \textcolor{keywordtype}{bool} ok = radio.write( &time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+
+            \textcolor{keywordflow}{if} (!ok)\{
+                printf(\textcolor{stringliteral}{"failed.\(\backslash\)n"});
+            \}
+            \textcolor{comment}{// Now, continue listening}
+            radio.startListening();
+
+            \textcolor{comment}{// Wait here until we get a response, or timeout (250ms)}
+            \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} started\_waiting\_at = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+            \textcolor{keywordtype}{bool} timeout = \textcolor{keyword}{false};
+            \textcolor{keywordflow}{while} ( ! radio.available() && ! timeout ) \{
+                \textcolor{keywordflow}{if} (\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - started\_waiting\_at > 200 )
+                    timeout = \textcolor{keyword}{true};
+            \}
+
+
+            \textcolor{comment}{// Describe the results}
+            \textcolor{keywordflow}{if} ( timeout )
+            \{
+                printf(\textcolor{stringliteral}{"Failed, response timed out.\(\backslash\)n"});
+            \}
+            \textcolor{keywordflow}{else}
+            \{
+                \textcolor{comment}{// Grab the response, compare, and send to debugging spew}
+                \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;
+                radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+
+                \textcolor{comment}{// Spew it}
+                printf(\textcolor{stringliteral}{"Got response %lu, round-trip delay: %lu\(\backslash\)n"},got\_time,
+      \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()-got\_time);
+            \}
+            sleep(1);
+        \}
+
+        \textcolor{comment}{//}
+        \textcolor{comment}{// Pong back role.  Receive each packet, dump it out, and send it back}
+        \textcolor{comment}{//}
+
+        \textcolor{keywordflow}{if} ( role == role\_pong\_back )
+        \{
+            
+            \textcolor{comment}{// if there is data ready}
+            \textcolor{keywordflow}{if} ( radio.available() )
+            \{
+                \textcolor{comment}{// Dump the payloads until we've gotten everything}
+                \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;
+
+                \textcolor{comment}{// Fetch the payload, and see if this was the last one.}
+                \textcolor{keywordflow}{while}(radio.available())\{
+                    radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+                \}
+                radio.stopListening();
+                
+                radio.write( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+
+                \textcolor{comment}{// Now, resume listening so we catch the next packets.}
+                radio.startListening();
+
+                \textcolor{comment}{// Spew it}
+                printf(\textcolor{stringliteral}{"Got payload(%d) %lu...\(\backslash\)n"},\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}), got\_time);
+                
+                \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(925); \textcolor{comment}{//Delay after payload responded to, minimize RPi CPU time}
+                
+            \}
+        
+        \}
+
+    \} \textcolor{comment}{// forever loop}
+
+  \textcolor{keywordflow}{return} 0;
+\}
+
+\end{DoxyCodeInclude}
+ 

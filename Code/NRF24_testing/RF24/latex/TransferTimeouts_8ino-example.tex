@@ -1,0 +1,208 @@
+\hypertarget{TransferTimeouts_8ino-example}{}\section{Transfer\+Timeouts.\+ino}
+{\bfseries New\+: T\+M\+Rh20 }~\newline
+ This example demonstrates the use of and extended timeout period and auto-\/retries/auto-\/re\+Use to increase reliability in noisy or low signal scenarios. ~\newline
+
+
+Write this sketch to two different nodes. Put one of the nodes into \textquotesingle{}transmit\textquotesingle{} mode by connecting with the serial monitor and sending a \textquotesingle{}T\textquotesingle{}. The data ~\newline
+ transfer will begin, with the receiver displaying the payload count and the data transfer rate.
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{TMRh20 2014}
+\textcolor{comment}{}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include "\hyperlink{nRF24L01_8h}{nRF24L01.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{printf_8h}{printf.h}"}
+
+\textcolor{comment}{/*************  USER Configuration *****************************/}
+
+\hyperlink{classRF24}{RF24} radio(7,8);                        \textcolor{comment}{// Set up nRF24L01 radio on SPI bus plus pins 7 & 8}
+\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} timeoutPeriod = 3000;     \textcolor{comment}{// Set a user-defined timeout period. With auto-retransmit set to
+       (15,15) retransmission will take up to 60ms and as little as 7.5ms with it set to (1,15).}
+                                        \textcolor{comment}{// With a timeout period of 1000, the radio will retry each payload
+       for up to 1 second before giving up on the transmission and starting over}
+
+\textcolor{comment}{/***************************************************************/}
+
+\textcolor{keyword}{const} uint64\_t pipes[2] = \{ 0xABCDABCD71LL, 0x544d52687CLL \};   \textcolor{comment}{// Radio pipe addresses for the 2 nodes to
+       communicate.}
+
+byte data[32];                           \textcolor{comment}{//Data buffer}
+
+\textcolor{keyword}{volatile} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} counter;
+\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} rxTimer,startTime, stopTime, payloads = 0;  
+\textcolor{keywordtype}{bool} TX=1,RX=0,role=0, transferInProgress = 0;
+
+
+\textcolor{keywordtype}{void} setup(\textcolor{keywordtype}{void}) \{
+
+  Serial.begin(115200);
+  \hyperlink{printf_8h_afc0d9ca32710dff550ebe56ab6b39d23}{printf\_begin}();
+
+  radio.begin();                           \textcolor{comment}{// Setup and configure rf radio}
+  radio.setChannel(1);                     \textcolor{comment}{// Set the channel}
+  radio.setPALevel(\hyperlink{RF24_8h_a1e4cd0bea93e6b43422855fb0120aacea7d8d09f4a047b7c22655e56c98ca010c}{RF24\_PA\_LOW});           \textcolor{comment}{// Set PA LOW for this demonstration. We want the
+       radio to be as lossy as possible for this example.}
+  radio.setDataRate(\hyperlink{RF24_8h_a82745de4aa1251b7561564b3ed1d6522afd01f3fd55247a67c0bcfd459fe17fdf}{RF24\_1MBPS});           \textcolor{comment}{// Raise the data rate to reduce transmission distance
+       and increase lossiness}
+  radio.setAutoAck(1);                     \textcolor{comment}{// Ensure autoACK is enabled}
+  radio.setRetries(2,15);                  \textcolor{comment}{// Optionally, increase the delay between retries. Want the
+       number of auto-retries as high as possible (15)}
+  radio.setCRCLength(\hyperlink{RF24_8h_adbe00719f3f835c82bd007081d040a7ea6eeb0379e23be63559106d96ada47a56}{RF24\_CRC\_16});         \textcolor{comment}{// Set CRC length to 16-bit to ensure quality of data}
+  radio.openWritingPipe(pipes[0]);         \textcolor{comment}{// Open the default reading and writing pipe}
+  radio.openReadingPipe(1,pipes[1]);       
+  
+  radio.startListening();                 \textcolor{comment}{// Start listening}
+  radio.printDetails();                   \textcolor{comment}{// Dump the configuration of the rf unit for debugging}
+  
+  printf(\textcolor{stringliteral}{"\(\backslash\)n\(\backslash\)rRF24/examples/Transfer Rates/\(\backslash\)n\(\backslash\)r"});
+  printf(\textcolor{stringliteral}{"*** PRESS 'T' to begin transmitting to the other node\(\backslash\)n\(\backslash\)r"});
+  
+  randomSeed(analogRead(0));              \textcolor{comment}{//Seed for random number generation  }
+  \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0; i<32; i++)\{
+     data[i] = random(255);               \textcolor{comment}{//Load the buffer with random data}
+  \}
+  radio.powerUp();                        \textcolor{comment}{//Power up the radio}
+
+  
+\}
+
+
+
+\textcolor{keywordtype}{void} loop(\textcolor{keywordtype}{void})\{
+
+
+  \textcolor{keywordflow}{if}(role == TX)\{    
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(2000);                                              \textcolor{comment}{// Pause for a couple seconds between
+       transfers    }
+    printf(\textcolor{stringliteral}{"Initiating Extended Timeout Data Transfer\(\backslash\)n\(\backslash\)r"});
+
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} cycles = 1000;                              \textcolor{comment}{// Change this to a higher or lower number.
+       This is the number of payloads that will be sent.   }
+    
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} transferCMD[] = \{\textcolor{charliteral}{'H'},\textcolor{charliteral}{'S'},cycles \};          \textcolor{comment}{// Indicate to the other radio that we are
+       starting, and provide the number of payloads that will be sent }
+    radio.writeFast(&transferCMD,12);                         \textcolor{comment}{// Send the transfer command}
+    \textcolor{keywordflow}{if}(radio.txStandBy(timeoutPeriod))\{                       \textcolor{comment}{// If transfer initiation was successful, do
+       the following}
+   
+        startTime = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();                                 \textcolor{comment}{// For calculating transfer rate}
+        \textcolor{keywordtype}{boolean} timedOut = 0;                                 \textcolor{comment}{// Boolean for keeping track of failures}
+      
+        \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0; i<cycles; i++)\{                          \textcolor{comment}{// Loop through a number of cycles}
+          data[0] = i;                                        \textcolor{comment}{// Change the first byte of the payload for
+       identification}
+       
+          \textcolor{keywordflow}{if}(!radio.writeBlocking(&data,32,timeoutPeriod))\{   \textcolor{comment}{// If retries are failing and the user
+       defined timeout is exceeded}
+              timedOut = 1;                                   \textcolor{comment}{// Indicate failure}
+              counter = cycles;                               \textcolor{comment}{// Set the fail count to maximum}
+              \textcolor{keywordflow}{break};                                          \textcolor{comment}{// Break out of the for loop}
+          \}  
+        \}    
+  
+   
+        stopTime = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();                                  \textcolor{comment}{// Capture the time of completion or
+       failure}
+   
+       \textcolor{comment}{//This should be called to wait for completion and put the radio in standby mode after transmission,
+       returns 0 if data still in FIFO (timed out), 1 if success}
+       \textcolor{keywordflow}{if}(timedOut)\{ radio.txStandBy(); \}                     \textcolor{comment}{//Partially blocking standby, blocks until
+       success or max retries. FIFO flushed if auto timeout reached}
+       \textcolor{keywordflow}{else}\{ radio.txStandBy(timeoutPeriod);     \}            \textcolor{comment}{//Standby, block until FIFO empty (sent) or
+       user specified timeout reached. FIFO flushed if user timeout reached.}
+   
+   \}\textcolor{keywordflow}{else}\{                                             
+       Serial.println(\textcolor{stringliteral}{"Communication not established"});       \textcolor{comment}{//If unsuccessful initiating transfer, exit
+       and retry later}
+   \} 
+    
+   \textcolor{keywordtype}{float} rate = cycles * 32 / (stopTime - startTime);         \textcolor{comment}{//Display results:}
+    
+   Serial.print(\textcolor{stringliteral}{"Transfer complete at "}); Serial.print(rate); printf(\textcolor{stringliteral}{" KB/s \(\backslash\)n\(\backslash\)r"});
+   Serial.print(counter);
+   Serial.print(\textcolor{stringliteral}{" of "});
+   Serial.print(cycles); Serial.println(\textcolor{stringliteral}{" Packets Failed to Send"});
+   counter = 0;   
+    
+   \}
+  
+  
+  
+\textcolor{keywordflow}{if}(role == RX)\{  
+  
+  \textcolor{keywordflow}{if}(!transferInProgress)\{                       \textcolor{comment}{// If a bulk data transfer has not been started}
+     \textcolor{keywordflow}{if}(radio.available())\{                      
+        radio.read(&data,32);                    \textcolor{comment}{//Read any available payloads for analysis}
+
+        \textcolor{keywordflow}{if}(data[0] == \textcolor{charliteral}{'H'} && data[4] == \textcolor{charliteral}{'S'})\{    \textcolor{comment}{// If a bulk data transfer command has been received}
+          payloads = data[8];                    \textcolor{comment}{// Read the first two bytes of the unsigned long. Need to
+       read the 3rd and 4th if sending more than 65535 payloads}
+          payloads |= data[9] << 8;              \textcolor{comment}{// This is the number of payloads that will be sent}
+          counter = 0;                           \textcolor{comment}{// Reset the payload counter to 0}
+          transferInProgress = 1;                \textcolor{comment}{// Indicate it has started}
+          startTime = rxTimer = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();        \textcolor{comment}{// Capture the start time to measure transfer rate
+       and calculate timeouts}
+        \}
+     \}
+  \}\textcolor{keywordflow}{else}\{
+     \textcolor{keywordflow}{if}(radio.available())\{                     \textcolor{comment}{// If in bulk transfer mode, and a payload is available}
+       radio.read(&data,32);                    \textcolor{comment}{// Read the payload}
+       rxTimer = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();                      \textcolor{comment}{// Reset the timeout timer}
+       counter++;                               \textcolor{comment}{// Keep a count of received payloads}
+     \}\textcolor{keywordflow}{else}
+     \textcolor{keywordflow}{if}(\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - rxTimer > timeoutPeriod)\{    \textcolor{comment}{// If no data available, check the timeout period}
+       Serial.println(\textcolor{stringliteral}{"Transfer Failed"});       \textcolor{comment}{// If per-payload timeout exceeeded, end the transfer}
+       transferInProgress = 0; 
+     \}\textcolor{keywordflow}{else}
+     \textcolor{keywordflow}{if}(counter >= payloads)\{                   \textcolor{comment}{// If the specified number of payloads is reached, transfer
+       is completed}
+      startTime = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - startTime;         \textcolor{comment}{// Calculate the total time spent during transfer}
+      \textcolor{keywordtype}{float} numBytes = counter*32;              \textcolor{comment}{// Calculate the number of bytes transferred}
+      Serial.print(\textcolor{stringliteral}{"Rate: "});                   \textcolor{comment}{// Print the transfer rate and number of payloads}
+      Serial.print(numBytes/startTime);
+      Serial.println(\textcolor{stringliteral}{" KB/s"});
+      printf(\textcolor{stringliteral}{"Payload Count: %d \(\backslash\)n\(\backslash\)r"}, counter);
+      transferInProgress = 0;                   \textcolor{comment}{// End the transfer as complete}
+    \}     
+  \}
+  
+   
+  \}
+  
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Change roles}
+  \textcolor{comment}{//}
+
+  \textcolor{keywordflow}{if} ( Serial.available() )
+  \{
+    \textcolor{keywordtype}{char} c = toupper(Serial.read());
+    \textcolor{keywordflow}{if} ( c == \textcolor{charliteral}{'T'} && role == RX )
+    \{
+      printf(\textcolor{stringliteral}{"*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK\(\backslash\)n\(\backslash\)r"});
+      radio.openWritingPipe(pipes[1]);
+      radio.openReadingPipe(1,pipes[0]);
+      radio.stopListening();
+      role = TX;                  \textcolor{comment}{// Become the primary transmitter (ping out)}
+    \}
+    \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ( c == \textcolor{charliteral}{'R'} && role == TX )
+    \{
+      radio.openWritingPipe(pipes[0]);
+      radio.openReadingPipe(1,pipes[1]); 
+      radio.startListening();
+      printf(\textcolor{stringliteral}{"*** CHANGING TO RECEIVE ROLE -- PRESS 'T' TO SWITCH BACK\(\backslash\)n\(\backslash\)r"});      
+      role = RX;                \textcolor{comment}{// Become the primary receiver (pong back)}
+    \}
+  \}
+\}
+
+
+\end{DoxyCodeInclude}
+ 

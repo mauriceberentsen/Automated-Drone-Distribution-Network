@@ -1,0 +1,81 @@
+A\+T\+Tiny support is built into the library, so users are not required to include S\+P\+I.\+h in their sketches~\newline
+ See the included rf24ping85 example for pin info and usage
+
+Some versions of Arduino I\+DE may require a patch to allow use of the full program space on A\+T\+Tiny~\newline
+ See \href{https://github.com/TCWORLD/ATTinyCore/tree/master/PCREL%20Patch%20for%20GCC}{\tt https\+://github.\+com/\+T\+C\+W\+O\+R\+L\+D/\+A\+T\+Tiny\+Core/tree/master/\+P\+C\+R\+E\+L\%20\+Patch\%20for\%20\+G\+CC} for A\+T\+Tiny patch
+
+A\+T\+Tiny board support initially added from \href{https://github.com/jscrane/RF24}{\tt https\+://github.\+com/jscrane/\+R\+F24}\hypertarget{ATTiny_Hardware}{}\section{Hardware Configuration}\label{ATTiny_Hardware}
+By tong67 ( \href{https://github.com/tong67}{\tt https\+://github.\+com/tong67} )
+
+{\bfseries A\+Ttiny25/45/85 Pin map with C\+E\+\_\+\+P\+IN 3 and C\+S\+N\+\_\+\+P\+IN 4} 
+\begin{DoxyCode}
+                             +-\(\backslash\)/-+
+               NC      PB5  1|o   |8  Vcc --- nRF24L01  VCC, pin2 --- LED --- 5V
+nRF24L01  CE, pin3 --- PB3  2|    |7  PB2 --- nRF24L01  SCK, pin5
+nRF24L01 CSN, pin4 --- PB4  3|    |6  PB1 --- nRF24L01 MOSI, pin6
+nRF24L01 GND, pin1 --- GND  4|    |5  PB0 --- nRF24L01 MISO, pin7
+                             +----+ 
+\end{DoxyCode}
+
+
+~\newline
+ {\bfseries A\+Ttiny25/45/85 Pin map with C\+E\+\_\+\+P\+IN 3 and C\+S\+N\+\_\+\+P\+IN 3} =$>$ P\+B3 and P\+B4 are free to use for application ~\newline
+ Circuit idea from \href{http://nerdralph.blogspot.ca/2014/01/nrf24l01-control-with-3-attiny85-pins.html}{\tt http\+://nerdralph.\+blogspot.\+ca/2014/01/nrf24l01-\/control-\/with-\/3-\/attiny85-\/pins.\+html} ~\newline
+ Original RC combination was 1\+K/100nF. 22\+K/10nF combination worked better. ~\newline
+ For best settletime delay value in R\+F24\+::csn() the timing\+Search3pin.\+ino sketch can be used. ~\newline
+ This configuration is enabled when C\+E\+\_\+\+P\+IN and C\+S\+N\+\_\+\+P\+IN are equal, e.\+g. both 3 ~\newline
+ Because CE is always high the power consumption is higher than for 5 pins solution ~\newline
+ 
+\begin{DoxyCode}
+                                                                                       ^^         
+                             +-\(\backslash\)/-+           nRF24L01   CE, pin3 ------|              \textcolor{comment}{//         }
+                       PB5  1|o   |8  Vcc --- nRF24L01  VCC, pin2 ------x----------x--|<|-- 5V    
+               NC      PB3  2|    |7  PB2 --- nRF24L01  SCK, pin5 --|<|---x-[22k]--|  LED         
+               NC      PB4  3|    |6  PB1 --- nRF24L01 MOSI, pin6  1n4148 |                       
+nRF24L01 GND, pin1 -x- GND  4|    |5  PB0 --- nRF24L01 MISO, pin7         |                       
+                    |        +----+                                       |                       
+                    |-----------------------------------------------||----x-- nRF24L01 CSN, pin4  
+                                                                  10nF                            
+\end{DoxyCode}
+
+
+~\newline
+ {\bfseries A\+Ttiny24/44/84 Pin map with C\+E\+\_\+\+P\+IN 8 and C\+S\+N\+\_\+\+P\+IN 7} ~\newline
+ Schematic provided and successfully tested by Carmine Pastore (\href{https://github.com/Carminepz}{\tt https\+://github.\+com/\+Carminepz}) ~\newline
+ 
+\begin{DoxyCode}
+                              +-\(\backslash\)/-+                                                              
+nRF24L01  VCC, pin2 --- VCC  1|o   |14 GND --- nRF24L01  GND, pin1
+                        PB0  2|    |13 AREF
+                        PB1  3|    |12 PA1
+                        PB3  4|    |11 PA2 --- nRF24L01   CE, pin3
+                        PB2  5|    |10 PA3 --- nRF24L01  CSN, pin4
+                        PA7  6|    |9  PA4 --- nRF24L01  SCK, pin5
+nRF24L01 MISO, pin7 --- PA6  7|    |8  PA5 --- nRF24L01 MOSI, pin6
+                              +----+
+\end{DoxyCode}
+
+
+~\newline
+ {\bfseries A\+Ttiny2313/4313 Pin map with C\+E\+\_\+\+P\+IN 12 and C\+S\+N\+\_\+\+P\+IN 13} ~\newline
+ 
+\begin{DoxyCode}
+                              +-\(\backslash\)/-+                                                              
+                        PA2  1|o   |20 VCC --- nRF24L01  VCC, pin2
+                        PD0  2|    |19 PB7 --- nRF24L01  SCK, pin5
+                        PD1  3|    |18 PB6 --- nRF24L01 MOSI, pin6
+                        PA1  4|    |17 PB5 --- nRF24L01 MISO, pin7
+                        PA0  5|    |16 PB4 --- nRF24L01  CSN, pin4
+                        PD2  6|    |15 PB3 --- nRF24L01   CE, pin3
+                        PD3  7|    |14 PB2
+                        PD4  8|    |13 PB1
+                        PD5  9|    |12 PB0
+nRF24L01  GND, pin1 --- GND 10|    |11 PD6
+                              +----+
+\end{DoxyCode}
+
+
+~\newline
+~\newline
+~\newline
+ 

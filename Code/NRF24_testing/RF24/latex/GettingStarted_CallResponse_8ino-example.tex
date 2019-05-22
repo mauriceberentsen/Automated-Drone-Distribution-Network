@@ -1,0 +1,152 @@
+\hypertarget{GettingStarted_CallResponse_8ino-example}{}\section{Getting\+Started\+\_\+\+Call\+Response.\+ino}
+{\bfseries For Arduino}~\newline
+ {\bfseries New\+: T\+M\+Rh20 2014}~\newline
+
+
+This example continues to make use of all the normal functionality of the radios including the auto-\/ack and auto-\/retry features, but allows ack-\/payloads to be written optionlly as well. ~\newline
+ This allows very fast call-\/response communication, with the responding radio never having to switch out of Primary Receiver mode to send back a payload, but having the option to switch to ~\newline
+ primary transmitter if wanting to initiate communication instead of respond to a commmunication.
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{   Dec 2014 - TMRh20 - Updated}
+\textcolor{comment}{   Derived from examples by J. Coliz <maniacbug@ymail.com>}
+\textcolor{comment}{*/}
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+
+\textcolor{comment}{/****************** User Config ***************************/}
+\textcolor{comment}{/***      Set this radio as radio number 0 or 1         ***/}
+\textcolor{keywordtype}{bool} radioNumber = 0;
+
+\textcolor{comment}{/* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 */}
+\hyperlink{classRF24}{RF24} radio(7,8);
+\textcolor{comment}{/**********************************************************/}
+                                                                           \textcolor{comment}{// Topology}
+byte addresses[][6] = \{\textcolor{stringliteral}{"1Node"},\textcolor{stringliteral}{"2Node"}\};              \textcolor{comment}{// Radio pipe addresses for the 2 nodes to
+       communicate.}
+
+\textcolor{comment}{// Role management: Set up role.  This sketch uses the same software for all the nodes}
+\textcolor{comment}{// in this system.  Doing so greatly simplifies testing.  }
+\textcolor{keyword}{typedef} \textcolor{keyword}{enum} \{ role\_ping\_out = 1, role\_pong\_back \} role\_e;                 \textcolor{comment}{// The various roles supported
+       by this sketch}
+\textcolor{keyword}{const} \textcolor{keywordtype}{char}* role\_friendly\_name[] = \{ \textcolor{stringliteral}{"invalid"}, \textcolor{stringliteral}{"Ping out"}, \textcolor{stringliteral}{"Pong back"}\};  \textcolor{comment}{// The debug-friendly names of
+       those roles}
+role\_e role = role\_pong\_back;                                              \textcolor{comment}{// The role of the current
+       running sketch}
+
+byte counter = 1;                                                          \textcolor{comment}{// A single byte to keep track
+       of the data being sent back and forth}
+
+
+\textcolor{keywordtype}{void} setup()\{
+
+  Serial.begin(115200);
+  Serial.println(F(\textcolor{stringliteral}{"RF24/examples/GettingStarted\_CallResponse"}));
+  Serial.println(F(\textcolor{stringliteral}{"*** PRESS 'T' to begin transmitting to the other node"}));
+ 
+  \textcolor{comment}{// Setup and configure radio}
+
+  radio.begin();
+
+  radio.enableAckPayload();                     \textcolor{comment}{// Allow optional ack payloads}
+  radio.enableDynamicPayloads();                \textcolor{comment}{// Ack payloads are dynamic payloads}
+  
+  \textcolor{keywordflow}{if}(radioNumber)\{
+    radio.openWritingPipe(addresses[1]);        \textcolor{comment}{// Both radios listen on the same pipes by default, but
+       opposite addresses}
+    radio.openReadingPipe(1,addresses[0]);      \textcolor{comment}{// Open a reading pipe on address 0, pipe 1}
+  \}\textcolor{keywordflow}{else}\{
+    radio.openWritingPipe(addresses[0]);
+    radio.openReadingPipe(1,addresses[1]);
+  \}
+  radio.startListening();                       \textcolor{comment}{// Start listening  }
+  
+  radio.writeAckPayload(1,&counter,1);          \textcolor{comment}{// Pre-load an ack-paylod into the FIFO buffer for pipe 1}
+  \textcolor{comment}{//radio.printDetails();}
+\}
+
+\textcolor{keywordtype}{void} loop(\textcolor{keywordtype}{void}) \{
+
+  
+\textcolor{comment}{/****************** Ping Out Role ***************************/}
+
+  \textcolor{keywordflow}{if} (role == role\_ping\_out)\{                               \textcolor{comment}{// Radio is in ping mode}
+
+    byte gotByte;                                           \textcolor{comment}{// Initialize a variable for the incoming
+       response}
+    
+    radio.stopListening();                                  \textcolor{comment}{// First, stop listening so we can talk.      }
+    Serial.print(F(\textcolor{stringliteral}{"Now sending "}));                         \textcolor{comment}{// Use a simple byte counter as payload}
+    Serial.println(counter);
+    
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} time = micros();                          \textcolor{comment}{// Record the current microsecond count   }
+                                                            
+    \textcolor{keywordflow}{if} ( radio.write(&counter,1) )\{                         \textcolor{comment}{// Send the counter variable to the other radio
+       }
+        \textcolor{keywordflow}{if}(!radio.available())\{                             \textcolor{comment}{// If nothing in the buffer, we got an ack but
+       it is blank}
+            Serial.print(F(\textcolor{stringliteral}{"Got blank response. round-trip delay: "}));
+            Serial.print(micros()-time);
+            Serial.println(F(\textcolor{stringliteral}{" microseconds"}));     
+        \}\textcolor{keywordflow}{else}\{      
+            \textcolor{keywordflow}{while}(radio.available() )\{                      \textcolor{comment}{// If an ack with payload was received}
+                radio.read( &gotByte, 1 );                  \textcolor{comment}{// Read it, and display the response time}
+                \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} timer = micros();
+                
+                Serial.print(F(\textcolor{stringliteral}{"Got response "}));
+                Serial.print(gotByte);
+                Serial.print(F(\textcolor{stringliteral}{" round-trip delay: "}));
+                Serial.print(timer-time);
+                Serial.println(F(\textcolor{stringliteral}{" microseconds"}));
+                counter++;                                  \textcolor{comment}{// Increment the counter variable}
+            \}
+        \}
+    
+    \}\textcolor{keywordflow}{else}\{        Serial.println(F(\textcolor{stringliteral}{"Sending failed."})); \}          \textcolor{comment}{// If no ack response, sending failed}
+    
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(1000);  \textcolor{comment}{// Try again later}
+  \}
+
+
+\textcolor{comment}{/****************** Pong Back Role ***************************/}
+
+  \textcolor{keywordflow}{if} ( role == role\_pong\_back ) \{
+    byte pipeNo, gotByte;                          \textcolor{comment}{// Declare variables for the pipe and the byte received}
+    \textcolor{keywordflow}{while}( radio.available(&pipeNo))\{              \textcolor{comment}{// Read all available payloads}
+      radio.read( &gotByte, 1 );                   
+                                                   \textcolor{comment}{// Since this is a call-response. Respond directly with
+       an ack payload.}
+      gotByte += 1;                                \textcolor{comment}{// Ack payloads are much more efficient than switching
+       to transmit mode to respond to a call}
+      radio.writeAckPayload(pipeNo,&gotByte, 1 );  \textcolor{comment}{// This can be commented out to send empty payloads.}
+      Serial.print(F(\textcolor{stringliteral}{"Loaded next response "}));
+      Serial.println(gotByte);  
+   \}
+ \}
+
+
+
+\textcolor{comment}{/****************** Change Roles via Serial Commands ***************************/}
+
+  \textcolor{keywordflow}{if} ( Serial.available() )
+  \{
+    \textcolor{keywordtype}{char} c = toupper(Serial.read());
+    \textcolor{keywordflow}{if} ( c == \textcolor{charliteral}{'T'} && role == role\_pong\_back )\{      
+      Serial.println(F(\textcolor{stringliteral}{"*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK"}));
+      role = role\_ping\_out;  \textcolor{comment}{// Become the primary transmitter (ping out)}
+      counter = 1;
+   \}\textcolor{keywordflow}{else}
+    \textcolor{keywordflow}{if} ( c == \textcolor{charliteral}{'R'} && role == role\_ping\_out )\{
+      Serial.println(F(\textcolor{stringliteral}{"*** CHANGING TO RECEIVE ROLE -- PRESS 'T' TO SWITCH BACK"}));      
+       role = role\_pong\_back; \textcolor{comment}{// Become the primary receiver (pong back)}
+       radio.startListening();
+       counter = 1;
+       radio.writeAckPayload(1,&counter,1);
+       
+    \}
+  \}
+\}
+\end{DoxyCodeInclude}
+ 

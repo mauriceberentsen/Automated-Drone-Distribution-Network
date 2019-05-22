@@ -1,0 +1,236 @@
+\hypertarget{pingpair_sleepy_8ino-example}{}\section{pingpair\+\_\+sleepy.\+ino}
+{\bfseries Update\+: T\+M\+Rh20}~\newline
+ This is an example of how to use the \hyperlink{classRF24}{R\+F24} class to create a battery-\/ efficient system. It is just like the Getting\+Started\+\_\+\+Call\+Response example, but the~\newline
+ ping node powers down the radio and sleeps the M\+CU after every ping/pong cycle, and the receiver sleeps between payloads. ~\newline
+
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>}
+\textcolor{comment}{}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{ }
+\textcolor{comment}{ TMRh20 2014 - Updates to the library allow sleeping both in TX and RX modes:}
+\textcolor{comment}{      TX Mode: The radio can be powered down (.9uA current) and the Arduino slept using the watchdog timer}
+\textcolor{comment}{      RX Mode: The radio can be left in standby mode (22uA current) and the Arduino slept using an
+       interrupt pin}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include <avr/sleep.h>}
+\textcolor{preprocessor}{#include <avr/power.h>}
+\textcolor{preprocessor}{#include "\hyperlink{nRF24L01_8h}{nRF24L01.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{printf_8h}{printf.h}"}
+
+
+\textcolor{comment}{// Set up nRF24L01 radio on SPI bus plus pins 7 & 8}
+\hyperlink{classRF24}{RF24} radio(7,8);
+
+\textcolor{comment}{// sets the role of this unit in hardware.  Connect to GND to be the 'pong' receiver}
+\textcolor{comment}{// Leave open to be the 'ping' transmitter}
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} role\_pin = 5;
+
+\textcolor{keyword}{const} uint64\_t pipes[2] = \{ 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL \};   \textcolor{comment}{// Radio pipe addresses for the 2 nodes to
+       communicate.}
+
+\textcolor{comment}{// Role management}
+\textcolor{comment}{// Set up role.  This sketch uses the same software for all the nodes}
+\textcolor{comment}{// in this system.  Doing so greatly simplifies testing.  The hardware itself specifies}
+\textcolor{comment}{// which node it is.}
+
+\textcolor{comment}{// The various roles supported by this sketch}
+\textcolor{keyword}{typedef} \textcolor{keyword}{enum} \{ role\_ping\_out = 1, role\_pong\_back \} role\_e;
+
+\textcolor{comment}{// The debug-friendly names of those roles}
+\textcolor{keyword}{const} \textcolor{keywordtype}{char}* role\_friendly\_name[] = \{ \textcolor{stringliteral}{"invalid"}, \textcolor{stringliteral}{"Ping out"}, \textcolor{stringliteral}{"Pong back"}\};
+
+\textcolor{comment}{// The role of the current running sketch}
+role\_e role;
+
+
+\textcolor{comment}{// Sleep declarations}
+\textcolor{keyword}{typedef} \textcolor{keyword}{enum} \{ wdt\_16ms = 0, wdt\_32ms, wdt\_64ms, wdt\_128ms, wdt\_250ms, wdt\_500ms, wdt\_1s, wdt\_2s, wdt\_4s, 
+      wdt\_8s \} wdt\_prescalar\_e;
+
+\textcolor{keywordtype}{void} setup\_watchdog(uint8\_t prescalar);
+\textcolor{keywordtype}{void} do\_sleep(\textcolor{keywordtype}{void});
+
+\textcolor{keyword}{const} \textcolor{keywordtype}{short} sleep\_cycles\_per\_transmission = 4;
+\textcolor{keyword}{volatile} \textcolor{keywordtype}{short} sleep\_cycles\_remaining = sleep\_cycles\_per\_transmission;
+
+
+
+\textcolor{keywordtype}{void} setup()\{
+
+  \textcolor{comment}{// set up the role pin}
+  \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pinMode}(role\_pin, \hyperlink{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}{INPUT});
+  \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digitalWrite}(role\_pin,\hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});
+  \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(20); \textcolor{comment}{// Just to get a solid reading on the role pin}
+
+  \textcolor{comment}{// read the address pin, establish our role}
+  \textcolor{keywordflow}{if} ( digitalRead(role\_pin) )
+    role = role\_ping\_out;
+  \textcolor{keywordflow}{else}
+    role = role\_pong\_back;
+
+  Serial.begin(115200);
+  \hyperlink{printf_8h_afc0d9ca32710dff550ebe56ab6b39d23}{printf\_begin}();
+  Serial.print(F(\textcolor{stringliteral}{"\(\backslash\)n\(\backslash\)rRF24/examples/pingpair\_sleepy/\(\backslash\)n\(\backslash\)rROLE: "}));
+  Serial.println(role\_friendly\_name[role]);
+
+  \textcolor{comment}{// Prepare sleep parameters}
+  \textcolor{comment}{// Only the ping out role uses WDT.  Wake up every 4s to send a ping}
+  \textcolor{comment}{//if ( role == role\_ping\_out )}
+    setup\_watchdog(wdt\_4s);
+
+  \textcolor{comment}{// Setup and configure rf radio}
+
+  radio.begin();
+
+  \textcolor{comment}{// Open pipes to other nodes for communication}
+
+  \textcolor{comment}{// This simple sketch opens two pipes for these two nodes to communicate}
+  \textcolor{comment}{// back and forth.}
+  \textcolor{comment}{// Open 'our' pipe for writing}
+  \textcolor{comment}{// Open the 'other' pipe for reading, in position #1 (we can have up to 5 pipes open for reading)}
+
+  \textcolor{keywordflow}{if} ( role == role\_ping\_out ) \{
+    radio.openWritingPipe(pipes[0]);
+    radio.openReadingPipe(1,pipes[1]);
+  \} \textcolor{keywordflow}{else} \{
+    radio.openWritingPipe(pipes[1]);
+    radio.openReadingPipe(1,pipes[0]);
+  \}
+
+  \textcolor{comment}{// Start listening}
+  radio.startListening();
+
+  \textcolor{comment}{// Dump the configuration of the rf unit for debugging}
+  \textcolor{comment}{//radio.printDetails();}
+\}
+
+\textcolor{keywordtype}{void} loop()\{
+
+  
+  \textcolor{keywordflow}{if} (role == role\_ping\_out)  \{                     \textcolor{comment}{// Ping out role.  Repeatedly send the current time}
+    radio.powerUp();                                \textcolor{comment}{// Power up the radio after sleeping}
+    radio.stopListening();                          \textcolor{comment}{// First, stop listening so we can talk.}
+                         
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} time = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();                  \textcolor{comment}{// Take the time, and send it.                   
+        }
+    Serial.print(F(\textcolor{stringliteral}{"Now sending... "}));
+    Serial.println(time);
+    
+    radio.write( &time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+
+    radio.startListening();                         \textcolor{comment}{// Now, continue listening}
+    
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} started\_waiting\_at = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();    \textcolor{comment}{// Wait here until we get a response, or timeout
+       (250ms)}
+    \textcolor{keywordtype}{bool} timeout = \textcolor{keyword}{false};
+    \textcolor{keywordflow}{while} ( ! radio.available()  )\{
+        \textcolor{keywordflow}{if} (\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - started\_waiting\_at > 250 )\{  \textcolor{comment}{// Break out of the while loop if nothing
+       available}
+          timeout = \textcolor{keyword}{true};
+          \textcolor{keywordflow}{break};
+        \}
+    \}
+    
+    \textcolor{keywordflow}{if} ( timeout ) \{                                \textcolor{comment}{// Describe the results}
+        Serial.println(F(\textcolor{stringliteral}{"Failed, response timed out."}));
+    \} \textcolor{keywordflow}{else} \{
+        \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;                     \textcolor{comment}{// Grab the response, compare, and send to debugging
+       spew}
+        radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+    
+        printf(\textcolor{stringliteral}{"Got response %lu, round-trip delay: %lu\(\backslash\)n\(\backslash\)r"},got\_time,\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()-got\_time);
+    \}
+
+    \textcolor{comment}{// Shut down the system}
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(500);                     \textcolor{comment}{// Experiment with some delay here to see if it has an effect}
+                                    \textcolor{comment}{// Power down the radio.  }
+    radio.powerDown();              \textcolor{comment}{// NOTE: The radio MUST be powered back up again manually}
+
+                                    \textcolor{comment}{// Sleep the MCU.}
+      do\_sleep();
+
+
+  \}
+
+
+  \textcolor{comment}{// Pong back role.  Receive each packet, dump it out, and send it back}
+  \textcolor{keywordflow}{if} ( role == role\_pong\_back ) \{
+    
+    \textcolor{keywordflow}{if} ( radio.available() ) \{                                  \textcolor{comment}{// if there is data ready}
+      
+        \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;
+        \textcolor{keywordflow}{while} (radio.available()) \{                             \textcolor{comment}{// Dump the payloads until we've gotten
+       everything}
+          radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );       \textcolor{comment}{// Get the payload, and see if this was the
+       last one.}
+                                                                \textcolor{comment}{// Spew it.  Include our time, because the
+       ping\_out millis counter is unreliable}
+          printf(\textcolor{stringliteral}{"Got payload %lu @ %lu..."},got\_time,\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()); \textcolor{comment}{// due to it sleeping}
+        \}
+     
+        radio.stopListening();                                  \textcolor{comment}{// First, stop listening so we can talk}
+        radio.write( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );        \textcolor{comment}{// Send the final one back.}
+        Serial.println(F(\textcolor{stringliteral}{"Sent response."}));
+        radio.startListening();                                 \textcolor{comment}{// Now, resume listening so we catch the
+       next packets.}
+    \} \textcolor{keywordflow}{else} \{
+        Serial.println(F(\textcolor{stringliteral}{"Sleeping"}));
+        \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(50);                                             \textcolor{comment}{// Delay so the serial data can print
+       out}
+        do\_sleep();
+
+    \}
+  \}
+\}
+
+\textcolor{keywordtype}{void} wakeUp()\{
+  sleep\_disable();
+\}
+
+\textcolor{comment}{// Sleep helpers}
+
+\textcolor{comment}{//Prescaler values}
+\textcolor{comment}{// 0=16ms, 1=32ms,2=64ms,3=125ms,4=250ms,5=500ms}
+\textcolor{comment}{// 6=1 sec,7=2 sec, 8=4 sec, 9= 8sec}
+
+\textcolor{keywordtype}{void} setup\_watchdog(uint8\_t prescalar)\{
+
+  uint8\_t wdtcsr = prescalar & 7;
+  \textcolor{keywordflow}{if} ( prescalar & 8 )
+    wdtcsr |= \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(WDP3);
+  MCUSR &= ~\hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(WDRF);                      \textcolor{comment}{// Clear the WD System Reset Flag}
+  WDTCSR = \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(WDCE) | \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(WDE);            \textcolor{comment}{// Write the WD Change enable bit to enable changing the
+       prescaler and enable system reset}
+  WDTCSR = \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(WDCE) | wdtcsr | \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(WDIE);  \textcolor{comment}{// Write the prescalar bits (how long to sleep, enable
+       the interrupt to wake the MCU}
+\}
+
+ISR(WDT\_vect)
+\{
+  \textcolor{comment}{//--sleep\_cycles\_remaining;}
+  Serial.println(F(\textcolor{stringliteral}{"WDT"}));
+\}
+
+\textcolor{keywordtype}{void} do\_sleep(\textcolor{keywordtype}{void})
+\{
+  set\_sleep\_mode(SLEEP\_MODE\_PWR\_DOWN); \textcolor{comment}{// sleep mode is set here}
+  sleep\_enable();
+  attachInterrupt(0,wakeUp,\hyperlink{group__Porting__General_gab811d8c6ff3a505312d3276590444289}{LOW});
+  WDTCSR |= \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(WDIE);
+  sleep\_mode();                        \textcolor{comment}{// System sleeps here}
+                                       \textcolor{comment}{// The WDT\_vect interrupt wakes the MCU from here}
+  sleep\_disable();                     \textcolor{comment}{// System continues execution here when watchdog timed out  }
+  detachInterrupt(0);  
+  WDTCSR &= ~\hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\_BV}(WDIE);  
+\}
+\end{DoxyCodeInclude}
+ 

@@ -1,0 +1,168 @@
+\hyperlink{classRF24}{R\+F24} supports a variety of Linux based devices via various drivers. Some boards like R\+Pi can utilize multiple methods to drive the G\+P\+IO and S\+PI functionality.
+
+~\newline
+ \hypertarget{RPi_PreConfig}{}\section{Potential Pre\+Configuration}\label{RPi_PreConfig}
+If S\+PI is not already enabled, load it on boot\+: 
+\begin{DoxyCode}
+sudo raspi-config  
+\end{DoxyCode}
+ A. Update the tool via the menu as required~\newline
+ B. Select {\bfseries Advanced} and {\bfseries enable the S\+PI kernel module} ~\newline
+ C. Update other software and libraries 
+\begin{DoxyCode}
+sudo apt-\textcolor{keyword}{get} update 
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+sudo apt-\textcolor{keyword}{get} upgrade 
+\end{DoxyCode}
+ ~\newline
+~\newline
+\hypertarget{RPi_Build}{}\section{Build Options}\label{RPi_Build}
+The default build on Raspberry Pi utilizes the included {\bfseries B\+C\+M2835} driver from \href{http://www.airspayce.com/mikem/bcm2835}{\tt http\+://www.\+airspayce.\+com/mikem/bcm2835}
+\begin{DoxyEnumerate}
+\item 
+\begin{DoxyCode}
+sudo make install -B 
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+Build using the {\bfseries M\+R\+AA} library from \href{http://iotdk.intel.com/docs/master/mraa/index.html}{\tt http\+://iotdk.\+intel.\+com/docs/master/mraa/index.\+html} ~\newline
+ M\+R\+AA is not included. See the \href{MRAA.html}{\tt M\+R\+AA} platform page for more information.
+
+
+\begin{DoxyEnumerate}
+\item Install, and build M\+R\+AA 
+\begin{DoxyCode}
+git clone https:\textcolor{comment}{//github.com/intel-iot-devkit/mraa.git}
+cd mraa
+mkdir build
+cd build
+cmake .. -DBUILDSWIGNODE=OFF
+sudo make install
+\end{DoxyCode}
+
+\item Complete the install ~\newline
+ 
+\begin{DoxyCode}
+nano /etc/ld.so.conf 
+\end{DoxyCode}
+ Add the line
+\begin{DoxyCode}
+/usr/local/lib/arm-linux-gnueabihf 
+\end{DoxyCode}
+ Run
+\begin{DoxyCode}
+sudo ldconfig 
+\end{DoxyCode}
+
+\item Install \hyperlink{classRF24}{R\+F24}, using M\+R\+AA 
+\begin{DoxyCode}
+./configure --driver=MRAA
+sudo make install -B
+\end{DoxyCode}
+ See the gettingstarted example for an example of pin configuration
+\end{DoxyEnumerate}
+
+Build using {\bfseries S\+P\+I\+D\+EV}
+
+
+\begin{DoxyEnumerate}
+\item Make sure that spi device support is enabled and /dev/spidev$<$a$>$.$<$b$>$ is present
+\item Install \hyperlink{classRF24}{R\+F24}, using S\+P\+I\+D\+EV 
+\begin{DoxyCode}
+./configure --driver=SPIDEV
+sudo make install -B
+\end{DoxyCode}
+
+\item See the gettingstarted example for an example of pin configuration
+\end{DoxyEnumerate}
+
+~\newline
+ \hypertarget{RPi_Pins}{}\section{Connections and Pin Configuration}\label{RPi_Pins}
+Using pin 15/\+G\+P\+IO 22 for CE, pin 24/\+G\+P\+I\+O8 (C\+E0) for C\+SN
+
+Can use either R\+Pi C\+E0 or C\+E1 pins for radio C\+SN.~\newline
+ Choose any R\+Pi output pin for radio CE pin.
+
+{\bfseries B\+C\+M2835 Constructor\+:} 
+\begin{DoxyCode}
+\hyperlink{classRF24}{RF24} radio(RPI\_V2\_GPIO\_P1\_15,BCM2835\_SPI\_CS0, BCM2835\_SPI\_SPEED\_8MHZ);
+ or
+\hyperlink{classRF24}{RF24} radio(RPI\_V2\_GPIO\_P1\_15,BCM2835\_SPI\_CS1, BCM2835\_SPI\_SPEED\_8MHZ);
+  
+RPi B+:
+\hyperlink{classRF24}{RF24} radio(RPI\_BPLUS\_GPIO\_J8\_15,RPI\_BPLUS\_GPIO\_J8\_24, BCM2835\_SPI\_SPEED\_8MHZ);
+or
+\hyperlink{classRF24}{RF24} radio(RPI\_BPLUS\_GPIO\_J8\_15,RPI\_BPLUS\_GPIO\_J8\_26, BCM2835\_SPI\_SPEED\_8MHZ);
+
+General:
+\hyperlink{classRF24}{RF24} radio(22,0);
+or
+\hyperlink{classRF24}{RF24} radio(22,1);
+\end{DoxyCode}
+ See the gettingstarted example for an example of pin configuration
+
+See \href{http://www.airspayce.com/mikem/bcm2835/index.html}{\tt http\+://www.\+airspayce.\+com/mikem/bcm2835/index.\+html} for B\+C\+M2835 class documentation. ~\newline
+~\newline
+ {\bfseries M\+R\+AA Constructor\+:}
+
+
+\begin{DoxyCode}
+\hyperlink{classRF24}{RF24} radio(15,0); 
+\end{DoxyCode}
+
+
+See \href{http://iotdk.intel.com/docs/master/mraa/rasppi.html}{\tt http\+://iotdk.\+intel.\+com/docs/master/mraa/rasppi.\+html} ~\newline
+~\newline
+ {\bfseries S\+P\+I\+\_\+\+D\+EV Constructor}
+
+
+\begin{DoxyCode}
+\hyperlink{classRF24}{RF24} radio(22,0); 
+\end{DoxyCode}
+ In general, use
+\begin{DoxyCode}
+\hyperlink{classRF24}{RF24} radio(<ce\_pin>, <a>*10+<b>); 
+\end{DoxyCode}
+ for proper S\+P\+I\+D\+EV constructor to address correct spi device at /dev/spidev$<$a$>$.$<$b$>$
+
+See \href{http://pi.gadgetoid.com/pinout}{\tt http\+://pi.\+gadgetoid.\+com/pinout}
+
+{\bfseries Pins\+:}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ P\+IN }&\textbf{ N\+R\+F24\+L01 }&\textbf{ R\+PI }&\textbf{ R\+Pi -\/\+P1 Connector  }\\\cline{1-4}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ P\+IN }&\textbf{ N\+R\+F24\+L01 }&\textbf{ R\+PI }&\textbf{ R\+Pi -\/\+P1 Connector  }\\\cline{1-4}
+\endhead
+1 &G\+ND &rpi-\/gnd &(25) \\\cline{1-4}
+2 &V\+CC &rpi-\/3v3 &(17) \\\cline{1-4}
+3 &CE &rpi-\/gpio22 &(15) \\\cline{1-4}
+4 &C\+SN &rpi-\/gpio8 &(24) \\\cline{1-4}
+5 &S\+CK &rpi-\/sckl &(23) \\\cline{1-4}
+6 &M\+O\+SI &rpi-\/mosi &(19) \\\cline{1-4}
+7 &M\+I\+SO &rpi-\/miso &(21) \\\cline{1-4}
+8 &I\+RQ &-\/ &-\/ \\\cline{1-4}
+\end{longtabu}
+
+
+~\newline
+~\newline
+
+
+Based on the arduino lib from J. Coliz \href{mailto:maniacbug@ymail.com}{\tt maniacbug@ymail.\+com} ~\newline
+ the library was berryfied by Purinda Gunasekara \href{mailto:purinda@gmail.com}{\tt purinda@gmail.\+com} ~\newline
+ then forked from github stanleyseow/\+R\+F24 to \href{https://github.com/jscrane/RF24-rpi}{\tt https\+://github.\+com/jscrane/\+R\+F24-\/rpi} ~\newline
+ Network lib also based on \href{https://github.com/farconada/RF24Network}{\tt https\+://github.\+com/farconada/\+R\+F24\+Network}
+
+~\newline
+~\newline
+~\newline
+ 

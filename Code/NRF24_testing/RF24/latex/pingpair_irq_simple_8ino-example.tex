@@ -1,0 +1,128 @@
+\hypertarget{pingpair_irq_simple_8ino-example}{}\section{pingpair\+\_\+irq\+\_\+simple.\+ino}
+{\bfseries Dec 2014 -\/ T\+M\+Rh20}~\newline
+ This is an example of how to user interrupts to interact with the radio, with bidirectional communication.
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{ }
+\textcolor{comment}{ Created Dec 2014 - TMRh20}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+\textcolor{preprocessor}{#include <\hyperlink{printf_8h}{printf.h}>}
+
+\textcolor{comment}{// Hardware configuration}
+\textcolor{comment}{// Set up nRF24L01 radio on SPI bus plus pins 7 & 8}
+\hyperlink{classRF24}{RF24} radio(7,8);
+                                        
+\textcolor{comment}{// Use the same address for both devices}
+uint8\_t address[] = \{ \textcolor{stringliteral}{"radio"} \};
+
+\textcolor{comment}{// Simple messages to represent a 'ping' and 'pong'}
+uint8\_t ping = 111;
+uint8\_t pong = 222;
+
+\textcolor{keyword}{volatile} uint32\_t round\_trip\_timer = 0;
+
+
+\textcolor{comment}{/********************** Setup *********************/}
+
+\textcolor{keywordtype}{void} setup()\{
+
+  Serial.begin(115200);
+  Serial.println(F(\textcolor{stringliteral}{"Simple pingpair example"}));
+  Serial.println(F(\textcolor{stringliteral}{"Send a 'T' via Serial to transmit a single 'ping' "}));
+  \textcolor{comment}{//printf\_begin();}
+  
+  \textcolor{comment}{// Setup and configure rf radio}
+  radio.begin();
+
+  \textcolor{comment}{// Use dynamic payloads to improve response time}
+  radio.enableDynamicPayloads();
+  radio.openWritingPipe(address);             \textcolor{comment}{// communicate back and forth.  One listens on it, the other
+       talks to it.}
+  radio.openReadingPipe(1,address); 
+  radio.startListening();
+  
+  \textcolor{comment}{//radio.printDetails();                             // Dump the configuration of the rf unit for
+       debugging}
+
+  attachInterrupt(0, check\_radio, \hyperlink{group__Porting__General_gab811d8c6ff3a505312d3276590444289}{LOW});             \textcolor{comment}{// Attach interrupt handler to interrupt #0 (using
+       pin 2) on BOTH the sender and receiver}
+\}
+
+
+
+\textcolor{comment}{/********************** Main Loop *********************/}
+\textcolor{keywordtype}{void} loop() \{
+
+  \textcolor{keywordflow}{if}(Serial.available())\{
+    \textcolor{keywordflow}{switch}(toupper(Serial.read()))\{
+      \textcolor{keywordflow}{case} \textcolor{charliteral}{'T'}: 
+                \textcolor{comment}{// Only allow 1 transmission per 45ms to prevent overlapping IRQ/reads/writes}
+                \textcolor{comment}{// Default retries = 5,15 = ~20ms per transmission max}
+                \textcolor{keywordflow}{while}(micros() - round\_trip\_timer < 45000)\{
+                  \textcolor{comment}{//delay between writes }
+                \}
+                Serial.print(F(\textcolor{stringliteral}{"Sending Ping"}));
+                radio.stopListening();                
+                round\_trip\_timer = micros();
+                radio.startWrite( &ping, \textcolor{keyword}{sizeof}(uint8\_t),0 );
+                \textcolor{keywordflow}{break};    
+    \}
+  \}  
+\}
+
+\textcolor{comment}{/********************** Interrupt *********************/}
+
+\textcolor{keywordtype}{void} check\_radio(\textcolor{keywordtype}{void})                                \textcolor{comment}{// Receiver role: Does nothing!  All the work is in
+       IRQ}
+\{
+  
+  \textcolor{keywordtype}{bool} tx,fail,rx;
+  radio.whatHappened(tx,fail,rx);                     \textcolor{comment}{// What happened?}
+
+ 
+  \textcolor{comment}{// If data is available, handle it accordingly}
+  \textcolor{keywordflow}{if} ( rx )\{
+    
+    \textcolor{keywordflow}{if}(radio.getDynamicPayloadSize() < 1)\{
+      \textcolor{comment}{// Corrupt payload has been flushed}
+      \textcolor{keywordflow}{return}; 
+    \}
+    \textcolor{comment}{// Read in the data}
+    uint8\_t received;
+    radio.read(&received,\textcolor{keyword}{sizeof}(received));
+
+    \textcolor{comment}{// If this is a ping, send back a pong}
+    \textcolor{keywordflow}{if}(received == ping)\{
+      radio.stopListening();
+      \textcolor{comment}{// Normal delay will not work here, so cycle through some no-operations (16nops @16mhz = 1us delay)}
+      \textcolor{keywordflow}{for}(uint32\_t i=0; i<130;i++)\{
+         \_\_asm\_\_(\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{
+      "nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"}\textcolor{stringliteral}{"nop\(\backslash\)n\(\backslash\)t"});
+      \}
+      radio.startWrite(&pong,\textcolor{keyword}{sizeof}(pong),0);
+      Serial.print(\textcolor{stringliteral}{"pong"});
+    \}\textcolor{keywordflow}{else}    
+    \textcolor{comment}{// If this is a pong, get the current micros()}
+    \textcolor{keywordflow}{if}(received == pong)\{
+      round\_trip\_timer = micros() - round\_trip\_timer;
+      Serial.print(F(\textcolor{stringliteral}{"Received Pong, Round Trip Time: "}));
+      Serial.println(round\_trip\_timer);
+    \}
+  \}
+
+  \textcolor{comment}{// Start listening if transmission is complete}
+  \textcolor{keywordflow}{if}( tx || fail )\{
+     radio.startListening(); 
+     Serial.println(tx ? F(\textcolor{stringliteral}{":OK"}) : F(\textcolor{stringliteral}{":Fail"}));
+  \}  
+\}
+\end{DoxyCodeInclude}
+ 

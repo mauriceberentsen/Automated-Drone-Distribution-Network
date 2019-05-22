@@ -1,0 +1,214 @@
+\hypertarget{pingpair_dyn_8cpp-example}{}\section{pingpair\+\_\+dyn.\+cpp}
+This is an example of how to use payloads of a varying (dynamic) size on Linux.
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{    TMRh20 2014 - Optimized RF24 Library Fork}
+\textcolor{comment}{*/}
+
+\textcolor{preprocessor}{#include <cstdlib>}
+\textcolor{preprocessor}{#include <iostream>}
+\textcolor{preprocessor}{#include <sstream>}
+\textcolor{preprocessor}{#include <string>}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{./RF24.h}"}
+
+
+\textcolor{keyword}{using namespace }\hyperlink{namespacestd}{std};
+\textcolor{comment}{//}
+\textcolor{comment}{// Hardware configuration}
+\textcolor{comment}{// Configure the appropriate pins for your connections}
+
+\textcolor{comment}{/****************** Raspberry Pi ***********************/}
+
+\textcolor{comment}{// Radio CE Pin, CSN Pin, SPI Speed}
+\textcolor{comment}{// See http://www.airspayce.com/mikem/bcm2835/group\_\_constants.html#ga63c029bd6500167152db4e57736d0939 and
+       the related enumerations for pin information.}
+
+\textcolor{comment}{// Setup for GPIO 22 CE and CE0 CSN with SPI Speed @ 4Mhz}
+\textcolor{comment}{//RF24 radio(RPI\_V2\_GPIO\_P1\_22, BCM2835\_SPI\_CS0, BCM2835\_SPI\_SPEED\_4MHZ);}
+
+\textcolor{comment}{// NEW: Setup for RPi B+}
+\textcolor{comment}{//RF24 radio(RPI\_BPLUS\_GPIO\_J8\_15,RPI\_BPLUS\_GPIO\_J8\_24, BCM2835\_SPI\_SPEED\_8MHZ);}
+
+\textcolor{comment}{// Setup for GPIO 15 CE and CE0 CSN with SPI Speed @ 8Mhz}
+\hyperlink{classRF24}{RF24} radio(RPI\_V2\_GPIO\_P1\_15, RPI\_V2\_GPIO\_P1\_24, BCM2835\_SPI\_SPEED\_8MHZ);
+
+\textcolor{comment}{/*** RPi Alternate ***/}
+\textcolor{comment}{//Note: Specify SPI BUS 0 or 1 instead of CS pin number.}
+\textcolor{comment}{// See http://tmrh20.github.io/RF24/RPi.html for more information on usage}
+
+\textcolor{comment}{//RPi Alternate, with MRAA}
+\textcolor{comment}{//RF24 radio(15,0);}
+
+\textcolor{comment}{//RPi Alternate, with SPIDEV - Note: Edit RF24/arch/BBB/spi.cpp and  set 'this->device =
+       "/dev/spidev0.0";;' or as listed in /dev}
+\textcolor{comment}{//RF24 radio(22,0);}
+
+
+\textcolor{comment}{/****************** Linux (BBB,x86,etc) ***********************/}
+
+\textcolor{comment}{// See http://tmrh20.github.io/RF24/pages.html for more information on usage}
+\textcolor{comment}{// See http://iotdk.intel.com/docs/master/mraa/ for more information on MRAA}
+\textcolor{comment}{// See https://www.kernel.org/doc/Documentation/spi/spidev for more information on SPIDEV}
+
+\textcolor{comment}{// Setup for ARM(Linux) devices like BBB using spidev (default is "/dev/spidev1.0" )}
+\textcolor{comment}{//RF24 radio(115,0);}
+
+\textcolor{comment}{//BBB Alternate, with mraa}
+\textcolor{comment}{// CE pin = (Header P9, Pin 13) = 59 = 13 + 46 }
+\textcolor{comment}{//Note: Specify SPI BUS 0 or 1 instead of CS pin number. }
+\textcolor{comment}{//RF24 radio(59,0);}
+
+\textcolor{comment}{/**************************************************************/}
+
+\textcolor{comment}{// Radio pipe addresses for the 2 nodes to communicate.}
+\textcolor{keyword}{const} uint64\_t pipes[2] = \{ 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL \};
+
+
+
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} min\_payload\_size = 4;
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} max\_payload\_size = 32;
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} payload\_size\_increments\_by = 1;
+\textcolor{keywordtype}{int} next\_payload\_size = min\_payload\_size;
+
+\textcolor{keywordtype}{char} receive\_payload[max\_payload\_size+1]; \textcolor{comment}{// +1 to allow room for a terminating NULL char}
+
+\textcolor{keywordtype}{int} main(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}** argv)\{
+
+  \textcolor{keywordtype}{bool} role\_ping\_out = 1, role\_pong\_back = 0;
+  \textcolor{keywordtype}{bool} role = 0;
+
+  \textcolor{comment}{// Print preamble:}
+  cout << \textcolor{stringliteral}{"RF24/examples/pingpair\_dyn/\(\backslash\)n"};
+
+  \textcolor{comment}{// Setup and configure rf radio}
+  radio.begin();
+  radio.enableDynamicPayloads();
+  radio.setRetries(5,15);
+  radio.printDetails();
+
+
+\textcolor{comment}{/********* Role chooser ***********/}
+
+  printf(\textcolor{stringliteral}{"\(\backslash\)n ************ Role Setup ***********\(\backslash\)n"});
+  \textcolor{keywordtype}{string} input = \textcolor{stringliteral}{""};
+  \textcolor{keywordtype}{char} myChar = \{0\};
+  cout << \textcolor{stringliteral}{"Choose a role: Enter 0 for receiver, 1 for transmitter (CTRL+C to exit) \(\backslash\)n>"};
+  getline(cin,input);
+
+  \textcolor{keywordflow}{if}(input.length() == 1) \{
+    myChar = input[0];
+    \textcolor{keywordflow}{if}(myChar == \textcolor{charliteral}{'0'})\{
+        cout << \textcolor{stringliteral}{"Role: Pong Back, awaiting transmission "} << endl << endl;
+    \}\textcolor{keywordflow}{else}\{  cout << \textcolor{stringliteral}{"Role: Ping Out, starting transmission "} << endl << endl;
+        role = role\_ping\_out;
+    \}
+  \}
+\textcolor{comment}{/***********************************/}
+
+    \textcolor{keywordflow}{if} ( role == role\_ping\_out )    \{
+      radio.openWritingPipe(pipes[0]);
+      radio.openReadingPipe(1,pipes[1]);
+    \} \textcolor{keywordflow}{else} \{
+      radio.openWritingPipe(pipes[1]);
+      radio.openReadingPipe(1,pipes[0]);
+      radio.startListening();
+    \}
+
+
+\textcolor{comment}{// forever loop}
+    \textcolor{keywordflow}{while} (1)
+    \{
+
+\textcolor{keywordflow}{if} (role == role\_ping\_out)
+  \{
+    \textcolor{comment}{// The payload will always be the same, what will change is how much of it we send.}
+    \textcolor{keyword}{static} \textcolor{keywordtype}{char} send\_payload[] = \textcolor{stringliteral}{"ABCDEFGHIJKLMNOPQRSTUVWXYZ789012"};
+
+    \textcolor{comment}{// First, stop listening so we can talk.}
+    radio.stopListening();
+
+    \textcolor{comment}{// Take the time, and send it.  This will block until complete}
+    printf(\textcolor{stringliteral}{"Now sending length %i..."},next\_payload\_size);
+    radio.write( send\_payload, next\_payload\_size );
+
+    \textcolor{comment}{// Now, continue listening}
+    radio.startListening();
+
+    \textcolor{comment}{// Wait here until we get a response, or timeout}
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} started\_waiting\_at = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+    \textcolor{keywordtype}{bool} timeout = \textcolor{keyword}{false};
+    \textcolor{keywordflow}{while} ( ! radio.available() && ! timeout )
+      \textcolor{keywordflow}{if} (\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - started\_waiting\_at > 500 )
+        timeout = \textcolor{keyword}{true};
+
+    \textcolor{comment}{// Describe the results}
+    \textcolor{keywordflow}{if} ( timeout )
+    \{
+      printf(\textcolor{stringliteral}{"Failed, response timed out.\(\backslash\)n\(\backslash\)r"});
+    \}
+    \textcolor{keywordflow}{else}
+    \{
+      \textcolor{comment}{// Grab the response, compare, and send to debugging spew}
+      uint8\_t len = radio.getDynamicPayloadSize();
+      radio.read( receive\_payload, len );
+
+      \textcolor{comment}{// Put a zero at the end for easy printing}
+      receive\_payload[len] = 0;
+
+      \textcolor{comment}{// Spew it}
+      printf(\textcolor{stringliteral}{"Got response size=%i value=%s\(\backslash\)n\(\backslash\)r"},len,receive\_payload);
+    \}
+
+    \textcolor{comment}{// Update size for next time.}
+    next\_payload\_size += payload\_size\_increments\_by;
+    \textcolor{keywordflow}{if} ( next\_payload\_size > max\_payload\_size )
+      next\_payload\_size = min\_payload\_size;
+
+    \textcolor{comment}{// Try again 1s later}
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(100);
+  \}
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Pong back role.  Receive each packet, dump it out, and send it back}
+  \textcolor{comment}{//}
+
+  \textcolor{keywordflow}{if} ( role == role\_pong\_back )
+  \{
+    \textcolor{comment}{// if there is data ready}
+    \textcolor{keywordflow}{if} ( radio.available() )
+    \{
+      \textcolor{comment}{// Dump the payloads until we've gotten everything}
+      uint8\_t len;
+
+      \textcolor{keywordflow}{while} (radio.available())
+      \{
+        \textcolor{comment}{// Fetch the payload, and see if this was the last one.}
+    len = radio.getDynamicPayloadSize();
+    radio.read( receive\_payload, len );
+
+    \textcolor{comment}{// Put a zero at the end for easy printing}
+    receive\_payload[len] = 0;
+
+    \textcolor{comment}{// Spew it}
+    printf(\textcolor{stringliteral}{"Got payload size=%i value=%s\(\backslash\)n\(\backslash\)r"},len,receive\_payload);
+      \}
+
+      \textcolor{comment}{// First, stop listening so we can talk}
+      radio.stopListening();
+
+      \textcolor{comment}{// Send the final one back.}
+      radio.write( receive\_payload, len );
+      printf(\textcolor{stringliteral}{"Sent response.\(\backslash\)n\(\backslash\)r"});
+
+      \textcolor{comment}{// Now, resume listening so we catch the next packets.}
+      radio.startListening();
+    \}
+  \}
+\}
+\}
+
+
+\end{DoxyCodeInclude}
+ 

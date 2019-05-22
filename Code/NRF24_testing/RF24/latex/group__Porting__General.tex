@@ -1,0 +1,299 @@
+\hypertarget{group__Porting__General}{}\section{Porting\+: General}
+\label{group__Porting__General}\index{Porting\+: General@{Porting\+: General}}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__Porting__General_gac9c625ddccaf6226fc77d5d903d160e9}{R\+F24\+\_\+\+L\+I\+N\+UX}
+\item 
+\#define \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\+\_\+\+BV}(x)~(1$<$$<$(x))
+\item 
+\#define \hyperlink{group__Porting__General_gaa9e44ba356b97be27806db7f96ff527d}{\+\_\+\+S\+PI}~spi
+\item 
+\#define \hyperlink{group__Porting__General_gab2cf239a98bc5d0beee4ceb41a5dd549}{I\+F\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+D\+E\+B\+UG}(x)
+\item 
+\#define \hyperlink{group__Porting__General_ga9c00057fd19e916cc1aa0a5949336beb}{P\+S\+TR}(x)~(x)
+\item 
+\#define \hyperlink{group__Porting__General_ga758ad569cbda7c5ddfaa902e8eed3360}{printf\+\_\+P}~printf
+\item 
+\#define \hyperlink{group__Porting__General_ga05dde754db9944c90362c1f861d358ba}{strlen\+\_\+P}~strlen
+\item 
+\#define \hyperlink{group__Porting__General_ga75acaba9e781937468d0911423bc0c35}{P\+R\+O\+G\+M\+EM}
+\item 
+\#define \hyperlink{group__Porting__General_gaa59a94d7ea755db0d7811b543253ebc4}{pgm\+\_\+read\+\_\+word}(p)~($\ast$(p))
+\item 
+\#define \hyperlink{group__Porting__General_ga7642e6d60f41fc769b32962c8c513668}{P\+R\+I\+P\+S\+TR}~\char`\"{}\%s\char`\"{}
+\item 
+\#define \hyperlink{group__Porting__General_gae6778ca2c38951f24bd39f9c38cab9b2}{pgm\+\_\+read\+\_\+byte}(p)~($\ast$(p))
+\item 
+\#define \hyperlink{group__Porting__General_gab811d8c6ff3a505312d3276590444289}{L\+OW}~\hyperlink{group__Porting__GPIO_gaa29a50f0f8fc0a62076c7f4bc7dc70db}{G\+P\+I\+O\+::\+O\+U\+T\+P\+U\+T\+\_\+\+L\+OW}
+\item 
+\#define \hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{H\+I\+GH}~\hyperlink{group__Porting__GPIO_ga18fd76f29528fc97aadcdb78495ff6bf}{G\+P\+I\+O\+::\+O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH}
+\item 
+\#define \hyperlink{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}{I\+N\+P\+UT}~\hyperlink{group__Porting__GPIO_gafbf58b193d0f84db90a843e00f27367c}{G\+P\+I\+O\+::\+D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN}
+\item 
+\#define \hyperlink{group__Porting__General_ga61a3c9a18380aafb6e430e79bf596557}{O\+U\+T\+P\+UT}~\hyperlink{group__Porting__GPIO_gac39c2a3ce71b0df667c227292d4ab30c}{G\+P\+I\+O\+::\+D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT}
+\item 
+\#define \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digital\+Write}(pin,  value)~\hyperlink{group__Porting__GPIO_ga957694ca061e30268dd8a4b28a08e59b}{G\+P\+I\+O\+::write}(pin, value)
+\item 
+\#define \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pin\+Mode}(pin,  direction)~\hyperlink{group__Porting__GPIO_gad3451cca241dbbf42bf381129385a35c}{G\+P\+I\+O\+::open}(pin, direction)
+\item 
+\#define \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(milisec)~\hyperlink{group__Porting__Timing_ga4c2e4dffa20576f5b3d9c2f9bb052106}{\+\_\+\+\_\+msleep}(milisec)
+\item 
+\#define \hyperlink{group__Porting__General_ga9384257bf5d5c1aae675b22cc3ecb91a}{delay\+Microseconds}(usec)~\hyperlink{group__Porting__Timing_gaec87320f2886551c012814de85713681}{\+\_\+\+\_\+usleep}(usec)
+\item 
+\#define \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()~\hyperlink{group__Porting__Timing_gad13c7acd564917af4f86b655035a6424}{\+\_\+\+\_\+millis}()
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef uint16\+\_\+t \hyperlink{group__Porting__General_ga05ca2f20b55933ad782917161d54287d}{prog\+\_\+uint16\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Example of \hyperlink{RF24__arch__config_8h}{R\+F24\+\_\+arch\+\_\+config.\+h} for \hyperlink{classRF24}{R\+F24} portability 
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{group__Porting__General_gac9c625ddccaf6226fc77d5d903d160e9}\label{group__Porting__General_gac9c625ddccaf6226fc77d5d903d160e9}} 
+\index{Porting\+: General@{Porting\+: General}!R\+F24\+\_\+\+L\+I\+N\+UX@{R\+F24\+\_\+\+L\+I\+N\+UX}}
+\index{R\+F24\+\_\+\+L\+I\+N\+UX@{R\+F24\+\_\+\+L\+I\+N\+UX}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{R\+F24\+\_\+\+L\+I\+N\+UX}{RF24\_LINUX}}
+{\footnotesize\ttfamily \#define R\+F24\+\_\+\+L\+I\+N\+UX}
+
+
+
+Definition at line 29 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga483c9de27db573099572f5485ef841c9}\label{group__Porting__General_ga483c9de27db573099572f5485ef841c9}} 
+\index{Porting\+: General@{Porting\+: General}!\+\_\+\+BV@{\+\_\+\+BV}}
+\index{\+\_\+\+BV@{\+\_\+\+BV}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{\+\_\+\+BV}{\_BV}}
+{\footnotesize\ttfamily \#define \+\_\+\+BV(\begin{DoxyParamCaption}\item[{}]{x }\end{DoxyParamCaption})~(1$<$$<$(x))}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, and \hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+
+
+Definition at line 41 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_gaa9e44ba356b97be27806db7f96ff527d}\label{group__Porting__General_gaa9e44ba356b97be27806db7f96ff527d}} 
+\index{Porting\+: General@{Porting\+: General}!\+\_\+\+S\+PI@{\+\_\+\+S\+PI}}
+\index{\+\_\+\+S\+PI@{\+\_\+\+S\+PI}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{\+\_\+\+S\+PI}{\_SPI}}
+{\footnotesize\ttfamily \#define \+\_\+\+S\+PI~spi}
+
+
+
+Definition at line 42 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_gab2cf239a98bc5d0beee4ceb41a5dd549}\label{group__Porting__General_gab2cf239a98bc5d0beee4ceb41a5dd549}} 
+\index{Porting\+: General@{Porting\+: General}!I\+F\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+D\+E\+B\+UG@{I\+F\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+D\+E\+B\+UG}}
+\index{I\+F\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+D\+E\+B\+UG@{I\+F\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+D\+E\+B\+UG}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{I\+F\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+D\+E\+B\+UG}{IF\_SERIAL\_DEBUG}}
+{\footnotesize\ttfamily \#define I\+F\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+D\+E\+B\+UG(\begin{DoxyParamCaption}\item[{}]{x }\end{DoxyParamCaption})}
+
+
+
+Definition at line 48 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga9c00057fd19e916cc1aa0a5949336beb}\label{group__Porting__General_ga9c00057fd19e916cc1aa0a5949336beb}} 
+\index{Porting\+: General@{Porting\+: General}!P\+S\+TR@{P\+S\+TR}}
+\index{P\+S\+TR@{P\+S\+TR}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{P\+S\+TR}{PSTR}}
+{\footnotesize\ttfamily \#define P\+S\+TR(\begin{DoxyParamCaption}\item[{}]{x }\end{DoxyParamCaption})~(x)}
+
+
+
+Definition at line 62 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga758ad569cbda7c5ddfaa902e8eed3360}\label{group__Porting__General_ga758ad569cbda7c5ddfaa902e8eed3360}} 
+\index{Porting\+: General@{Porting\+: General}!printf\+\_\+P@{printf\+\_\+P}}
+\index{printf\+\_\+P@{printf\+\_\+P}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{printf\+\_\+P}{printf\_P}}
+{\footnotesize\ttfamily \#define printf\+\_\+P~printf}
+
+
+
+Definition at line 63 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga05dde754db9944c90362c1f861d358ba}\label{group__Porting__General_ga05dde754db9944c90362c1f861d358ba}} 
+\index{Porting\+: General@{Porting\+: General}!strlen\+\_\+P@{strlen\+\_\+P}}
+\index{strlen\+\_\+P@{strlen\+\_\+P}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{strlen\+\_\+P}{strlen\_P}}
+{\footnotesize\ttfamily \#define strlen\+\_\+P~strlen}
+
+
+
+Definition at line 64 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga75acaba9e781937468d0911423bc0c35}\label{group__Porting__General_ga75acaba9e781937468d0911423bc0c35}} 
+\index{Porting\+: General@{Porting\+: General}!P\+R\+O\+G\+M\+EM@{P\+R\+O\+G\+M\+EM}}
+\index{P\+R\+O\+G\+M\+EM@{P\+R\+O\+G\+M\+EM}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{P\+R\+O\+G\+M\+EM}{PROGMEM}}
+{\footnotesize\ttfamily \#define P\+R\+O\+G\+M\+EM}
+
+
+
+Definition at line 65 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_gaa59a94d7ea755db0d7811b543253ebc4}\label{group__Porting__General_gaa59a94d7ea755db0d7811b543253ebc4}} 
+\index{Porting\+: General@{Porting\+: General}!pgm\+\_\+read\+\_\+word@{pgm\+\_\+read\+\_\+word}}
+\index{pgm\+\_\+read\+\_\+word@{pgm\+\_\+read\+\_\+word}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{pgm\+\_\+read\+\_\+word}{pgm\_read\_word}}
+{\footnotesize\ttfamily \#define pgm\+\_\+read\+\_\+word(\begin{DoxyParamCaption}\item[{}]{p }\end{DoxyParamCaption})~($\ast$(p))}
+
+
+
+Definition at line 66 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga7642e6d60f41fc769b32962c8c513668}\label{group__Porting__General_ga7642e6d60f41fc769b32962c8c513668}} 
+\index{Porting\+: General@{Porting\+: General}!P\+R\+I\+P\+S\+TR@{P\+R\+I\+P\+S\+TR}}
+\index{P\+R\+I\+P\+S\+TR@{P\+R\+I\+P\+S\+TR}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{P\+R\+I\+P\+S\+TR}{PRIPSTR}}
+{\footnotesize\ttfamily \#define P\+R\+I\+P\+S\+TR~\char`\"{}\%s\char`\"{}}
+
+
+
+Definition at line 67 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_gae6778ca2c38951f24bd39f9c38cab9b2}\label{group__Porting__General_gae6778ca2c38951f24bd39f9c38cab9b2}} 
+\index{Porting\+: General@{Porting\+: General}!pgm\+\_\+read\+\_\+byte@{pgm\+\_\+read\+\_\+byte}}
+\index{pgm\+\_\+read\+\_\+byte@{pgm\+\_\+read\+\_\+byte}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{pgm\+\_\+read\+\_\+byte}{pgm\_read\_byte}}
+{\footnotesize\ttfamily \#define pgm\+\_\+read\+\_\+byte(\begin{DoxyParamCaption}\item[{}]{p }\end{DoxyParamCaption})~($\ast$(p))}
+
+
+
+Definition at line 68 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_gab811d8c6ff3a505312d3276590444289}\label{group__Porting__General_gab811d8c6ff3a505312d3276590444289}} 
+\index{Porting\+: General@{Porting\+: General}!L\+OW@{L\+OW}}
+\index{L\+OW@{L\+OW}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{L\+OW}{LOW}}
+{\footnotesize\ttfamily \#define L\+OW~\hyperlink{group__Porting__GPIO_gaa29a50f0f8fc0a62076c7f4bc7dc70db}{G\+P\+I\+O\+::\+O\+U\+T\+P\+U\+T\+\_\+\+L\+OW}}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{pingpair_irq_8ino-example}{pingpair\+\_\+irq.\+ino}, \hyperlink{pingpair_irq_simple_8ino-example}{pingpair\+\_\+irq\+\_\+simple.\+ino}, \hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, and \hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+
+
+Definition at line 71 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}\label{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}} 
+\index{Porting\+: General@{Porting\+: General}!H\+I\+GH@{H\+I\+GH}}
+\index{H\+I\+GH@{H\+I\+GH}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{H\+I\+GH}{HIGH}}
+{\footnotesize\ttfamily \#define H\+I\+GH~\hyperlink{group__Porting__GPIO_ga18fd76f29528fc97aadcdb78495ff6bf}{G\+P\+I\+O\+::\+O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH}}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{pingpair_dyn_8ino-example}{pingpair\+\_\+dyn.\+ino}, \hyperlink{pingpair_irq_8ino-example}{pingpair\+\_\+irq.\+ino}, \hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, \hyperlink{starping_8pde-example}{starping.\+pde}, and \hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+
+
+Definition at line 72 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}\label{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}} 
+\index{Porting\+: General@{Porting\+: General}!I\+N\+P\+UT@{I\+N\+P\+UT}}
+\index{I\+N\+P\+UT@{I\+N\+P\+UT}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{I\+N\+P\+UT}{INPUT}}
+{\footnotesize\ttfamily \#define I\+N\+P\+UT~\hyperlink{group__Porting__GPIO_gafbf58b193d0f84db90a843e00f27367c}{G\+P\+I\+O\+::\+D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN}}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{pingpair_dyn_8ino-example}{pingpair\+\_\+dyn.\+ino}, \hyperlink{pingpair_irq_8ino-example}{pingpair\+\_\+irq.\+ino}, \hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, \hyperlink{starping_8pde-example}{starping.\+pde}, and \hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+
+
+Definition at line 73 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga61a3c9a18380aafb6e430e79bf596557}\label{group__Porting__General_ga61a3c9a18380aafb6e430e79bf596557}} 
+\index{Porting\+: General@{Porting\+: General}!O\+U\+T\+P\+UT@{O\+U\+T\+P\+UT}}
+\index{O\+U\+T\+P\+UT@{O\+U\+T\+P\+UT}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{O\+U\+T\+P\+UT}{OUTPUT}}
+{\footnotesize\ttfamily \#define O\+U\+T\+P\+UT~\hyperlink{group__Porting__GPIO_gac39c2a3ce71b0df667c227292d4ab30c}{G\+P\+I\+O\+::\+D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT}}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+
+
+Definition at line 74 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_gabda89b115581947337690b2f85bfab6e}\label{group__Porting__General_gabda89b115581947337690b2f85bfab6e}} 
+\index{Porting\+: General@{Porting\+: General}!digital\+Write@{digital\+Write}}
+\index{digital\+Write@{digital\+Write}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{digital\+Write}{digitalWrite}}
+{\footnotesize\ttfamily \#define digital\+Write(\begin{DoxyParamCaption}\item[{}]{pin,  }\item[{}]{value }\end{DoxyParamCaption})~\hyperlink{group__Porting__GPIO_ga957694ca061e30268dd8a4b28a08e59b}{G\+P\+I\+O\+::write}(pin, value)}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{pingpair_dyn_8ino-example}{pingpair\+\_\+dyn.\+ino}, \hyperlink{pingpair_irq_8ino-example}{pingpair\+\_\+irq.\+ino}, \hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, \hyperlink{starping_8pde-example}{starping.\+pde}, and \hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+
+
+Definition at line 75 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}\label{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}} 
+\index{Porting\+: General@{Porting\+: General}!pin\+Mode@{pin\+Mode}}
+\index{pin\+Mode@{pin\+Mode}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{pin\+Mode}{pinMode}}
+{\footnotesize\ttfamily \#define pin\+Mode(\begin{DoxyParamCaption}\item[{}]{pin,  }\item[{}]{direction }\end{DoxyParamCaption})~\hyperlink{group__Porting__GPIO_gad3451cca241dbbf42bf381129385a35c}{G\+P\+I\+O\+::open}(pin, direction)}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{pingpair_dyn_8ino-example}{pingpair\+\_\+dyn.\+ino}, \hyperlink{pingpair_irq_8ino-example}{pingpair\+\_\+irq.\+ino}, \hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, \hyperlink{starping_8pde-example}{starping.\+pde}, and \hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+
+
+Definition at line 76 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}\label{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}} 
+\index{Porting\+: General@{Porting\+: General}!delay@{delay}}
+\index{delay@{delay}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{delay}{delay}}
+{\footnotesize\ttfamily \#define delay(\begin{DoxyParamCaption}\item[{}]{milisec }\end{DoxyParamCaption})~\hyperlink{group__Porting__Timing_ga4c2e4dffa20576f5b3d9c2f9bb052106}{\+\_\+\+\_\+msleep}(milisec)}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{gettingstarted_8cpp-example}{gettingstarted.\+cpp}, \hyperlink{GettingStarted_8ino-example}{Getting\+Started.\+ino}, \hyperlink{gettingstarted_call_response_8cpp-example}{gettingstarted\+\_\+call\+\_\+response.\+cpp}, \hyperlink{GettingStarted_CallResponse_8ino-example}{Getting\+Started\+\_\+\+Call\+Response.\+ino}, \hyperlink{GettingStarted_HandlingData_8ino-example}{Getting\+Started\+\_\+\+Handling\+Data.\+ino}, \hyperlink{GettingStarted_HandlingFailures_8ino-example}{Getting\+Started\+\_\+\+Handling\+Failures.\+ino}, \hyperlink{pingpair_ack_8ino-example}{pingpair\+\_\+ack.\+ino}, \hyperlink{pingpair_dyn_8cpp-example}{pingpair\+\_\+dyn.\+cpp}, \hyperlink{pingpair_dyn_8ino-example}{pingpair\+\_\+dyn.\+ino}, \hyperlink{pingpair_irq_8ino-example}{pingpair\+\_\+irq.\+ino}, \hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, \hyperlink{rf24ping85_8ino-example}{rf24ping85.\+ino}, \hyperlink{starping_8pde-example}{starping.\+pde}, \hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}, \hyperlink{Transfer_8ino-example}{Transfer.\+ino}, and \hyperlink{TransferTimeouts_8ino-example}{Transfer\+Timeouts.\+ino}.\end{Desc}
+
+
+Definition at line 77 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_ga9384257bf5d5c1aae675b22cc3ecb91a}\label{group__Porting__General_ga9384257bf5d5c1aae675b22cc3ecb91a}} 
+\index{Porting\+: General@{Porting\+: General}!delay\+Microseconds@{delay\+Microseconds}}
+\index{delay\+Microseconds@{delay\+Microseconds}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{delay\+Microseconds}{delayMicroseconds}}
+{\footnotesize\ttfamily \#define delay\+Microseconds(\begin{DoxyParamCaption}\item[{}]{usec }\end{DoxyParamCaption})~\hyperlink{group__Porting__Timing_gaec87320f2886551c012814de85713681}{\+\_\+\+\_\+usleep}(usec)}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{scanner_8ino-example}{scanner.\+ino}, and \hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+
+
+Definition at line 78 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+\mbox{\Hypertarget{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}\label{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}} 
+\index{Porting\+: General@{Porting\+: General}!millis@{millis}}
+\index{millis@{millis}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{millis}{millis}}
+{\footnotesize\ttfamily \#define millis(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~\hyperlink{group__Porting__Timing_gad13c7acd564917af4f86b655035a6424}{\+\_\+\+\_\+millis}()}
+
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{gettingstarted_8cpp-example}{gettingstarted.\+cpp}, \hyperlink{gettingstarted_call_response_8cpp-example}{gettingstarted\+\_\+call\+\_\+response.\+cpp}, \hyperlink{GettingStarted_HandlingFailures_8ino-example}{Getting\+Started\+\_\+\+Handling\+Failures.\+ino}, \hyperlink{pingpair_dyn_8cpp-example}{pingpair\+\_\+dyn.\+cpp}, \hyperlink{pingpair_dyn_8ino-example}{pingpair\+\_\+dyn.\+ino}, \hyperlink{pingpair_irq_8ino-example}{pingpair\+\_\+irq.\+ino}, \hyperlink{pingpair_sleepy_8ino-example}{pingpair\+\_\+sleepy.\+ino}, \hyperlink{starping_8pde-example}{starping.\+pde}, \hyperlink{transfer_8cpp-example}{transfer.\+cpp}, \hyperlink{Transfer_8ino-example}{Transfer.\+ino}, and \hyperlink{TransferTimeouts_8ino-example}{Transfer\+Timeouts.\+ino}.\end{Desc}
+
+
+Definition at line 79 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{group__Porting__General_ga05ca2f20b55933ad782917161d54287d}\label{group__Porting__General_ga05ca2f20b55933ad782917161d54287d}} 
+\index{Porting\+: General@{Porting\+: General}!prog\+\_\+uint16\+\_\+t@{prog\+\_\+uint16\+\_\+t}}
+\index{prog\+\_\+uint16\+\_\+t@{prog\+\_\+uint16\+\_\+t}!Porting\+: General@{Porting\+: General}}
+\subsubsection{\texorpdfstring{prog\+\_\+uint16\+\_\+t}{prog\_uint16\_t}}
+{\footnotesize\ttfamily typedef uint16\+\_\+t \hyperlink{group__Porting__General_ga05ca2f20b55933ad782917161d54287d}{prog\+\_\+uint16\+\_\+t}}
+
+
+
+Definition at line 61 of file R\+F24\+\_\+arch\+\_\+config.\+h.
+

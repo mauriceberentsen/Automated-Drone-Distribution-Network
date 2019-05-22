@@ -1,0 +1,92 @@
+\hypertarget{group__Porting__SPI}{}\section{Porting\+: S\+PI}
+\label{group__Porting__SPI}\index{Porting\+: S\+PI@{Porting\+: S\+PI}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__Porting__SPI_gacd293e741d829f9578b8c5ee49833608}{S\+PI} ()
+\item 
+void \hyperlink{group__Porting__SPI_gaf79095574842d60a6297aa5b01b6185f}{begin} (int bus\+No)
+\item 
+uint8\+\_\+t \hyperlink{group__Porting__SPI_gad8a210abb2138c105350cc91972edfa9}{transfer} (uint8\+\_\+t tx\+\_\+)
+\item 
+void \hyperlink{group__Porting__SPI_ga26b5af7f6420d54b479af9eaf1b2e452}{transfernb} (char $\ast$tbuf, char $\ast$rbuf, uint32\+\_\+t len)
+\item 
+void \hyperlink{group__Porting__SPI_gade902816b77c7377afd02ea4cb7e30b5}{transfern} (char $\ast$buf, uint32\+\_\+t len)
+\item 
+virtual \hyperlink{group__Porting__SPI_ga224a368f34373695f2a7e631d0742029}{$\sim$\+S\+PI} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Example of \hyperlink{spi_8h}{spi.\+h} class declaration for S\+PI portability 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{group__Porting__SPI_gacd293e741d829f9578b8c5ee49833608}\label{group__Porting__SPI_gacd293e741d829f9578b8c5ee49833608}} 
+\index{Porting\+: S\+PI@{Porting\+: S\+PI}!S\+PI@{S\+PI}}
+\index{S\+PI@{S\+PI}!Porting\+: S\+PI@{Porting\+: S\+PI}}
+\subsubsection{\texorpdfstring{S\+P\+I()}{SPI()}}
+{\footnotesize\ttfamily S\+PI (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+S\+PI constructor \begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+\mbox{\Hypertarget{group__Porting__SPI_gaf79095574842d60a6297aa5b01b6185f}\label{group__Porting__SPI_gaf79095574842d60a6297aa5b01b6185f}} 
+\index{Porting\+: S\+PI@{Porting\+: S\+PI}!begin@{begin}}
+\index{begin@{begin}!Porting\+: S\+PI@{Porting\+: S\+PI}}
+\subsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily void begin (\begin{DoxyParamCaption}\item[{int}]{bus\+No }\end{DoxyParamCaption})}
+
+Start S\+PI \begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+\mbox{\Hypertarget{group__Porting__SPI_gad8a210abb2138c105350cc91972edfa9}\label{group__Porting__SPI_gad8a210abb2138c105350cc91972edfa9}} 
+\index{Porting\+: S\+PI@{Porting\+: S\+PI}!transfer@{transfer}}
+\index{transfer@{transfer}!Porting\+: S\+PI@{Porting\+: S\+PI}}
+\subsubsection{\texorpdfstring{transfer()}{transfer()}}
+{\footnotesize\ttfamily uint8\+\_\+t transfer (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{tx\+\_\+ }\end{DoxyParamCaption})}
+
+Transfer a single byte 
+\begin{DoxyParams}{Parameters}
+{\em tx\+\_\+} & Byte to send \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Data returned via spi 
+\end{DoxyReturn}
+\begin{Desc}
+\item[Examples\+: ]\par
+\hyperlink{timingSearch3pin_8ino-example}{timing\+Search3pin.\+ino}.\end{Desc}
+\mbox{\Hypertarget{group__Porting__SPI_ga26b5af7f6420d54b479af9eaf1b2e452}\label{group__Porting__SPI_ga26b5af7f6420d54b479af9eaf1b2e452}} 
+\index{Porting\+: S\+PI@{Porting\+: S\+PI}!transfernb@{transfernb}}
+\index{transfernb@{transfernb}!Porting\+: S\+PI@{Porting\+: S\+PI}}
+\subsubsection{\texorpdfstring{transfernb()}{transfernb()}}
+{\footnotesize\ttfamily void transfernb (\begin{DoxyParamCaption}\item[{char $\ast$}]{tbuf,  }\item[{char $\ast$}]{rbuf,  }\item[{uint32\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+Transfer a buffer of data 
+\begin{DoxyParams}{Parameters}
+{\em tbuf} & Transmit buffer \\
+\hline
+{\em rbuf} & Receive buffer \\
+\hline
+{\em len} & Length of the data \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__Porting__SPI_gade902816b77c7377afd02ea4cb7e30b5}\label{group__Porting__SPI_gade902816b77c7377afd02ea4cb7e30b5}} 
+\index{Porting\+: S\+PI@{Porting\+: S\+PI}!transfern@{transfern}}
+\index{transfern@{transfern}!Porting\+: S\+PI@{Porting\+: S\+PI}}
+\subsubsection{\texorpdfstring{transfern()}{transfern()}}
+{\footnotesize\ttfamily void transfern (\begin{DoxyParamCaption}\item[{char $\ast$}]{buf,  }\item[{uint32\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+Transfer a buffer of data without an rx buffer 
+\begin{DoxyParams}{Parameters}
+{\em buf} & Pointer to a buffer of data \\
+\hline
+{\em len} & Length of the data \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{group__Porting__SPI_ga224a368f34373695f2a7e631d0742029}\label{group__Porting__SPI_ga224a368f34373695f2a7e631d0742029}} 
+\index{Porting\+: S\+PI@{Porting\+: S\+PI}!````~S\+PI@{$\sim$\+S\+PI}}
+\index{````~S\+PI@{$\sim$\+S\+PI}!Porting\+: S\+PI@{Porting\+: S\+PI}}
+\subsubsection{\texorpdfstring{$\sim$\+S\+P\+I()}{~SPI()}}
+{\footnotesize\ttfamily virtual $\sim$\hyperlink{group__Porting__SPI_gacd293e741d829f9578b8c5ee49833608}{S\+PI} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+

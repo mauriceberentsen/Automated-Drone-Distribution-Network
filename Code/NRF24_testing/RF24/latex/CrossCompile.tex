@@ -1,0 +1,109 @@
+\hyperlink{classRF24}{R\+F24} library supports cross-\/compilation. Advantages of cross-\/compilation\+:
+\begin{DoxyItemize}
+\item development tools don\textquotesingle{}t have to be installed on target machine
+\item resources of target machine don\textquotesingle{}t have to be sufficient for compilation
+\item compilation time can be reduced for large projects
+\end{DoxyItemize}
+
+Following prerequisites need to be assured\+:
+\begin{DoxyItemize}
+\item ssh passwordless access to target machine (\href{https://linuxconfig.org/passwordless-ssh}{\tt https\+://linuxconfig.\+org/passwordless-\/ssh})
+\item sudo of a remote user without password (\href{http://askubuntu.com/questions/334318/sudoers-file-enable-nopasswd-for-user-all-commands}{\tt http\+://askubuntu.\+com/questions/334318/sudoers-\/file-\/enable-\/nopasswd-\/for-\/user-\/all-\/commands})
+\item cross-\/compilation toolchain for your target machine; for R\+Pi 
+\begin{DoxyCode}
+git clone https:\textcolor{comment}{//github.com/raspberrypi/tools rpi\_tools }
+\end{DoxyCode}
+ and cross-\/compilation tools must be in P\+A\+TH, for example 
+\begin{DoxyCode}
+export PATH=$PATH:/your/dir/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin 
+\end{DoxyCode}
+
+\end{DoxyItemize}\hypertarget{CrossCompile_CxSteps}{}\section{Cross compilation steps\+:}\label{CrossCompile_CxSteps}
+
+\begin{DoxyEnumerate}
+\item clone \hyperlink{classRF24}{R\+F24} to a machine for cross-\/compilation 
+\begin{DoxyCode}
+git clone https:\textcolor{comment}{//github.com/TMRh20/RF24}
+cd \hyperlink{classRF24}{RF24}
+\end{DoxyCode}
+
+\item configure for cross compilation 
+\begin{DoxyCode}
+./configure --remote=pi@target\_linux\_host 
+\end{DoxyCode}
+ eventually 
+\begin{DoxyCode}
+./configure --remote=pi@target\_linux\_host --driver=<driver> 
+\end{DoxyCode}
+
+\item build 
+\begin{DoxyCode}
+make 
+\end{DoxyCode}
+
+\item (opt) install library to cross-\/compilation machine into cross-\/exvironment -\/ important for compilation of examples 
+\begin{DoxyCode}
+sudo make install 
+\end{DoxyCode}
+
+\item upload library to target machine 
+\begin{DoxyCode}
+make upload 
+\end{DoxyCode}
+
+\item (opt) compile examples 
+\begin{DoxyCode}
+cd examples\_linux
+make
+\end{DoxyCode}
+
+\item (opt) upload examples to target machine 
+\begin{DoxyCode}
+make upload 
+\end{DoxyCode}
+
+\end{DoxyEnumerate}\hypertarget{CrossCompile_CxStepsPython}{}\section{Cross comilation steps for python wrapper}\label{CrossCompile_CxStepsPython}
+Prerequisites\+:
+\begin{DoxyItemize}
+\item Python setuptools must be installed on both target and cross-\/compilation machines 
+\begin{DoxyCode}
+sudo pip install setuptools 
+\end{DoxyCode}
+ or 
+\begin{DoxyCode}
+sudo apt-\textcolor{keyword}{get} install python-setuptools 
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+Installation steps\+:
+\begin{DoxyEnumerate}
+\item Assure having libboost-\/python-\/dev library in your cross-\/compilation environment. Alternatively, you can install it into your target machine and copy /usr and /lib directories to the cross-\/compilation machine. For example 
+\begin{DoxyCode}
+mkdir -p rpi\_root && rsync -a pi@target\_linux\_host:/usr :/lib rpi\_root
+export CFLAGS=\textcolor{stringliteral}{"--sysroot=/your/dir/rpi\_root -I/your/dir/rpi\_root/usr/include/python2.7/"}
+\end{DoxyCode}
+
+\item Build the python wrapper 
+\begin{DoxyCode}
+cd pyRF24
+./setup.py build --compiler=crossunix
+\end{DoxyCode}
+
+\item Make the egg package 
+\begin{DoxyCode}
+./setup.py bdist\_egg --plat-name=cross 
+\end{DoxyCode}
+ dist/\+R\+F24-\/$<$version$>$-\/cross.\+egg should be created.
+\item Upload it to the target machine and install there\+: 
+\begin{DoxyCode}
+scp dist/\hyperlink{classRF24}{RF24}-*-cross.egg pi@target\_linux\_host:
+ssh pi@target\_linux\_host \textcolor{stringliteral}{'sudo easy\_install RF24-*-cross.egg'}
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+~\newline
+~\newline
+~\newline
+ 

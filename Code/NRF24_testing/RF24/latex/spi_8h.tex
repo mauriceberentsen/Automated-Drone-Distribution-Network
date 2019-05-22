@@ -1,0 +1,32 @@
+\hypertarget{spi_8h}{}\section{utility/\+Template/spi.h File Reference}
+\label{spi_8h}\index{utility/\+Template/spi.\+h@{utility/\+Template/spi.\+h}}
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$getopt.\+h$>$}\newline
+{\ttfamily \#include $<$fcntl.\+h$>$}\newline
+{\ttfamily \#include $<$sys/ioctl.\+h$>$}\newline
+{\ttfamily \#include $<$inttypes.\+h$>$}\newline
+{\ttfamily \#include $<$linux/types.\+h$>$}\newline
+{\ttfamily \#include $<$linux/spi/spidev.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__Porting__SPI_gacd293e741d829f9578b8c5ee49833608}{S\+PI} ()
+\item 
+void \hyperlink{group__Porting__SPI_gaf79095574842d60a6297aa5b01b6185f}{begin} (int bus\+No)
+\item 
+uint8\+\_\+t \hyperlink{group__Porting__SPI_gad8a210abb2138c105350cc91972edfa9}{transfer} (uint8\+\_\+t tx\+\_\+)
+\item 
+void \hyperlink{group__Porting__SPI_ga26b5af7f6420d54b479af9eaf1b2e452}{transfernb} (char $\ast$tbuf, char $\ast$rbuf, uint32\+\_\+t len)
+\item 
+void \hyperlink{group__Porting__SPI_gade902816b77c7377afd02ea4cb7e30b5}{transfern} (char $\ast$buf, uint32\+\_\+t len)
+\item 
+virtual \hyperlink{group__Porting__SPI_ga224a368f34373695f2a7e631d0742029}{$\sim$\+S\+PI} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class declaration for S\+PI helper files 

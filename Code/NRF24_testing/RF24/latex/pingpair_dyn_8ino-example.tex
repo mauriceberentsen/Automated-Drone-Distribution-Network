@@ -1,0 +1,247 @@
+\hypertarget{pingpair_dyn_8ino-example}{}\section{pingpair\+\_\+dyn.\+ino}
+This is an example of how to use payloads of a varying (dynamic) size on Arduino.
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>}
+\textcolor{comment}{}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include "\hyperlink{nRF24L01_8h}{nRF24L01.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Hardware configuration}
+\textcolor{comment}{//}
+
+\textcolor{comment}{// Set up nRF24L01 radio on SPI bus plus pins 7 & 8}
+
+\hyperlink{classRF24}{RF24} radio(7,8);
+
+\textcolor{comment}{// sets the role of this unit in hardware.  Connect to GND to be the 'pong' receiver}
+\textcolor{comment}{// Leave open to be the 'ping' transmitter}
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} role\_pin = 5;
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Topology}
+\textcolor{comment}{//}
+
+\textcolor{comment}{// Radio pipe addresses for the 2 nodes to communicate.}
+\textcolor{keyword}{const} uint64\_t pipes[2] = \{ 0xF0F0F0F0E1LL, 0xF0F0F0F0D2LL \};
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Role management}
+\textcolor{comment}{//}
+\textcolor{comment}{// Set up role.  This sketch uses the same software for all the nodes}
+\textcolor{comment}{// in this system.  Doing so greatly simplifies testing.  The hardware itself specifies}
+\textcolor{comment}{// which node it is.}
+\textcolor{comment}{//}
+\textcolor{comment}{// This is done through the role\_pin}
+\textcolor{comment}{//}
+
+\textcolor{comment}{// The various roles supported by this sketch}
+\textcolor{keyword}{typedef} \textcolor{keyword}{enum} \{ role\_ping\_out = 1, role\_pong\_back \} role\_e;
+
+\textcolor{comment}{// The debug-friendly names of those roles}
+\textcolor{keyword}{const} \textcolor{keywordtype}{char}* role\_friendly\_name[] = \{ \textcolor{stringliteral}{"invalid"}, \textcolor{stringliteral}{"Ping out"}, \textcolor{stringliteral}{"Pong back"}\};
+
+\textcolor{comment}{// The role of the current running sketch}
+role\_e role;
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Payload}
+\textcolor{comment}{//}
+
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} min\_payload\_size = 4;
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} max\_payload\_size = 32;
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} payload\_size\_increments\_by = 1;
+\textcolor{keywordtype}{int} next\_payload\_size = min\_payload\_size;
+
+\textcolor{keywordtype}{char} receive\_payload[max\_payload\_size+1]; \textcolor{comment}{// +1 to allow room for a terminating NULL char}
+
+\textcolor{keywordtype}{void} setup(\textcolor{keywordtype}{void})
+\{
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Role}
+  \textcolor{comment}{//}
+
+  \textcolor{comment}{// set up the role pin}
+  \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pinMode}(role\_pin, \hyperlink{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}{INPUT});
+  \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digitalWrite}(role\_pin,\hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});
+  \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(20); \textcolor{comment}{// Just to get a solid reading on the role pin}
+
+  \textcolor{comment}{// read the address pin, establish our role}
+  \textcolor{keywordflow}{if} ( digitalRead(role\_pin) )
+    role = role\_ping\_out;
+  \textcolor{keywordflow}{else}
+    role = role\_pong\_back;
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Print preamble}
+  \textcolor{comment}{//}
+
+  Serial.begin(115200);
+  
+  Serial.println(F(\textcolor{stringliteral}{"RF24/examples/pingpair\_dyn/"}));
+  Serial.print(F(\textcolor{stringliteral}{"ROLE: "}));
+  Serial.println(role\_friendly\_name[role]);
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Setup and configure rf radio}
+  \textcolor{comment}{//}
+
+  radio.begin();
+
+  \textcolor{comment}{// enable dynamic payloads}
+  radio.enableDynamicPayloads();
+
+  \textcolor{comment}{// optionally, increase the delay between retries & # of retries}
+  radio.setRetries(5,15);
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Open pipes to other nodes for communication}
+  \textcolor{comment}{//}
+
+  \textcolor{comment}{// This simple sketch opens two pipes for these two nodes to communicate}
+  \textcolor{comment}{// back and forth.}
+  \textcolor{comment}{// Open 'our' pipe for writing}
+  \textcolor{comment}{// Open the 'other' pipe for reading, in position #1 (we can have up to 5 pipes open for reading)}
+
+  \textcolor{keywordflow}{if} ( role == role\_ping\_out )
+  \{
+    radio.openWritingPipe(pipes[0]);
+    radio.openReadingPipe(1,pipes[1]);
+  \}
+  \textcolor{keywordflow}{else}
+  \{
+    radio.openWritingPipe(pipes[1]);
+    radio.openReadingPipe(1,pipes[0]);
+  \}
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Start listening}
+  \textcolor{comment}{//}
+
+  radio.startListening();
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Dump the configuration of the rf unit for debugging}
+  \textcolor{comment}{//}
+
+  radio.printDetails();
+\}
+
+\textcolor{keywordtype}{void} loop(\textcolor{keywordtype}{void})
+\{
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Ping out role.  Repeatedly send the current time}
+  \textcolor{comment}{//}
+
+  \textcolor{keywordflow}{if} (role == role\_ping\_out)
+  \{
+    \textcolor{comment}{// The payload will always be the same, what will change is how much of it we send.}
+    \textcolor{keyword}{static} \textcolor{keywordtype}{char} send\_payload[] = \textcolor{stringliteral}{"ABCDEFGHIJKLMNOPQRSTUVWXYZ789012"};
+
+    \textcolor{comment}{// First, stop listening so we can talk.}
+    radio.stopListening();
+
+    \textcolor{comment}{// Take the time, and send it.  This will block until complete}
+    Serial.print(F(\textcolor{stringliteral}{"Now sending length "}));
+    Serial.println(next\_payload\_size);
+    radio.write( send\_payload, next\_payload\_size );
+
+    \textcolor{comment}{// Now, continue listening}
+    radio.startListening();
+
+    \textcolor{comment}{// Wait here until we get a response, or timeout}
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} started\_waiting\_at = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+    \textcolor{keywordtype}{bool} timeout = \textcolor{keyword}{false};
+    \textcolor{keywordflow}{while} ( ! radio.available() && ! timeout )
+      \textcolor{keywordflow}{if} (\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - started\_waiting\_at > 500 )
+        timeout = \textcolor{keyword}{true};
+
+    \textcolor{comment}{// Describe the results}
+    \textcolor{keywordflow}{if} ( timeout )
+    \{
+      Serial.println(F(\textcolor{stringliteral}{"Failed, response timed out."}));
+    \}
+    \textcolor{keywordflow}{else}
+    \{
+      \textcolor{comment}{// Grab the response, compare, and send to debugging spew}
+      uint8\_t len = radio.getDynamicPayloadSize();
+      
+      \textcolor{comment}{// If a corrupt dynamic payload is received, it will be flushed}
+      \textcolor{keywordflow}{if}(!len)\{
+        \textcolor{keywordflow}{return}; 
+      \}
+      
+      radio.read( receive\_payload, len );
+
+      \textcolor{comment}{// Put a zero at the end for easy printing}
+      receive\_payload[len] = 0;
+
+      \textcolor{comment}{// Spew it}
+      Serial.print(F(\textcolor{stringliteral}{"Got response size="}));
+      Serial.print(len);
+      Serial.print(F(\textcolor{stringliteral}{" value="}));
+      Serial.println(receive\_payload);
+    \}
+    
+    \textcolor{comment}{// Update size for next time.}
+    next\_payload\_size += payload\_size\_increments\_by;
+    \textcolor{keywordflow}{if} ( next\_payload\_size > max\_payload\_size )
+      next\_payload\_size = min\_payload\_size;
+
+    \textcolor{comment}{// Try again 1s later}
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(100);
+  \}
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Pong back role.  Receive each packet, dump it out, and send it back}
+  \textcolor{comment}{//}
+
+  \textcolor{keywordflow}{if} ( role == role\_pong\_back )
+  \{
+    \textcolor{comment}{// if there is data ready}
+    \textcolor{keywordflow}{while} ( radio.available() )
+    \{
+
+      \textcolor{comment}{// Fetch the payload, and see if this was the last one.}
+      uint8\_t len = radio.getDynamicPayloadSize();
+      
+      \textcolor{comment}{// If a corrupt dynamic payload is received, it will be flushed}
+      \textcolor{keywordflow}{if}(!len)\{
+        \textcolor{keywordflow}{continue}; 
+      \}
+      
+      radio.read( receive\_payload, len );
+
+      \textcolor{comment}{// Put a zero at the end for easy printing}
+      receive\_payload[len] = 0;
+
+      \textcolor{comment}{// Spew it}
+      Serial.print(F(\textcolor{stringliteral}{"Got response size="}));
+      Serial.print(len);
+      Serial.print(F(\textcolor{stringliteral}{" value="}));
+      Serial.println(receive\_payload);
+
+      \textcolor{comment}{// First, stop listening so we can talk}
+      radio.stopListening();
+
+      \textcolor{comment}{// Send the final one back.}
+      radio.write( receive\_payload, len );
+      Serial.println(F(\textcolor{stringliteral}{"Sent response."}));
+
+      \textcolor{comment}{// Now, resume listening so we catch the next packets.}
+      radio.startListening();
+    \}
+  \}
+\}
+\textcolor{comment}{// vim:cin:ai:sts=2 sw=2 ft=cpp}
+\end{DoxyCodeInclude}
+ 

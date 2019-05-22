@@ -1,0 +1,95 @@
+Generic Linux devices are supported via S\+P\+I\+D\+EV, M\+R\+AA, R\+Pi native via B\+C\+M2835, or using Little\+Wire.
+
+\begin{DoxyNote}{Note}
+The S\+P\+I\+D\+EV option should work with most Linux systems supporting spi userspace device. ~\newline
+
+\end{DoxyNote}
+~\newline
+ \hypertarget{Linux_AutoInstall}{}\section{Automated Install}\label{Linux_AutoInstall}
+({\bfseries Designed \& Tested on R\+Pi} -\/ Defaults to S\+P\+I\+D\+EV on devices supporting it)
+
+
+\begin{DoxyEnumerate}
+\item Install prerequisites if there are any (M\+R\+AA, Little\+Wire libraries, setup S\+PI device etc)
+\item Download the install.\+sh file from \href{http://tmrh20.github.io/RF24Installer/RPi/install.sh}{\tt http\+://tmrh20.\+github.\+io/\+R\+F24\+Installer/\+R\+Pi/install.\+sh} 
+\begin{DoxyCode}
+wget http:\textcolor{comment}{//tmrh20.github.io/RF24Installer/RPi/install.sh }
+\end{DoxyCode}
+
+\item Make it executable 
+\begin{DoxyCode}
+chmod +x install.sh 
+\end{DoxyCode}
+
+\item Run it and choose your options 
+\begin{DoxyCode}
+./install.sh 
+\end{DoxyCode}
+
+\item Run an example from one of the libraries 
+\begin{DoxyCode}
+cd rf24libs/\hyperlink{classRF24}{RF24}/examples\_linux  
+\end{DoxyCode}
+ Edit the gettingstarted example, to set your pin configuration 
+\begin{DoxyCode}
+nano gettingstarted.cpp
+make  
+sudo ./gettingstarted  
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+~\newline
+ \hypertarget{Linux_ManInstall}{}\section{Manual Install}\label{Linux_ManInstall}
+
+\begin{DoxyEnumerate}
+\item Install prerequisites if there are any (M\+R\+AA, Little\+Wire libraries, setup S\+PI device etc) \begin{DoxyNote}{Note}
+See the \href{http://iotdk.intel.com/docs/master/mraa/index.html}{\tt M\+R\+AA } documentation for more info on installing M\+R\+AA ~\newline
+
+\end{DoxyNote}
+
+\item Make a directory to contain the \hyperlink{classRF24}{R\+F24} and possibly R\+F24\+Network lib and enter it 
+\begin{DoxyCode}
+mkdir ~/rf24libs 
+cd ~/rf24libs
+\end{DoxyCode}
+
+\item Clone the \hyperlink{classRF24}{R\+F24} repo 
+\begin{DoxyCode}
+git clone https:\textcolor{comment}{//github.com/tmrh20/RF24.git RF24 }
+\end{DoxyCode}
+
+\item Change to the new \hyperlink{classRF24}{R\+F24} directory 
+\begin{DoxyCode}
+cd \hyperlink{classRF24}{RF24} 
+\end{DoxyCode}
+
+\item Configure build environment using
+\begin{DoxyCode}
+./configure 
+\end{DoxyCode}
+ script. It auto detectes device and build environment. For overriding autodetections, use command-\/line switches, see
+\begin{DoxyCode}
+./configure --help 
+\end{DoxyCode}
+ for description.
+\item Build the library, and run an example file 
+\begin{DoxyCode}
+sudo make install 
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+cd examples\_linux  
+\end{DoxyCode}
+ Edit the gettingstarted example, to set your pin configuration 
+\begin{DoxyCode}
+nano gettingstarted.cpp 
+make 
+sudo ./gettingstarted
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+~\newline
+~\newline
+ 

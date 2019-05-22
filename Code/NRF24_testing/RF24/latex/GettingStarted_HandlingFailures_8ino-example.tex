@@ -1,0 +1,239 @@
+\hypertarget{GettingStarted_HandlingFailures_8ino-example}{}\section{Getting\+Started\+\_\+\+Handling\+Failures.\+ino}
+This example demonstrates the basic getting started functionality, but with failure handling for the radio chip. Addresses random radio failures etc, potentially due to loose wiring on breadboards etc.
+
+
+\begin{DoxyCodeInclude}
+
+\textcolor{comment}{/*}
+\textcolor{comment}{* Getting Started example sketch for nRF24L01+ radios}
+\textcolor{comment}{* This is a very basic example of how to send data from one node to another}
+\textcolor{comment}{* but modified to include failure handling.}
+\textcolor{comment}{* }
+\textcolor{comment}{* The nrf24l01+ radios are fairly reliable devices, but on breadboards etc, with inconsistent wiring,
+       failures may}
+\textcolor{comment}{* occur randomly after many hours to days or weeks. This sketch demonstrates how to handle the various
+       failures and}
+\textcolor{comment}{* keep the radio operational.}
+\textcolor{comment}{* }
+\textcolor{comment}{* The three main failure modes of the radio include:}
+\textcolor{comment}{* Writing to radio: Radio unresponsive - Fixed internally by adding a timeout to the internal write
+       functions in RF24 (failure handling)}
+\textcolor{comment}{* Reading from radio: Available returns true always - Fixed by adding a timeout to available functions by
+       the user. This is implemented internally in  RF24Network.}
+\textcolor{comment}{* Radio configuration settings are lost - Fixed by monitoring a value that is different from the default,
+       and re-configuring the radio if this setting reverts to the default.}
+\textcolor{comment}{* }
+\textcolor{comment}{* The printDetails output should appear as follows for radio #0:}
+\textcolor{comment}{* }
+\textcolor{comment}{* STATUS         = 0x0e RX\_DR=0 TX\_DS=0 MAX\_RT=0 RX\_P\_NO=7 TX\_FULL=0}
+\textcolor{comment}{* RX\_ADDR\_P0-1   = 0x65646f4e31 0x65646f4e32}
+\textcolor{comment}{* RX\_ADDR\_P2-5   = 0xc3 0xc4 0xc5 0xc6}
+\textcolor{comment}{* TX\_ADDR        = 0x65646f4e31}
+\textcolor{comment}{* RX\_PW\_P0-6     = 0x20 0x20 0x00 0x00 0x00 0x00}
+\textcolor{comment}{* EN\_AA          = 0x3f}
+\textcolor{comment}{* EN\_RXADDR      = 0x02}
+\textcolor{comment}{* RF\_CH          = 0x4c}
+\textcolor{comment}{* RF\_SETUP       = 0x03}
+\textcolor{comment}{* CONFIG         = 0x0f}
+\textcolor{comment}{* DYNPD/FEATURE  = 0x00 0x00}
+\textcolor{comment}{* Data Rate      = 1MBPS}
+\textcolor{comment}{* Model          = nRF24L01+}
+\textcolor{comment}{* CRC Length     = 16 bits}
+\textcolor{comment}{* PA Power       = PA\_LOW}
+\textcolor{comment}{*}
+\textcolor{comment}{*Users can use this sketch to troubleshoot radio module wiring etc. as it makes the radios hot-swapable}
+\textcolor{comment}{*}
+\textcolor{comment}{* Updated: 2019 by TMRh20}
+\textcolor{comment}{*/}
+
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{printf_8h}{printf.h}"}
+
+\textcolor{comment}{/****************** User Config ***************************/}
+\textcolor{comment}{/***      Set this radio as radio number 0 or 1         ***/}
+\textcolor{keywordtype}{bool} radioNumber = 0;
+
+\textcolor{comment}{/* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 */}
+\hyperlink{classRF24}{RF24} radio(7,8);
+\textcolor{comment}{/**********************************************************/}
+
+byte addresses[][6] = \{\textcolor{stringliteral}{"1Node"},\textcolor{stringliteral}{"2Node"}\};
+
+\textcolor{comment}{// Used to control whether this node is sending or receiving}
+\textcolor{keywordtype}{bool} role = 0;
+
+\textcolor{comment}{/**********************************************************/}
+\textcolor{comment}{//Function to configure the radio}
+\textcolor{keywordtype}{void} configureRadio()\{
+
+  radio.begin();
+
+  \textcolor{comment}{// Set the PA Level low to prevent power supply related issues since this is a}
+ \textcolor{comment}{// getting\_started sketch, and the likelihood of close proximity of the devices. RF24\_PA\_MAX is default.}
+  radio.setPALevel(\hyperlink{RF24_8h_a1e4cd0bea93e6b43422855fb0120aacea7d8d09f4a047b7c22655e56c98ca010c}{RF24\_PA\_LOW});
+  
+  \textcolor{comment}{// Open a writing and reading pipe on each radio, with opposite addresses}
+  \textcolor{keywordflow}{if}(radioNumber)\{
+    radio.openWritingPipe(addresses[1]);
+    radio.openReadingPipe(1,addresses[0]);
+  \}\textcolor{keywordflow}{else}\{
+    radio.openWritingPipe(addresses[0]);
+    radio.openReadingPipe(1,addresses[1]);
+  \}
+  
+  \textcolor{comment}{// Start the radio listening for data}
+  radio.startListening();
+  radio.printDetails();
+\}
+
+\textcolor{comment}{/**********************************************************/}
+
+\textcolor{keywordtype}{void} setup() \{
+  Serial.begin(115200);
+  Serial.println(F(\textcolor{stringliteral}{"RF24/examples/GettingStarted"}));
+  Serial.println(F(\textcolor{stringliteral}{"*** PRESS 'T' to begin transmitting to the other node"}));
+
+  \hyperlink{printf_8h_afc0d9ca32710dff550ebe56ab6b39d23}{printf\_begin}();
+  
+  configureRadio();  
+\}
+
+uint32\_t configTimer =  \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+
+\textcolor{keywordtype}{void} loop() \{
+  
+  \textcolor{keywordflow}{if}(radio.failureDetected)\{
+    radio.failureDetected = \textcolor{keyword}{false};
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(250);
+    Serial.println(\textcolor{stringliteral}{"Radio failure detected, restarting radio"});
+    configureRadio();        
+  \}
+  \textcolor{comment}{//Every 5 seconds, verify the configuration of the radio. This can be done using any }
+  \textcolor{comment}{//setting that is different from the radio defaults.}
+  \textcolor{keywordflow}{if}(\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - configTimer > 5000)\{
+    configTimer = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+    \textcolor{keywordflow}{if}(radio.getDataRate() != \hyperlink{RF24_8h_a82745de4aa1251b7561564b3ed1d6522afd01f3fd55247a67c0bcfd459fe17fdf}{RF24\_1MBPS})\{
+      radio.failureDetected = \textcolor{keyword}{true};
+      Serial.print(\textcolor{stringliteral}{"Radio configuration error detected"});
+    \}
+  \}
+  
+\textcolor{comment}{/****************** Ping Out Role ***************************/}  
+\textcolor{keywordflow}{if} (role == 1)  \{
+    
+    radio.stopListening();                                    \textcolor{comment}{// First, stop listening so we can talk.}
+    
+    
+    Serial.println(F(\textcolor{stringliteral}{"Now sending"}));
+
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} start\_time = micros();                             \textcolor{comment}{// Take the time, and send it.  This
+       will block until complete}
+     \textcolor{keywordflow}{if} (!radio.write( &start\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) ))\{
+       Serial.println(F(\textcolor{stringliteral}{"failed"}));
+     \}
+        
+    radio.startListening();                                    \textcolor{comment}{// Now, continue listening}
+    
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} started\_waiting\_at = micros();               \textcolor{comment}{// Set up a timeout period, get the current
+       microseconds}
+    \textcolor{keywordtype}{boolean} timeout = \textcolor{keyword}{false};                                   \textcolor{comment}{// Set up a variable to indicate if a
+       response was received or not}
+    
+    \textcolor{keywordflow}{while} ( ! radio.available() )\{                             \textcolor{comment}{// While nothing is received}
+      \textcolor{keywordflow}{if} (micros() - started\_waiting\_at > 200000 )\{            \textcolor{comment}{// If waited longer than 200ms, indicate
+       timeout and exit while loop}
+          timeout = \textcolor{keyword}{true};
+          \textcolor{keywordflow}{break};
+      \}      
+    \}
+        
+    \textcolor{keywordflow}{if} ( timeout )\{                                             \textcolor{comment}{// Describe the results}
+        Serial.println(F(\textcolor{stringliteral}{"Failed, response timed out."}));
+    \}\textcolor{keywordflow}{else}\{
+        \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;                                 \textcolor{comment}{// Grab the response, compare, and send to
+       debugging spew}
+        
+        \textcolor{comment}{//Failure Handling:}
+        uint32\_t failTimer = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+        \textcolor{keywordflow}{while}(radio.available())\{                               \textcolor{comment}{//If available always returns true, there
+       is a problem}
+          \textcolor{keywordflow}{if}(\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - failTimer > 250)\{
+            radio.failureDetected = \textcolor{keyword}{true};
+            Serial.println(\textcolor{stringliteral}{"Radio available failure detected"});
+            \textcolor{keywordflow}{break};
+          \}
+          radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+        \}
+        \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} end\_time = micros();
+        
+        \textcolor{comment}{// Spew it}
+        Serial.print(F(\textcolor{stringliteral}{"Sent "}));
+        Serial.print(start\_time);
+        Serial.print(F(\textcolor{stringliteral}{", Got response "}));
+        Serial.print(got\_time);
+        Serial.print(F(\textcolor{stringliteral}{", Round-trip delay "}));
+        Serial.print(end\_time-start\_time);
+        Serial.println(F(\textcolor{stringliteral}{" microseconds"}));
+    \}
+
+    \textcolor{comment}{// Try again 1s later}
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(1000);
+  \}
+
+
+
+\textcolor{comment}{/****************** Pong Back Role ***************************/}
+
+  \textcolor{keywordflow}{if} ( role == 0 )
+  \{
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;
+    
+    \textcolor{keywordflow}{if}( radio.available())\{
+      
+      uint32\_t failTimer = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();                                                         \textcolor{comment}{//
+       Variable for the received timestamp}
+      \textcolor{keywordflow}{while} (radio.available()) \{                                 \textcolor{comment}{// While there is data ready}
+        \textcolor{keywordflow}{if}(\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()-failTimer > 500)\{
+          Serial.println(\textcolor{stringliteral}{"Radio available failure detected"});
+          radio.failureDetected = \textcolor{keyword}{true};
+          \textcolor{keywordflow}{break};
+        \}
+        radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );             \textcolor{comment}{// Get the payload}
+      \}
+     
+      radio.stopListening();                                        \textcolor{comment}{// First, stop listening so we can talk
+         }
+      radio.write( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );              \textcolor{comment}{// Send the final one back.      }
+      radio.startListening();                                       \textcolor{comment}{// Now, resume listening so we catch
+       the next packets.     }
+      Serial.print(F(\textcolor{stringliteral}{"Sent response "}));
+      Serial.println(got\_time);  
+   \}
+ \}
+
+
+
+
+\textcolor{comment}{/****************** Change Roles via Serial Commands ***************************/}
+
+  \textcolor{keywordflow}{if} ( Serial.available() )
+  \{
+    \textcolor{keywordtype}{char} c = toupper(Serial.read());
+    \textcolor{keywordflow}{if} ( c == \textcolor{charliteral}{'T'} && role == 0 )\{      
+      Serial.println(F(\textcolor{stringliteral}{"*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK"}));
+      role = 1;                  \textcolor{comment}{// Become the primary transmitter (ping out)}
+    
+   \}\textcolor{keywordflow}{else}
+    \textcolor{keywordflow}{if} ( c == \textcolor{charliteral}{'R'} && role == 1 )\{
+      Serial.println(F(\textcolor{stringliteral}{"*** CHANGING TO RECEIVE ROLE -- PRESS 'T' TO SWITCH BACK"}));      
+       role = 0;                \textcolor{comment}{// Become the primary receiver (pong back)}
+       radio.startListening();
+       
+    \}
+  \}
+
+
+\} \textcolor{comment}{// Loop}
+\end{DoxyCodeInclude}
+ 

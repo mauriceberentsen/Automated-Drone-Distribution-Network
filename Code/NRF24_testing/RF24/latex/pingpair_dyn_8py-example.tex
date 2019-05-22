@@ -1,0 +1,148 @@
+\hypertarget{pingpair_dyn_8py-example}{}\section{pingpair\+\_\+dyn.\+py}
+This is a python example for R\+Pi of how to use payloads of a varying (dynamic) size.
+
+
+\begin{DoxyCodeInclude}
+1 \textcolor{comment}{#!/usr/bin/env python}
+2 
+3 \textcolor{comment}{#}
+4 \textcolor{comment}{# Example using Dynamic Payloads}
+5 \textcolor{comment}{# }
+6 \textcolor{comment}{#  This is an example of how to use payloads of a varying (dynamic) size.}
+7 \textcolor{comment}{# }
+8 
+9 \textcolor{keyword}{from} \_\_future\_\_ \textcolor{keyword}{import} print\_function
+10 \textcolor{keyword}{import} time
+11 \textcolor{keyword}{from} RF24 \textcolor{keyword}{import} *
+12 \textcolor{keyword}{import} RPi.GPIO \textcolor{keyword}{as} GPIO
+13 
+14 irq\_gpio\_pin = \textcolor{keywordtype}{None}
+15 
+16 
+18 
+19 \textcolor{comment}{# CE Pin, CSN Pin, SPI Speed}
+20 
+21 \textcolor{comment}{# Setup for GPIO 22 CE and CE0 CSN with SPI Speed @ 8Mhz}
+22 \textcolor{comment}{#radio = RF24(RPI\_V2\_GPIO\_P1\_15, BCM2835\_SPI\_CS0, BCM2835\_SPI\_SPEED\_8MHZ)}
+23 
+24 \textcolor{comment}{#RPi B}
+25 \textcolor{comment}{# Setup for GPIO 15 CE and CE1 CSN with SPI Speed @ 8Mhz}
+26 \textcolor{comment}{#radio = RF24(RPI\_V2\_GPIO\_P1\_15, BCM2835\_SPI\_CS0, BCM2835\_SPI\_SPEED\_8MHZ)}
+27 
+28 \textcolor{comment}{#RPi B+}
+29 \textcolor{comment}{# Setup for GPIO 22 CE and CE0 CSN for RPi B+ with SPI Speed @ 8Mhz}
+30 \textcolor{comment}{#radio = RF24(RPI\_BPLUS\_GPIO\_J8\_15, RPI\_BPLUS\_GPIO\_J8\_24, BCM2835\_SPI\_SPEED\_8MHZ)}
+31 
+32 \textcolor{comment}{# RPi Alternate, with SPIDEV - Note: Edit RF24/arch/BBB/spi.cpp and  set 'this->device =
+       "/dev/spidev0.0";;' or as listed in /dev}
+33 radio = \hyperlink{classRF24}{RF24}(22, 0);
+34 
+35 
+36 \textcolor{comment}{# Setup for connected IRQ pin, GPIO 24 on RPi B+; uncomment to activate}
+37 \textcolor{comment}{#irq\_gpio\_pin = RPI\_BPLUS\_GPIO\_J8\_18}
+38 \textcolor{comment}{#irq\_gpio\_pin = 24}
+39 
+40 
+41 \textcolor{keyword}{def }try\_read\_data(channel=0):
+42     \textcolor{keywordflow}{if} radio.available():
+43         \textcolor{keywordflow}{while} radio.available():
+44             len = radio.getDynamicPayloadSize()
+45             receive\_payload = radio.read(len)
+46             print(\textcolor{stringliteral}{'Got payload size=\{\} value="\{\}"'}.format(len, receive\_payload.decode(\textcolor{stringliteral}{'utf-8'})))
+47             \textcolor{comment}{# First, stop listening so we can talk}
+48             radio.stopListening()
+49 
+50             \textcolor{comment}{# Send the final one back.}
+51             radio.write(receive\_payload)
+52             print(\textcolor{stringliteral}{'Sent response.'})
+53 
+54             \textcolor{comment}{# Now, resume listening so we catch the next packets.}
+55             radio.startListening()
+56 
+57 pipes = [0xF0F0F0F0E1, 0xF0F0F0F0D2]
+58 min\_payload\_size = 4
+59 max\_payload\_size = 32
+60 payload\_size\_increments\_by = 1
+61 next\_payload\_size = min\_payload\_size
+62 inp\_role = \textcolor{stringliteral}{'none'}
+63 send\_payload = b\textcolor{stringliteral}{'ABCDEFGHIJKLMNOPQRSTUVWXYZ789012'}
+64 millis = \textcolor{keyword}{lambda}: int(round(time.time() * 1000))
+65 
+66 print(\textcolor{stringliteral}{'pyRF24/examples/pingpair\_dyn/'})
+67 radio.begin()
+68 radio.enableDynamicPayloads()
+69 radio.setRetries(5,15)
+70 radio.printDetails()
+71 
+72 print(\textcolor{stringliteral}{' ************ Role Setup *********** '})
+73 \textcolor{keywordflow}{while} (inp\_role !=\textcolor{stringliteral}{'0'}) \textcolor{keywordflow}{and} (inp\_role !=\textcolor{stringliteral}{'1'}):
+74     inp\_role = str(input(\textcolor{stringliteral}{'Choose a role: Enter 0 for receiver, 1 for transmitter (CTRL+C to exit) '}))
+75 
+76 \textcolor{keywordflow}{if} inp\_role == \textcolor{stringliteral}{'0'}:
+77     print(\textcolor{stringliteral}{'Role: Pong Back, awaiting transmission'})
+78     \textcolor{keywordflow}{if} irq\_gpio\_pin \textcolor{keywordflow}{is} \textcolor{keywordflow}{not} \textcolor{keywordtype}{None}:
+79         \textcolor{comment}{# set up callback for irq pin}
+80         GPIO.setmode(GPIO.BCM)
+81         GPIO.setup(irq\_gpio\_pin, GPIO.IN, pull\_up\_down=GPIO.PUD\_UP)
+82         GPIO.add\_event\_detect(irq\_gpio\_pin, GPIO.FALLING, callback=try\_read\_data)
+83 
+84     radio.openWritingPipe(pipes[1])
+85     radio.openReadingPipe(1,pipes[0])
+86     radio.startListening()
+87 \textcolor{keywordflow}{else}:
+88     print(\textcolor{stringliteral}{'Role: Ping Out, starting transmission'})
+89     radio.openWritingPipe(pipes[0])
+90     radio.openReadingPipe(1,pipes[1])
+91 
+92 \textcolor{comment}{# forever loop}
+93 \textcolor{keywordflow}{while} 1:
+94     \textcolor{keywordflow}{if} inp\_role == \textcolor{stringliteral}{'1'}:   \textcolor{comment}{# ping out}
+95         \textcolor{comment}{# The payload will always be the same, what will change is how much of it we send.}
+96 
+97         \textcolor{comment}{# First, stop listening so we can talk.}
+98         radio.stopListening()
+99 
+100         \textcolor{comment}{# Take the time, and send it.  This will block until complete}
+101         print(\textcolor{stringliteral}{'Now sending length \{\} ... '}.format(next\_payload\_size), end=\textcolor{stringliteral}{""})
+102         radio.write(send\_payload[:next\_payload\_size])
+103 
+104         \textcolor{comment}{# Now, continue listening}
+105         radio.startListening()
+106 
+107         \textcolor{comment}{# Wait here until we get a response, or timeout}
+108         started\_waiting\_at = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()
+109         timeout = \textcolor{keyword}{False}
+110         \textcolor{keywordflow}{while} (\textcolor{keywordflow}{not} radio.available()) \textcolor{keywordflow}{and} (\textcolor{keywordflow}{not} timeout):
+111             \textcolor{keywordflow}{if} (\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - started\_waiting\_at) > 500:
+112                 timeout = \textcolor{keyword}{True}
+113 
+114         \textcolor{comment}{# Describe the results}
+115         \textcolor{keywordflow}{if} timeout:
+116             print(\textcolor{stringliteral}{'failed, response timed out.'})
+117         \textcolor{keywordflow}{else}:
+118             \textcolor{comment}{# Grab the response, compare, and send to debugging spew}
+119             len = radio.getDynamicPayloadSize()
+120             receive\_payload = radio.read(len)
+121 
+122             \textcolor{comment}{# Spew it}
+123             print(\textcolor{stringliteral}{'got response size=\{\} value="\{\}"'}.format(len, receive\_payload.decode(\textcolor{stringliteral}{'utf-8'})))
+124 
+125         \textcolor{comment}{# Update size for next time.}
+126         next\_payload\_size += payload\_size\_increments\_by
+127         \textcolor{keywordflow}{if} next\_payload\_size > max\_payload\_size:
+128             next\_payload\_size = min\_payload\_size
+129         time.sleep(0.1)
+130     \textcolor{keywordflow}{else}:
+131         \textcolor{comment}{# Pong back role.  Receive each packet, dump it out, and send it back}
+132 
+133         \textcolor{comment}{# if there is data ready}
+134         \textcolor{keywordflow}{if} irq\_gpio\_pin \textcolor{keywordflow}{is} \textcolor{keywordtype}{None}:
+135             \textcolor{comment}{# no irq pin is set up -> poll it}
+136             try\_read\_data()
+137         \textcolor{keywordflow}{else}:
+138             \textcolor{comment}{# callback routine set for irq pin takes care for reading -}
+139             \textcolor{comment}{# do nothing, just sleeps in order not to burn cpu by looping}
+140             time.sleep(1000)
+141 
+\end{DoxyCodeInclude}
+ 

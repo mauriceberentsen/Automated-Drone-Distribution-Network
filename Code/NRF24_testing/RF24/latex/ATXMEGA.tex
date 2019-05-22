@@ -1,0 +1,53 @@
+The \hyperlink{classRF24}{R\+F24} driver can be build as a static library with Atmel Studio 7 in order to be included as any other library in another program for the X\+M\+E\+GA family.
+
+Currently only the {\bfseries A\+T\+X\+M\+E\+GA D3} family is implemented.\hypertarget{ATXMEGA_Preparation}{}\section{Preparation}\label{ATXMEGA_Preparation}
+Create an empty G\+CC Static Library project in A\+S7.~\newline
+ As not all files are required, copy the following directory structure in the project\+:
+
+
+\begin{DoxyCode}
+utility\(\backslash\)
+  ATXMegaD3\(\backslash\)
+    compatibility.c
+    compatibility.h
+    gpio.cpp
+    gpio.h
+    gpio\_helper.c
+    gpio\_helper.h
+    includes.h
+    RF24\_arch\_config.h
+    spi.cpp
+    spi.h
+nRF24L01.h
+printf.h
+\hyperlink{classRF24}{RF24}.cpp
+\hyperlink{classRF24}{RF24}.h
+RF24\_config.h
+\end{DoxyCode}
+\hypertarget{ATXMEGA_Usage}{}\section{Usage}\label{ATXMEGA_Usage}
+Add the library to your project!~\newline
+ In the file where the {\bfseries main()} is put the following in order to update the millisecond functionality\+:
+
+
+\begin{DoxyCode}
+ISR(TCE0\_OVF\_vect)
+\{
+   update\_milisec();
+\}
+\end{DoxyCode}
+
+
+Declare the rf24 radio with {\bfseries \hyperlink{classRF24}{R\+F24} radio(\+X\+M\+E\+G\+A\+\_\+\+P\+O\+R\+T\+C\+\_\+\+P\+I\+N3, X\+M\+E\+G\+A\+\_\+\+S\+P\+I\+\_\+\+P\+O\+R\+T\+\_\+\+C);}
+
+First parameter is the CE pin which can be any available pin on the uC.
+
+Second parameter is the CS which can be on port C ({\bfseries X\+M\+E\+G\+A\+\_\+\+S\+P\+I\+\_\+\+P\+O\+R\+T\+\_\+C}) or on port D ({\bfseries X\+M\+E\+G\+A\+\_\+\+S\+P\+I\+\_\+\+P\+O\+R\+T\+\_\+D}).
+
+Call the $\ast$$\ast$\+\_\+\+\_\+start\+\_\+timer()$\ast$$\ast$ to start the millisecond timer.
+
+\begin{DoxyNote}{Note}
+Note about the millisecond functionality\+:~\newline
+
+\end{DoxyNote}
+The millisecond functionality is based on the T\+C\+E0 so don\textquotesingle{}t use these pins as IO.~\newline
+ The operating frequency of the uC is 32\+M\+Hz. If you have other frequency change the T\+C\+E0 registers appropriatly in function $\ast$$\ast$\+\_\+\+\_\+start\+\_\+timer()$\ast$$\ast$ in {\bfseries compatibility.\+c} file for your frequency. 

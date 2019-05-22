@@ -1,0 +1,125 @@
+\hypertarget{scanner_8ino-example}{}\section{scanner.\+ino}
+Example to detect interference on the various channels available. This is a good diagnostic tool to check whether you\textquotesingle{}re picking a good channel for your application.
+
+Inspired by cpixip. See \href{http://arduino.cc/forum/index.php/topic,54795.0.html}{\tt http\+://arduino.\+cc/forum/index.\+php/topic,54795.\+0.\+html}
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>}
+\textcolor{comment}{}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include "\hyperlink{nRF24L01_8h}{nRF24L01.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{printf_8h}{printf.h}"}
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Hardware configuration}
+\textcolor{comment}{//}
+
+\textcolor{comment}{// Set up nRF24L01 radio on SPI bus plus pins 7 & 8}
+
+\hyperlink{classRF24}{RF24} radio(7,8);
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Channel info}
+\textcolor{comment}{//}
+
+\textcolor{keyword}{const} uint8\_t num\_channels = 126;
+uint8\_t values[num\_channels];
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Setup}
+\textcolor{comment}{//}
+
+\textcolor{keywordtype}{void} setup(\textcolor{keywordtype}{void})
+\{
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Print preamble}
+  \textcolor{comment}{//}
+
+  Serial.begin(115200);
+  \hyperlink{printf_8h_afc0d9ca32710dff550ebe56ab6b39d23}{printf\_begin}();
+  Serial.println(F(\textcolor{stringliteral}{"\(\backslash\)n\(\backslash\)rRF24/examples/scanner/"}));
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Setup and configure rf radio}
+  \textcolor{comment}{//}
+
+  radio.begin();
+  radio.setAutoAck(\textcolor{keyword}{false});
+
+  \textcolor{comment}{// Get into standby mode}
+  radio.startListening();
+  radio.stopListening();
+
+  radio.printDetails();
+
+  \textcolor{comment}{// Print out header, high then low digit}
+  \textcolor{keywordtype}{int} i = 0;
+  \textcolor{keywordflow}{while} ( i < num\_channels )
+  \{
+    printf(\textcolor{stringliteral}{"%x"},i>>4);
+    ++i;
+  \}
+  Serial.println();
+  i = 0;
+  \textcolor{keywordflow}{while} ( i < num\_channels )
+  \{
+    printf(\textcolor{stringliteral}{"%x"},i&0xf);
+    ++i;
+  \}
+  Serial.println();
+\}
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Loop}
+\textcolor{comment}{//}
+
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} num\_reps = 100;
+
+\textcolor{keywordtype}{void} loop(\textcolor{keywordtype}{void})
+\{
+  \textcolor{comment}{// Clear measurement values}
+  memset(values,0,\textcolor{keyword}{sizeof}(values));
+
+  \textcolor{comment}{// Scan all channels num\_reps times}
+  \textcolor{keywordtype}{int} rep\_counter = num\_reps;
+  \textcolor{keywordflow}{while} (rep\_counter--)
+  \{
+    \textcolor{keywordtype}{int} i = num\_channels;
+    \textcolor{keywordflow}{while} (i--)
+    \{
+      \textcolor{comment}{// Select this channel}
+      radio.setChannel(i);
+
+      \textcolor{comment}{// Listen for a little}
+      radio.startListening();
+      \hyperlink{group__Porting__General_ga9384257bf5d5c1aae675b22cc3ecb91a}{delayMicroseconds}(128);
+      radio.stopListening();
+
+      \textcolor{comment}{// Did we get a carrier?}
+      \textcolor{keywordflow}{if} ( radio.testCarrier() )\{
+        ++values[i];
+      \}
+    \}
+  \}
+
+  \textcolor{comment}{// Print out channel measurements, clamped to a single hex digit}
+  \textcolor{keywordtype}{int} i = 0;
+  \textcolor{keywordflow}{while} ( i < num\_channels )
+  \{
+    printf(\textcolor{stringliteral}{"%x"},min(0xf,values[i]));
+    ++i;
+  \}
+  Serial.println();
+\}
+
+\textcolor{comment}{// vim:ai:cin:sts=2 sw=2 ft=cpp}
+\end{DoxyCodeInclude}
+ 

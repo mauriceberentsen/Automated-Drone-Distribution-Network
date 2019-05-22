@@ -1,0 +1,157 @@
+\hypertarget{pingpair_irq_8ino-example}{}\section{pingpair\+\_\+irq.\+ino}
+{\bfseries Update\+: T\+M\+Rh20}~\newline
+ This is an example of how to user interrupts to interact with the radio, and a demonstration of how to use them to sleep when receiving, and not miss any payloads.~\newline
+ The pingpair\+\_\+sleepy example expands on sleep functionality with a timed sleep option for the transmitter. Sleep functionality is built directly into my fork of the R\+F24\+Network library~\newline
+
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>}
+\textcolor{comment}{}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{ }
+\textcolor{comment}{ Update 2014 - TMRh20}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include "\hyperlink{nRF24L01_8h}{nRF24L01.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{printf_8h}{printf.h}"}
+
+\textcolor{comment}{// Hardware configuration}
+\hyperlink{classRF24}{RF24} radio(7,8);                          \textcolor{comment}{// Set up nRF24L01 radio on SPI bus plus pins 7 & 8}
+                                        
+\textcolor{keyword}{const} \textcolor{keywordtype}{short} role\_pin = 5;                 \textcolor{comment}{// sets the role of this unit in hardware.  Connect to GND to be
+       the 'pong' receiver}
+                                          \textcolor{comment}{// Leave open to be the 'ping' transmitter}
+
+\textcolor{comment}{// Demonstrates another method of setting up the addresses}
+byte address[][5] = \{ 0xCC,0xCE,0xCC,0xCE,0xCC , 0xCE,0xCC,0xCE,0xCC,0xCE\};
+
+\textcolor{comment}{// Role management}
+
+\textcolor{comment}{// Set up role.  This sketch uses the same software for all the nodes in this}
+\textcolor{comment}{// system.  Doing so greatly simplifies testing.  The hardware itself specifies}
+\textcolor{comment}{// which node it is.}
+\textcolor{comment}{// This is done through the role\_pin}
+\textcolor{keyword}{typedef} \textcolor{keyword}{enum} \{ role\_sender = 1, role\_receiver \} role\_e;                 \textcolor{comment}{// The various roles supported by
+       this sketch}
+\textcolor{keyword}{const} \textcolor{keywordtype}{char}* role\_friendly\_name[] = \{ \textcolor{stringliteral}{"invalid"}, \textcolor{stringliteral}{"Sender"}, \textcolor{stringliteral}{"Receiver"}\};  \textcolor{comment}{// The debug-friendly names of
+       those roles}
+role\_e role;                                                            \textcolor{comment}{// The role of the current running
+       sketch}
+
+\textcolor{keyword}{static} uint32\_t message\_count = 0;
+
+
+\textcolor{comment}{/********************** Setup *********************/}
+
+\textcolor{keywordtype}{void} setup()\{
+
+  \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pinMode}(role\_pin, \hyperlink{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}{INPUT});                        \textcolor{comment}{// set up the role pin                  }
+  \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digitalWrite}(role\_pin,\hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});                     \textcolor{comment}{// Change this to LOW/HIGH instead of
+       using an external pin}
+  \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(20);                                       \textcolor{comment}{// Just to get a solid reading on the role pin}
+
+  \textcolor{keywordflow}{if} ( digitalRead(role\_pin) )                    \textcolor{comment}{// read the address pin, establish our role}
+    role = role\_sender;
+  \textcolor{keywordflow}{else}
+    role = role\_receiver;
+
+
+  Serial.begin(115200);
+  \hyperlink{printf_8h_afc0d9ca32710dff550ebe56ab6b39d23}{printf\_begin}();
+  Serial.print(F(\textcolor{stringliteral}{"\(\backslash\)n\(\backslash\)rRF24/examples/pingpair\_irq\(\backslash\)n\(\backslash\)rROLE: "}));
+  Serial.println(role\_friendly\_name[role]);
+
+  \textcolor{comment}{// Setup and configure rf radio}
+  radio.begin();  
+  \textcolor{comment}{//radio.setPALevel(RF24\_PA\_LOW);}
+  radio.enableAckPayload();                         \textcolor{comment}{// We will be using the Ack Payload feature, so please
+       enable it}
+  radio.enableDynamicPayloads();                    \textcolor{comment}{// Ack payloads are dynamic payloads}
+                                                    \textcolor{comment}{// Open pipes to other node for communication}
+  \textcolor{keywordflow}{if} ( role == role\_sender ) \{                      \textcolor{comment}{// This simple sketch opens a pipe on a single address
+       for these two nodes to }
+     radio.openWritingPipe(address[0]);             \textcolor{comment}{// communicate back and forth.  One listens on it, the
+       other talks to it.}
+     radio.openReadingPipe(1,address[1]); 
+  \}\textcolor{keywordflow}{else}\{
+    radio.openWritingPipe(address[1]);
+    radio.openReadingPipe(1,address[0]);
+    radio.startListening();
+    radio.writeAckPayload( 1, &message\_count, \textcolor{keyword}{sizeof}(message\_count) );  \textcolor{comment}{// Add an ack packet for the next
+       time around.  This is a simple}
+    ++message\_count;        
+  \}
+  radio.printDetails();                             \textcolor{comment}{// Dump the configuration of the rf unit for debugging}
+  \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(50);
+  attachInterrupt(0, check\_radio, \hyperlink{group__Porting__General_gab811d8c6ff3a505312d3276590444289}{LOW});             \textcolor{comment}{// Attach interrupt handler to interrupt #0 (using
+       pin 2) on BOTH the sender and receiver}
+\}
+
+
+
+\textcolor{comment}{/********************** Main Loop *********************/}
+\textcolor{keywordtype}{void} loop() \{
+
+
+  \textcolor{keywordflow}{if} (role == role\_sender)  \{                        \textcolor{comment}{// Sender role.  Repeatedly send the current time }
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} time = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();                   \textcolor{comment}{// Take the time, and send it.}
+      Serial.print(F(\textcolor{stringliteral}{"Now sending "}));
+      Serial.println(time);
+    radio.startWrite( &time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) ,0);
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(2000);                                     \textcolor{comment}{// Try again soon}
+  \}
+
+
+  \textcolor{keywordflow}{if}(role == role\_receiver)\{                        \textcolor{comment}{// Receiver does nothing except in IRQ}
+  \}  
+\}
+
+
+\textcolor{comment}{/********************** Interrupt *********************/}
+
+\textcolor{keywordtype}{void} check\_radio(\textcolor{keywordtype}{void})                                \textcolor{comment}{// Receiver role: Does nothing!  All the work is in
+       IRQ}
+\{
+  
+  \textcolor{keywordtype}{bool} tx,fail,rx;
+  radio.whatHappened(tx,fail,rx);                     \textcolor{comment}{// What happened?}
+  
+  \textcolor{keywordflow}{if} ( tx ) \{                                         \textcolor{comment}{// Have we successfully transmitted?}
+      \textcolor{keywordflow}{if} ( role == role\_sender )\{   Serial.println(F(\textcolor{stringliteral}{"Send:OK"})); \}
+      \textcolor{keywordflow}{if} ( role == role\_receiver )\{ Serial.println(F(\textcolor{stringliteral}{"Ack Payload:Sent"})); \}
+  \}
+  
+  \textcolor{keywordflow}{if} ( fail ) \{                                       \textcolor{comment}{// Have we failed to transmit?}
+      \textcolor{keywordflow}{if} ( role == role\_sender )\{   Serial.println(F(\textcolor{stringliteral}{"Send:Failed"}));  \}
+      \textcolor{keywordflow}{if} ( role == role\_receiver )\{ Serial.println(F(\textcolor{stringliteral}{"Ack Payload:Failed"}));  \}
+  \}
+  
+  \textcolor{keywordflow}{if} ( rx || radio.available())\{                      \textcolor{comment}{// Did we receive a message?}
+    
+    \textcolor{keywordflow}{if} ( role == role\_sender ) \{                      \textcolor{comment}{// If we're the sender, we've received an ack payload}
+        radio.read(&message\_count,\textcolor{keyword}{sizeof}(message\_count));
+        Serial.print(F(\textcolor{stringliteral}{"Ack: "}));
+        Serial.println(message\_count);
+    \}
+
+    
+    \textcolor{keywordflow}{if} ( role == role\_receiver ) \{                    \textcolor{comment}{// If we're the receiver, we've received a time
+       message}
+      \textcolor{keyword}{static} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;                  \textcolor{comment}{// Get this payload and dump it}
+      radio.read( &got\_time, \textcolor{keyword}{sizeof}(got\_time) );
+      Serial.print(F(\textcolor{stringliteral}{"Got payload "}));
+      Serial.println(got\_time);
+      radio.writeAckPayload( 1, &message\_count, \textcolor{keyword}{sizeof}(message\_count) );  \textcolor{comment}{// Add an ack packet for the next
+       time around.  This is a simple}
+      ++message\_count;                                \textcolor{comment}{// packet counter}
+    \}
+  \}
+\}
+\end{DoxyCodeInclude}
+ 

@@ -1,0 +1,199 @@
+\hypertarget{transfer_8cpp-example}{}\section{transfer.\+cpp}
+{\bfseries For Linux}~\newline
+ This example demonstrates half-\/rate transfer using the F\+I\+FO buffers~\newline
+
+
+It is an example of how to use the \hyperlink{classRF24}{R\+F24} class. Write this sketch to two different nodes. Put one of the nodes into \textquotesingle{}transmit\textquotesingle{} mode by connecting ~\newline
+ with the serial monitor and sending a \textquotesingle{}T\textquotesingle{}. The data transfer will begin, with the receiver displaying the payload count. (32\+Byte Payloads) ~\newline
+
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{TMRh20 2014}
+\textcolor{comment}{}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <cstdlib>}
+\textcolor{preprocessor}{#include <iostream>}
+\textcolor{preprocessor}{#include <sstream>}
+\textcolor{preprocessor}{#include <string>}
+\textcolor{preprocessor}{#include <\hyperlink{RF24_8h}{RF24/RF24.h}>}
+\textcolor{preprocessor}{#include <unistd.h>}
+
+\textcolor{keyword}{using namespace }\hyperlink{namespacestd}{std};
+\textcolor{comment}{//}
+\textcolor{comment}{// Hardware configuration}
+\textcolor{comment}{//}
+
+\textcolor{comment}{/****************** Raspberry Pi ***********************/}
+
+\textcolor{comment}{// Radio CE Pin, CSN Pin, SPI Speed}
+\textcolor{comment}{// See http://www.airspayce.com/mikem/bcm2835/group\_\_constants.html#ga63c029bd6500167152db4e57736d0939 and
+       the related enumerations for pin information.}
+
+\textcolor{comment}{// Setup for GPIO 22 CE and CE0 CSN with SPI Speed @ 4Mhz}
+\textcolor{comment}{//RF24 radio(RPI\_V2\_GPIO\_P1\_22, BCM2835\_SPI\_CS0, BCM2835\_SPI\_SPEED\_4MHZ);}
+
+\textcolor{comment}{// NEW: Setup for RPi B+}
+\textcolor{comment}{//RF24 radio(RPI\_BPLUS\_GPIO\_J8\_15,RPI\_BPLUS\_GPIO\_J8\_24, BCM2835\_SPI\_SPEED\_8MHZ);}
+
+\textcolor{comment}{// Setup for GPIO 15 CE and CE0 CSN with SPI Speed @ 8Mhz}
+\textcolor{comment}{//RF24 radio(RPI\_V2\_GPIO\_P1\_15, RPI\_V2\_GPIO\_P1\_24, BCM2835\_SPI\_SPEED\_8MHZ);}
+\hyperlink{classRF24}{RF24} radio(25,8, BCM2835\_SPI\_SPEED\_8MHZ);
+
+\textcolor{comment}{/*** RPi Alternate ***/}
+\textcolor{comment}{//Note: Specify SPI BUS 0 or 1 instead of CS pin number.}
+\textcolor{comment}{// See http://tmrh20.github.io/RF24/RPi.html for more information on usage}
+
+\textcolor{comment}{//RPi Alternate, with MRAA}
+\textcolor{comment}{//RF24 radio(15,0);}
+
+\textcolor{comment}{//RPi Alternate, with SPIDEV - Note: Edit RF24/arch/BBB/spi.cpp and  set 'this->device =
+       "/dev/spidev0.0";;' or as listed in /dev}
+\textcolor{comment}{//RF24 radio(22,0);}
+
+
+\textcolor{comment}{/****************** Linux (BBB,x86,etc) ***********************/}
+
+\textcolor{comment}{// See http://tmrh20.github.io/RF24/pages.html for more information on usage}
+\textcolor{comment}{// See http://iotdk.intel.com/docs/master/mraa/ for more information on MRAA}
+\textcolor{comment}{// See https://www.kernel.org/doc/Documentation/spi/spidev for more information on SPIDEV}
+
+\textcolor{comment}{// Setup for ARM(Linux) devices like BBB using spidev (default is "/dev/spidev1.0" )}
+\textcolor{comment}{//RF24 radio(115,0);}
+
+\textcolor{comment}{//BBB Alternate, with mraa}
+\textcolor{comment}{// CE pin = (Header P9, Pin 13) = 59 = 13 + 46 }
+\textcolor{comment}{//Note: Specify SPI BUS 0 or 1 instead of CS pin number. }
+\textcolor{comment}{//RF24 radio(59,0);}
+
+\textcolor{comment}{/**************************************************************/}
+
+\textcolor{comment}{// Radio pipe addresses for the 2 nodes to communicate.}
+\textcolor{keyword}{const} uint64\_t addresses[2] = \{ 0xABCDABCD71LL, 0x544d52687CLL \};
+
+
+uint8\_t data[32];
+\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} startTime, stopTime, counter, rxTimer=0;
+
+\textcolor{keywordtype}{int} main(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}** argv)\{
+
+  \textcolor{keywordtype}{bool} role\_ping\_out = 1, role\_pong\_back = 0;
+  \textcolor{keywordtype}{bool} role = 0;
+
+  \textcolor{comment}{// Print preamble:}
+
+  cout << \textcolor{stringliteral}{"RF24/examples/Transfer/\(\backslash\)n"};
+
+  radio.begin();                           \textcolor{comment}{// Setup and configure rf radio}
+  radio.setChannel(1);
+  radio.setPALevel(\hyperlink{RF24_8h_a1e4cd0bea93e6b43422855fb0120aaceab0bfc94c4095e9495b2e49530b623d0d}{RF24\_PA\_MAX});
+  radio.setDataRate(\hyperlink{RF24_8h_a82745de4aa1251b7561564b3ed1d6522ad6a241689903e120c99b6963cb98c97c}{RF24\_250KBPS});
+  radio.setAutoAck(1);                     \textcolor{comment}{// Ensure autoACK is enabled}
+  radio.setRetries(2,15);                  \textcolor{comment}{// Optionally, increase the delay between retries & # of retries}
+  radio.setCRCLength(\hyperlink{RF24_8h_adbe00719f3f835c82bd007081d040a7eade0b6b3a0dd8729e2a17c49896e0a468}{RF24\_CRC\_8});          \textcolor{comment}{// Use 8-bit CRC for performance}
+  radio.printDetails();
+\textcolor{comment}{/********* Role chooser ***********/}
+
+  printf(\textcolor{stringliteral}{"\(\backslash\)n ************ Role Setup ***********\(\backslash\)n"});
+  \textcolor{keywordtype}{string} input = \textcolor{stringliteral}{""};
+  \textcolor{keywordtype}{char} myChar = \{0\};
+  cout << \textcolor{stringliteral}{"Choose a role: Enter 0 for receiver, 1 for transmitter (CTRL+C to exit)\(\backslash\)n>"};
+  getline(cin,input);
+
+  \textcolor{keywordflow}{if}(input.length() == 1) \{
+    myChar = input[0];
+    \textcolor{keywordflow}{if}(myChar == \textcolor{charliteral}{'0'})\{
+        cout << \textcolor{stringliteral}{"Role: Pong Back, awaiting transmission "} << endl << endl;
+    \}\textcolor{keywordflow}{else}\{  cout << \textcolor{stringliteral}{"Role: Ping Out, starting transmission "} << endl << endl;
+        role = role\_ping\_out;
+    \}
+  \}
+\textcolor{comment}{/***********************************/}
+
+    \textcolor{keywordflow}{if} ( role == role\_ping\_out )    \{
+      radio.openWritingPipe(addresses[1]);
+      radio.openReadingPipe(1,addresses[0]);
+      radio.stopListening();
+    \} \textcolor{keywordflow}{else} \{
+      radio.openWritingPipe(addresses[0]);
+      radio.openReadingPipe(1,addresses[1]);
+      radio.startListening();
+    \}
+
+
+  \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0; i<32; i++)\{
+     data[i] = rand() % 255;                        \textcolor{comment}{//Load the buffer with random data}
+  \}
+
+    \textcolor{comment}{// forever loop}
+    \textcolor{keywordflow}{while} (1)\{
+
+    \textcolor{keywordflow}{if} (role == role\_ping\_out)\{
+        sleep(2);
+        printf(\textcolor{stringliteral}{"Initiating Basic Data Transfer\(\backslash\)n\(\backslash\)r"});
+
+        \textcolor{keywordtype}{long} \textcolor{keywordtype}{int} cycles = 10000;                    \textcolor{comment}{//Change this to a higher or lower number.}
+        
+        \textcolor{comment}{// unsigned long pauseTime = millis();      //Uncomment if autoAck == 1 ( NOACK )}
+        startTime = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+    
+        \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0; i<cycles; i++)\{                \textcolor{comment}{//Loop through a number of cycles}
+                data[0] = i;                        \textcolor{comment}{//Change the first byte of the payload for
+       identification}
+                \textcolor{keywordflow}{if}(!radio.writeFast(&data,32))\{     \textcolor{comment}{//Write to the FIFO buffers}
+                    counter++;                      \textcolor{comment}{//Keep count of failed payloads}
+                \}
+
+                
+                \textcolor{comment}{//This is only required when NO ACK ( enableAutoAck(0) ) payloads are used}
+        \textcolor{comment}{/*      if(millis() - pauseTime > 3)\{       // Need to drop out of TX mode every 4ms if sending a
+       steady stream of multicast data}
+\textcolor{comment}{                    pauseTime = millis();           }
+\textcolor{comment}{                    radio.txStandBy();              // This gives the PLL time to sync back up  }
+\textcolor{comment}{                \}}
+\textcolor{comment}{        */}
+        \}
+        stopTime = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+
+        \textcolor{keywordflow}{if}(!radio.txStandBy())\{ counter+=3; \}
+
+        \textcolor{keywordtype}{float} numBytes = cycles*32;
+        \textcolor{keywordtype}{float} rate = numBytes / (stopTime - startTime);
+
+        printf(\textcolor{stringliteral}{"Transfer complete at %.2f KB/s \(\backslash\)n\(\backslash\)r"},rate);
+        printf(\textcolor{stringliteral}{"%lu of %lu Packets Failed to Send\(\backslash\)n\(\backslash\)r"},counter,cycles);
+        counter = 0;
+
+    \}
+
+
+\textcolor{keywordflow}{if}(role == role\_pong\_back)\{
+     \textcolor{keywordflow}{while}(radio.available())\{
+      radio.read(&data,32);
+      counter++;
+     \}
+   \textcolor{keywordflow}{if}(\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - rxTimer > 1000)\{
+     rxTimer = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+     printf(\textcolor{stringliteral}{"Rate: "});
+     \textcolor{keywordtype}{float} numBytes = counter*32;
+     printf(\textcolor{stringliteral}{"%.2f KB/s \(\backslash\)n\(\backslash\)r"},numBytes/1000);
+     printf(\textcolor{stringliteral}{"Payload Count: %lu \(\backslash\)n\(\backslash\)r"}, counter);
+     counter = 0;
+   \}
+  \}
+
+\} \textcolor{comment}{// loop}
+\} \textcolor{comment}{// main}
+
+
+
+
+
+
+\end{DoxyCodeInclude}
+ 

@@ -1,0 +1,73 @@
+\hypertarget{index_Goals}{}\section{Design Goals}\label{index_Goals}
+This library fork is designed to be... \begin{DoxyItemize}
+\item More compliant with the manufacturer specified operation of the chip, while allowing advanced users to work outside the recommended operation. \item Utilize the capabilities of the radio to their full potential via Arduino \item More reliable, responsive, bug-\/free and feature rich \item Easy for beginners to use, with well documented examples and features \item Consumed with a public interface that\textquotesingle{}s similar to other Arduino standard libraries\end{DoxyItemize}
+\hypertarget{index_News}{}\section{News}\label{index_News}
+{\bfseries Dec 2015}~\newline
+
+\begin{DoxyItemize}
+\item E\+S\+P8266 support via Arduino I\+DE
+\item \href{https://github.com/stewarthou/Particle-RF24}{\tt Particle Photon/\+Core} fork available
+\item A\+T\+Tiny2313/4313 support added
+\item Python 3 support added
+\item \hyperlink{classRF24}{R\+F24} added to Arduino library manager
+\item \hyperlink{classRF24}{R\+F24} added to Platform\+IO library manager
+\end{DoxyItemize}
+
+{\bfseries March 2015}~\newline
+
+\begin{DoxyItemize}
+\item Uses S\+PI transactions on Arduino
+\item New layout for \href{Portability.html}{\tt easier portability\+:} Break out defines \& includes for individual platforms to R\+F24/utility
+\item \href{MRAA.html}{\tt M\+R\+AA} support added ( Galileo, Edison, etc)
+\item \href{Linux.html}{\tt Generic Linux support (S\+P\+I\+D\+EV)} support
+\item Support for R\+Pi 2 added
+\item Major Documentation cleanup \& update (Move all docs to github.\+io)
+\end{DoxyItemize}
+
+If issues are discovered with the documentation, please report them \href{https://github.com/TMRh20/tmrh20.github.io/issues}{\tt here}
+
+~\newline
+ \hypertarget{index_Useful}{}\section{Useful References}\label{index_Useful}
+\begin{DoxyItemize}
+\item \href{http://tmrh20.github.io/RF24/classRF24.html}{\tt {\bfseries R\+F24} Class Documentation} \item \href{https://github.com/TMRh20/RF24/archive/master.zip}{\tt {\bfseries Download}} \item \href{https://github.com/tmrh20/RF24/}{\tt {\bfseries Source Code}} \item \href{http://tmrh20.blogspot.com/2014/03/high-speed-data-transfers-and-wireless.html}{\tt {\bfseries My Blog\+:} R\+F24 Optimization Overview} \item \href{http://tmrh20.blogspot.com/2016/08/raspberry-pilinux-with-nrf24l01.html}{\tt {\bfseries My Blog\+:} R\+Pi/\+Linux w/\+R\+F24\+Gateway} \item \href{http://www.nordicsemi.com/files/Product/data_sheet/nRF24L01_Product_Specification_v2_0.pdf}{\tt Chip Datasheet}\end{DoxyItemize}
+{\bfseries Additional Information and Add-\/ons}
+
+\begin{DoxyItemize}
+\item \href{http://tmrh20.github.io/RF24Network}{\tt {\bfseries R\+F24\+Network\+:} O\+SI Network Layer for multi-\/device communication. Create a home sensor network.} \item \href{http://tmrh20.github.io/RF24Mesh}{\tt {\bfseries R\+F24\+Mesh\+:} Dynamic Mesh Layer for R\+F24\+Network} \item \href{http://tmrh20.github.io/RF24Ethernet}{\tt {\bfseries R\+F24\+Ethernet\+:} T\+C\+P/\+IP Radio Mesh Networking (shares Arduino Ethernet A\+PI)} \item \href{http://tmrh20.github.io/RF24Audio}{\tt {\bfseries R\+F24\+Audio\+:} Realtime Wireless Audio streaming} \item \href{http://tmrh20.github.io/}{\tt All T\+M\+Rh20 Documentation Main Page}\end{DoxyItemize}
+{\bfseries More Information and \hyperlink{classRF24}{R\+F24} Based Projects}
+
+\begin{DoxyItemize}
+\item \href{http://TMRh20.blogspot.com}{\tt Project Blog\+: T\+M\+Rh20.\+blogspot.\+com } \item \href{http://maniacalbits.blogspot.ca/}{\tt Maniacal Bits Blog} \item \href{http://www.mysensors.org/}{\tt My\+Sensors.\+org (User friendly sensor networks/\+IoT)} \item \href{https://github.com/mannkind/RF24Node_MsgProto}{\tt R\+F24\+Node\+\_\+\+Msg\+Proto (M\+Q\+TT)} \item \href{https://bitbucket.org/pjhardy/rf24sensornet/}{\tt R\+F24\+Sensor\+Net } \item \href{http://www.homeautomationforgeeks.com/rf24software.shtml}{\tt Home Automation for Geeks} \item \href{https://maniacbug.wordpress.com/2012/03/30/rf24network/}{\tt Original Maniacbug R\+F24\+Network Blog Post} \item \href{https://github.com/maniacbug/RF24}{\tt Maniac\+Bug on Git\+Hub (Original Library Author)}\end{DoxyItemize}
+~\newline
+\hypertarget{index_Platform_Support}{}\section{Platform Support Pages}\label{index_Platform_Support}
+\begin{DoxyItemize}
+\item \href{Arduino.html}{\tt {\bfseries Arduino}} (Uno, Nano, Mega, Due, Galileo, etc) \item \href{ATTiny.html}{\tt {\bfseries A\+T\+Tiny}} \item \href{Linux.html}{\tt {\bfseries Linux devices}}( \href{RPi.html}{\tt {\bfseries R\+Pi}} , \href{Linux.html}{\tt {\bfseries Linux S\+PI userspace device}}, \href{MRAA.html}{\tt {\bfseries M\+R\+AA}} supported boards ( Galileo, Edison, etc), \href{LittleWire.html}{\tt {\bfseries Little\+Wire}}) \item \href{CrossCompile.html}{\tt {\bfseries Cross-\/compilation}} for linux devices \item \href{Python.html}{\tt {\bfseries Python}} wrapper available for Linux devices\end{DoxyItemize}
+~\newline
+ {\bfseries General µC Pin layout} (See the individual board support pages for more info)
+
+The table below shows how to connect the the pins of the N\+R\+F24\+L01(+) to different boards. CE and C\+SN are configurable.
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{8}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ P\+IN }&\textbf{ N\+R\+F24\+L01 }&\textbf{ Arduino U\+NO }&\textbf{ A\+Ttiny25/45/85 \mbox{[}0\mbox{]} }&\textbf{ A\+Ttiny44/84 \mbox{[}1\mbox{]} }&\textbf{ Little\+Wire \mbox{[}2\mbox{]} }&\textbf{ R\+PI }&\textbf{ R\+Pi -\/\+P1 Connector  }\\\cline{1-8}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ P\+IN }&\textbf{ N\+R\+F24\+L01 }&\textbf{ Arduino U\+NO }&\textbf{ A\+Ttiny25/45/85 \mbox{[}0\mbox{]} }&\textbf{ A\+Ttiny44/84 \mbox{[}1\mbox{]} }&\textbf{ Little\+Wire \mbox{[}2\mbox{]} }&\textbf{ R\+PI }&\textbf{ R\+Pi -\/\+P1 Connector  }\\\cline{1-8}
+\endhead
+1 &G\+ND &G\+ND &pin 4 &pin 14 &G\+ND &rpi-\/gnd &(25) \\\cline{1-8}
+2 &V\+CC &3.\+3V &pin 8 &pin 1 &regulator 3.\+3V required &rpi-\/3v3 &(17) \\\cline{1-8}
+3 &CE &dig\+IO 7 &pin 2 &pin 12 &pin to 3.\+3V &rpi-\/gpio22 &(15) \\\cline{1-8}
+4 &C\+SN &dig\+IO 8 &pin 3 &pin 11 &R\+E\+S\+ET &rpi-\/gpio8 &(24) \\\cline{1-8}
+5 &S\+CK &dig\+IO 13 &pin 7 &pin 9 &S\+CK &rpi-\/sckl &(23) \\\cline{1-8}
+6 &M\+O\+SI &dig\+IO 11 &pin 6 &pin 7 &M\+O\+SI &rpi-\/mosi &(19) \\\cline{1-8}
+7 &M\+I\+SO &dig\+IO 12 &pin 5 &pin 8 &M\+I\+SO &rpi-\/miso &(21) \\\cline{1-8}
+8 &I\+RQ &-\/ &-\/ &-\/ &-\/ &-\/ &-\/ \\\cline{1-8}
+\end{longtabu}
+\begin{DoxyItemize}
+\item \mbox{[}0\mbox{]} \href{https://learn.sparkfun.com/tutorials/tiny-avr-programmer-hookup-guide/attiny85-use-hints}{\tt https\+://learn.\+sparkfun.\+com/tutorials/tiny-\/avr-\/programmer-\/hookup-\/guide/attiny85-\/use-\/hints} \item \mbox{[}1\mbox{]} \href{http://highlowtech.org/?p=1695}{\tt http\+://highlowtech.\+org/?p=1695} \item \mbox{[}2\mbox{]} \href{http://littlewire.cc/}{\tt http\+://littlewire.\+cc/} ~\newline
+~\newline
+~\newline
+ \end{DoxyItemize}

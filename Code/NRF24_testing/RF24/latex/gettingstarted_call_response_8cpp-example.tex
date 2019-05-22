@@ -1,0 +1,182 @@
+\hypertarget{gettingstarted_call_response_8cpp-example}{}\section{gettingstarted\+\_\+call\+\_\+response.\+cpp}
+{\bfseries For Linux}~\newline
+ {\bfseries New\+: T\+M\+Rh20 2014}~\newline
+
+
+This example continues to make use of all the normal functionality of the radios including the auto-\/ack and auto-\/retry features, but allows ack-\/payloads to be written optionlly as well. ~\newline
+ This allows very fast call-\/response communication, with the responding radio never having to switch out of Primary Receiver mode to send back a payload, but having the option to switch to ~\newline
+ primary transmitter if wanting to initiate communication instead of respond to a commmunication.
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{TMRh20 2014 - Updated to work with optimized RF24 Arduino library}
+\textcolor{comment}{*/}
+
+
+\textcolor{preprocessor}{#include <cstdlib>}
+\textcolor{preprocessor}{#include <iostream>}
+\textcolor{preprocessor}{#include <sstream>}
+\textcolor{preprocessor}{#include <string>}
+\textcolor{preprocessor}{#include <unistd.h>}
+\textcolor{preprocessor}{#include <\hyperlink{RF24_8h}{RF24/RF24.h}>}
+
+\textcolor{keyword}{using namespace }\hyperlink{namespacestd}{std};
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Hardware configuration}
+\textcolor{comment}{// Configure the appropriate pins for your connections}
+
+\textcolor{comment}{/****************** Raspberry Pi ***********************/}
+
+\textcolor{comment}{// Radio CE Pin, CSN Pin, SPI Speed}
+\textcolor{comment}{// See http://www.airspayce.com/mikem/bcm2835/group\_\_constants.html#ga63c029bd6500167152db4e57736d0939 and
+       the related enumerations for pin information.}
+
+\textcolor{comment}{// Setup for GPIO 22 CE and CE0 CSN with SPI Speed @ 4Mhz}
+\textcolor{comment}{//RF24 radio(RPI\_V2\_GPIO\_P1\_22, BCM2835\_SPI\_CS0, BCM2835\_SPI\_SPEED\_4MHZ);}
+
+\textcolor{comment}{// NEW: Setup for RPi B+}
+\textcolor{comment}{//RF24 radio(RPI\_BPLUS\_GPIO\_J8\_15,RPI\_BPLUS\_GPIO\_J8\_24, BCM2835\_SPI\_SPEED\_8MHZ);}
+
+\textcolor{comment}{// Setup for GPIO 15 CE and CE0 CSN with SPI Speed @ 8Mhz}
+\textcolor{comment}{//RF24 radio(RPI\_V2\_GPIO\_P1\_15, RPI\_V2\_GPIO\_P1\_24, BCM2835\_SPI\_SPEED\_8MHZ);}
+\hyperlink{classRF24}{RF24} radio(25,8, BCM2835\_SPI\_SPEED\_8MHZ);
+
+\textcolor{comment}{/*** RPi Alternate ***/}
+\textcolor{comment}{//Note: Specify SPI BUS 0 or 1 instead of CS pin number.}
+\textcolor{comment}{// See http://tmrh20.github.io/RF24/RPi.html for more information on usage}
+
+\textcolor{comment}{//RPi Alternate, with MRAA}
+\textcolor{comment}{//RF24 radio(15,0);}
+
+\textcolor{comment}{//RPi Alternate, with SPIDEV - Note: Edit RF24/arch/BBB/spi.cpp and  set 'this->device =
+       "/dev/spidev0.0";;' or as listed in /dev}
+\textcolor{comment}{//RF24 radio(22,0);}
+
+
+\textcolor{comment}{/****************** Linux (BBB,x86,etc) ***********************/}
+
+\textcolor{comment}{// See http://tmrh20.github.io/RF24/pages.html for more information on usage}
+\textcolor{comment}{// See http://iotdk.intel.com/docs/master/mraa/ for more information on MRAA}
+\textcolor{comment}{// See https://www.kernel.org/doc/Documentation/spi/spidev for more information on SPIDEV}
+
+\textcolor{comment}{// Setup for ARM(Linux) devices like BBB using spidev (default is "/dev/spidev1.0" )}
+\textcolor{comment}{//RF24 radio(115,0);}
+
+\textcolor{comment}{//BBB Alternate, with mraa}
+\textcolor{comment}{// CE pin = (Header P9, Pin 13) = 59 = 13 + 46 }
+\textcolor{comment}{//Note: Specify SPI BUS 0 or 1 instead of CS pin number. }
+\textcolor{comment}{//RF24 radio(59,0);}
+
+\textcolor{comment}{/********** User Config *********/}
+\textcolor{comment}{// Assign a unique identifier for this node, 0 or 1. Arduino example uses radioNumber 0 by default.}
+\textcolor{keywordtype}{bool} radioNumber = 1;
+
+\textcolor{comment}{/********************************/}
+
+
+\textcolor{comment}{// Radio pipe addresses for the 2 nodes to communicate.}
+\textcolor{keyword}{const} uint8\_t addresses[][6] = \{\textcolor{stringliteral}{"1Node"},\textcolor{stringliteral}{"2Node"}\};
+
+\textcolor{keywordtype}{bool} role\_ping\_out = 1, role\_pong\_back = 0, role = 0;
+uint8\_t counter = 1;                                                          \textcolor{comment}{// A single byte to keep
+       track of the data being sent back and forth}
+
+
+\textcolor{keywordtype}{int} main(\textcolor{keywordtype}{int} argc, \textcolor{keywordtype}{char}** argv)\{
+
+
+  cout << \textcolor{stringliteral}{"RPi/RF24/examples/gettingstarted\_call\_response\(\backslash\)n"};
+  radio.begin();
+  radio.enableAckPayload();               \textcolor{comment}{// Allow optional ack payloads}
+  radio.enableDynamicPayloads();
+  radio.printDetails();                   \textcolor{comment}{// Dump the configuration of the rf unit for debugging}
+
+
+\textcolor{comment}{/********* Role chooser ***********/}
+
+  printf(\textcolor{stringliteral}{"\(\backslash\)n ************ Role Setup ***********\(\backslash\)n"});
+  \textcolor{keywordtype}{string} input = \textcolor{stringliteral}{""};
+  \textcolor{keywordtype}{char} myChar = \{0\};
+  cout << \textcolor{stringliteral}{"Choose a role: Enter 0 for pong\_back, 1 for ping\_out (CTRL+C to exit)\(\backslash\)n>"};
+  getline(cin,input);
+
+  \textcolor{keywordflow}{if}(input.length() == 1) \{
+    myChar = input[0];
+    \textcolor{keywordflow}{if}(myChar == \textcolor{charliteral}{'0'})\{
+        cout << \textcolor{stringliteral}{"Role: Pong Back, awaiting transmission "} << endl << endl;
+    \}\textcolor{keywordflow}{else}\{  cout << \textcolor{stringliteral}{"Role: Ping Out, starting transmission "} << endl << endl;
+        role = role\_ping\_out;
+    \}
+  \}
+\textcolor{comment}{/***********************************/}
+  \textcolor{comment}{// This opens two pipes for these two nodes to communicate}
+  \textcolor{comment}{// back and forth.}
+    \textcolor{keywordflow}{if} ( !radioNumber )    \{
+      radio.openWritingPipe(addresses[0]);
+      radio.openReadingPipe(1,addresses[1]);
+    \}\textcolor{keywordflow}{else}\{
+      radio.openWritingPipe(addresses[1]);
+      radio.openReadingPipe(1,addresses[0]);
+    \}
+    radio.startListening();
+    radio.writeAckPayload(1,&counter,1);
+
+\textcolor{comment}{// forever loop}
+\textcolor{keywordflow}{while} (1)\{
+
+
+\textcolor{comment}{/****************** Ping Out Role ***************************/}
+
+  \textcolor{keywordflow}{if} (role == role\_ping\_out)\{                               \textcolor{comment}{// Radio is in ping mode}
+
+    uint8\_t gotByte;                                        \textcolor{comment}{// Initialize a variable for the incoming
+       response}
+
+    radio.stopListening();                                  \textcolor{comment}{// First, stop listening so we can talk.}
+    printf(\textcolor{stringliteral}{"Now sending %d as payload. "},counter);          \textcolor{comment}{// Use a simple byte counter as payload}
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} time = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();                          \textcolor{comment}{// Record the current microsecond count}
+
+    \textcolor{keywordflow}{if} ( radio.write(&counter,1) )\{                         \textcolor{comment}{// Send the counter variable to the other radio}
+        \textcolor{keywordflow}{if}(!radio.available())\{                             \textcolor{comment}{// If nothing in the buffer, we got an ack but
+       it is blank}
+            printf(\textcolor{stringliteral}{"Got blank response. round-trip delay: %lu ms\(\backslash\)n\(\backslash\)r"},\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()-time);
+        \}\textcolor{keywordflow}{else}\{
+            \textcolor{keywordflow}{while}(radio.available() )\{                      \textcolor{comment}{// If an ack with payload was received}
+                radio.read( &gotByte, 1 );                  \textcolor{comment}{// Read it, and display the response time}
+                printf(\textcolor{stringliteral}{"Got response %d, round-trip delay: %lu ms\(\backslash\)n\(\backslash\)r"},gotByte,
+      \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()-time);
+                counter++;                                  \textcolor{comment}{// Increment the counter variable}
+            \}
+        \}
+
+    \}\textcolor{keywordflow}{else}\{        printf(\textcolor{stringliteral}{"Sending failed.\(\backslash\)n\(\backslash\)r"}); \}          \textcolor{comment}{// If no ack response, sending failed}
+
+    sleep(1);  \textcolor{comment}{// Try again later}
+  \}
+
+\textcolor{comment}{/****************** Pong Back Role ***************************/}
+
+  \textcolor{keywordflow}{if} ( role == role\_pong\_back ) \{
+    uint8\_t pipeNo, gotByte;                        \textcolor{comment}{// Declare variables for the pipe and the byte received}
+    \textcolor{keywordflow}{if}( radio.available(&pipeNo))\{                  \textcolor{comment}{// Read all available payloads      }
+      radio.read( &gotByte, 1 );
+                                                    \textcolor{comment}{// Since this is a call-response. Respond directly with
+       an ack payload.}
+      gotByte += 1;                                 \textcolor{comment}{// Ack payloads are much more efficient than switching
+       to transmit mode to respond to a call}
+      radio.writeAckPayload(pipeNo,&gotByte, 1 );   \textcolor{comment}{// This can be commented out to send empty payloads.    
+        }
+      printf(\textcolor{stringliteral}{"Loaded next response %d \(\backslash\)n\(\backslash\)r"}, gotByte);
+      \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(900); \textcolor{comment}{//Delay after a response to minimize CPU usage on RPi}
+                  \textcolor{comment}{//Expects a payload every second      }
+   \}
+ \}
+
+\} \textcolor{comment}{//while 1}
+\} \textcolor{comment}{//main}
+
+
+\end{DoxyCodeInclude}
+ 

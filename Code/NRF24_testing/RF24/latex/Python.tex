@@ -1,0 +1,54 @@
+\begin{DoxyNote}{Note}
+Both python2 and python3 are supported.
+\end{DoxyNote}
+\hypertarget{Python_Install}{}\section{Installation\+:}\label{Python_Install}
+
+\begin{DoxyEnumerate}
+\item Install the python-\/dev (or python3-\/dev) and boost libraries 
+\begin{DoxyCode}
+sudo apt-\textcolor{keyword}{get} install python-dev libboost-python-dev 
+\end{DoxyCode}
+ \begin{DoxyNote}{Note}
+For python3 in Raspbian, it\textquotesingle{}s needed to manually link python boost library, like this\+: 
+\begin{DoxyCode}
+sudo ln -s /usr/lib/arm-linux-gnueabihf/libboost\_python-py34.so /usr/lib/arm-linux-gnueabihf/
+      libboost\_python3.so 
+\end{DoxyCode}
+
+\end{DoxyNote}
+
+\item Install python-\/setuptools (or python3-\/setuptools) 
+\begin{DoxyCode}
+sudo apt-\textcolor{keyword}{get} install python-setuptools 
+\end{DoxyCode}
+
+\item Build the library 
+\begin{DoxyCode}
+./setup.py build   
+\end{DoxyCode}
+ \begin{DoxyNote}{Note}
+Build takes several minutes on arm-\/based machines. Machines with R\+AM $<$1\+GB may need to increase amount of swap for build.
+\end{DoxyNote}
+
+\item Install the library 
+\begin{DoxyCode}
+sudo ./setup.py install  
+\end{DoxyCode}
+ See the additional \href{pages.html}{\tt Platform Support} pages for information on connecting your hardware ~\newline
+ See the included \href{pingpair_dyn_8py-example.html}{\tt example } for usage information.
+\item Running the Example Edit the pingpair\+\_\+dyn.\+py example to configure the appropriate pins per the above documentation\+: 
+\begin{DoxyCode}
+nano pingpair\_dyn.py   
+\end{DoxyCode}
+ Configure another device, Arduino or R\+Pi with the \href{pingpair_dyn_8py-example.html}{\tt pingpair\+\_\+dyn} example ~\newline
+ Run the example 
+\begin{DoxyCode}
+sudo ./pingpair\_dyn.py  
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+~\newline
+~\newline
+~\newline
+ 

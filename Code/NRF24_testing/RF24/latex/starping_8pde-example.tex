@@ -1,0 +1,289 @@
+\hypertarget{starping_8pde-example}{}\section{starping.\+pde}
+This sketch is a more complex example of using the \hyperlink{classRF24}{R\+F24} library for Arduino. Deploy this on up to six nodes. Set one as the \textquotesingle{}pong receiver\textquotesingle{} by tying the role\+\_\+pin low, and the others will be \textquotesingle{}ping transmit\textquotesingle{} units. The ping units unit will send out the value of \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis()} once a second. The pong unit will respond back with a copy of the value. Each ping unit can get that response back, and determine how long the whole cycle took.
+
+This example requires a bit more complexity to determine which unit is which. The pong receiver is identified by having its role\+\_\+pin tied to ground. The ping senders are further differentiated by a byte in eeprom.
+
+
+\begin{DoxyCodeInclude}
+\textcolor{comment}{/*}
+\textcolor{comment}{ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>}
+\textcolor{comment}{}
+\textcolor{comment}{ This program is free software; you can redistribute it and/or}
+\textcolor{comment}{ modify it under the terms of the GNU General Public License}
+\textcolor{comment}{ version 2 as published by the Free Software Foundation.}
+\textcolor{comment}{ */}
+
+\textcolor{preprocessor}{#include <SPI.h>}
+\textcolor{preprocessor}{#include <EEPROM.h>}
+\textcolor{preprocessor}{#include "\hyperlink{nRF24L01_8h}{nRF24L01.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{RF24_8h}{RF24.h}"}
+\textcolor{preprocessor}{#include "\hyperlink{printf_8h}{printf.h}"}
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Hardware configuration}
+\textcolor{comment}{//}
+
+\textcolor{comment}{// Set up nRF24L01 radio on SPI bus plus pins 9 & 10}
+
+\hyperlink{classRF24}{RF24} radio(9,10);
+
+\textcolor{comment}{// sets the role of this unit in hardware.  Connect to GND to be the 'pong' receiver}
+\textcolor{comment}{// Leave open to be the 'pong' receiver.}
+\textcolor{keyword}{const} \textcolor{keywordtype}{int} role\_pin = 7;
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Topology}
+\textcolor{comment}{//}
+
+\textcolor{comment}{// Radio pipe addresses for the nodes to communicate.  Only ping nodes need}
+\textcolor{comment}{// dedicated pipes in this topology.  Each ping node has a talking pipe}
+\textcolor{comment}{// that it will ping into, and a listening pipe that it will listen for}
+\textcolor{comment}{// the pong.  The pong node listens on all the ping node talking pipes}
+\textcolor{comment}{// and sends the pong back on the sending node's specific listening pipe.}
+
+\textcolor{keyword}{const} uint64\_t talking\_pipes[5] = \{ 0xF0F0F0F0D2LL, 0xF0F0F0F0C3LL, 0xF0F0F0F0B4LL, 0xF0F0F0F0A5LL, 
+      0xF0F0F0F096LL \};
+\textcolor{keyword}{const} uint64\_t listening\_pipes[5] = \{ 0x3A3A3A3AD2LL, 0x3A3A3A3AC3LL, 0x3A3A3A3AB4LL, 0x3A3A3A3AA5LL, 
+      0x3A3A3A3A96LL \};
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Role management}
+\textcolor{comment}{//}
+\textcolor{comment}{// Set up role.  This sketch uses the same software for all the nodes}
+\textcolor{comment}{// in this system.  Doing so greatly simplifies testing.  The hardware itself specifies}
+\textcolor{comment}{// which node it is.}
+\textcolor{comment}{//}
+\textcolor{comment}{// This is done through the role\_pin}
+\textcolor{comment}{//}
+
+\textcolor{comment}{// The various roles supported by this sketch}
+\textcolor{keyword}{typedef} \textcolor{keyword}{enum} \{ role\_invalid = 0, role\_ping\_out, role\_pong\_back \} role\_e;
+
+\textcolor{comment}{// The debug-friendly names of those roles}
+\textcolor{keyword}{const} \textcolor{keywordtype}{char}* role\_friendly\_name[] = \{ \textcolor{stringliteral}{"invalid"}, \textcolor{stringliteral}{"Ping out"}, \textcolor{stringliteral}{"Pong back"}\};
+
+\textcolor{comment}{// The role of the current running sketch}
+role\_e role;
+
+\textcolor{comment}{//}
+\textcolor{comment}{// Address management}
+\textcolor{comment}{//}
+
+\textcolor{comment}{// Where in EEPROM is the address stored?}
+\textcolor{keyword}{const} uint8\_t address\_at\_eeprom\_location = 0;
+
+\textcolor{comment}{// What is our address (SRAM cache of the address from EEPROM)}
+\textcolor{comment}{// Note that zero is an INVALID address.  The pong back unit takes address}
+\textcolor{comment}{// 1, and the rest are 2-6}
+uint8\_t node\_address;
+
+\textcolor{keywordtype}{void} setup(\textcolor{keywordtype}{void})
+\{
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Role}
+  \textcolor{comment}{//}
+
+  \textcolor{comment}{// set up the role pin}
+  \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pinMode}(role\_pin, \hyperlink{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}{INPUT});
+  \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digitalWrite}(role\_pin,\hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{HIGH});
+  \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(20); \textcolor{comment}{// Just to get a solid reading on the role pin}
+
+  \textcolor{comment}{// read the address pin, establish our role}
+  \textcolor{keywordflow}{if} ( digitalRead(role\_pin) )
+    role = role\_ping\_out;
+  \textcolor{keywordflow}{else}
+    role = role\_pong\_back;
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Address}
+  \textcolor{comment}{//}
+
+  \textcolor{keywordflow}{if} ( role == role\_pong\_back )
+    node\_address = 1;
+  \textcolor{keywordflow}{else}
+  \{
+    \textcolor{comment}{// Read the address from EEPROM}
+    uint8\_t reading = EEPROM.read(address\_at\_eeprom\_location);
+
+    \textcolor{comment}{// If it is in a valid range for node addresses, it is our}
+    \textcolor{comment}{// address.}
+    \textcolor{keywordflow}{if} ( reading >= 2 && reading <= 6 )
+      node\_address = reading;
+
+    \textcolor{comment}{// Otherwise, it is invalid, so set our address AND ROLE to 'invalid'}
+    \textcolor{keywordflow}{else}
+    \{
+      node\_address = 0;
+      role = role\_invalid;
+    \}
+  \}
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Print preamble}
+  \textcolor{comment}{//}
+
+  Serial.begin(115200);
+  \hyperlink{printf_8h_afc0d9ca32710dff550ebe56ab6b39d23}{printf\_begin}();
+  printf(\textcolor{stringliteral}{"\(\backslash\)n\(\backslash\)rRF24/examples/starping/\(\backslash\)n\(\backslash\)r"});
+  printf(\textcolor{stringliteral}{"ROLE: %s\(\backslash\)n\(\backslash\)r"},role\_friendly\_name[role]);
+  printf(\textcolor{stringliteral}{"ADDRESS: %i\(\backslash\)n\(\backslash\)r"},node\_address);
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Setup and configure rf radio}
+  \textcolor{comment}{//}
+
+  radio.begin();
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Open pipes to other nodes for communication}
+  \textcolor{comment}{//}
+
+  \textcolor{comment}{// The pong node listens on all the ping node talking pipes}
+  \textcolor{comment}{// and sends the pong back on the sending node's specific listening pipe.}
+  \textcolor{keywordflow}{if} ( role == role\_pong\_back )
+  \{
+    radio.openReadingPipe(1,talking\_pipes[0]);
+    radio.openReadingPipe(2,talking\_pipes[1]);
+    radio.openReadingPipe(3,talking\_pipes[2]);
+    radio.openReadingPipe(4,talking\_pipes[3]);
+    radio.openReadingPipe(5,talking\_pipes[4]);
+  \}
+
+  \textcolor{comment}{// Each ping node has a talking pipe that it will ping into, and a listening}
+  \textcolor{comment}{// pipe that it will listen for the pong.}
+  \textcolor{keywordflow}{if} ( role == role\_ping\_out )
+  \{
+    \textcolor{comment}{// Write on our talking pipe}
+    radio.openWritingPipe(talking\_pipes[node\_address-2]);
+    \textcolor{comment}{// Listen on our listening pipe}
+    radio.openReadingPipe(1,listening\_pipes[node\_address-2]);
+  \}
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Start listening}
+  \textcolor{comment}{//}
+
+  radio.startListening();
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Dump the configuration of the rf unit for debugging}
+  \textcolor{comment}{//}
+
+  radio.printDetails();
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Prompt the user to assign a node address if we don't have one}
+  \textcolor{comment}{//}
+
+  \textcolor{keywordflow}{if} ( role == role\_invalid )
+  \{
+    printf(\textcolor{stringliteral}{"\(\backslash\)n\(\backslash\)r*** NO NODE ADDRESS ASSIGNED *** Send 1 through 6 to assign an address\(\backslash\)n\(\backslash\)r"});
+  \}
+\}
+
+\textcolor{keywordtype}{void} loop(\textcolor{keywordtype}{void})
+\{
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Ping out role.  Repeatedly send the current time}
+  \textcolor{comment}{//}
+
+  \textcolor{keywordflow}{if} (role == role\_ping\_out)
+  \{
+    \textcolor{comment}{// First, stop listening so we can talk.}
+    radio.stopListening();
+
+    \textcolor{comment}{// Take the time, and send it.  This will block until complete}
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} time = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+    printf(\textcolor{stringliteral}{"Now sending %lu..."},time);
+    radio.write( &time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+
+    \textcolor{comment}{// Now, continue listening}
+    radio.startListening();
+
+    \textcolor{comment}{// Wait here until we get a response, or timeout (250ms)}
+    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} started\_waiting\_at = \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}();
+    \textcolor{keywordtype}{bool} timeout = \textcolor{keyword}{false};
+    \textcolor{keywordflow}{while} ( ! radio.available() && ! timeout )
+      \textcolor{keywordflow}{if} (\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}() - started\_waiting\_at > 250 )
+        timeout = \textcolor{keyword}{true};
+
+    \textcolor{comment}{// Describe the results}
+    \textcolor{keywordflow}{if} ( timeout )
+    \{
+      printf(\textcolor{stringliteral}{"Failed, response timed out.\(\backslash\)n\(\backslash\)r"});
+    \}
+    \textcolor{keywordflow}{else}
+    \{
+      \textcolor{comment}{// Grab the response, compare, and send to debugging spew}
+      \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;
+      radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+
+      \textcolor{comment}{// Spew it}
+      printf(\textcolor{stringliteral}{"Got response %lu, round-trip delay: %lu\(\backslash\)n\(\backslash\)r"},got\_time,\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()-got\_time);
+    \}
+
+    \textcolor{comment}{// Try again 1s later}
+    \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(1000);
+  \}
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Pong back role.  Receive each packet, dump it out, and send it back}
+  \textcolor{comment}{//}
+
+  \textcolor{keywordflow}{if} ( role == role\_pong\_back )
+  \{
+    \textcolor{comment}{// if there is data ready}
+    uint8\_t pipe\_num;
+    \textcolor{keywordflow}{if} ( radio.available(&pipe\_num) )
+    \{
+      \textcolor{comment}{// Dump the payloads until we've gotten everything}
+      \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} got\_time;
+      \textcolor{keywordtype}{bool} done = \textcolor{keyword}{false};
+      \textcolor{keywordflow}{while} (!done)
+      \{
+        \textcolor{comment}{// Fetch the payload, and see if this was the last one.}
+        done = radio.read( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+
+        \textcolor{comment}{// Spew it}
+        printf(\textcolor{stringliteral}{"Got payload %lu from node %i..."},got\_time,pipe\_num+1);
+      \}
+
+      \textcolor{comment}{// First, stop listening so we can talk}
+      radio.stopListening();
+
+      \textcolor{comment}{// Open the correct pipe for writing}
+      radio.openWritingPipe(listening\_pipes[pipe\_num-1]);
+
+      \textcolor{comment}{// Retain the low 2 bytes to identify the pipe for the spew}
+      uint16\_t pipe\_id = listening\_pipes[pipe\_num-1] & 0xffff;
+
+      \textcolor{comment}{// Send the final one back.}
+      radio.write( &got\_time, \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long}) );
+      printf(\textcolor{stringliteral}{"Sent response to %04x.\(\backslash\)n\(\backslash\)r"},pipe\_id);
+
+      \textcolor{comment}{// Now, resume listening so we catch the next packets.}
+      radio.startListening();
+    \}
+  \}
+
+  \textcolor{comment}{//}
+  \textcolor{comment}{// Listen for serial input, which is how we set the address}
+  \textcolor{comment}{//}
+  \textcolor{keywordflow}{if} (Serial.available())
+  \{
+    \textcolor{comment}{// If the character on serial input is in a valid range...}
+    \textcolor{keywordtype}{char} c = Serial.read();
+    \textcolor{keywordflow}{if} ( c >= \textcolor{charliteral}{'1'} && c <= \textcolor{charliteral}{'6'} )
+    \{
+      \textcolor{comment}{// It is our address}
+      EEPROM.write(address\_at\_eeprom\_location,c-\textcolor{charliteral}{'0'});
+
+      \textcolor{comment}{// And we are done right now (no easy way to soft reset)}
+      printf(\textcolor{stringliteral}{"\(\backslash\)n\(\backslash\)rManually reset address to: %c\(\backslash\)n\(\backslash\)rPress RESET to continue!"},c);
+      \textcolor{keywordflow}{while}(1) ;
+    \}
+  \}
+\}
+\textcolor{comment}{// vim:ai:ci sts=2 sw=2 ft=cpp}
+\end{DoxyCodeInclude}
+ 

@@ -1,0 +1,63 @@
+\hypertarget{RF24__arch__config_8h}{}\section{utility/\+Template/\+R\+F24\+\_\+arch\+\_\+config.h File Reference}
+\label{RF24__arch__config_8h}\index{utility/\+Template/\+R\+F24\+\_\+arch\+\_\+config.\+h@{utility/\+Template/\+R\+F24\+\_\+arch\+\_\+config.\+h}}
+{\ttfamily \#include $<$stddef.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}spi.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}gpio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}compatibility.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$sys/time.\+h$>$}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__Porting__General_gac9c625ddccaf6226fc77d5d903d160e9}{R\+F24\+\_\+\+L\+I\+N\+UX}
+\item 
+\#define \hyperlink{group__Porting__General_ga483c9de27db573099572f5485ef841c9}{\+\_\+\+BV}(x)~(1$<$$<$(x))
+\item 
+\#define \hyperlink{group__Porting__General_gaa9e44ba356b97be27806db7f96ff527d}{\+\_\+\+S\+PI}~spi
+\item 
+\#define \hyperlink{group__Porting__General_gab2cf239a98bc5d0beee4ceb41a5dd549}{I\+F\+\_\+\+S\+E\+R\+I\+A\+L\+\_\+\+D\+E\+B\+UG}(x)
+\item 
+\#define \hyperlink{group__Porting__General_ga9c00057fd19e916cc1aa0a5949336beb}{P\+S\+TR}(x)~(x)
+\item 
+\#define \hyperlink{group__Porting__General_ga758ad569cbda7c5ddfaa902e8eed3360}{printf\+\_\+P}~printf
+\item 
+\#define \hyperlink{group__Porting__General_ga05dde754db9944c90362c1f861d358ba}{strlen\+\_\+P}~strlen
+\item 
+\#define \hyperlink{group__Porting__General_ga75acaba9e781937468d0911423bc0c35}{P\+R\+O\+G\+M\+EM}
+\item 
+\#define \hyperlink{group__Porting__General_gaa59a94d7ea755db0d7811b543253ebc4}{pgm\+\_\+read\+\_\+word}(p)~($\ast$(p))
+\item 
+\#define \hyperlink{group__Porting__General_ga7642e6d60f41fc769b32962c8c513668}{P\+R\+I\+P\+S\+TR}~\char`\"{}\%s\char`\"{}
+\item 
+\#define \hyperlink{group__Porting__General_gae6778ca2c38951f24bd39f9c38cab9b2}{pgm\+\_\+read\+\_\+byte}(p)~($\ast$(p))
+\item 
+\#define \hyperlink{group__Porting__General_gab811d8c6ff3a505312d3276590444289}{L\+OW}~\hyperlink{group__Porting__GPIO_gaa29a50f0f8fc0a62076c7f4bc7dc70db}{G\+P\+I\+O\+::\+O\+U\+T\+P\+U\+T\+\_\+\+L\+OW}
+\item 
+\#define \hyperlink{group__Porting__General_ga5bb885982ff66a2e0a0a45a8ee9c35e2}{H\+I\+GH}~\hyperlink{group__Porting__GPIO_ga18fd76f29528fc97aadcdb78495ff6bf}{G\+P\+I\+O\+::\+O\+U\+T\+P\+U\+T\+\_\+\+H\+I\+GH}
+\item 
+\#define \hyperlink{group__Porting__General_ga1bb283bd7893b9855e2f23013891fc82}{I\+N\+P\+UT}~\hyperlink{group__Porting__GPIO_gafbf58b193d0f84db90a843e00f27367c}{G\+P\+I\+O\+::\+D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+IN}
+\item 
+\#define \hyperlink{group__Porting__General_ga61a3c9a18380aafb6e430e79bf596557}{O\+U\+T\+P\+UT}~\hyperlink{group__Porting__GPIO_gac39c2a3ce71b0df667c227292d4ab30c}{G\+P\+I\+O\+::\+D\+I\+R\+E\+C\+T\+I\+O\+N\+\_\+\+O\+UT}
+\item 
+\#define \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digital\+Write}(pin,  value)~\hyperlink{group__Porting__GPIO_ga957694ca061e30268dd8a4b28a08e59b}{G\+P\+I\+O\+::write}(pin, value)
+\item 
+\#define \hyperlink{group__Porting__General_ga361649efb4f1e2fa3c870ca203497d5e}{pin\+Mode}(pin,  direction)~\hyperlink{group__Porting__GPIO_gad3451cca241dbbf42bf381129385a35c}{G\+P\+I\+O\+::open}(pin, direction)
+\item 
+\#define \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay}(milisec)~\hyperlink{group__Porting__Timing_ga4c2e4dffa20576f5b3d9c2f9bb052106}{\+\_\+\+\_\+msleep}(milisec)
+\item 
+\#define \hyperlink{group__Porting__General_ga9384257bf5d5c1aae675b22cc3ecb91a}{delay\+Microseconds}(usec)~\hyperlink{group__Porting__Timing_gaec87320f2886551c012814de85713681}{\+\_\+\+\_\+usleep}(usec)
+\item 
+\#define \hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis}()~\hyperlink{group__Porting__Timing_gad13c7acd564917af4f86b655035a6424}{\+\_\+\+\_\+millis}()
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef uint16\+\_\+t \hyperlink{group__Porting__General_ga05ca2f20b55933ad782917161d54287d}{prog\+\_\+uint16\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+General defines and includes for R\+F24/\+Linux 

@@ -1,0 +1,50 @@
+The \hyperlink{classRF24}{R\+F24} radio driver mainly utilizes the \href{http://arduino.cc/en/reference/homePage}{\tt Arduino A\+PI} for G\+P\+IO, S\+PI, and timing functions, which are easily replicated on various platforms. ~\newline
+Support files for these platforms are stored under R\+F24/utility, and can be modified to provide the required functionality.
+
+~\newline
+ \hypertarget{Portability_Hardware_Templates}{}\section{Basic Hardware Template}\label{Portability_Hardware_Templates}
+{\bfseries R\+F24/utility}
+
+The \hyperlink{classRF24}{R\+F24} library now includes a basic hardware template to assist in porting to various platforms. ~\newline
+ The following files can be included to replicate standard Arduino functions as needed, allowing devices from A\+T\+Tiny to Raspberry Pi to utilize the same core \hyperlink{classRF24}{R\+F24} driver.
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ File }&\textbf{ Purpose  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ File }&\textbf{ Purpose  }\\\cline{1-2}
+\endhead
+\hyperlink{RF24__arch__config_8h}{R\+F24\+\_\+arch\+\_\+config.\+h} &Basic Arduino/\+A\+VR compatibility, includes for remaining support files, etc \\\cline{1-2}
+\hyperlink{includes_8h}{includes.\+h} &Linux only. Defines specific platform, include correct R\+F24\+\_\+arch\+\_\+config file \\\cline{1-2}
+\hyperlink{spi_8h}{spi.\+h} &Provides standardized S\+PI ( \hyperlink{group__Porting__SPI_gad8a210abb2138c105350cc91972edfa9}{transfer()} ) methods \\\cline{1-2}
+\hyperlink{gpio_8h}{gpio.\+h} &Provides standardized G\+P\+IO ( \hyperlink{group__Porting__General_gabda89b115581947337690b2f85bfab6e}{digital\+Write()} ) methods \\\cline{1-2}
+\hyperlink{compatibility_8h}{compatibility.\+h} &Provides standardized timing (\hyperlink{group__Porting__General_gad5b3ec1ce839fa1c4337a7d0312e9749}{millis()}, \hyperlink{group__Porting__General_ga70a331e8ddf9acf9d33c47b71cda4c5f}{delay()}) methods \\\cline{1-2}
+your\+\_\+custom\+\_\+file.\+h &Provides access to custom drivers for spi,gpio, etc \\\cline{1-2}
+\end{longtabu}
+~\newline
+ Examples are provided via the included hardware support templates in {\bfseries R\+F24/utility} ~\newline
+ See the \href{modules.html}{\tt modules} page for examples of class declarations
+
+~\newline
+ \hypertarget{Portability_Device_Detection}{}\section{Device Detection}\label{Portability_Device_Detection}
+
+\begin{DoxyEnumerate}
+\item The main detection for Linux devices is done in the configure script, with the \hyperlink{includes_8h}{includes.\+h} from the proper hardware directory copied to R\+F24/utility/includes.\+h ~\newline
+
+\item Secondary detection is completed in \hyperlink{RF24__config_8h}{R\+F24\+\_\+config.\+h}, causing the include.\+h file to be included for all supported Linux devices ~\newline
+
+\item \hyperlink{RF24_8h}{R\+F24.\+h} contains the declaration for S\+PI and G\+P\+IO objects \textquotesingle{}spi\textquotesingle{} and \textquotesingle{}gpio\textquotesingle{} to be used for porting-\/in related functions.
+\end{DoxyEnumerate}
+
+~\newline
+ \hypertarget{Portability_Ported_Code}{}\section{Code}\label{Portability_Ported_Code}
+To have your ported code included in this library, or for assistance in porting, create a pull request or open an issue at \href{https://github.com/TMRh20/RF24}{\tt https\+://github.\+com/\+T\+M\+Rh20/\+R\+F24}
+
+~\newline
+~\newline
+~\newline
+ 

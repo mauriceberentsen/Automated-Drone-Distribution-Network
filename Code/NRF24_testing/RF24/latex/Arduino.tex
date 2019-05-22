@@ -1,0 +1,93 @@
+\hyperlink{classRF24}{R\+F24} is fully compatible with Arduino boards ~\newline
+ See {\bfseries  \href{http://www.arduino.cc/en/Reference/Board}{\tt http\+://www.\+arduino.\+cc/en/\+Reference/\+Board} } and {\bfseries  \href{http://arduino.cc/en/Reference/SPI}{\tt http\+://arduino.\+cc/en/\+Reference/\+S\+PI} } for more information
+
+\hyperlink{classRF24}{R\+F24} makes use of the standard hardware S\+PI pins (M\+I\+SO,M\+O\+SI,S\+CK) and requires two additional pins, to control the chip-\/select and chip-\/enable functions.~\newline
+ These pins must be chosen and designated by the user, in \hyperlink{classRF24}{R\+F24} radio(ce\+\_\+pin,cs\+\_\+pin); and can use any available pins.
+
+~\newline
+ \hypertarget{Arduino_ARD_DUE}{}\section{Arduino Due}\label{Arduino_ARD_DUE}
+\hyperlink{classRF24}{R\+F24} makes use of the extended S\+PI functionality available on the Arduino Due, and requires one of the defined hardware S\+S/\+CS pins to be designated in \hyperlink{classRF24}{R\+F24} radio(ce\+\_\+pin,cs\+\_\+pin);~\newline
+ See \href{http://arduino.cc/en/Reference/DueExtendedSPI}{\tt http\+://arduino.\+cc/en/\+Reference/\+Due\+Extended\+S\+PI} for more information
+
+Initial Due support taken from \href{https://github.com/mcrosson/RF24/tree/due}{\tt https\+://github.\+com/mcrosson/\+R\+F24/tree/due}
+
+~\newline
+ \hypertarget{Arduino_Alternate_SPI}{}\section{Alternate S\+P\+I Support}\label{Arduino_Alternate_SPI}
+\hyperlink{classRF24}{R\+F24} supports alternate S\+PI methods, in case the standard hardware S\+PI pins are otherwise unavailable.
+
+~\newline
+ {\bfseries Software Driven S\+PI}
+
+Software driven S\+PI is provided by the \href{https://github.com/greiman/DigitalIO}{\tt Digital\+IO} library
+
+Setup\+:~\newline
+
+\begin{DoxyEnumerate}
+\item Install the digital\+IO library~\newline
+
+\item Open \hyperlink{RF24__config_8h}{R\+F24\+\_\+config.\+h} in a text editor. Uncomment the line 
+\begin{DoxyCode}
+\textcolor{preprocessor}{#define SOFTSPI}
+\end{DoxyCode}
+ or add the build flag/option 
+\begin{DoxyCode}
+-DSOFTSPI
+\end{DoxyCode}
+
+\item In your sketch, add 
+\begin{DoxyCode}
+\textcolor{preprocessor}{#include DigitalIO.h}
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Note\+: Pins are listed as follows and can be modified by editing the \hyperlink{RF24__config_8h}{R\+F24\+\_\+config.\+h} file~\newline
+ \begin{DoxyVerb}#define SOFT_SPI_MISO_PIN 16
+#define SOFT_SPI_MOSI_PIN 15
+#define SOFT_SPI_SCK_PIN 14
+\end{DoxyVerb}
+ Or add the build flag/option \begin{DoxyVerb}-DSOFT_SPI_MISO_PIN=16 -DSOFT_SPI_MOSI_PIN=15 -DSOFT_SPI_SCK_PIN=14
+\end{DoxyVerb}
+
+\end{DoxyNote}
+~\newline
+ {\bfseries Alternate Hardware (U\+A\+RT) Driven S\+PI}
+
+The Serial Port (U\+A\+RT) on Arduino can also function in S\+PI mode, and can double-\/buffer data, while the default S\+PI hardware cannot.
+
+The S\+P\+I\+\_\+\+U\+A\+RT library is available at \href{https://github.com/TMRh20/Sketches/tree/master/SPI_UART}{\tt https\+://github.\+com/\+T\+M\+Rh20/\+Sketches/tree/master/\+S\+P\+I\+\_\+\+U\+A\+RT}
+
+Enabling\+:
+\begin{DoxyEnumerate}
+\item Install the S\+P\+I\+\_\+\+U\+A\+RT library
+\item Edit \hyperlink{RF24__config_8h}{R\+F24\+\_\+config.\+h} and uncomment \#define S\+P\+I\+\_\+\+U\+A\+RT
+\item In your sketch, add
+\begin{DoxyCode}
+\textcolor{preprocessor}{#include <SPI\_UART.h>} 
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+S\+P\+I\+\_\+\+U\+A\+RT S\+PI Pin Connections\+: \tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ N\+RF }&\textbf{ Arduino Uno Pin  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ N\+RF }&\textbf{ Arduino Uno Pin  }\\\cline{1-2}
+\endhead
+M\+O\+SI&T\+X(0) \\\cline{1-2}
+M\+I\+SO&R\+X(1) \\\cline{1-2}
+S\+CK &X\+C\+K(4) \\\cline{1-2}
+CE &User Specified \\\cline{1-2}
+C\+SN &User Specified \\\cline{1-2}
+\end{longtabu}
+
+
+\begin{DoxyNote}{Note}
+S\+P\+I\+\_\+\+U\+A\+RT on Mega boards requires soldering to an unused pin on the chip. ~\newline
+See \href{https://github.com/TMRh20/RF24/issues/24}{\tt https\+://github.\+com/\+T\+M\+Rh20/\+R\+F24/issues/24} for more information on S\+P\+I\+\_\+\+U\+A\+RT. 
+\end{DoxyNote}
