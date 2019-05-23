@@ -14,7 +14,7 @@
 #include "NRF24LowLevelInterface.hpp"
 
 NRF24LowLevelInterface::NRF24LowLevelInterface(NRF24HighLevelInterface* _highLevelInterface)
-    : highLevelInterface(_highLevelInterface),radio(RF24(25, 8, BCM2835_SPI_SPEED_8MHZ))
+    : radio(RF24(25, 8, BCM2835_SPI_SPEED_8MHZ)),highLevelInterface(_highLevelInterface)
 {
 }
 
@@ -42,6 +42,7 @@ void NRF24LowLevelInterface::Start(const uint64_t _NodeIdReadAddress,
 }
 void NRF24LowLevelInterface::BroadcastMessage(const uint8_t *message) 
 {
+    std::cout << "Broadcast" <<std::endl;
     currentState = SENDING;
     radio.openWritingPipe(broadcastAddress);
     radio.stopListening();
@@ -54,6 +55,7 @@ bool NRF24LowLevelInterface::SendMessage(const uint64_t sendAddress,
                                          const uint64_t ackAddress,
                                          const uint8_t *message)
 {
+    std::cout << "Send a msg" <<std::endl;
     bool success;
     currentState = SENDING;
     radio.openReadingPipe(3, ackAddress);
@@ -63,6 +65,7 @@ bool NRF24LowLevelInterface::SendMessage(const uint64_t sendAddress,
     success = radio.write(message, 32, false);
     radio.txStandBy();
     radio.startListening();
+    radio.openWritingPipe(broadcastAddress);
     currentState = RECEIVING;
     return success;
 }
@@ -118,11 +121,11 @@ void NRF24LowLevelInterface::setNodeIdReadAddress(const uint64_t
                                                  _NodeIdReadAddress)
 {
     this->NodeIdReadAddress = _NodeIdReadAddress;
-    radio.openReadingPipe(1, _NodeIdReadAddress);
+    radio.openReadingPipe(2, _NodeIdReadAddress);
 }
 void NRF24LowLevelInterface::setBroadcastAddress(const uint64_t 
                                                 _broadcastAddress)
 {
     this->broadcastAddress = _broadcastAddress;
-    radio.openReadingPipe(2, _broadcastAddress);
+    radio.openReadingPipe(1, _broadcastAddress);
 }
