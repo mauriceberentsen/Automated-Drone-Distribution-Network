@@ -31,7 +31,7 @@ void MockNetworkComponent::DoStuf()
     msg.toPayload(buf);
         static int D = 0;
         ++D;
-        if(D > 1000000000)
+        if(D > 100000000)
         {
 	std::cout<<"Send"<<std::endl;
         if(highLevelInterface.SendMessageTo(buf))
@@ -44,7 +44,7 @@ void MockNetworkComponent::OnMsg( const uint8_t* message )
 {
     for (int i = 0; i < 32; i++)
     {
-        std::cout<<message[i];
+        std::cout<<(int)message[i];
     }
     std::cout<<std::endl;
 }

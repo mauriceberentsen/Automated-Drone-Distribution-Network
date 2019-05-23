@@ -80,7 +80,7 @@ void NRF24LowLevelInterface::runAntenna()
         {
             static int counter = 0;
             ++counter;
-            if (counter > 80000)
+            if (counter > 3800000)
             {
                 std::cout << "Sending" << std::endl;
                 counter = 0;
@@ -94,7 +94,7 @@ void NRF24LowLevelInterface::HandleIncomingMessages()
 
     static int counter = 0;
     ++counter;
-    if (counter > 12000)
+    if (counter > 20000)
     {
         std::cout << "Listening" << std::endl;
         counter = 0;
