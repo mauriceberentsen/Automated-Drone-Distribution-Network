@@ -19,12 +19,12 @@ MockDroneEngine::~MockDroneEngine()
 {
 }
 
-MockDroneEngine::turnOn(/* args */)
+void MockDroneEngine::turnOn(/* args */)
 {
     on = true;
 }
 
-MockDroneEngine::turnOff(/* args */)
+void MockDroneEngine::turnOff(/* args */)
 {
     on = false;
 }
@@ -32,9 +32,9 @@ MockDroneEngine::turnOff(/* args */)
 void MockDroneEngine::setGoal(const float latitude, const float longitude,
                        const float height)
 {
-    pos.X = latitude;
-    pos.Y = longitude;
-    pos.Z = height;
+    pos.X(latitude);
+    pos.Y(longitude);
+    pos.Z(height);
 }
 
  const Vector3< float > MockDroneEngine::getLocation(/* args */)
