@@ -40,7 +40,7 @@ namespace Meshnetwork
  {
 	for(int it = 0; it < 32; it++)
 	{
-	std::cout<<(int)message[it];
+	std::cout<<(int)message[it]<<"-";
 	}
 	std::cout<<std::endl;
 
