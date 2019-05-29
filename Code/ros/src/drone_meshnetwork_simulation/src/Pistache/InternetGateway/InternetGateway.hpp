@@ -42,8 +42,8 @@ public:
 
 private:
 
-  Rest::Router router;
   Rest::Description desc;
+  Rest::Router router;
   
   void InternetService();
   void createDescription();

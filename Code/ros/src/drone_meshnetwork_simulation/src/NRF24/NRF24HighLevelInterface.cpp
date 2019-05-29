@@ -16,7 +16,10 @@
 using namespace Communication::Messages;
 
 NRF24HighLevelInterface::NRF24HighLevelInterface()
-:lowLevelInterface(new NRF24LowLevelInterface(this))
+:lowLevelInterface(new NRF24LowLevelInterface(this)),
+                                        on(false),
+                   meshnetworkComponent(nullptr),
+                                    debuginfo(false)
 {
 }
 

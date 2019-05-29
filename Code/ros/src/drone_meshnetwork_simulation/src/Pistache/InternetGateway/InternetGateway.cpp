@@ -23,8 +23,7 @@ void handleReady(const Rest::Request&, Http::ResponseWriter response) {
 }
 
 InternetGateway::InternetGateway(/* args */)
-:httpEndpoint(nullptr)
-, desc("Gateway API", "0.1")
+:desc("Gateway API", "0.1"), httpEndpoint(nullptr),meshnetworkGateway(nullptr)
 {
 
 }

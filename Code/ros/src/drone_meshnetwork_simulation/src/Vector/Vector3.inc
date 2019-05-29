@@ -116,12 +116,12 @@ Vector3<T> Vector3<T>::operator-(const Vector3<T>& rhs) const
 
 
 template <typename T>
-bool Vector3<T>::operator!=(const Vector3<T>& rhs)
+bool Vector3<T>::operator!=(const Vector3<T>& rhs) const
 {
     return (this->x != rhs.X()) &&(this->z != rhs.Z()) &&(this->y != rhs.Y());
 }
 template <typename T>
-bool Vector3<T>::operator==(const Vector3<T>& rhs)
+bool Vector3<T>::operator==(const Vector3<T>& rhs) const
 {
     return (this->x == rhs.X()) &&(this->z == rhs.Z()) &&(this->y == rhs.Y());
 }

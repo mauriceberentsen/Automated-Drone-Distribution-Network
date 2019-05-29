@@ -33,12 +33,13 @@ public:
      * 
      * @param defaultValue value that fills X,Y,Z
      */
-    Vector3(T defaultValue = 0);
+    explicit Vector3(T defaultValue = 0);
     /**
      * @brief Vector3 copy constructor
      * 
      * @param rhs the Vector3 to copy
      */
+    // cppcheck-suppress noExplicitConstructor
     Vector3(const Vector3<T>& rhs);
     /**
      * @brief Construct a new Vector 3 object from different values
@@ -153,7 +154,7 @@ public:
      * @return true if not equal
      * @return false if equal
      */
-    bool operator!=(const Vector3<T>& rhs);
+    bool operator!=(const Vector3<T>& rhs) const;
     /**
      * @brief Compares the values of the Vector3 lhs against rhs
      *        * lhs.x == rhs.x
@@ -164,7 +165,7 @@ public:
      * @return true if  equal
      * @return false if not equal
      */    
-    bool operator==(const Vector3<T>& rhs);
+    bool operator==(const Vector3<T>& rhs) const;
 
     /**********************************************/
     /*                                            */
