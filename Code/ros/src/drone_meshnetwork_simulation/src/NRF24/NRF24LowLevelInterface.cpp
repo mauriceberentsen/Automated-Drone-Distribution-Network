@@ -82,18 +82,10 @@ void NRF24LowLevelInterface::runAntenna()
     {
         if (currentState == RECEIVING)
         {
-
             HandleIncomingMessages();
         }
         if (currentState == SENDING)
         {
-            static int counter = 0;
-            ++counter;
-            if (counter > 3800000)
-            {
-                std::cout << "Sending" << std::endl;
-                counter = 0;
-            }
         }
     }
 }
@@ -101,13 +93,6 @@ void NRF24LowLevelInterface::runAntenna()
 void NRF24LowLevelInterface::HandleIncomingMessages()
 {
 
-    static int counter = 0;
-    ++counter;
-    if (counter > 20000)
-    {
-        std::cout << "Listening" << std::endl;
-        counter = 0;
-    }
     radio.startListening();
     static uint8_t data[100][MAX_PAYLOAD];
 

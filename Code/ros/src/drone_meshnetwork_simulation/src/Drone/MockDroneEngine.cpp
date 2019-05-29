@@ -9,7 +9,9 @@
  * 
  */
 
+#include <iostream>
 #include "MockDroneEngine.hpp"
+
 
 MockDroneEngine::MockDroneEngine(/* args */)
 {
@@ -35,6 +37,7 @@ void MockDroneEngine::setGoal(const float latitude, const float longitude,
     pos.X(latitude);
     pos.Y(longitude);
     pos.Z(height);
+    std::cout<<"Move yourself towards: latitude[" << latitude <<"] longitude["<< longitude <<"] height["<< height <<"]"<<std::endl;
 }
 
  const Vector3< float > MockDroneEngine::getLocation(/* args */)
