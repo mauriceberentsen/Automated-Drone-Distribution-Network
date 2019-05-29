@@ -16,14 +16,25 @@ namespace gazebo
 void DroneFactory::Load( physics::WorldPtr _parent, sdf::ElementPtr _sdf )
 {
  bool debug = false;
+ bool server = false;
 
  if ( _sdf->HasElement( "Debug" ) ) { debug = _sdf->Get< bool >( "Debug" ); }
+ if ( _sdf->HasElement( "UseServer" ) ) { server = _sdf->Get< bool >( "UseServer" ); }
 
  if ( _sdf->HasElement( "amountOfGatewayDrones" ) ) {
   int amountOfGateways = _sdf->Get< int >( "amountOfGatewayDrones" );
   for ( int i = 0; i < amountOfGateways; i++ ) {
+   if(i == 0 && server)
+   {
+   new DroneSimulation::GatewayServerDrone( -1, i, 0, _parent, debug );
+   }
+   else
+   {
    // the new class will inject sdf information needed in Gazebo
    new DroneSimulation::GatewayDrone( -1, i, 0, _parent, debug );
+       
+   }
+      
   }
  }
 

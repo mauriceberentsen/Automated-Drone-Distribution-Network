@@ -90,6 +90,25 @@ namespace DroneSimulation
                 physics::WorldPtr _parent, bool debug = false );
   ~GatewayDrone( );
  };
+
+  class GatewayServerDrone : public VirtualDrone
+ {
+ public:
+  /**
+   * @brief Construct a new Router Drone its creates the SDF string needed for
+   * injecting in the world. Important parts are: The coordinates, DroneID,
+   * NodeID, GatewayComponent, DroneEngine and shape.
+   *
+   * @param _x X coordinate in the world
+   * @param _y Y coordinate in the world
+   * @param _z Z coordinate in the world
+   * @param _parent The world to place the drone in
+   * @param debug debugging on or off
+   */
+  GatewayServerDrone( const float _x, const float _y, const float _z,
+                physics::WorldPtr _parent, bool debug = false );
+  ~GatewayServerDrone( );
+ };
 }  // namespace DroneSimulation
 }  // namespace gazebo
 #endif  // DRONE

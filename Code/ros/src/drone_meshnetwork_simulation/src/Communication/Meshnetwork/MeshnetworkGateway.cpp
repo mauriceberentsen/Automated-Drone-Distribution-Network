@@ -27,7 +27,7 @@ namespace Meshnetwork
  {
   droneEngine->turnOn( );
 
-  internet->connect( this );
+  internet->init( this );
   // Since we are a gateway this is always true. In the future we could base
   // this on the fact if we are connected to the internet
   connectedToGateway = true;
@@ -35,6 +35,7 @@ namespace Meshnetwork
   prefferedGateWay = this->nodeID;
   // Give the InternetComponent some time to boot
   // Begin with routing nearby nodes
+  internet->connect();
   routerTech->startRouting( this );
  }
 

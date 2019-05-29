@@ -19,8 +19,9 @@ class Vector3
 {
 
 public:
-    //We only want vectors holding real value's
-    static_assert(std::is_arithmetic<T>::value, "Value T must be integral T or a floating-point T.");
+    //We only want vectors holding real value's not pointers or references
+    static_assert(std::is_arithmetic<T>::value, 
+                        "Value T must be integral T or a floating-point T.");
     /**********************************************/
     /*                                            */
     /*                CONSTRUCTORS                */
