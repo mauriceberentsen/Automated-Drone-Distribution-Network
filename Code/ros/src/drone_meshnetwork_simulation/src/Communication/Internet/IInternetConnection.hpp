@@ -18,12 +18,13 @@ namespace Internet
  class IInternetConnection
  {
  public:
+ virtual void init( Communication::Internet::IGatewayCommands *IGC, uint8_t threads = 1) = 0;
   /**
    * @brief Connect to the internet service
    *
    * @param IGC pointer to the required interface Gateway Commands
    */
-  virtual void connect( Communication::Internet::IGatewayCommands *IGC ) = 0;
+  virtual void connect( ) = 0;
   /**
    * @brief  Disconnect from the internet service
    *

@@ -150,5 +150,68 @@ namespace DroneSimulation
  GatewayDrone::~GatewayDrone( )
  {
  }
+
+  GatewayServerDrone::GatewayServerDrone( const float _x, const float _y, const float _z,
+                             physics::WorldPtr _parent, bool debug )
+     : VirtualDrone( _x, _y, _z, _parent, debug )
+ {
+  std::stringstream ss;
+  ss << "<sdf version ='1.6'>\
+          <model name ='gateway_drone'>\
+           <static>1</static>\
+            <pose>"
+     << x << " " << y << " " << z + 0.1 << " "
+     << " 0 0 0</pose>\
+            <link name ='link'>\
+              <inertial>\
+              <pose>"
+     << x << " " << y << " " << z + 0.1 << " "
+     << "0 0 0</pose>\
+              </inertial>\
+              <collision name ='collision'>\
+                <geometry>\
+                  <box><size>0.2 0.1 0.2</size></box>\
+                </geometry>\
+              </collision>\
+              <visual name ='visual'>\
+                <geometry>\
+                  <box><size>0.2 0.1 0.2</size></box>\
+                </geometry>\
+                <material>\
+            <script>\
+              <uri>file://media/materials/scripts/gazebo.material</uri>\
+              <name>Gazebo/Purple</name>\
+            </script>\
+          </material>\
+              </visual>\
+            </link>\
+            <plugin name=\"MeshnetworkGatewayWithServer\" filename=\"libMeshnetworkGatewayWithServer.so\">\
+            <nodeID>"
+     << std::to_string( droneID ) << "</nodeID>\
+              <DroneID>"
+     << std::to_string( droneID ) << "</DroneID>\
+            <Debug>"
+     << std::to_string( debug ) << "</Debug>\
+            </plugin>\
+            <plugin filename='libDroneEngine.so' name='DroneEngine'>\
+             <DroneID>"
+     << std::to_string( droneID ) << "</DroneID>\
+            </plugin>\
+          </model>\
+        </sdf>";
+  SdfString = ss.str( );
+
+  sdf::SDF boxSDF;
+  boxSDF.SetFromString( SdfString );
+  sdf::ElementPtr model = boxSDF.Root( )->GetElement( "model" );
+  model->GetAttribute( "name" )->SetFromString( "drone" +
+                                                std::to_string( droneID ) );
+  parent->InsertModelSDF( boxSDF );
+  ++droneID;
+ }
+
+ GatewayServerDrone::~GatewayServerDrone( )
+ {
+ }
 }  // namespace DroneSimulation
 }  // namespace gazebo

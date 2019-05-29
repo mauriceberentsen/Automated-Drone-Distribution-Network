@@ -79,6 +79,28 @@ catkin_package(
    CATKIN_DEPENDS roscpp rospy std_msgs message_runtime 
    DEPENDS roscpp gazebo_ros
 )
+##############
+## Pistache ##
+##############
+
+
+#####################################
+##      LIBRARY SEARCH PATHS       ##
+#####################################
+set(PISTACHE_LIBRARY "pistache")
+set(EXTRA_LIBRARY "-pthread -lssl")
+
+set(LIBRARIES_SEARCH_PATHS ${PISTACHE_LIBRARY} ${EXTRA_LIBRARY})
+
+#######################################
+##      ADDING HEADERS LIBRARY       ##
+#######################################
+#include_directories("libs/pistache/include")
+#target_link_libraries(${PROJECT_NAME} )
+
+
+
+
 
 #############
 ## Gazebo  ##
@@ -89,7 +111,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 find_package(gazebo REQUIRED)
 
 link_directories(${GAZEBO_LIBRARY_DIRS})
-include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} include)
+include_directories(${Boost_INCLUDE_DIR} ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} "libs/pistache/include" include)
 
 add_library(MeshnetworkRouter SHARED       src/gazebo/RaspberryPi/VirtualRaspberryPiRouter.cpp
                                            src/Communication/Meshnetwork/MeshnetworkComponent.cpp
@@ -109,8 +131,23 @@ add_library(MeshnetworkGateway SHARED src/gazebo/RaspberryPi/VirtualRaspberryPiG
                                       src/ros/WirelessSimulation/VirtualNRF24.cpp
                                       src/ros/RosDroneEngineConnector.cpp
                                       src/ros/RosInternetMock.cpp)
+                                      
 target_link_libraries(MeshnetworkGateway ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})
 add_dependencies(MeshnetworkGateway drone_meshnetwork_simulation_generate_messages_cpp)
+
+
+add_library(MeshnetworkGatewayWithServer SHARED src/gazebo/RaspberryPi/VirtualRaspberryPiGatewayWithServer.cpp
+                                      src/Communication/Meshnetwork/MeshnetworkComponent.cpp
+                                      src/Communication/Meshnetwork/MeshnetworkGateway.cpp
+                                      src/Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp
+                                      src/Communication/Messages/Message.cpp
+                                      src/ros/WirelessSimulation/VirtualNRF24.cpp
+                                      src/ros/RosDroneEngineConnector.cpp
+                                      src/Pistache/InternetGateway/InternetGateway.cpp)
+
+                                      
+target_link_libraries(MeshnetworkGatewayWithServer ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES} ${LIBRARIES_SEARCH_PATHS})
+add_dependencies(MeshnetworkGatewayWithServer drone_meshnetwork_simulation_generate_messages_cpp)
 
 add_library(DroneEngine SHARED src/gazebo/DroneSimulation/DroneEngine.cpp)
 target_link_libraries(DroneEngine ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES})

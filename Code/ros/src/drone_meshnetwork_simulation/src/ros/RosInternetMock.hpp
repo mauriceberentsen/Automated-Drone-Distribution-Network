@@ -36,7 +36,8 @@ namespace Internet
  public:
   RosInternetMock( );
   ~RosInternetMock( );
-  void connect( Communication::Internet::IGatewayCommands *IGC );
+  void init( Communication::Internet::IGatewayCommands *IGC, uint8_t threads = 1 );
+  void connect( );
   void disconnect( );
 
  private:
@@ -56,7 +57,7 @@ namespace Internet
   ros::CallbackQueue rosQueue;
   /// \brief Subscriber to the general gateway topic
   ros::Subscriber gatewaySub;
-  /// \brief Reference to the gateway for incoming messages
+  /// \brief Reference to the gateway for incoming messages 
   Communication::Internet::IGatewayCommands *meshnetworkGateway;
   /// \brief Pointer to the Ros Node of this class
   std::shared_ptr< ros::NodeHandle > rosNode;

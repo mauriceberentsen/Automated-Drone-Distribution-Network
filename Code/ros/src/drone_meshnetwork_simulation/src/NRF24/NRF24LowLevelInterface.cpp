@@ -10,11 +10,17 @@
  */
 #include <iostream>
 #include <thread>
+
+#include "../Communication/Messages/Message.hpp"
+
 #include "NRF24HighLevelInterface.hpp"
 #include "NRF24LowLevelInterface.hpp"
 
+using Communication::Messages::MessageHelper;
+
 NRF24LowLevelInterface::NRF24LowLevelInterface(NRF24HighLevelInterface* _highLevelInterface)
-    : radio(RF24(25, 8, BCM2835_SPI_SPEED_8MHZ)),highLevelInterface(_highLevelInterface)
+    : radio(RF24(25, 8, BCM2835_SPI_SPEED_8MHZ)),
+         highLevelInterface(_highLevelInterface)
 {
 }
 
@@ -46,7 +52,7 @@ void NRF24LowLevelInterface::BroadcastMessage(const uint8_t *message)
     currentState = SENDING;
     radio.openWritingPipe(broadcastAddress);
     radio.stopListening();
-    radio.write(message, 32, true);
+    radio.write(message, MAX_PAYLOAD, true);
     radio.startListening();
     currentState = RECEIVING;
 }
@@ -62,7 +68,7 @@ bool NRF24LowLevelInterface::SendMessage(const uint64_t sendAddress,
     radio.openWritingPipe(sendAddress);
     radio.stopListening();
     radio.flush_tx();
-    success = radio.write(message, 32, false);
+    success = radio.write(message, MAX_PAYLOAD, false);
     radio.txStandBy();
     radio.startListening();
     radio.openWritingPipe(broadcastAddress);
@@ -102,18 +108,15 @@ void NRF24LowLevelInterface::HandleIncomingMessages()
         std::cout << "Listening" << std::endl;
         counter = 0;
     }
-    static uint8_t data[100][32];
-    static int i = 0;
     radio.startListening();
+    static uint8_t data[100][MAX_PAYLOAD];
     if (radio.available())
     {
-        radio.read(&data[i], 32);
+        static int i = 0;
+        radio.read(&data[i], MAX_PAYLOAD);
         ++i;
         i = i % 100;
         highLevelInterface->OnMessage(data[i-1]);
-        // for (int x = 0; x < 32; x++)
-        //     std::cout << (int)data[i - 1][x];
-        // std::cout << std::endl;
     }
 }
 
