@@ -11,9 +11,19 @@ add_executable(${PROJECT_NAME}_router RaspberryRouter.cpp
 				      ../Communication/Meshnetwork/MeshnetworkComponent.cpp 
 				      ../Communication/Meshnetwork/MeshnetworkRouter.cpp 
 				      ../Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp
- 			              ../Drone/MockDroneEngine.cpp 
+ 			          ../Drone/MockDroneEngine.cpp 
  				      ../NRF24/NRF24HighLevelInterface.cpp 
 				      ../NRF24/NRF24LowLevelInterface.cpp)
+
+add_executable(${PROJECT_NAME}_gateway RaspberryGateway.cpp 
+				      ../Communication/Messages/Message.cpp 
+				      ../Communication/Meshnetwork/MeshnetworkComponent.cpp 
+				      ../Communication/Meshnetwork/MeshnetworkRouter.cpp 
+				      ../Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp
+ 			          ../Drone/MockDroneEngine.cpp 
+ 				      ../NRF24/NRF24HighLevelInterface.cpp 
+					  ../NRF24/NRF24LowLevelInterface.cpp
+					  ../Pistache/InternetGateway.cpp)
 
 #####################################
 ##      HEADERS SEARCH PATHS       ##
