@@ -19,7 +19,7 @@ NRF24HighLevelInterface::NRF24HighLevelInterface()
 :lowLevelInterface(new NRF24LowLevelInterface(this)),
                                         on(false),
                    meshnetworkComponent(nullptr),
-                                    debuginfo(false)
+                                    debuginfo(nullptr)
 {
 }
 

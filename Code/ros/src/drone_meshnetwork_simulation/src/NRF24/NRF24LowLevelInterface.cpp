@@ -16,7 +16,7 @@
 #include "NRF24HighLevelInterface.hpp"
 #include "NRF24LowLevelInterface.hpp"
 
-using Communication::Messages::MessageHelper;
+using namespace Communication::Messages;
 
 NRF24LowLevelInterface::NRF24LowLevelInterface(NRF24HighLevelInterface* _highLevelInterface)
     : radio(RF24(25, 8, BCM2835_SPI_SPEED_8MHZ)),
@@ -110,13 +110,14 @@ void NRF24LowLevelInterface::HandleIncomingMessages()
     }
     radio.startListening();
     static uint8_t data[100][MAX_PAYLOAD];
+
     if (radio.available())
     {
         static int i = 0;
         radio.read(&data[i], MAX_PAYLOAD);
+        highLevelInterface->OnMessage(data[i]);
         ++i;
         i = i % 100;
-        highLevelInterface->OnMessage(data[i-1]);
     }
 }
 
