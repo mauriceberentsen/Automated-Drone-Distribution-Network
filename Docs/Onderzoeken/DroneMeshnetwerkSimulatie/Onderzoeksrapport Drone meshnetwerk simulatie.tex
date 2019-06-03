@@ -37,7 +37,7 @@
 \usepackage{booktabs}
 \usepackage{listings}
 \usepackage{siunitx}
-\sisetup{per-mode=symbol,per-symbol = p,binary-units=true } 
+\sisetup{per-mode=symbol,per-symbol = /,binary-units=true } 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 \titleformat{\chapter}[hang]{\huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Large\bfseries}
@@ -727,7 +727,7 @@ Een nadeel van dit netwerk is de lage data snelheid waardoor het alleen geschikt
 
 \subsubsection{nRF24l01+}\label{sec:nrf24l01}
 De nRF24l01 long range is een transciever van Nordic Semiconductor die werkzaam is op de 2,4ghz band \cite{nRFspec}.
-De module kan gebruik maken van verschillende standen van datasnelheid: 250kbps, 1Mbps, 2Mbps.
+De module kan gebruik maken van verschillende standen van datasnelheid: \SI{250}{\kilo\bit\per\second}, \SI{1}{\mega\bit\per\second}, \SI{2}{\mega\bit\per\second}.
 Hoewel het een 3,3 volt apparaat is zijn de I/O pinnen 5 volt tolerant waardoor het een veilige interface biedt aan microcontrollers. Daarnaast is door het aanbod van 3,3 volt I/O geschikt voor het gebruik op een Raspberry Pi.
 
 Er zijn van de module twee varianten met een gelijke interface. 
@@ -735,7 +735,7 @@ Er is een module (nRF24l01) voor korte afstand en een module (nRF24l01+pa+lna) v
 De module voor lange afstanden beschikt over een power amplifier en een low noise amplifier wat het een beter zend en ontvangst vermogen geeft.
 De module heeft volgens de specificaties een theoretisch bereik van 1100 meter bij vrij zicht.
 Er zijn verschillende video's op youtube waar aangetoond wordt dat deze afstand gehaald wordt.
-Zo wordt in de \href{https://www.youtube.com/watch?v=lR60toEjHl8}{video (https://www.youtube.com/watch?v=lR60toEjHl8}) van iforce2d een afstand overbrugt van 700m met een data rate van 250kbps \cite{nrfAfstand}.
+Zo wordt in de \href{https://www.youtube.com/watch?v=lR60toEjHl8}{video (https://www.youtube.com/watch?v=lR60toEjHl8}) van iforce2d een afstand overbrugt van 700m met een data rate van \SI{250}{\kilo\bit\per\second} \cite{nrfAfstand}.
 Het zal in ieder geval voldoende zijn om de eis van 500 meter te overbruggen.  
 
 \begin{figure}[H]
@@ -1374,7 +1374,7 @@ Dit onderzoek heeft daarnaast aangetoond dat de simulatiesoftware gebruikt kan w
 
 \chapter{Videos simulatie netwerkherstel door drone verplaatsing}\label{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing}
 De video's van deze bijlagen zijn te vinden door het volgende pad te volgen: \newline
-.$\backslash$Bijlagen$\backslash$Videos simulatie netwerkherstel door drone verplaatsing$\backslash$
+./Bijlagen/Videos simulatie netwerkherstel door drone verplaatsing/
 \section{enkele verloren drone situatie 1.mp4}\label{sec:enkele-verloren-drone-situatie-1mp4}
 \section{enkele verloren drone situatie 2.mp4}\label{sec:enkele-verloren-drone-situatie-2mp4}
 \section{groep verloren drones situatie 1.mp4}\label{sec:groep-verloren-drones-situatie-1mp4}
