@@ -1,61 +1,45 @@
 @startuml
 
-class MeshnetworkComponent
-class MeshnetworkGateway
-class MeshnetworkRouter
-
-MeshnetworkGateway      --|> MeshnetworkComponent
-MeshnetworkRouter --|> MeshnetworkComponent
-
-interface WirelessCommunication
-interface InternetConnection
-
-MeshnetworkGateway o-- InternetConnection : Connects to Internet >
-MeshnetworkComponent o-- WirelessCommunication : Communicates with other drones through >
-
-(MeshnetworkComponent, WirelessCommunication) .. Message
-
-class DroneManager
-
-DroneManager -up- InternetConnection : Controls Drones via >
-
-class RaspberryPi
-class RaspberryPiRouter
-class RaspberryPiGateway
-
-RaspberryPiRouter -up-|> RaspberryPi
-RaspberryPiGateway      -up-|> RaspberryPi
-
-RaspberryPiRouter ..> MeshnetworkRouter : <<use>>
-RaspberryPiGateway      ..> MeshnetworkGateway : <<use>>
-
-class NRF24
-
-WirelessCommunication ..> NRF24 : is preformed by >
+class Dronecontroller
+class Algoritmetester
+class Netwerkgebruiker
 
 class Drone
-class RouterDrone
-class GatewayDrone
+class Simulatie
+class Simulatiewereld
+class "Draadloze communicatie" as com
+class Bericht
+class Zender
+class Ontvanger
+class Meshnetwerk
 
-RouterDrone     -up-|> Drone
-GatewayDrone    -up-|> Drone
+class Netwerkcomponent
+class Gateway
+class Noodprotocol
+class Positie
 
-RouterDrone o-- RaspberryPiRouter
-GatewayDrone o-- RaspberryPiGateway
+Algoritmetester --> Simulatie : <<Draait een>>
+Dronecontroller --> "0..*" Drone : <<Zet uit>>
+Netwerkgebruiker --> Netwerkcomponent : <<Communiceert via een>>
+ 
+Simulatie --> "0..*" Drone : <<Simuleert>>
+Netwerkcomponent -left- "0..1" Drone
 
-class DroneEngine
 
-Drone *-left- DroneEngine 
-MeshnetworkComponent ..> DroneEngine : repositions with\n & \n gets current locations from >
+Meshnetwerk -up-> "*" Netwerkcomponent : <<Bestaat uit>>
+Netwerkcomponent ..> Noodprotocol
 
-class ros
+Netwerkcomponent -up-|> Zender
+Netwerkcomponent -up-|> Ontvanger
 
-ros ...> WirelessCommunication : simulates >
-ros ..> InternetConnection : simulates >
+Drone -- Positie
 
-class gazebo
+Netwerkcomponent ..> com : <<Communiceert door>>
+(Netwerkcomponent, com) .. Bericht 
 
-gazebo ..> "0..*" Drone : simulates >
+Simulatie --> Simulatiewereld : <<Simuleert>>
+Simulatie --> com : <<Simuleert>>
 
+Gateway -left-|> Netwerkcomponent
 
 @enduml

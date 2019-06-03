@@ -3,21 +3,9 @@
 autonumber
 actor "Algoritmetester" as AT
 participant "Systeem" as sys
-participant "config:Configuratie" as config
-participant "WereldSimulatie" as SIM
-participant "Communicatie simulatie" as com
-participant "DroneManager" as DM
 
-AT --> sys +: Start applicatie
-sys -> config : Leest simulatie instellingen
-sys --> SIM +: start
-sys --> com +: start
-loop config.gatewaydrones
-sys -> SIM : injecteert gatewaydrones
-end
-loop config.routerdrones
-sys -> SIM : injecteert routerdrones
-end
-sys --> DM +: start
+AT -> sys : Configureert aantal drones
+AT -> sys : Start applicatie
+AT <-- sys : Toont simulatie
 
 @enduml

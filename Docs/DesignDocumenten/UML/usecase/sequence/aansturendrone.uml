@@ -2,17 +2,14 @@
 
 autonumber
 
-actor "aanstuuderder" as aan
+actor "Netwerkcomponent" as aan
 participant systeem
 
-aan -> systeem : geeft doellocatie
-systeem -> systeem : Berekend pad
-alt pad gevonden
-systeem -> systeem : start motor
-systeem -> systeem : verplaatst zich naar locatie
-systeem -> systeem : stopt motor
-else geen pad gevonden
-systeem ->  systeem : blijft op locatie
+aan -> systeem : Geeft doellocatie
+alt Pad gevonden
+aan <-- systeem : Verplaatst zich naar locatie
+else Geen pad gevonden
+aan <-- systeem : Blijft staan
 end
 
 @enduml

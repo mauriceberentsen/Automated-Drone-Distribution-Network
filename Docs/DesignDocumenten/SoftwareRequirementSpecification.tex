@@ -34,7 +34,7 @@
 \newcommand{\hsp}{\hspace{20pt}}
 \usepackage{pdfpages}
 \usepackage{siunitx}
-\sisetup{per-mode=symbol,per-symbol = p,binary-units=true } 
+\sisetup{per-mode=symbol,binary-units=true } 
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 
@@ -168,7 +168,7 @@ Dit document volgt het document: \textit{"Software Requirements Specification Te
 \section{Doel van dit document}
 \label{inleiding:doelvanditdoucment}
 
-Het doel is dat de lezer aan het einde van dit document begrijpt hoe de functionaliteit geïmplementeerd zal worden in het op te leveren product. Het document laat zien hoe de flow van het programma loopt en welke classes in de software worden gebruikt. Een lezer van dit document zou met de juiste technische kennis de volledige applicatie moeten kunnen maken zoals het bedacht is door de ontwerper.  
+In dit document zullen de gebruikers, eisen en usecases van het systeem beschreven worden zodat het duidelijk is wie gebruik gaat maken van het systeem en welke functionaliteiten het systeem bevat.   
 
 \section{Actoren en hun eigenschappen}
 \label{inleiding:gebruikers}
@@ -178,7 +178,7 @@ Elke actor wordt kort omgeschreven per paragraaf
 \subsection{Dronecontroller}
 \label{inleiding:gebruikers:dronecontroller}
 Een drone controller is de gebruiker die het systeem wil gebruiken om drones naar plekken toe te kunnen sturen.
-Hij wil hiermee een netwerk van onderling verbonden drones kunnen ontplooien  
+Hij wil hiermee een netwerk van onderling verbonden drones ontplooien  
 
 \subsection{Netwerkgebruiker}
 \label{inleiding:gebruikers:netwerkgebruiker}
@@ -271,10 +271,11 @@ Om de drones te kunnen simuleren is er voor gekozen om gebruik te maken van Gaze
 \label{inleiding:productfuncties}
 In het onderstaande diagram \ref{fig:usecasediagram} is te zien wie er betrokken is bij het systeem(actoren) en hoe zij het systeem gebruiken om hun doel te gebruiken.
 Een netwerkgebruiker is maar geïnteresseerd in één usecase, hij wil namelijk alleen gebruik maken van het netwerk om zijn data te versturen.
-De dronecontroller wil een dronenetwerk kunnen ontplooien en drone verzoeken om te verplaatsen.
-Een algoritme tester wil het dronenetwerk simuleren en wil daarom alleen die usecase uitvoeren deze usecase kan wel gebruik maken van dezelfde usecases als een dronecontroller. 
+De dronecontroller wil een dronenetwerk kunnen ontplooien en drones verzoeken om te verplaatsen.
+Een algoritme tester wil het dronenetwerk simuleren en wil daarom alleen die usecase uitvoeren.
+Deze usecase kan wel gebruik maken van dezelfde usecases als een dronecontroller maar doet dat dus in een gesimuleerde omgeving. 
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=.9\linewidth]{UML/out/usecase/usecasediagram/usecasediagram.png}\end{center}
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/usecase/usecasediagram/usecasediagram.png}\end{center}
 	\caption{Usecase diagram}
 	\label{fig:usecasediagram}
 \end{figure}
@@ -300,14 +301,14 @@ Een algoritme tester wil het dronenetwerk simuleren en wil daarom alleen die use
 \end{table}
 
 
-\chapter{Domein Model}
+\chapter{Domeinmodel}
 \label{domeinmodel}
 
 Aan de hand van een domeinmodel wordt de samenhang van de te ontwikkelen software in kaart gebracht.
-In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelichting gegeven.
+Hierna wordt in \nameref{domeinmodel:beschrijving} wordt per class toelichting gegeven.
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.65\textheight]{UML/out/DomeinModel/DomeinModel/DomeinModel.png}\end{center}
+	\begin{center}\includegraphics[width=\textwidth]{UML/out/DomeinModel/DomeinModel/DomeinModel.png}\end{center}
 	\caption{Domeinmodel}
 	\label{fig:toplogienetwerkuml}
 \end{figure}
@@ -315,42 +316,30 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 \section{Beschrijving domeinmodel}
 \label{domeinmodel:beschrijving}
 
-% Please add the following required packages to your document preamble:
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
-% \usepackage{longtable}
-% Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|l|l|}
 	\hline
-	\rowcolor[HTML]{C0C0C0} 
-	Naam & Beschrijving \\ \hline
-	\endfirsthead
-	%
-	\multicolumn{2}{c}%
-	{{\bfseries Table \thetable\ continued from previous page}} \\
+	\rowcolor[HTML]{9B9B9B} 
+	Term & Beschrijving \\ \hline
 	\endhead
 	%
-	gazebo & Gazebo is de simulatie omgeving voor physics. \\ \hline
-	Drone & \begin{tabular}[c]{@{}l@{}}Een drone kan zichzelf verplaatsen in een ruimte \\ met een DroneEngine.\end{tabular} \\ \hline
-	DroneEngine & \begin{tabular}[c]{@{}l@{}}Een drone engine wordt gebruikt door de drone \\ voor verplaatsing.\end{tabular} \\ \hline
-	RouterDrone & \begin{tabular}[c]{@{}l@{}}Een RouterDrone is een drone voorzien van een \\ RaspberryPiRouter.\end{tabular} \\ \hline
-	GatewayDrone & \begin{tabular}[c]{@{}l@{}}Een RouterGateway is een drone voorzien van \\ een RaspberryPiGateway.\end{tabular} \\ \hline
-	RaspberryPi & Een RaspberryPi is een mircocomputer. \\ \hline
-	RaspberryPiRouter & \begin{tabular}[c]{@{}l@{}}Is een RaspberryPi voorzien van MeshnetworkRouter. \\ software\end{tabular} \\ \hline
-	RaspberryPiGateway & \begin{tabular}[c]{@{}l@{}}Is een RaspberryPi voorzien van MeshnetworkGateway. \\ software\end{tabular} \\ \hline
-	MeshnetworkComponent & Is een onderdeel binnen een meshnetwerk. \\ \hline
-	MeshnetworkRouter & \begin{tabular}[c]{@{}l@{}}Is een meshcomponent in staat berichten binnen het\\ netwerk door te sturen.\end{tabular} \\ \hline
-	MeshnetworkGateway & \begin{tabular}[c]{@{}l@{}}Is een meshcomponent met een verbinding extern \\ van het netwerk.\end{tabular} \\ \hline
-	InternetConnection & Is een  verbinding naar het wereldwijde web. \\ \hline
-	DroneManager & Een manager voor het aansturen van drones. \\ \hline
-	ros & \begin{tabular}[c]{@{}l@{}}Middleware voor het aansturen van fysieke of\\  gesimuleerde drones.\end{tabular} \\ \hline
-	Message & Een bericht gebruikt voor communicatie.\\ \hline
-	WirelessCommunication & Communicatie type die door de lucht verloopt. \\ \hline
-	NRF24 & Een radio transceiver bruikbaar voor communicatie. \\ \hline
-	\caption{Toelichting domeinmodel}
+	Algoritmetester & Een actor die algoritmes wil testen in een simulatie. \\ \hline
+	Bericht & Een netwerkcomponent communiceert met berichten. \\ \hline
+	Draadloze communicatie & \begin{tabular}[c]{@{}l@{}}Berichten worden verstuurd door het gebruik van \\ draadloze communicatie.\end{tabular} \\ \hline
+	Drone & \begin{tabular}[c]{@{}l@{}}Een drone wordt ontplooit door een dronecontroller. \\ Het beschikt altijd over een netwerkcomponent. \\ Een drone heeft een positie.\end{tabular} \\ \hline
+	Dronecontroller & \begin{tabular}[c]{@{}l@{}}Een dronecontroller is de actor die fysieke drones \\ ontplooit.\end{tabular} \\ \hline
+	Gateway & \begin{tabular}[c]{@{}l@{}}Een gateway is een netwerkcomponent die het\\ netwerk van buitenaf benaderbaar maakt\end{tabular} \\ \hline
+	Meshnetwerk & \begin{tabular}[c]{@{}l@{}}Een meshnetwerk is een netwerktype waarin punten \\ dynamisch met elkaar kunnen verbinden en meerdere\\ connecties tegelijk aan kunnen gaan.\end{tabular} \\ \hline
+	Netwerkcomponent & \begin{tabular}[c]{@{}l@{}}Een netwerkcomponent kan aangesloten worden op \\ een drone.  Het gebruikt draadloze communicatie om\\ berichten te versturen.Het gebruikt een noodprotocol.\\ Een netwerkcomponent is zowel een zender als een\\ ontvanger.\end{tabular} \\ \hline
+	Netwerkgebruiker & \begin{tabular}[c]{@{}l@{}}Een netwerkgebruiker is een actor die wil communiceren\\ via het netwerk.\end{tabular} \\ \hline
+	Noodprotocol & \begin{tabular}[c]{@{}l@{}}Een noodprotocol is een verzameling acties die ondernomen \\ worden zodra een component geen verbinding meer heeft.\end{tabular} \\ \hline
+	Ontvanger & \begin{tabular}[c]{@{}l@{}}Een ontvanger is een rol binnen het netwerk voor het \\ ontvangen van berichten\end{tabular} \\ \hline
+	Positie & Een positie is een drie dimensionale plek in een ruimte \\ \hline
+	Simulatie & \begin{tabular}[c]{@{}l@{}}Een simulatie wordt gebruik om de wereld na te bootsen.\\ Een simulatie simuleert een wereld, drones en draadloze\\  communicatie\end{tabular} \\ \hline
+	Simulatiewereld & \begin{tabular}[c]{@{}l@{}}Een simulatie wereld  is een virtuele representatie van de\\ echte wereld.\end{tabular} \\ \hline
+	Zender & \begin{tabular}[c]{@{}l@{}}Een zender is een rol binnen het netwerk voor het zenden van\\ berichten\end{tabular} \\ \hline
+	\caption{Domeinmodel}
 	\label{tab:domeinmodel}\\
 \end{longtable}
-
 
 \chapter{Use-case omschrijvingen}
 \label{Usecase}
@@ -369,7 +358,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 								 drones gesimuleerd worden welke onderling kunnen communiceren via een gesimuleerde\\
 								 draadloze communicatieweg. Hiermee creëren zij een meshnetwerk. \end{tabular} \\ \hline
 		Primary actor:  \nameref{inleiding:gebruikers:algoritmetester}                                                               \\ \hline
-		Preconditions: Er is aangegeven hoeveel routers en gateway gesimuleerd moeten worden.                                         \\ \hline
+		Preconditions: Er is aangegeven hoeveel routers en gateways gesimuleerd moeten worden.                                         \\ \hline
 		Postconditions: De simulatie van de drones en de communicatie is opgestart.                                                     \\ \hline
 	\end{tabular}
 \end{table}
@@ -381,12 +370,9 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor actie  & System responsibility   \\ \hline
-		1. Start de applicatie.& 2. Leest het configuratie bestand uit. \\ \hline
-		& 3. Start de wereld simulatie.                     \\ \hline
-		& 4. Start de communicatie simulatie.                     \\ \hline
-		& 5. Laadt het opgegeven aantal gatewaydrones de simulatie in.                         \\ \hline
-		& 6. Laadt opgegeven aantal routerdrones de simulatie in.                         \\ \hline
-		& 7. Start de dronemanager.                 \\ \hline
+		  1. Past simulatie parameters aan.&  \\ \hline
+		  2. Start de simulatie.		   &                     \\ \hline
+		& 3. Toont de simulatie.                     \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -395,7 +381,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 \subsection{System Sequence Diagram}
 \label{Usecase:simulatiedronenetwerk:systemsequence}
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.3\textheight]{UML/out/usecase/sequence/SimulerenDronenetwerk/SimulerenDronenetwerk.png}\end{center}
+	\begin{center}\includegraphics[height=.2\textheight]{UML/out/usecase/sequence/SimulerenDronenetwerk/SimulerenDronenetwerk.png}\end{center}
 	\caption{System sequence diagram opstarten simulatie}
 	\label{fig:simulatiedronenetwerk:systemsequence}
 \end{figure}
@@ -412,9 +398,8 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		Usecase: Simuleren drone.                                                                            \\ \hline
 		Doel: Het creëren van een virtuele representatie van een drone.                                                                \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: In de simulatie wil een actor een drone simuleren.\\
-									Door het uitvoeren van deze usecase wordt er een drone in de simulatie geladen\\
-									welke de rol van gateway of router kan hebben. \\ \end{tabular} \\ \hline
-		Primary actor:  \nameref{Usecase:simulatiedronenetwerk}                                                                                \\ \hline
+									Door het uitvoeren van deze usecase wordt er een drone in de simulatie geladen. \\ \end{tabular} \\ \hline
+		Primary actor:  \nameref{inleiding:gebruikers:algoritmetester}                                                                                \\ \hline
 		Preconditions: Er is een simulatiewereld aanwezig.                                                                         \\ \hline
 		Postconditions: Een drone is ingeladen in de simulatiewereld.                                                     \\ \hline
 	\end{tabular}
@@ -428,33 +413,18 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		1. Leest configuratie uit.  & 						  \\ \hline
-		2. Verzoekt het injecteren van een gatewaydrone.	& 3. Leest de drone parameters uit.                          \\ \hline
-											& 4. Koppelt een motor aan de gesimuleerde drone.                         \\ \hline
-											& 	\begin{tabular}[c]{@{}l@{}}5. Koppelt een gatewaycomponent aan de\\ gesimuleerde drone. \\ \end{tabular} \\ \hline
-											& 6. Injecteert de drone de gesimuleerde wereld in.                         \\ \hline
+		1. Verzoekt een nieuwe drone.	& 2.  Toont een nieuwe drone in de simulatie              \\ \hline
+
 	\end{tabular}
 \end{table}
 
-\subsection{Alternative Flows}
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{C0C0C0} 
-		Actor action  & System responsibility   \\ \hline
-		2. Verzoekt het injecteren van een routerdrone.	& 3. Leest de drone parameters uit.                          \\ \hline
-& 	\begin{tabular}[c]{@{}l@{}}5. Koppelt een router component aan de\\ gesimuleerde drone. \\ \end{tabular} \\ \hline 
-	\end{tabular}
-\end{table}
 
 \label{Usecase:simulatiedrone:fully-dressed}
 \subsection{System Sequence Diagram}
 \label{Usecase:simulatiedrone:systemsequence}
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.3\textheight]{UML/out/usecase/sequence/SimulerenDrone/SimulerenDrone.png}\end{center}
+	\begin{center}\includegraphics[height=.2\textheight]{UML/out/usecase/sequence/SimulerenDrone/SimulerenDrone.png}\end{center}
 	\caption{System sequence diagram opstarten drone simulatie}
 	\label{fig:simulatiedrone:systemsequence}
 \end{figure}
@@ -468,13 +438,13 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 	\centering
 	\begin{tabular}{|l|}
 		\hline
-		Use Case: Simuleren draadloze communicatie.                                                                            \\ \hline
+		Usecase: Simuleren draadloze communicatie.                                                                            \\ \hline
 		Doel: Het nabootsen van draadloze communicatie in een simulator.                               \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: In de simulatie wil een actor gebruik maken van\\
 								draadloze communicatie. Om dit realistisch na te bootsen loopt elk bericht langs\\
-								de draadloos simulator die bepaalt wat er met het bericht gebeurd.\\ \end{tabular} \\ \hline
-		Primary actor:  \nameref{Usecase:simulatiedronenetwerk}.                                                                                \\ \hline
-		Preconditions:                                                                          \\ \hline
+								de draadloos simulator die bepaalt wat er met het bericht gebeurt.\\ \end{tabular} \\ \hline
+		Primary actor:  \nameref{inleiding:gebruikers:algoritmetester}.                                                                                \\ \hline
+		Preconditions:    -                                                                       \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Postconditions: Er is een simulator aanwezig die \nameref{Usecase:communicerendata} mogelijk\\maakt voor gesimuleerde \nameref{inleiding:werkomgeving:nrf24}'s.  \\ \end{tabular}   \\ \hline
 	\end{tabular}
 \end{table}
@@ -487,35 +457,35 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		\begin{tabular}[c]{@{}l@{}}1. Start applicatie met\\ maximale afstand parameter.{}\end{tabular}&\begin{tabular}[c]{@{}l@{}}2. Stelt de meegegeven waarde in voor de\\ maximale communicatie afstand. {}\end{tabular}\\ \hline
-		& 3. Start draadloze simulator.                  \\ \hline
+		\begin{tabular}[c]{@{}l@{}}1. Start draadloze communicatie applicatie.{}\end{tabular}\begin{tabular}[c]{@{}l@{}} {}\end{tabular}
+		& 2. Start draadloze communicatie simulator.                  \\ \hline
 		
 	\end{tabular}
 \end{table}
 
-\subsection{Alternative Flows}
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{C0C0C0} 
-		Actor action  & System responsibility   \\ \hline
-		\begin{tabular}[c]{@{}l@{}}1. Start applicatie zonder\\ parameters.{}\end{tabular}&\begin{tabular}[c]{@{}l@{}}2. Stelt de standaard waarde in voor de\\ maximale communicatie afstand. {}\end{tabular}\\ \hline
-	\end{tabular}
-\end{table}
+%\subsection{Alternative Flows}
+%
+%\begin{table}[H]
+%	\centering
+%	\begin{tabular}{|l|l|}
+%		\hline
+%		\rowcolor[HTML]{C0C0C0} 
+%		Actor action  & System responsibility   \\ \hline
+%		\begin{tabular}[c]{@{}l@{}}1. Start applicatie zonder\\ parameters.{}\end{tabular}&\begin{tabular}[c]{@{}l@{}}2. Start de communicatie simulatie met\\ de standaard waarde voor de maximale\\ communicatie afstand. {}\end{tabular}\\ \hline
+%	\end{tabular}
+%\end{table}
 
 \label{Usecase:simmulatiecommuicatie:fully-dressed}
 \subsection{System Sequence Diagram }
 \label{Usecase:simmulatiecommuicatie:systemsequence}
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.3\textheight]{UML/out/usecase/sequence/Simulerendraadlozecommunicatie/Simulerendraadlozecommunicatie.png}\end{center}
+	\begin{center}\includegraphics[height=.2\textheight]{UML/out/usecase/sequence/Simulerendraadlozecommunicatie/Simulerendraadlozecommunicatie.png}\end{center}
 	\caption{System sequence diagram opstarten draadloze communicatie simulatie}
 	\label{fig:simmulatiecommuicatie:systemsequence}
 \end{figure}
 
-\section[Communiceren data]{Use case: Communiceren data}
+\section[Communiceren data]{Usecase: Communiceren data}
 \label{Usecase:communicerendata}
 \subsection{Fully-dressed usecase description}
 \label{Usecase:communicerendata:fully-dressed}
@@ -523,10 +493,10 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 	\centering
 	\begin{tabular}{|l|}
 		\hline
-		Use Case: Communiceren data.					                                                                              \\ \hline
+		Usecase: Communiceren data.					                                                                              \\ \hline
 		Purpose: Deze usecase wordt gebruiken om data uit te wisselen tussen componenten                                             \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: In het netwerk zullen componenten met elkaar willen \\communiceren. Deze usecase zal de data proberen te versturen. \\ \end{tabular} \\ \hline
-		Primary actor:  \nameref{inleiding:gebruikers:netwerkgebruiker}, \nameref{Usecase:simmulatiecommuicatie}, \nameref{Usecase:opbouwenmeshnetwerk}                       \\ \hline
+		Primary actor:  \nameref{inleiding:gebruikers:netwerkgebruiker}, \nameref{inleiding:gebruikers:algoritmetester}, \nameref{inleiding:gebruikers:dronecontroller}                 \\ \hline
 		 \begin{tabular}[c]{@{}l@{}}Preconditions: Communicatiemiddel van de zender is opgestart, de te versturen data is bekend,\\ en het adres van de ontvanger is bekend.{}\end{tabular}\\ \hline
 		Postconditions: Er is data verstuurd van een component naar een andere component.                                           \\ \hline
 	\end{tabular}
@@ -540,34 +510,16 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		1. Geeft bericht om te verzenden. & 2. Zet bericht om in overdraagbare data.  \\ \hline
-		& 3. Opent verbinding met ontvanger.                         \\ \hline
-		& 4. Verstuurd bericht naar ontvanger.                        \\ \hline
-5. Krijgt notificatie van slagen. & 6. Ontvangend syteem zet data terug naar bericht. \\ \hline
-		 & 7. Ontvanger ontvangt bericht.                         \\ \hline
+		1. Geeft bericht om te verzenden. & 2. Geeft succes aan van het versturen  \\ \hline
 	\end{tabular}
 \end{table}
-
-\subsection{Alternative Flows}
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{C0C0C0} 
-		Actor action  & System responsibility   \\ \hline
-		& 3. Kan geen verbinding openen met ontvanger.                        \\ \hline
-	4. Krijgt notificatie van het niet slagen.	&                         \\ \hline
-	\end{tabular}
-\end{table}
-
 
 
 \subsection{System Sequence Diagram }
 \label{Usecase:communicerendata:systemsequence}
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.4\textheight]{UML/out/usecase/sequence/VersturenBericht/VersturenBericht.png}\end{center}
+	\begin{center}\includegraphics[height=.2\textheight]{UML/out/usecase/sequence/VersturenBericht/VersturenBericht.png}\end{center}
 	\caption{System sequence diagram opstarten draadloze communicatie simulatie}
 	\label{fig:communicerendata:systemsequence}
 \end{figure}
@@ -583,7 +535,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		Usecase: Opbouwen meshnetwerk				                                                                              \\ \hline
 		\begin{tabular}[c]{@{}l@{}} Doel: Het uitvoeren van de usecase zal een netwerk opzetten van onderling\\ verbonden meshnetwerkcomponenten.{}\end{tabular}  \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase:  Na het uitvoeren van de usecase moeten alle\\ meshnetwerkcomponenten een verbinding hebben met de netwerkcomponenten die\\ binnen hun bereik zijn. De componenten staan klaar om berichten door te sturen \\naar elkaar of naar een gateway voor externe adressen.{}\end{tabular} \\ \hline
-		Primary actor:  \nameref{Usecase:ontplooien}                                                                                \\ \hline
+		Primary actor:  \nameref{inleiding:gebruikers:algoritmetester}, \nameref{inleiding:gebruikers:dronecontroller}                                                          \\ \hline
 		\begin{tabular}[c]{@{}l@{}} Preconditions: Componenten zijn binnen bereik van elkaar, er is minstens één \\gateway aanwezig.{}\end{tabular}		                      \\ \hline
 		Postconditions: Er is een onderling verbonden netwerk opgebouwd.                                                                       \\ \hline
 	\end{tabular}
@@ -598,39 +550,34 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		1. Start applicatie. & 2. Start communicatie methode. \\ \hline
-		& 3. Componenten maken verbinding met elkaar.  \\ \hline
-		& 4. Componenten berekenen verbindingspaden        \\ \hline
-		& 5. Maak contact met extern adres. \\ \hline
+		1. Start netwerkcomponent. & \begin{tabular}[c]{@{}l@{}} 2. Geeft feedback over verbinding met een gateway\\ en/of andere punten. {}\end{tabular}	\\ \hline
 	\end{tabular}
 \end{table}
 
-\subsection{Alternative Flows}
-
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		\rowcolor[HTML]{C0C0C0} 
-		Actor action  & System responsibility   \\ \hline
-		& 3. Componenten maken geen directe of indirecte verbinding met een gateway.\\ \hline
-		& 4. Componenten starten \nameref{Usecase:noodprotocol}.      \\ \hline
-	\end{tabular}
-\end{table}
+%\subsection{Alternative Flows}
+%\begin{table}[H]
+%	\centering
+%	\begin{tabular}{|l|l|}
+%		\hline
+%		\rowcolor[HTML]{C0C0C0} 
+%		Actor action  & System responsibility   \\ \hline
+%		& 3. Componenten maken geen directe of indirecte verbinding met een gateway.\\ \hline
+%		& 4. Componenten starten \nameref{Usecase:noodprotocol}.      \\ \hline
+%	\end{tabular}
+%\end{table}
 
 \label{Usecase:opbouwenmeshnetwerk:fully-dressed}
 \subsection{System Sequence Diagram }
 \label{Usecase:opbouwenmeshnetwerk:systemsequence}
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.3\textheight]{UML/out/usecase/sequence/meshnetwerk/meshnetwerk.png}\end{center}
+	\begin{center}\includegraphics[height=.2\textheight]{UML/out/usecase/sequence/meshnetwerk/meshnetwerk.png}\end{center}
 	\caption{System sequence diagram opzetten meshnetwerk.}
 	\label{fig:opbouwenmeshnetwerk:systemsequence}
 \end{figure}
 
 
-\hypertarget{noodprotocol}{\section[Uitvoeren noodprotocol bij geen verbinding]{Use case: Uitvoeren noodprotocol bij geen verbinding}}
+\hypertarget{noodprotocol}{\section[Uitvoeren noodprotocol bij geen verbinding]{Usecase: Uitvoeren noodprotocol bij geen verbinding}}
 \label{Usecase:noodprotocol}
 \subsection{Fully-dressed usecase description}
 \label{Usecase:noodprotocol:fully-dressed}
@@ -639,12 +586,12 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 	\centering
 	\begin{tabular}{|l|}
 		\hline
-		Use Case: Uitvoeren noodprotocol bij geen verbinding                                                                              \\ \hline
+		Usecase: Uitvoeren noodprotocol bij geen verbinding                                                                              \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Doel: Door het uitvoeren van een noodprotocol zijn één of meerdere drones in staat\\de verbinding te herstellen met een gateway. Hiervoor kan het gebruik maken van\\ \nameref{Usecase:aansturendrone}.{}\end{tabular}\\ \hline
-		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: Deze usecase is de uiterste stap die een meshcomponent.{}\end{tabular} \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: Deze usecase is de uiterste stap die een netwerkcomponent \\onderneemt bij het verlies van een verbinding.{}\end{tabular} \\ \hline
 		Primary actor:  \nameref{Usecase:opbouwenmeshnetwerk}                                                                                \\ \hline
 		Preconditions: 	Elke drone heeft ooit direct of indirect verbinding gehad met een gateway.		                                                                          \\ \hline
-		Postconditions: Drone(s) is/zijn herplaatst naar een positie in verbinding met een gateway. \\ \hline
+		Postconditions: Drone(s) is/zijn verplaatst naar een positie in verbinding met een gateway. \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -657,10 +604,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		1. Start noodprotocol. &  2. Kijkt of node alleen is of samen.\\ \hline
-						   	&  3. Drones bepalen verplaatsing.     \\ \hline
-						    &  4. Drones herpositioneren zich.	    \\ \hline
-							&  5. Alle drones hebben direct of indirect verbinding met een gateway.\\ \hline
+		1. Start noodprotocol. &  2. Drones herpositioneren zich.\\ \hline
 	\end{tabular}
 \end{table}
 
@@ -673,8 +617,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-	    &  3. Enkele drone bepaalt verplaatsing.     \\ \hline
-        &  4. Enkele drones herpositioneert zich.	    \\ \hline
+	    &  2. Drone positioneert zich op nieuwe locatie.     \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -684,8 +627,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		&  5. Drone(s) heeft/hebben nog geen verbinding met gateway.     \\ \hline
-		&  6. Drone(s) verplaatst/verplaatsen zich terug naar positie van gateway.	    \\ \hline
+		&  3. Drone(s) keren terug naar de positie van de gateway. \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -693,7 +635,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 \label{Usecase:noodprotocol:systemsequence}
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.4\textheight]{UML/out/usecase/sequence/noodprotocol/noodprotocol.png}\end{center}
+	\begin{center}\includegraphics[height=.3\textheight]{UML/out/usecase/sequence/noodprotocol/noodprotocol.png}\end{center}
 	\caption{System sequence diagram noodprotocol.}
 	\label{fig:noodprotocol:systemsequence}
 \end{figure}
@@ -708,10 +650,10 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 	\centering
 	\begin{tabular}{|l|}
 		\hline
-		Use Case:Ontplooien dronenetwerk                                                                             \\ \hline
+		Usecase:Ontplooien dronenetwerk                                                                             \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Doel: Het doel van deze usecase is het ontplooien van een dronenetwerk, met\\een casus zal worden aangegeven waar naartoe te verplaatsen, ze moeten\\ zelfstandig een netwerk opzetten.{}\end{tabular}   \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: Deze usecase zal alle drones aansturen om naar\\ een vooraf bepaalde posities te vliegen. De drones zullen een meshnetwerk\\ opbouwen waarover gecommuniceerd kan worden. \\ \end{tabular} \\ \hline
-		Primary actor:  \nameref{inleiding:gebruikers:dronecontroller}, \nameref{Usecase:simulatiedronenetwerk}  \\ \hline
+		Primary actor:  \nameref{inleiding:gebruikers:dronecontroller}, \nameref{inleiding:gebruikers:algoritmetester}  \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Preconditions: Drones zijn voorzien van meshcomponenten en kunnen zich\\verplaatsen. Er zijn genoeg drones aanwezig voor de casus. {}\end{tabular} \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Postconditions: Drones zijn verplaatst naar ingestelde positie en hebben\\een onderling netwerk opgebouwd.{}\end{tabular} \\ \hline
 	\end{tabular}
@@ -751,7 +693,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.4\textheight]{UML/out/usecase/sequence/ontplooien/ontplooien.png}\end{center}
+	\begin{center}\includegraphics[height=.3\textheight]{UML/out/usecase/sequence/ontplooien/ontplooien.png}\end{center}
 	\caption{System sequence diagram noodprotocol.}
 	\label{fig:ontplooien:systemsequence}
 \end{figure}
@@ -768,7 +710,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		Usecase: Verzoeken droneverplaatsing                                                                              \\ \hline
 		Doel: Deze usecase dient voor het verzoeken tot een verplaatsing van een drone.                                    \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Beschrijving usecase: Door deze usecase te gebruiken kan een individuele\\drone verzocht worden zich te verplaatsen.  {}\end{tabular} \\ \hline
-		Primary actor:  \nameref{inleiding:gebruikers:dronecontroller}, \nameref{Usecase:simulatiedronenetwerk}, \nameref{Usecase:ontplooien}. \\ \hline
+		Primary actor:  \nameref{inleiding:gebruikers:dronecontroller}, \nameref{inleiding:gebruikers:algoritmetester}. \\ \hline
 		Preconditions: Communicatieweg beschikbaar tot aan drone.\\ \hline
 		Postconditions: Drone gaat zich verplaatsen naar verzoeklocatie.            \\ \hline
 	\end{tabular}
@@ -783,9 +725,8 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		1. Verstuurt verzoek voor verplaatsing.  & 2. Verstuurt verzoek naar drone. \\ \hline
-												 & 3. Stuurt drone aan.  	   \\ \hline
-	\end{tabular}
+		1. Verstuurt verzoek voor verplaatsing.  & 2. Drone verplaatst zich naar positie. \\ \hline
+												 	\end{tabular}
 \end{table}
 
 \subsection{Alternative Flows}
@@ -797,7 +738,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-	    & 2. Drone is niet bereikbaar. \\ \hline
+	    & 2. Drone blijft staan. \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -820,10 +761,10 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 	\centering
 	\begin{tabular}{|l|}
 		\hline
-		Use Case: Aansturen drone                                                                              \\ \hline
+		Usecase: Aansturen drone                                                                              \\ \hline
 		Purpose: Het aansturen van een drone wordt gebruikt om een drone te verplaatsen.                                                                               \\ \hline
-		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: Elke drone kan aangestuurd worden om zicht te verplaatsen.\\Die wordt altijd uitgevoerd vanaf het aangesloten netwerkcomponent. Daarom moet er\\vanuit een extern punt altijd een verzoek gestuurd worden voor een verplaatsing of vanaf de\\aangesloten module zelf komen. {}\end{tabular} \\ \hline
-		Primary actor: \nameref{Usecase:verzoekverplaatsing}, \nameref{Usecase:noodprotocol}.                                        \\ \hline
+		\begin{tabular}[c]{@{}l@{}}Beschrijving van de usecase: Elke drone kan aangestuurd worden om zich te verplaatsen.\\Dit wordt altijd uitgevoerd vanaf het aangesloten netwerkcomponent. Daarom moet er\\vanuit een extern punt altijd een verzoek gestuurd worden voor een verplaatsing of vanaf de\\aangesloten module zelf komen. {}\end{tabular} \\ \hline
+		Primary actor: \nameref{inleiding:gebruikers:dronecontroller}, \nameref{inleiding:gebruikers:algoritmetester}.                                        \\ \hline
 		Preconditions: Drone is in staat zich te verplaatsen.                                                                         \\ \hline
 		Postconditions: Drone heeft zich verplaatst naar de verzochte positie.                                                                   \\ \hline
 	\end{tabular}
@@ -838,10 +779,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-		1. Stuurt doellocatie & 2. Berekend pad naar locatie \\ \hline
- 							  & 3. Start motor \\ \hline
- 							  & 4. Verplaatst zich naar locatie \\ \hline
- 							  & 5. Stopt motor  \\ \hline
+		1. Stuurt doellocatie & 2. Verplaatst zich naar locatie \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -854,8 +792,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 		\hline
 		\rowcolor[HTML]{C0C0C0} 
 		Actor action  & System responsibility   \\ \hline
-				      & 3. Geen pas mogelijk naar locatie \\ \hline
-					  & 4. Blijft op huidige locatie                        \\ \hline
+				      & 2. Blijft op huidige locatie                        \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -865,7 +802,7 @@ In de hier opvolgende \nameref{domeinmodel:beschrijving} wordt per class toelich
 
 
 \begin{figure}[H]
-	\begin{center}\includegraphics[height=.3\textheight]{UML/out/usecase/sequence/aansturendrone/aansturendrone.png}\end{center}
+	\begin{center}\includegraphics[height=.25\textheight]{UML/out/usecase/sequence/aansturendrone/aansturendrone.png}\end{center}
 	\caption{System sequence aansturen drone.}
 	\label{fig:aansturendrone:systemsequence}
 \end{figure}
@@ -888,7 +825,7 @@ hieraan wordt pas gewerkt als alle Must requirements afgehandeld zijn. Onder de 
 	\hyperlink{SIMULATIE4}{SIMULATIE4}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert tot 100 drones tegelijk.\end{tabular}        			 &S \\ \hline	
 	\hyperlink{SIMULATIE5}{SIMULATIE5}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert draadloze communicatie.\end{tabular}        			 &M \\ \hline	
 	\hyperlink{SIMULATIE6}{SIMULATIE6}			&\begin{tabular}[c]{@{}l@{}}Simulatie simuleert een Raspberry Pi. \end{tabular}        						 &S \\ \hline	
-	\hyperlink{SIMULATIE7}{SIMULATIE7}			&\begin{tabular}[c]{@{}l@{}}Een gesimuleerde Raspberry Pi houdt zich aan de snelheidslimieten\\ van een Raspberry Pi model 2B+ \end{tabular}        						 &W \\ \hline	
+	\hyperlink{SIMULATIE7}{SIMULATIE7}			&\begin{tabular}[c]{@{}l@{}}Een gesimuleerde Raspberry Pi houdt zich aan de snelheidslimieten\\ van een Raspberry Pi model 2B+. \end{tabular}        						 &W \\ \hline	
 	\hyperlink{SIMULATIE8}{SIMULATIE8}			&\begin{tabular}[c]{@{}l@{}}Simulatie kan met een configuratiebestand gestart worden. \end{tabular}     &S \\ \hline	
 	\hyperlink{DRONE1}{DRONE1}		&\begin{tabular}[c]{@{}l@{}}Drone kan zich verplaatsen naar een positie. \end{tabular}        			 &M \\ \hline	
 	\hyperlink{DRONE2}{DRONE2}		&\begin{tabular}[c]{@{}l@{}}Drone kan een route naar positie berekenen.  \end{tabular}        			 &S \\ \hline	
@@ -910,11 +847,13 @@ hieraan wordt pas gewerkt als alle Must requirements afgehandeld zijn. Onder de 
 \section{Toelichting functionele requirements}
 
 \subsection{Simulatie}
-Onderstaand worden alle functionele requirements van de simulatie toegelicht
+Onderstaand worden alle functionele requirements van de simulatie toegelicht.
 \paragraph{SIMULATIE1: Simulatie representeert een wereld}
 \hypertarget{SIMULATIE1}{}
 
 De simulatiecomponent moet een echte wereld nabootsen, er hoeven nog geen objecten in aanwezig te zijn.
+Een simulatiewereld bestaat uit een ruimte en maakt gebruiken van tijd. 
+De simulatiewereld moet in staat zijn krachten afkomstig van zwaartekracht, botsingen en wrijving te verwerken. 
 
 \paragraph{SIMULATIE2: Simulatie simuleert en visualiseert een abstracte drone.}
 \hypertarget{SIMULATIE2}{}
@@ -924,7 +863,7 @@ De simulatie moet een abstracte versie van een drone representeren hierbij maakt
 \paragraph{SIMULATIE3: Simulatie simuleert de beweging van een drone.}
 \hypertarget{SIMULATIE3}{}
 
-De drone moet bewegen in de simulatie het is belangrijk dat deze beweging visueel zichtbaar is voor analyse van het verplaatsingsgedrag.
+De drone moet bewegen in de simulatie, het is belangrijk dat deze beweging visueel zichtbaar is voor analyse van het verplaatsingsgedrag.
 
 \paragraph{SIMULATIE4: Simulatie simuleert tot 100 drones tegelijk.}
 \hypertarget{SIMULATIE4}{}
@@ -950,6 +889,7 @@ De gesimuleerde Raspberry Pi zal zich niet houden aan de clock snelheid van een 
 \hypertarget{SIMULATIE8}{}
 
 Om het starten van simulaties gemakkelijk te maken voor de algoritmetester moet het mogelijk zijn simulaties via een configuratie op te starten.
+
 
 \subsection{Drone}
 Onderstaand worden alle functionele requirements van de drone toegelicht.
@@ -1007,7 +947,7 @@ Wanneer het netwerk zijn onderlinge verbinding verliest moet het deze zelf kunne
 Om de stabiliteit van het netwerk te vergroten moet het mogelijk zijn het netwerk te ontplooien met meerdere gateways. 
 
 
-\subsection{algoritme test applicatie}
+\subsection{Algoritme test applicatie}
 Onderstaand worden alle functionele requirements van de algoritme testapplicatie toegelicht.
 \paragraph{ALGORITME1: Algoritmetester kan drones verdelen.}
 \hypertarget{ALGORITME1}{}
@@ -1027,7 +967,7 @@ Een algoritme tester moet casus situaties kunnen testen deze casus mag aangeroep
 	%
 	\endhead
 	\hyperlink{PERF1}{PERF1}			&\begin{tabular}[c]{@{}l@{}}Simulatiesnelheid moet minimaal 50 procent van de realiteit hebben.	\end{tabular}\\ \hline
-	\hyperlink{PERF2}{PERF2}			&\begin{tabular}[c]{@{}l@{}}Een router moet "snel" een pad berekenen.\end{tabular}\\ \hline
+	\hyperlink{PERF2}{PERF2}			&\begin{tabular}[c]{@{}l@{}}Een router moet "snel"\ een pad berekenen.\end{tabular}\\ \hline
 	\hyperlink{PERF3}{PERF3}			&\begin{tabular}[c]{@{}l@{}}Een drone kan binnen 10 seconden zijn positie bepalen.\end{tabular}\\ \hline
 	\caption{Non-functionele requirements performance}
 	\label{tab:nietfunctionelecriteria:performance}
@@ -1056,8 +996,8 @@ Een algoritme tester moet casus situaties kunnen testen deze casus mag aangeroep
 	%\endfirsthead
 	%
 	\endhead
-	\hyperlink{REL1}{REL1}			&\begin{tabular}[c]{@{}l@{}}Het netwerk mag maximaal 5 procent van zijn berichten verliezen	\end{tabular}\\ \hline
-	\hyperlink{REL2}{REL2}			&\begin{tabular}[c]{@{}l@{}}Een router heeft altijd direct of indirect een verbinding met een gateway	\end{tabular}\\ \hline
+	\hyperlink{REL1}{REL1}			&\begin{tabular}[c]{@{}l@{}}Het netwerk mag maximaal 5 procent van zijn berichten verliezen.	\end{tabular}\\ \hline
+	\hyperlink{REL2}{REL2}			&\begin{tabular}[c]{@{}l@{}}Een router heeft altijd direct of indirect een verbinding met een gateway.	\end{tabular}\\ \hline
 	\caption{Non-functionele requirements reliabilty}
 	\label{tab:nietfunctionelecriteria:reliabilty}
 \end{longtable}
@@ -1072,7 +1012,7 @@ Een algoritme tester moet casus situaties kunnen testen deze casus mag aangeroep
 	%
 	\endhead
 	\hyperlink{TIME1}{TIME1}			&\begin{tabular}[c]{@{}l@{}}Het netwerkwerk moet binnen 30 seconden detecteren dat er\\ een verbinding verloren is.	\end{tabular}\\ \hline
-	\hyperlink{TIME2}{TIME2}			&\begin{tabular}[c]{@{}l@{}}Het netwerkwerk moet minus de tijd van het verplaatsen van de drones\\zich herstellen binnen 2 minuten.\end{tabular}\\ \hline
+	\hyperlink{TIME2}{TIME2}			&\begin{tabular}[c]{@{}l@{}}Het netwerk moet minus de tijd van het verplaatsen van de drones\\zich herstellen binnen 2 minuten.\end{tabular}\\ \hline
 	\caption{Non-functionele requirements timeliness}
 	\label{tab:nietfunctionelecriteria:timeliness}
 \end{longtable}
@@ -1086,7 +1026,7 @@ Een algoritme tester moet casus situaties kunnen testen deze casus mag aangeroep
 	%\endfirsthead
 	%
 	\endhead
-	\hyperlink{QUA1}{QUA1}			&\begin{tabular}[c]{@{}l@{}} Het netwerk moet een minimale snelheid van \SI{100}{\kilo\bit\per\second} ondersteunen \end{tabular}\\ \hline
+	\hyperlink{QUA1}{QUA1}			&\begin{tabular}[c]{@{}l@{}} Het netwerk moet een minimale snelheid van \SI{100}{\kilo\bit\per\second} ondersteunen. \end{tabular}\\ \hline
 	\caption{Non-functionele requirements quality}
 	\label{tab:nietfunctionelecriteria:quality}
 \end{longtable}
@@ -1100,7 +1040,7 @@ Een algoritme tester moet casus situaties kunnen testen deze casus mag aangeroep
 	%\endfirsthead
 	%
 	\endhead
-	\hyperlink{SCALE1}{SCALE1}			&\begin{tabular}[c]{@{}l@{}} Een netwerkmodule past op elke drone die voldoet aan de gevraagde interface	\end{tabular}\\ \hline
+	\hyperlink{SCALE1}{SCALE1}			&\begin{tabular}[c]{@{}l@{}} Een netwerkmodule past op elke drone die voldoet aan de gevraagde interface.	\end{tabular}\\ \hline
 	\caption{Non-functionele requirements scalability}
 	\label{tab:nietfunctionelecriteria:scalability}
 \end{longtable}

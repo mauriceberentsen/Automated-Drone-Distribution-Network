@@ -1,16 +1,15 @@
 @startuml
 
 autonumber
-actor "Netwerkopzetter" as act
+actor "Dronecontroller" as act
 participant "Systeem" as sys
 
-act -> act : Start alle drones
-act -> sys : Start geef posities door voor de drones
-opt elke drone beschikbaar
-sys -> sys : Stuurt elke individuele drone aan naar positie
-else bepaalde drones niet beschikbaar
-sys -> sys :  Stuurt positie naar elk beschikbare drone
+act -> sys : Start alle drones op
+act -> sys : Start geef posities door voor de drone(s)
+opt Drone(s) bereikbaar via gateway
+act <-- sys : Drone(s) verplaatsen zich naar de\nopgegeven positie
+else Drone(s) niet bereikbaar
+act <-- sys : Drone(s) verplaatsen zich niet
 end
-sys -> sys : Bouwt meshnetwerk op
 
 @enduml

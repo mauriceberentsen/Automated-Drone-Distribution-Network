@@ -1,17 +1,11 @@
 @startuml
 
 autonumber
-actor "Ontplooien netwerk" as act
+actor "Algortimetester" as act
 participant "Systeem" as sys
 
-act -> sys : start
-sys -> sys : start communicatie methode
-sys -> sys : Maakt onderlinge verbinding
-opt contact met gateway gevonden
-sys -> sys : Berekend verbindingspaden
-else geen contact met gateway gevonden
-sys -> sys : Start noodprotocol
-end
-sys -> sys : Maakt contact met extern adres
+note over act: Kan ook uitgevoerd worden\ndoor Dronecontroller
+act -> sys : Start communicatiecomponent
+act <-- sys : Geeft feeback van verbinding
 
 @enduml

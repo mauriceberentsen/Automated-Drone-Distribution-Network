@@ -1,19 +1,17 @@
 @startuml
 
 autonumber
-actor "Ontplooien netwerk" as act
+actor "Netwerkcomponent" as act
 participant "Systeem" as sys
 
-act -> sys : start
-opt drones zijn in een groep
-sys -> sys : Bepaald verplaatsing
-sys -> sys : Bepaald onderling de verplaatsing
-else drone is alleen
-sys -> sys : bepaald verplaatsing
-sys -> sys : herpositioneert enkele drone
+act -> sys : Drone(s) zijn verbinding met de gateway verloren
+opt Drones zijn in een groep
+act <-- sys : Drone(s) verplaatsen zich naar nieuwe positie
+else Drone is alleen
+act <-- sys : Enkele drone verplaatst zich naar nieuwe positie
 end
-opt geen contact met gateway gevonden
-sys -> sys : Keert terug naar gateway
+opt Geen contact met gateway gevonden
+act <-- sys : Keert terug naar positie gateway
 end
 
 @enduml

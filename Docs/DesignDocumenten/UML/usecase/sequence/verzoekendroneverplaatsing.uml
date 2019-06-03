@@ -2,12 +2,14 @@
 
 autonumber
 
-actor "verplaatsingverzoeker" as verzoek
+actor "Dronecontroller" as verzoek
 participant systeem
 
-verzoek -> systeem : Verzoekt verplaatsing
-systeem -> systeem : Stuurt verzoek naar drone
-systeem -> systeem : Stuurt drone aan
-
+verzoek -> systeem : Verzoekt drone verplaatsing
+opt drone bereikbaar in het netwerk
+verzoek <-- systeem : Drone verplaatst zich naar opgegeven positie
+else drone niet bereikbaar
+verzoek <-- systeem : Drone blijft staan
+end
 
 @enduml

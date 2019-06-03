@@ -1,49 +1,56 @@
 @startuml
 
-rectangle netwerk{
-usecase "Communiceren data" as versturen
-usecase "Opbouwen meshnetwerk" as OON
-usecase "Uitvoeren noodprotocol\nbij geen verbinding" as un
+rectangle systeem{
+rectangle dronenetwerk <<subsysteem>>{
+
+    rectangle drone <<subsysteem>>{
+        usecase "Ontplooien dronenetwerk" as Ontplooien 
+        usecase "Aansturen drone" as verplaatsen
+        usecase "Verzoeken\ndroneverplaatsing" as VDV
+    }
+
+    rectangle meshnetwerk <<subsysteem>>{    
+        usecase "Communiceren data" as versturen
+        usecase "Opbouwen meshnetwerk" as OON
+        usecase "Uitvoeren noodprotocol\nbij geen verbinding" as un
+    }
+}
+rectangle simulatie <<subsysteem>>{
+    usecase "Simuleren\ndraadloze communicatie" as simCom
+    usecase "Simuleren drone" as simDrones
+    usecase "Simuleren dronenetwerk" as simDronenetwerk
+}
 }
 
-rectangle simulatie{
-usecase "Simuleren\ndraadloze communicatie" as simCom
-usecase "Simuleren drone" as simDrones
-usecase "Simuleren dronenetwerk" as simDronenetwerk
-}
 
-rectangle drones{
-usecase "Ontplooien dronenetwerk" as Ontplooien
-usecase "Aansturen drone" as verplaatsen
-usecase "Verzoeken\ndroneverplaatsing" as VDV
-}
 
 actor "Dronecontroller" as controller
 actor "Netwerkgebruiker" as gebruiker
 actor "Algoritmetester" as tester
 
-tester -- simDronenetwerk
+tester -right- simDronenetwerk
 gebruiker -- versturen
 
 controller -- Ontplooien
-controller -- VDV
+controller -right- VDV
 
 simCom ..> versturen : <<include>>
 
 simDronenetwerk ..> simDrones : <<include>> 
 simDronenetwerk ..> simCom : <<include>> 
-simDronenetwerk ..> Ontplooien : <<extend>> 
-simDronenetwerk ..> VDV : <<extend>>
+simDronenetwerk ..> Ontplooien : <<include>> 
+simDronenetwerk <.. VDV : <<extend>>
 
 Ontplooien ..> VDV : <<include>>
 Ontplooien ..> OON : <<include>>
 
 VDV ..> verplaatsen : <<include>>
 
-OON ..> un : <<extend>>
+OON <.. un : <<extend>>
 OON ..> versturen : <<include>>
 
+simDrones ..> verplaatsen : <<include>>
 
-un ..> verplaatsen : <<extend>>
+un <.. verplaatsen : <<extends>>
 
 @enduml
