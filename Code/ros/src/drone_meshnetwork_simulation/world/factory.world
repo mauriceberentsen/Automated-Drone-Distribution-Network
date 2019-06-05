@@ -9,9 +9,9 @@
       <uri>model://sun</uri>
     </include>
     <plugin name="DroneFactory" filename="libDroneFactory.so">
-      <amountOfRouterDrones>1</amountOfRouterDrones>
-      <amountOfGatewayDrones>1</amountOfGatewayDrones>
-      <UseServer>1</UseServer>
+      <amountOfRouterDrones>16</amountOfRouterDrones>
+      <amountOfGatewayDrones>2</amountOfGatewayDrones>
+      <UseServer>0</UseServer>
       <Debug>1</Debug>
     </plugin>
   </world>

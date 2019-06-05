@@ -946,8 +946,8 @@ Wanneer het netwerk zijn onderlinge verbinding verliest moet het deze zelf kunne
 Om de stabiliteit van het netwerk te vergroten moet het mogelijk zijn het netwerk te ontplooien met meerdere gateways. 
 
 
-\subsection{Algoritme test applicatie}
-Onderstaand worden alle functionele requirements van de algoritme testapplicatie toegelicht.
+\subsection{Algoritme testapplicatie}
+Onderstaand worden alle functionele requirements van de testapplicatie voor het algoritme toegelicht.
 \paragraph{ALGORITME1: Algoritmetester kan drones verdelen.}
 \hypertarget{ALGORITME1}{}
 Een algoritmetester moet om zijn algoritme te kunnen testen drones kunnen verplaatsen, dit zal via een aangeboden interface gebeuren.
@@ -1010,7 +1010,7 @@ Een algoritmetester moet casus situaties kunnen testen deze casus zal aangeroepe
 	%\endfirsthead
 	%
 	\endhead
-	\hyperlink{TIME1}{TIME1}			&\begin{tabular}[c]{@{}l@{}}Het netwerkwerk moet binnen 30 seconden detecteren dat er\\ een verbinding verloren is.	\end{tabular}\\ \hline
+	\hyperlink{TIME1}{TIME1}			&\begin{tabular}[c]{@{}l@{}}Het netwerk moet binnen 30 seconden detecteren dat er\\ een verbinding verloren is.	\end{tabular}\\ \hline
 	\hyperlink{TIME2}{TIME2}			&\begin{tabular}[c]{@{}l@{}}Het netwerk moet minus de tijd van het verplaatsen van de drones\\zich herstellen binnen 2 minuten.\end{tabular}\\ \hline
 	\caption{Non-functionele requirements timeliness.}
 	\label{tab:nietfunctionelecriteria:timeliness}
@@ -1064,25 +1064,24 @@ Om aan te tonen dat zowel functionele als niet functionele requirements zijn beh
 \hyperlink{DRONE2}{DRONE2}			& \begin{tabular}[c]{@{}l@{}}  Dit is gerealiseerd in de code van de class DroneEngine  te\\vinden in \autoref{app:broncode}. De werking wordt toegelicht in bijlage \ref{sec:softwaredesigndocument}.	\end{tabular} \\ \hline
 \hyperlink{DRONE3}{DRONE3}			& \begin{tabular}[c]{@{}l@{}}  Dit is gerealiseerd in de code van de class DroneEngine  te\\vinden in \autoref{app:broncode}. De werking wordt toegelicht in bijlage \ref{sec:softwaredesigndocument}.	\end{tabular} \\ \hline
 \hyperlink{DRONE4}{DRONE4}			& \begin{tabular}[c]{@{}l@{}} In het onderzoek van bijlage \ref{sec:onderzoeksrapport-drone-meshnetwerk-simulatie} is bepaald wat een abstracte drone\\inhoudt. Dit is gerealiseerd in de code van de class VirtualDrone  te\\vinden in \autoref{app:broncode}. De werking wordt toegelicht in bijlage \ref{sec:softwaredesigndocument}.	\end{tabular} \\ \hline
-\hyperlink{NETWERK1}{NETWERK1}		& \begin{tabular}[c]{@{}l@{}} In de demonstratie videos te vinden in bijlage \ref{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing}, \ref{sec:gateway-drone-en-99-routerdronesmp4} is te zien dat\\de netwerkmodules zelfstandig een netwerk opbouwen in een simulatie.\\
-De werking op de raspberry is te zien in bijlage \ref{sec:fysieke-router-en-dronemp4}	\end{tabular} \\ \hline
+\hyperlink{NETWERK1}{NETWERK1}		& \begin{tabular}[c]{@{}l@{}} In de demonstratie videos te vinden in bijlage \ref{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing}, \ref{sec:gateway-drone-en-99-routerdronesmp4} is te zien dat\\de netwerkmodules zelfstandig een netwerk opbouwen in een\\simulatie. De werking op de raspberry is te zien in bijlage \ref{sec:fysieke-router-en-dronemp4}	\end{tabular} \\ \hline
 \hyperlink{NETWERK2}{NETWERK2}		& \begin{tabular}[c]{@{}l@{}} In het SDD  te vinden in bijlage \ref{sec:softwaredesigndocument} is vinden dat de routers altijd\\bezig zijn met zoeken naar een gateway.	\end{tabular} \\ \hline
 \hyperlink{NETWERK3}{NETWERK3}		& \begin{tabular}[c]{@{}l@{}} In de bijlage \ref{sec:fysieke-router-en-dronemp4} is te zien dat er locatie via het netwerk naar een\\drone verstuurd wordt.	\end{tabular} \\ \hline
 \hyperlink{NETWERK4}{NETWERK4}		& \begin{tabular}[c]{@{}l@{}} Dit is gerealiseerd in de code van de class InternetGateway  te\\vinden in \autoref{app:broncode}.	Werkend te zien in bijlage \ref{sec:fysieke-router-en-dronemp4}\end{tabular} \\ \hline
-\hyperlink{NETWERK5}{NETWERK5}		& \begin{tabular}[c]{@{}l@{}} n de demonstratie video's te vinden in bijlage \ref{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing} is te zien dat de\\drones met elkaar communiceren. Dit is gerealiseerd in de code van\\de folder drone\_meshnetwork\_simulation/src/ros/WirelessSimulation\\te vinden in \autoref{app:broncode}.	\end{tabular} \\ \hline
-\hyperlink{NETWERK6}{NETWERK6}		& \begin{tabular}[c]{@{}l@{}}  In de demonstratie video's te vinden in bijlage \ref{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing} is te zien dat de\\netwerkmodules het netwerk zelfstandig herstellen	\end{tabular} \\ \hline
-\hyperlink{NETWERK7}{NETWERK7}		& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{ALGROITME1}{ALGROITME1}	& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{ALGROITME2}{ALGROITME2}	& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{PERF1}{PERF1}			& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{PERF2}{PERF2}			& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{SEC1}{SEC1}				& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{REL1}{REL1}				& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{REL2}{REL2}				& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{TIME1}{TIME1}			& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{TIME2}{TIME2}			& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{QUA1}{QUA1}				& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
-\hyperlink{SCALE1}{SCALE1}			& \begin{tabular}[c]{@{}l@{}} a	\end{tabular} \\ \hline
+\hyperlink{NETWERK5}{NETWERK5}		& \begin{tabular}[c]{@{}l@{}} In de demonstratie video's te vinden in bijlage \ref{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing} is te zien dat de\\drones met elkaar communiceren. Dit is gerealiseerd in de code van\\de folder drone\_meshnetwork\_simulation/src/ros/WirelessSimulation\\te vinden in \autoref{app:broncode}.	\end{tabular} \\ \hline
+\hyperlink{NETWERK6}{NETWERK6}		& \begin{tabular}[c]{@{}l@{}}  In de demonstratie video's te vinden in bijlage \ref{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing} is te zien dat de\\netwerkmodules het netwerk zelfstandig herstellen. Dit doen ze door \\fysieke verplaatsing of het zoeken naar een nieuwe routeringsroute.	\end{tabular} \\ \hline
+\hyperlink{NETWERK7}{NETWERK7}		& \begin{tabular}[c]{@{}l@{}} In de video van de bijlage \ref{sec:gatewaywisselmp4} is te zien hoe meerdere gateways\\gebruikt worden in een netwerk.	\end{tabular} \\ \hline
+\hyperlink{ALGROITME1}{ALGROITME1}	& \begin{tabular}[c]{@{}l@{}} Aan de hand van de API aangeboden door de dronemanager kan er\\een drone naar een specifieke positie gestuurd worden.	\end{tabular} \\ \hline
+\hyperlink{ALGROITME2}{ALGROITME2}	& \begin{tabular}[c]{@{}l@{}} Aan de hand van de API aangeboden door de dronemanager kan de\\algoritmetester een casus starten. In de video van bijlage \ref{sec:gatewaywisselmp4} kan\\gezien worden hoe drone in een casus geplaatst worden.	\end{tabular} \\ \hline
+\hyperlink{PERF1}{PERF1}			& \begin{tabular}[c]{@{}l@{}} In de video's in de bijlage \ref{sec:videos-drone-simulatie} en \ref{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing} worden simulaties getoond. Deze\\lopen allen boven de 50 procent simulatie snelheid. 	\end{tabular} \\ \hline
+\hyperlink{PERF2}{PERF2}			& \begin{tabular}[c]{@{}l@{}} n.v.t.	\end{tabular} \\ \hline
+\hyperlink{SEC1}{SEC1}				& \begin{tabular}[c]{@{}l@{}} In bijlage \ref{sec:softwaredesigndocument} is zichtbaar dat de interface voor aansturing alleen\\mogelijk is vanaf een netwerkcomponent. Bijlage \ref{sec:fysieke-router-en-dronemp4} laat zien dat\\er een aansturing wordt uitgevoerd door het gebruik van een REST\\request. Deze loopt via een gateway naar het te verplaatsen\\netwerkcomponent.	\end{tabular} \\ \hline
+\hyperlink{REL1}{REL1}				& \begin{tabular}[c]{@{}l@{}} Het onderzoek in bijlage \ref{sec:onderzoeksrapport-drone-meshnetwerk-simulatie} toont aan dat er op een afstand van\\500 meter gemiddeld 2,8 procent van de berichten verloren gaan.\\Daarmee wordt de eis behaald.	\end{tabular} \\ \hline
+\hyperlink{REL2}{REL2}				& \begin{tabular}[c]{@{}l@{}} In het SDD uit bijlage \ref{sec:softwaredesigndocument} wordt beschreven dat een router altijd\\op zoek zal gaan naar een gateway.	\end{tabular} \\ \hline
+\hyperlink{TIME1}{TIME1}			& \begin{tabular}[c]{@{}l@{}} De software controleert elke 10 seconden of er een verbinding bestaat\\naar de gateway. Hiermee wordt de eis behaald.	\end{tabular} \\ \hline
+\hyperlink{TIME2}{TIME2}			& \begin{tabular}[c]{@{}l@{}} Zodra het netwerk 30 seconden geen verbinding heeft wordt actie\\ondernomen, hierbij bestaat de kans dat het huidige\\verplaatsingalgoritme de twee minuten niet haalt. 	\end{tabular} \\ \hline
+\hyperlink{QUA1}{QUA1}				& \begin{tabular}[c]{@{}l@{}} De gebruikte antenne ondersteund een minimale doorvoersnelheid\\van \SI{250}{\kilo\bit}. Het onderzoek uit bijlage \ref{sec:onderzoeksrapport-drone-meshnetwerk-simulatie} toont aan dat er op\\de maximale afstand van 500 meter gemiddeld \SI{87,1}{\kilo\bit} behaald\\wordt. Daarmee is de eis niet behaald. 	\end{tabular} \\ \hline
+\hyperlink{SCALE1}{SCALE1}			& \begin{tabular}[c]{@{}l@{}} n.v.t.	\end{tabular} \\ \hline
 	\caption{Referentie tabel bewijslast requirements.}
 	\label{tab:bewijslast}\\
 \end{longtable}
@@ -1105,11 +1104,14 @@ Voor het aantonen van behaalde requirements wordt gebruik gemaakt van code te vi
 
 ../Code/
 
-\chapter{Videos drone simulatie}
+\chapter{Videos drone simulatie}\label{sec:videos-drone-simulatie}
+Video's in ./Bijlagen/
 \section{gateway drone en 99 routerdrones.mp4}\label{sec:gateway-drone-en-99-routerdronesmp4}
 Video van 99 drones die verbinden met een gateway drone te vinden in:
-
-./Bijlagen/
+\section{GatewayWissel.mp4}\label{sec:gatewaywisselmp4}
+Video van drones die zich verspreiden, hier zijn twee gateways bij aanwezig.
+Vervolgens wordt een essentieel punt uit gezet. 
+De daarom verbonden router wisselt van gateway. 
 
 \chapter{Videos fysiek netwerkmodule}
 \section{Fysieke router en drone.mp4}\label{sec:fysieke-router-en-dronemp4}

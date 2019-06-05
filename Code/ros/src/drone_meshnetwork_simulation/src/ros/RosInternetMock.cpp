@@ -24,6 +24,7 @@ namespace Internet
  RosInternetMock::~RosInternetMock( )
  {
   disconnect( );
+  rosQueueThread.join();
  }
 
  void RosInternetMock::disconnect( )

@@ -38,11 +38,11 @@ namespace Meshnetwork
 
  void MeshnetworkComponent::OnMsg( const uint8_t *message )
  {
-	for(int it = 0; it < 32; it++)
-	{
-	std::cout<<(int)message[it]<<"-";
-	}
-	std::cout<<std::endl;
+	// for(int it = 0; it < 32; it++)
+	// {
+	// std::cout<<(int)message[it]<<"-";
+	// }
+	// std::cout<<std::endl;
 
   ( message[Messages::FORWARD] == this->nodeID ||
     message[Messages::FORWARD] == Messages::BROADCAST )
