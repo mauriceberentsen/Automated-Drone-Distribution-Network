@@ -99,7 +99,7 @@
 	\rfoot{{\footnotesize \textbf{#1}}}
 }
 
-\subtitle{Onderzoeksrapport}{Versie 1.0}{Alten Nederland B.V.}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica - Embedded Software Developement }{MWJ.Berentsen@student.han.nl}{Studentnummer: 561399}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
+\subtitle{Onderzoeksrapport}{Versie 2.0}{Alten Nederland B.V.}{Hogeschool van Arnhem en Nijmegen}{HBO Technische Informatica - Embedded Software Developement }{MWJ.Berentsen@student.han.nl}{Studentnummer: 561399}{Docent: J. Visch, MSc}{Assessor: ir. C.G.R. van Uffelen}
 
 
 \setlength{\parindent}{0pt}
@@ -155,31 +155,30 @@ Om aan te tonen dat de mogelijkheid om een drone te kunnen verplaatsen bijdraagt
 	Term & Beschrijving \\ \hline
 	\endhead
 	%
-	Acknowlegdement & \begin{tabular}[c]{@{}l@{}}Term die gebruikt wordt voor het bevestigen van het ontvangst\\ van een bericht.\end{tabular} \\ \hline
-	Adapter & \begin{tabular}[c]{@{}l@{}}Een ontwerppatroon die gebruikt wordt om niet passende \\interfaces op elkaar aan te sluiten.\end{tabular} \\ \hline
-	Broadcast & Het rond sturen van een bericht die iedereen mag ontvangen. \\ \hline
+
+
 	Byte & Een samenstelling van 8 bits. \\ \hline
-	Condensator & \begin{tabular}[c]{@{}l@{}}Een elektrische component  om spanningsschommelingen af te\\ vlakken.\end{tabular} \\ \hline
+
 	Debug & \begin{tabular}[c]{@{}l@{}}Term die slaat op debugger, vaak informatie die gebruikt \\ wordt om gedrag te vinden binnen een applicatie.\end{tabular} \\ \hline
 	Gateway & Een toegangspunt tot een netwerk. \\ \hline
 	Gazebo & Simulatiesoftware met ondersteuning voor physics. \\ \hline
 	GPS & Systeem voor locatie en tijd bepaling. \\ \hline
-	\begin{tabular}[c]{@{}l@{}}High level\\interface\end{tabular} & Versimpelde interface die functie extern aanbiedt. \\ \hline
-	Low level interface & \begin{tabular}[c]{@{}l@{}}Interface die meestal op een high level aangesloten wordt is een\\  direct aanspreekpunt op de hardware.\end{tabular} \\ \hline
+
+
 	nRF24l01+ & Radio transciever module werkzaam op de 2,4Ghz band. \\ \hline
 	Physics engine & Software die natuurwetten toepast op virtuele objecten. \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Raspeberry Pi \\ model 2B+\end{tabular} & Micro computer geschikt voor prototyping. \\ \hline
 	Ros & \begin{tabular}[c]{@{}l@{}}Robot operating system. Wordt gebruikt voor de transportlaag \\ naar zowel virtuele als gesimuleerde robots.\end{tabular} \\ \hline
-	Rosservice & Een request response mechanisme gebruikt door ros nodes. \\ \hline
-	Rostopic & Publicatie voor het gebruik van een subscriber patroon binnen ros. \\ \hline
+
+
 	Router & Netwerkcomponent die berichten kan doorsturen. \\ \hline
 	Routeringstechniek & \begin{tabular}[c]{@{}l@{}}Techniek die gebruikt voor het opbouwen van een pad binnen\\ een netwerk.\end{tabular} \\ \hline
-	RQT & Programma aangeboden door ros voor aansluiting op ros nodes. \\ \hline
-	SDF & \begin{tabular}[c]{@{}l@{}}XML format gebruikt voor het inladen van objecten en werelden\\ in gazebo\end{tabular} \\ \hline
+
+
 	Seriële verbinding & Een communicatieverbinding het meest bekend van USB. \\ \hline
 	Simulatie software & Software die fysieke objecten nabootst in software. \\ \hline
-	Unittest & Geautomatiseerde test die functie test op resultaat. \\ \hline
-	\caption{Begrippenlijst}
+
+	\caption{Begrippenlijst.}
 	\label{tab:begrippenlijst}\\
 \end{longtable}%\label{begrippen}
 
@@ -190,14 +189,14 @@ Om aan te tonen dat de mogelijkheid om een drone te kunnen verplaatsen bijdraagt
 \label{chapter:inleiding}
 
 
-Het volgende onderzoeksrapport wordt uitgevoerd ten behoeve van de het afstudeerproject van Maurice Berentsen, Hogeschool van Arnhem en Nijmegen.
+Het volgende onderzoeksrapport wordt uitgevoerd ten behoeve van het afstudeerproject van Maurice Berentsen, Hogeschool van Arnhem en Nijmegen.
 
 Het doel van dit onderzoek is het zetten van de eerste stap in de ontwikkeling van het dronenetwerk.
-De eerste stap is ontwikkelen van een simulatie van een netwerkmodule voor het onderling verbinden van drones.
+De eerste stap is het ontwikkelen van een simulatie van een netwerkmodule voor het onderling verbinden van drones.
 Het is van belang dat het meshnetwerk van de drones snel kan reageren op uitval van netwerkpunten en dat er eerst uitgezocht wordt welke hardware de netwerkmodule moet gebruiken.
 
 De aanleiding om dit onderzoek uit te voeren is om de kennis te verschaffen die nodig is om een netwerk van drones te kunnen opzetten.
-Door het ontwikkelen van een simulatie die gebaseerd is op keuzes voor de werkelijke drones en netwerkapparatuur kunnen er tijdens dit onderzoek al testen uitgevoerd worden zonder dat er de benodigde hardware zoals drones, antennes en microcomputers aanwezig hoeven zijn. 
+Door het ontwikkelen van een simulatie die gebaseerd is op keuzes voor de werkelijke drones en netwerkapparatuur kunnen er tijdens dit onderzoek al testen worden uitgevoerd zonder dat er de benodigde hardware zoals drones, antennes en microcomputers aanwezig hoeven zijn. 
 
 
 \chapter{Hoofd- en deelvragen}
@@ -333,11 +332,12 @@ Deze techniek is gebaseerd op de "Comparison Chart" van \cite{CMDmethod} uit de 
 
 De kandidaten zijn:
 \begin{itemize}
-	\item \href{https://www.energid.com/actin}{Actin} is een simulatie framework van het bedrijf Energid. Het is in staat om de beweging van verschillende robots gelijktijdig aan te sturen.
-	\item \href{http://gazebosim.org/}{Gazebo} is een open source robot simulatie framework bijzonder geschikt voor het simuleren van robotica in outdoor-omgevingen door de uitgebreide Physics Engine Support.
-	\item \href{http://www.coppeliarobotics.com/}{V-REP (Virtual Robot Experimentation Platform)} is een platform geschikt voor het snel bouwen van robot prototypes.
-	\item \href{https://cyberbotics.com/}{Webots} is een open source ontwikkelomgeving die wordt gebruikt voor het modelleren, programmeren en simuleren van mobiele robots.
-	\item \href{http://openrave.org/}{OpenRAVE} biedt een ontwikkelomgeving voor het testen van motion planning algoritmes aan de hand van simulaties.
+	\item Actin is een simulatie framework van het bedrijf Energid. Het is in staat om de beweging van verschillende robots gelijktijdig aan te sturen \cite{energid}.
+	
+	\item Gazebo is een open source robot simulatie framework bijzonder geschikt voor het simuleren van robotica in outdoor-omgevingen door de uitgebreide Physics Engine Support \cite{gazebo}.
+	\item V-REP (Virtual Robot Experimentation Platform) is een platform geschikt voor het snel bouwen van robot prototypes \cite{vrep}.
+	\item Webots is een open source ontwikkelomgeving die wordt gebruikt voor het modelleren, programmeren en simuleren van mobiele robots \cite{webots}.
+	\item OpenRAVE biedt een ontwikkelomgeving voor het testen van motion planning algoritmes aan de hand van simulaties \cite{openrave}.
 \end{itemize}
 
 \begin{table}[H]
@@ -448,7 +448,7 @@ Daarnaast zal er een bericht moeten komen waarmee het systeem de status van het 
 De huidige locatie is essentiële administratie voor de verdeling van de drones.
 Omdat de drones zich kunnen verplaatsen is naast de locatie ook het tijdstip waarop het bericht verstuurd wordt van belang.
 
-\subsubsection*{Coördinaat vanuit de informatie van de GPS module}
+\subsubsection{Coördinaat vanuit de informatie van de GPS module}
 Een positie van een locatie wordt aangeduid door coördinaten te gebruiken.
 Deze worden bepaald door het gebruik van een GPS module aan boord van het systeem.
 GPS modules gebruiken triangulatie van satellietsignalen om hun positie te bepalen.  
@@ -476,7 +476,7 @@ Het is gebruik hiervan is realistisch omdat met alleen realtime GPS data de accu
 Er wordt per as een float gebruikt dit houdt in dat minimaal 8 bytes nodig zijn voor een coördinaat.
 Dit is 4 bytes per float en exclusief de separator. 
 
-\subsubsection*{Hoogte van de drone}
+\subsubsection{Hoogte van de drone}
 \citeA{GPSheight} hebben onderzoek gedaan naar de accuraatheid van de hoogtebepaling bij drones. 
 Uit dit onderzoek is gebleken dat een continue vliegende drone een hoogte accuraatheid heeft van ongeveer twee meter.
 Hieruit is te halen dat het geen zin heeft om op 'centimeter niveau' de hoogte van een drone aan te geven.
@@ -487,7 +487,7 @@ De keuze om een signed integer te gebruiken is om ondersteuning te bieden aan pl
 
 Voor de hoogte moeten 2 bytes gereserveerd worden. 
 
-\subsubsection*{Tijd vanuit de GPS module}
+\subsubsection{Tijd vanuit de GPS module}
 
 De drone maakt al gebruik van de GPS module voor de positiebepaling.
 In de berichten die de GPS module ontvangt van de satellieten wordt ook de tijd meegestuurd.
@@ -498,7 +498,7 @@ Unix time maakt gebruik van 32 bits formaat, er is gekozen voor een unsigned var
 
 Voor de tijd en datum worden 4 bytes gereserveerd.
 
-\subsubsection*{Conclusie}  
+\subsubsection{Conclusie}  
 
 De bovenstaande sub paragrafen kunnen samengesteld worden tot een bericht waarin alle informatie zit die nodig is om te bepalen waar een drone zich op een moment bevindt.
 Een systeem kan met dit bericht in ieder geval elke drone afzonderlijk in kaart brengen.
@@ -510,7 +510,7 @@ Een systeem kan met dit bericht in ieder geval elke drone afzonderlijk in kaart 
 	& \cellcolor[HTML]{C0C0C0}ID & \cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Bericht \\ type\end{tabular} & \cellcolor[HTML]{C0C0C0}latitude & \cellcolor[HTML]{C0C0C0}longitude & \cellcolor[HTML]{C0C0C0}hoogte & \cellcolor[HTML]{C0C0C0}tijd \\ \hline
 	\multicolumn{1}{|l|}{\cellcolor[HTML]{C0C0C0}\begin{tabular}[c]{@{}l@{}}Aantal\\ Bytes\end{tabular}} & 1                          & 1                                                                               & 4                                & 4                                 & 2                              & 4                            \\ \hline
 \end{tabular}
- \caption{Locatie bericht in bytes}
+ \caption{Locatie bericht in bytes.}
 \label{tab:locatiebericht} 
 \end{table}
 In \ref{tab:locatiebericht} is het aantal bytes te zien benodigd voor een locatie bericht.
@@ -539,11 +539,11 @@ De ontvangers en zenders zijn verdeelt in \autoref{tab:ontvangerzender}.
 	Ontvanger & BS   & 9   & 7 & 5 & 3 & 2 & 8 & 6 & 11    & 13 & 12 & 14       \\ \hline
 	Zender    & 9,11 & 7,8 & 5 & 3 & 2 & 1 & 6 & 4 & 13,10 & 12 & 14 & 15,16,17
 \end{tabular}
-	\caption{De ontvangers en zenders uit de casus}
+	\caption{De ontvangers en zenders uit de casus.}
 	\label{tab:ontvangerzender}
 \end{table} 
 
-\subsubsection*{Topologie met PlantUML}  
+\subsubsection{Topologie met PlantUML}  
 Om snel aan te kunnen tonen dat er weinig informatie nodig is om een topologie op te stellen gebruikt de student PlantUML.
 Hiermee wordt aangetoond dat een bericht die de ontvanger aanmaakt zodra een zender zich bij hem aanmeld waar in staat wie de zender is genoeg is voor een topologie.
 De keuze om de verantwoording bij de ontvanger neer te leggen is omdat een zender niet bij elke soort netwerk weet wie de ontvanger is.
@@ -556,7 +556,7 @@ De uitwerking hiervan is zichtbaar in \autoref{fig:toplogienetwerkuml}
 \end{figure}
 
 
-\subsubsection*{Conclusie}  
+\subsubsection{Conclusie}  
 Het ID van de ontvanger zit al in het bericht aangezien deze de opsteller van het bericht is.
 Dit houdt in dat enkel een ID toegevoegd hoeft te worden van de aangemelde zender.
 De byte grootte van de ID's is al bekend deze telt namelijk 1 byte.
@@ -663,7 +663,7 @@ In het geval van de opdracht wordt alleen gekeken naar type C nodes, omdat er in
 De gestelde eisen over bereik en energieverbruik zijn een logische stap om een verdieping uit te voeren in low-power wide-area network (LPWAN) netwerken. 
 
 In de publicatie van \cite{LoraConnect} wordt het LoRaWAN netwerk onderzocht.
-Ook worden daar de grootste concurrenten van het LoRaWAN netwerk benoemd namelijk \href{https://www.sigfox.com/en}{SigFox} en Narrowband IoT (NB-IoT).
+Ook worden daar de grootste concurrenten van het LoRaWAN netwerk benoemd namelijk SigFox \citeyear{sigfox} en Narrowband IoT (NB-IoT).
 Ondanks het feit dat deze protocollen niet interessant zijn voor het project, omdat ze in de verkeerde OSI-laag vallen, is de netwerklaag wel interessant om te bekijken welke technieken er gebruikt worden.
 NB-IoT valt direct af als oplossing doordat het gebruikt maakt van mobiele communicatie en dus niet zou voldoen aan criteria \hyperlink{ph4}{PH4}.
 Daarna valt SiGFox ook af simpelweg, omdat het gebruik maar beperkt openbaar is gemaakt waardoor het niet geschikt is om een meshnetwerk mee te bouwen. 
@@ -681,7 +681,7 @@ Dit komt door de degradatie van timing prestaties waarin ze stellen dat periode 
 Voordeel van het gebruik die een mesh kan hebben ten opzichte van een ster netwerk is dat het een hogere bitsnelheid kan behouden, omdat er kleinere afstanden overbrugt hoeven te worden waardoor de frametijd alsnog klein kan blijven.
 Een voorwaarde van het gebruik van dit netwerk is dus wel dat de framelengte klein moet zijn waardoor het niet geschikt is voor het verwerken van grote berichten zoals afbeeldingen video of andere grote bestanden.
 
-\paragraph*{LoRa samengevat}
+\paragraph{LoRa samengevat}
 Als er gekeken wordt naar LPWAN oplossingen is LoRa PHY de enige noemenswaardige oplossing voor dit project.
 \citeA{LoraMesh} hebben al aangetoond dat een meshnetwerk op bais van LoRa mogelijk is waardoor het risico afneemt in de haalbaarheid van dit onderzoek.
 Een voordeel van dit netwerk is de afstand die de netwerkmodules van elkaar kunnen staan die met deze techniek kan oplopen tot meer dan 10 kilometer afhankelijk van de hoeveelheid en frequentie van de data die verstuurd moet worden.
@@ -700,12 +700,12 @@ Er is een module (nRF24l01) voor korte afstand en een module (nRF24l01+pa+lna) v
 De module voor lange afstanden beschikt over een power amplifier en een low noise amplifier wat het een beter zend en ontvangst vermogen geeft.
 De module heeft volgens de specificaties een theoretisch bereik van 1100 meter bij vrij zicht.
 Er zijn verschillende video's op youtube waar aangetoond wordt dat deze afstand gehaald wordt.
-Zo wordt in de \href{https://www.youtube.com/watch?v=lR60toEjHl8}{video (https://www.youtube.com/watch?v=lR60toEjHl8}) van iforce2d een afstand overbrugt van 700m met een data rate van \SI{250}{\kilo\bit\per\second} \cite{nrfAfstand}.
+Zo wordt in de video van iforce2d \citeyear{nrfAfstand} een afstand overbrugt van 700m met een data rate van \SI{250}{\kilo\bit\per\second}.
 Het zal in ieder geval voldoende zijn om de eis van 500 meter te overbruggen.  
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=0.4\linewidth]{Afbeeldingen/nrfMulticiever.jpg}\end{center}
-	\caption{Werking van verbindingen nRF24l01. Afkomstig van \href{https://www.instructables.com/id/NRF24L01-Multiceiver-Network}{https://www.instructables.com/id/NRF24L01-Multiceiver-Network}, 18 maart 2019}
+	\caption{Werking van verbindingen nRF24l01. Afkomstig van \href{https://www.instructables.com/id/NRF24L01-Multiceiver-Network}{https://www.instructables.com/id/NRF24L01-Multiceiver-Network}, 18 maart 2019.}
 	\label{fig:nrfchannel}
 \end{figure}
 De nRF24l01+ kan tot zes adressen tegelijk onderhouden die kunnen schakelen tussen een RX (ontvang) en TX (zend) stand. 
@@ -796,7 +796,7 @@ Dit scheelt in het gebruik van geheugen en het heeft minder berichten bij het in
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=0.45\linewidth]{Afbeeldingen/reactive.png}\end{center}
-	\caption{Voorbeeld proactieve routeringstechniek.}
+	\caption{Voorbeeld reactieve routeringstechniek.}
 	\label{fig:reactief}
 \end{figure}
 
@@ -1090,7 +1090,7 @@ Om het protocol te testen wordt de testopstelling gebruikt getoond in \autoref{f
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/testopstelling1.png}\end{center}
-	\caption{Testopstelling met links een gateway waarna zes routers volgen}
+	\caption{Testopstelling met links een gateway waarna zes routers volgen.}
 	\label{fig:testopstelling-gateway-zes-routers}
 \end{figure}
 
@@ -1100,19 +1100,19 @@ In de applicatie ziet dit er als volgt uit.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/testopstellingmetzes_debug_info_fusion.png}\end{center}
-	\caption{Applicatie gazebo waar zes routers en gateway getoond wordt samen met debug informatie}
+	\caption{Applicatie gazebo waar zes routers en een gateway getoond worden samen met debug informatie.}
 	\label{fig:applicatie-testopstelling-gateway-zes-routers}
 \end{figure}  
 
 In \autoref{fig:applicatie-testopstelling-gateway-zes-routers} is rechts debug informatie zichtbaar.
-De eerste waarde van elke router laat zien of verbinding is met een gateway.
+De eerste waarde van elke router (ConnectedWithGateway) laat zien of verbinding is met een gateway.
 In het huidige geval heeft dus elke router verbinding met een gateway.
 
 \paragraph{Uitval van drone 3}
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/testopstellingmetzes_debug_info_drie_is_uit.png}\end{center}
-	\caption{Debug informatie van testopstelling waar punt drie is uitgezet}
+	\caption{Debug informatie van testopstelling waar punt drie is uitgezet.}
 	\label{fig:applicatie-testopstelling-gateway-zes-routers-drie-is-uit}
 \end{figure}   
 Op het moment dat punt 3 wordt uitgezet blijven punt 5 en 6 verbonden met de gateway zoals verwacht.
@@ -1125,7 +1125,7 @@ De andere routes waren naar alle waarschijnlijkheid 5-3-1 en 5-3-0.
 \paragraph{Uitval van drone 3 en 6}
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/testopstelling1_drie_en_zes_is_uit.png}\end{center}
-	\caption{Debug informatie van testopstelling waar punt drie en zes is uitgezet}
+	\caption{Debug informatie van testopstelling waar punt drie en zes is uitgezet.}
 	\label{fig:applicatie-testopstelling-gateway-zes-routers-drie-en-zes-is-uit}
 \end{figure}
 
@@ -1137,7 +1137,7 @@ Er kan met zekerheid gezet worden dat dit route 5-4 en 5-4-0 zullen zijn.
 \paragraph{Uitval van drone 3, 4 en 6}
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/testopstellingmetzes_drie-vier-zes-uit.png}\end{center}
-	\caption{Debug informatie van testopstelling waar punt drie, vier en zes is uitgezet}
+	\caption{Debug informatie van testopstelling waar punt drie, vier en zes is uitgezet.}
 	\label{fig:applicatie-testopstelling-gateway-zes-routers-drie-vier-en-zes-is-uit}
 \end{figure}
 
@@ -1147,7 +1147,7 @@ Dit is zoals verwacht.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/testopstelling2_met_twaalf_drie_routers_uit.png}\end{center}
-	\caption{Debug informatie van testopstelling met 12 routers waar punt twee, vijf en acht is uitgezet}
+	\caption{Debug informatie van testopstelling met 12 routers waar punt twee, vijf en acht is uitgezet.}
 	\label{fig:applicatie-testopstelling-gateway-twaalf-routers}
 \end{figure}
 
@@ -1226,7 +1226,7 @@ In de video is te zien dat de drone het gedrag volgt zoals die in de oplossingsr
 
 
 \subsection{Test met een groep drones die hun verbinding verliest}
-\autoref{sec:een-groep-drones-die-verloren-is} beschrijft hoe drones zich zouden moeten gedragen op het moment dat ze al groep verloren zijn.
+\autoref{sec:een-groep-drones-die-verloren-is} beschrijft hoe drones zich zouden moeten gedragen op het moment dat ze als groep verloren zijn.
 Dit is geïmplementeerd in de software en wordt hier getest en kort omschreven.
 
 \begin{figure}[H]
@@ -1304,7 +1304,7 @@ Op de aanwezige boerderij wordt geen WiFi gebruikt en de wel aanwezige apparatuu
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.9\linewidth]{Afbeeldingen/comopstelling.png}\end{center}
-	\caption{Testopstelling nRF24l01+ communicatie}
+	\caption{Testopstelling nRF24l01+ communicatie.}
 	\label{fig:testopstelling}
 \end{figure}
 
@@ -1327,7 +1327,7 @@ Deze resultaten zijn verwerkt in de volgende grafiek te zien in:
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/meetresultaten.png}\end{center}
-	\caption{Grafiek gebaseerd op testresultaten NRF24l01+}
+	\caption{Grafiek gebaseerd op testresultaten NRF24l01+.}
 	\label{fig:grafiektestresultaten }
 \end{figure}
 
@@ -1348,9 +1348,9 @@ Dit wordt vervolgt met een advies die voortvloeit uit de kennis van dit verslag.
 
 \section{Antwoord op de hoofdvraag}
 
-uit de resultaten van dit onderzoek is gebleken dat door het toevoegen van een controller die zelfstandig kan opereren aan een drone een meshnetwerk opgezet kan worden van honderd drones. De controller moet toegang hebben tot een antenne voor onderlinge communicatie waarbij het advies is om gebruik te maken van een \nameref{sec:nrf24l01} vanwege zijn bereik en snelheid. Het onderzoek heeft nog niet de fase bereikt waarin de nRF module in de praktijk getest is. De radio module is een populaire keuze in het gebruik van low power meshnetwerken waardoor het aannemelijk is dat deze zal werken.
+Uit de resultaten van dit onderzoek is gebleken dat door het combineren van een drone met een controller die zelfstandig kan opereren, een meshnetwerk opgezet kan worden van honderd drones. De controller moet toegang hebben tot een antenne voor onderlinge communicatie waarbij het advies is om gebruik te maken van een \nameref{sec:nrf24l01} vanwege zijn bereik en snelheid. Het onderzoek heeft de fase bereikt waarin de nRF24l01+ module aangesloten op een Raspberry Pi met de ontwikkelde software getest is maar nog wel in de kinderschoenen staat. 
 
-Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is de mogelijkheid voor de individuele netwerkpunten dat deze in staat zijn te kunnen verifiëren dat een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway. 
+Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is de mogelijkheid voor de individuele netwerkpunten dat deze in staat zijn te kunnen verifiëren dat een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway waarmee routes onderhouden worden. 
 
 \section{Advies}
 Het advies uit dit onderzoek luidt als volgt:

@@ -222,20 +222,20 @@ In het geval van dit project wordt ROS gebruikt voor de communicatie naar de \na
 \subsection{Gazebo}
 \label{inleiding:werkomgeving:gazebo}
 
-\href{http://gazebosim.org/}{Gazebo} is een opensource robot simulatie framework bijzonder geschikt voor het simuleren van robotica in outdoor omgevingen door de uitgebreide Physics Engine Support.
+Gazebo is een opensource robot simulatie framework bijzonder geschikt voor het simuleren van robotica in outdoor omgevingen door de uitgebreide Physics Engine Support \cite{gazebo}.
 In dit project wordt nu geen gebruik gemaakt van de physics engine. Doordat de netwerkonderdelen als virtuele onderdelen beschikbaar zijn in gazebo kunnen ze aangesloten worden op een gesimuleerde drones die wel realistisch vlieggedrag vertonen.
 Deze mogelijkheid was daarom ook een hoofdreden om Gazebo te gebruiken.
 
 \subsection{Catkin}
 \label{inleiding:werkomgeving:catkin}
 
-\href{http://wiki.ros.org/catkin}{Catkin} is de ingebouwde standaard build tool van ROS. De tool is een combinatie van CMake en door ROS geschreven python scripts. Deze wordt gebruikt in het project om de simulatiesoftware mee te bouwen. 
+Catkin is de ingebouwde standaard build tool van ROS. De tool is een combinatie van CMake en door ROS geschreven python scripts \cite{catkin}. Deze wordt gebruikt in het project om de simulatiesoftware mee te bouwen. 
 
 
 \subsection{Gtest (Google unittest)}
 \label{inleiding:werkomgeving:gtest}
 
-\href{https://github.com/google/googletest}{Google test} wordt gebruik voor het schrijven van unit testen binnen ROS. Omdat het gebruik van Gtest erg populair is binnen de ROS community maat dit het identificeren van problemen makkelijker maakt. 
+Google test wordt gebruik voor het schrijven van unit testen binnen ROS \cite{googletest}. Omdat het gebruik van Gtest erg populair is binnen de ROS community maat dit het identificeren van problemen makkelijker maakt. 
 
 
 
@@ -253,7 +253,7 @@ Om de drones te kunnen simuleren is er voor gekozen om gebruik te maken van Gaze
 
 \begin{itemize}
 	\item Een GPU die werkt met OpenGL 3D accelerated driver.
-	\item Een CPU welk op zijn minst een Intel i5 is of vergelijkbaar. (\href{http://gazebosim.org/tutorials?tut=guided_b1&cat=}{bron})
+	\item Een CPU welk op zijn minst een Intel i5 is of vergelijkbaar \cite{gazeborequirements}. 
 	\item Op zijn minst 500 MB vrije opslag ruimte.
 \end{itemize}
 
