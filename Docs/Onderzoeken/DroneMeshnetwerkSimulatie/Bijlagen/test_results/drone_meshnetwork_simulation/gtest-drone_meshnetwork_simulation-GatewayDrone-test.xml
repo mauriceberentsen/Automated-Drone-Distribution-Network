@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="20" failures="0" disabled="0" errors="0" timestamp="2019-06-07T16:58:22" time="0.001" name="AllTests">
+  <testsuite name="TestMessages" tests="20" failures="0" disabled="0" errors="0" time="0.001">
+    <testcase name="normalMessage" status="run" time="0" classname="TestMessages" />
+    <testcase name="normalMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="locationMessage" status="run" time="0" classname="TestMessages" />
+    <testcase name="locationMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="locationHonoluluMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="locationFijiMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="locationLelystadAirportMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="IntroduceMessage" status="run" time="0" classname="TestMessages" />
+    <testcase name="IntroduceMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="HeartbeatMessage" status="run" time="0" classname="TestMessages" />
+    <testcase name="HeartbeatMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="isGateway" status="run" time="0" classname="TestMessages" />
+    <testcase name="isNoGateway" status="run" time="0" classname="TestMessages" />
+    <testcase name="makeHop" status="run" time="0" classname="TestMessages" />
+    <testcase name="MissingMessage" status="run" time="0" classname="TestMessages" />
+    <testcase name="MissingMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="GoToLocationMessage" status="run" time="0" classname="TestMessages" />
+    <testcase name="GoToLocationMessageToPayload" status="run" time="0" classname="TestMessages" />
+    <testcase name="MovementNegotiationMessage" status="run" time="0" classname="TestMessages" />
+    <testcase name="MovementNegotiationMessageToPayload" status="run" time="0" classname="TestMessages" />
+  </testsuite>
+</testsuites>

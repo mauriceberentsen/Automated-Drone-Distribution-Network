@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="18" failures="0" disabled="0" errors="0" timestamp="2019-06-07T16:58:22" time="0.001" name="AllTests">
+  <testsuite name="Vector3Testing" tests="18" failures="0" disabled="0" errors="0" time="0.001">
+    <testcase name="defaultConstructor" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="FiveConstructor" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="OneTwoTreeConstructor" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="CopyConstructor" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="setX" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="setY" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="setZ" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="operatorIs" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="operatorPlusIs" status="run" time="0.001" classname="Vector3Testing" />
+    <testcase name="operatorPlus" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="operatorMinusIs" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="operatorMinus" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="operatorEqual" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="operatorNotEqual" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="distancePositiveFive" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="distanceNegativeFive" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="distanceNegaPosFive" status="run" time="0" classname="Vector3Testing" />
+    <testcase name="distanceDifferentNumbers" status="run" time="0" classname="Vector3Testing" />
+  </testsuite>
+</testsuites>

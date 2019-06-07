@@ -175,7 +175,7 @@ Daarnaast is er een fysiek prototype opgeleverd van een netwerkmodule die zich g
 	Gazebo & Simulatiesoftware met ondersteuning voor physics. \\ \hline
 	nRF24l01+ & Radio transciever module werkzaam op de 2,4Ghz band. \\ \hline
 	Physics engine & Software die natuurwetten toepast op virtuele objecten. \\ \hline
-	\begin{tabular}[c]{@{}l@{}}Raspeberry Pi \\ model 2B+\end{tabular} & Micro computer geschikt voor prototyping. \\ \hline
+	\begin{tabular}[c]{@{}l@{}}Raspberry Pi \\ model 2B+\end{tabular} & Micro computer geschikt voor prototyping. \\ \hline
 	Ros & \begin{tabular}[c]{@{}l@{}}Robot operating system. Wordt gebruikt voor de transportlaag \\ naar zowel virtuele als gesimuleerde robots.\end{tabular} \\ \hline
 	Rosservice & Een request response mechanisme gebruikt door Ros nodes. \\ \hline
 	Rostopic & Publicatie voor het gebruik van een subscriber patroon binnen Ros. \\ \hline
@@ -433,7 +433,47 @@ Daarop kan geen Word geïnstalleerd worden waarbij de linux variant van LibreOff
 
 Omdat ik deze beide geen waardig alternatief vond ten opzichte van Latex waar ik ondertussen aardig bekwaam in ben heb ik definitief besloten tijdens het afstuderen om Latex te gebruiken
 
+\section{Retrospective en iteratieplan}
 
+\section{Rup}
+
+\section{PlantUML}
+
+\section{Template Vector3 class}
+
+Tijdens het bouwen van de software van het netwerkcomponent is begonnen met het maken van software voor de simulatie.
+Vanuit gemakzucht is er op dat moment gebruik gemaakt van de bestaande Vector3 die meegeleverd wordt met ROS \cite{ignitionVector}.
+Op dat moment was het een gemakkelijke oplossing zodat er snel verder gewerkt kon worden. 
+
+Later toen de software ook moest draaien kwam de afhankelijkheid terug naar voren die gecreëerd was.
+Er is gekozen om de vector3 zelf te implementeren in een template klasse aangezien niet alle functionaliteit van de vector3 uit de iginition libary\cite{ignitionVector} gebruikt wordt.
+Om specifiek te zijn wordt er zelfs maar een enkele functie gebruikt voor het bepalen van een afstand tussen twee vectoren.
+Die is als volgt in de code geïmplementeerd. 
+
+\begin{lstlisting}
+template <typename T>
+float Vector3<T>::Distance(const Vector3<T>& rhs) const
+{
+Vector3<T> difference(*this);
+difference -= rhs;
+return std::sqrt( std::pow( difference.X(), 2 ) + std::pow( difference.Y(), 2 ) + std::pow( difference.Z(), 2 ) );
+}
+\end{lstlisting}
+
+In deze functie wordt de stelling van Pythagoras gebruikt om de afstand tussen twee vector punten te berekenen.
+
+Door het maken van deze klasse is de code van het netwerkcomponent onafhankelijk geworden van externe libaries.
+
+\section{CppCheck}
+
+\section{GoogleTest}
+
+Gedurende het project is er gebruik gemaakt van unit testen. 
+Deze testen zijn geschreven via het framework GoogleTest.
+Dit leverde toen er op een later moment een template class van een 3D vector (bijlage \ref{app:broncode}/drone\_meshnetwork\_simulation/src/Vector/) gemaakt werd het voordeel dat deze test driven ontwikkeld kon worden.  
+Verder is de mogelijkheid van testen gebruikt om de opslag van routerichtingen te verifiëren en het coderen van berichten te testen.
+Een uitdraai van de de unittesten is terug te vinden in bijlage \ref{sec:resultaten-googletest}
+\section{CMake}
 
 \chapter{Uitvoer projectplan}\label{sec:uitvoer-projectplan}
 In de dit hoofdstuk wordt het plan eerst kort toegelicht, vervolgens wordt gekeken naar waar de afwijkingen zitten en waarom deze er waren.
@@ -682,6 +722,9 @@ Het opgeleverde product voldoet wel aan de wens van Alten zij wil namelijk verde
 \section{Hardwareprototype}\label{sec:hardwareprototype}
 Het huidige hardware prototype staat nog echt in de kinderschoenen.
 Hoewel het routeringsprotocol die gebruikt wordt in het prototype zichzelf bewezen heeft in de simulatie is deze summier getest in de fysieke wereld.
+Daarom kan er onvoldoende garantie gegeven worden op het gedrag van het prototype.
+Dankzij de opzet van de code kan er wel eerst getest worden in de simulatie waarna het vervolgens mogelijk is om de code direct te draaien op de prototype.
+Dit zal de doorontwikkeling aanzienlijk versnellen voor het prototype.
 %Op dit moment is er er nog geen werkend hardware prototype. Als de tijd het toestaat ga ik hier aan werken na de 80\% versie
 
 
@@ -814,9 +857,14 @@ Ter verantwoording van dit afstudeerverslag zijn de gemaakte documenten meegelev
 \section[SoftwareDesignDocumen]{SoftwareDesignDocument.pdf}
 \section[SoftwareRequirementSpecification]{SoftwareRequirementSpecification.pdf}\label{sec:softwarerequirementspecification}
 
-\chapter{Broncode}
+\chapter{Broncode}\label{app:broncode}
 Ter verantwoording van dit afstudeerverslag is de broncode opgeleverd en vinden in:
 
 ./Code/
+
+\chapter{Resultaat CppCheck}\label{sec:resultaat-cppcheck}
+\begin{center}\includegraphics[page=1,width=.8\linewidth]{Bijlagen/cppcheck-gui.pdf}\end{center}
+
+\chapter{Resultaten GoogleTest}\label{sec:resultaten-googletest}
 
 \end{document}
