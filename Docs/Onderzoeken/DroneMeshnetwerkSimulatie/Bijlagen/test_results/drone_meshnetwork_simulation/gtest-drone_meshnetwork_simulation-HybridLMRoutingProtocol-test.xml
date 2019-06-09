@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="15" failures="0" disabled="0" errors="0" timestamp="2019-06-07T16:58:22" time="0" name="AllTests">
-  <testsuite name="TestSuiteChildTableTree" tests="15" failures="0" disabled="0" errors="0" time="0">
-    <testcase name="addNeighbours" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="addDoubleNeighbours" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="cantCommunicate" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="addGranChildToUnknownChild" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="addGranChildToKnownChild" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="addSameGrandChildToAll" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="findRouteToNeighbour" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="noRoutePossible" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="findRouteToGrandChild" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="removeGrandchildRoute" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="alternativeRouteToGrandchild" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="noRouteToGrandchildBecauseMissingParent" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="NodeMovedLocation" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="empty" status="run" time="0" classname="TestSuiteChildTableTree" />
-    <testcase name="notempty" status="run" time="0" classname="TestSuiteChildTableTree" />
+<testsuites tests="15" failures="0" disabled="0" errors="0" timestamp="2019-06-09T19:25:22" time="0" name="AllTests">
+  <testsuite name="TestSuiteHybridLMRoutingProtocol" tests="15" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="addNeighbours" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="addDoubleNeighbours" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="cantCommunicate" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="addGranChildToUnknownChild" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="addGranChildToKnownChild" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="addSameGrandChildToAll" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="findRouteToNeighbour" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="noRoutePossible" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="findRouteToGrandChild" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="removeGrandchildRoute" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="alternativeRouteToGrandchild" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="noRouteToGrandchildBecauseMissingParent" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="NodeMovedLocation" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="empty" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
+    <testcase name="notempty" status="run" time="0" classname="TestSuiteHybridLMRoutingProtocol" />
   </testsuite>
 </testsuites>

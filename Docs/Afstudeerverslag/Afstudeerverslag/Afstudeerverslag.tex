@@ -61,10 +61,12 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \lstset{frame=tb,
-	language=Java,
+	language=C++,
 	aboveskip=3mm,
 	belowskip=3mm,
 	showstringspaces=false,
+	basicstyle=\footnotesize,% basic font setting
+	backgroundcolor=\color{black!3}, % set backgroundcolor
 	columns=flexible,
 	basicstyle={\small\ttfamily},
 	numbers=none,
@@ -433,11 +435,36 @@ Daarop kan geen Word geïnstalleerd worden waarbij de linux variant van LibreOff
 
 Omdat ik deze beide geen waardig alternatief vond ten opzichte van Latex waar ik ondertussen aardig bekwaam in ben heb ik definitief besloten tijdens het afstuderen om Latex te gebruiken
 
-\section{Retrospective en iteratieplan}
+\section{Template formulieren gebruik}
 
-\section{Rup}
+Tijdens de eerste fase van het project is er het plan geweest om templates te gebruiken gedurende het project.
+Hiervoor was gekozen omdat het tijdens het WoR project veel gemak opleverde. 
 
-\section{PlantUML}
+Met het afstuderen kwam ik er al snel achter dat bepaalde templates voor dit project niet nodig waren.
+Zo is er een template waar de planning van de komende iteratie in opgeschreven moest worden te vinden in bijlage \ref{app:Iteratieplan}.
+Dit template is uiteindelijk niet gebruikt, er is al vrij snel de overstap gemaakt om de planning in Redmine bij te houden zoals te zien in \autoref{fig:sprint2}.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/sprint2.png}\end{center}
+	\caption{Redmine sprint 2 planning.}
+	\label{fig:sprint2}
+\end{figure}
+
+Mijn begeleiders waren niet altijd op locatie en door het registeren van de planning in Redmine was er snel en gemakkelijk overzicht in de sprintplanning.
+
+Een template die eigenlijk ook voortvloeit uit de hiervoor beschreven template is het IterationAssessment uit bijlage \ref{app:IterationAssessment}.
+De sprints zijn veel informeler afgesloten door het er gewoon mondeling over te hebben met de begeleider tijdens de lunch of de koffietafel.
+Achteraf was het niet zo slim om het op deze manier af te sluiten zonder dat ook op schrift vast te leggen.
+Ik denk dat dit een valkuil is voor studenten die afstuderen omdat ze toch vaker alleen aan een opdracht werken.
+Hoewel er stakeholders waren tijdens het project die natuurlijk ook op een later moment besproken stof willen kunnen teruglezen is het er niet gekomen.
+Dit is een fout geweest van mij die er ingeslopen is.
+In een volgende project wil ik daarom dus ook absoluut hier verandering in brengen en daar de tijd nemen om meer vast te leggen.   
+
+Een ander template die wel gebruikt is, is de template voor een usecase te vinden in bijlage \ref{app:Usecase}.
+Dit template heeft veel gemak opgeleverd tijdens het SDD (bijlage \ref{app:SoftwareDesignDocument}). 
+Omdat er al een template aanwezig was heb ik mij volop kunnen concentreren op wat er toe doet en dat is het opstellen van de usecase. 
+
+
 
 \section{Template Vector3 class}
 
@@ -465,6 +492,11 @@ In deze functie wordt de stelling van Pythagoras gebruikt om de afstand tussen t
 Door het maken van deze klasse is de code van het netwerkcomponent onafhankelijk geworden van externe libaries.
 
 \section{CppCheck}
+Tijdens het project is gebruik gemaakt van een statische code checker.
+De keuze was gevallen op de CppCheck vanwege het gebruikersgemak.
+Bij oplevering toont de tool geen melding meer, deze zijn onderdrukt of opgelost.
+De resultaten van CppCheck zijn te vinden in bijlage \ref{sec:resultaat-cppcheck}.
+
 
 \section{GoogleTest}
 
@@ -473,10 +505,20 @@ Deze testen zijn geschreven via het framework GoogleTest.
 Dit leverde toen er op een later moment een template class van een 3D vector (bijlage \ref{app:broncode}/drone\_meshnetwork\_simulation/src/Vector/) gemaakt werd het voordeel dat deze test driven ontwikkeld kon worden.  
 Verder is de mogelijkheid van testen gebruikt om de opslag van routerichtingen te verifiëren en het coderen van berichten te testen.
 Een uitdraai van de de unittesten is terug te vinden in bijlage \ref{sec:resultaten-googletest}
+
 \section{CMake}
+Aan het einde van het project heeft de gesimuleerde software de overstap gemaakt naar het fysieke prototype. 
+Hiervoor moest de code gecompileerd worden op een Raspberry Pi.
+In de simulator werd ik als ontwikkelaar natuurlijk al een beetje verwend door het standaard aanwezige catkin  in ros.
+Tijdens het compileren van de code op de Raspberry Pi kwam ik eerst nog weg door telkens een lang commando in te voeren waarmee het router programma werd aangemaakt.
+Later toen er ook nog een gateway programma aangemaakt moest worden heb ik besloten om een overstap te maken naar CMake \cite{cmake}.
+
+Hierdoor kon ik door een enkel commando beide programma's simpel compileren op de Raspberry Pi.
+Dit bewees zijn nut helemaal op het moment toen er getest moest worden met meerdere Raspberry Pi's.
 
 \chapter{Uitvoer projectplan}\label{sec:uitvoer-projectplan}
 In de dit hoofdstuk wordt het plan eerst kort toegelicht, vervolgens wordt gekeken naar waar de afwijkingen zitten en waarom deze er waren.
+
 %Wat was het plan, hoe heb je dat uitgevoerd. Waar zitten de afwijkingen en waarom? Beperkt tot inhoudelijk relevante zaken.
 
 
@@ -498,7 +540,7 @@ Tenslotte zou er in de transitiefase ruimte zijn voor het maken en geven van pre
 
 Zoals bij de meeste projecten is dit project anders verlopen dan gepland is. Zo begon het met de tegenvaller dat er veel meer aandacht naar het plan van aanpak moest dan verwacht was. Hierdoor was er minder tijd om kleine onderzoeksvragen uit te voeren die wel van belang waren in voor de onderzoeken in de elaboratiefase. Hierdoor moesten deze doorgeschoven worden.
 
-Omdat er een onduidelijkheid zat wat er opgeleverd moet worden bij de 80\% versie wat beter omschreven wordt in \autoref{sec:altijd-navragen-nooit-aannemen} werd er in week drie van de elaboratie fase besloten dat er nieuwe planning gemaakt moest worden om aan de vraag van school te voldoen. 
+Omdat er een onduidelijkheid zat wat er opgeleverd moet worden bij de 80\% versie, wat beter omschreven wordt in \autoref{sec:altijd-navragen-nooit-aannemen}, werd er in week drie van de elaboratie fase besloten dat er nieuwe planning gemaakt moest worden om aan de vraag van school te voldoen. 
 Hier is besloten dat het beter zou zijn dat het hardware prototype pas gebouwd zou worden na het inleveren van de 80\% versie als de beschikbare tijd het ook toestaat. 
 De focus is verschoven naar het bouwen van een correct werkende simulatie die af is voor  de 80\% versie.
 Het deel van het onderzoek dat al uitgevoerd is, bevatte genoeg handvatten voor het bouwen van alle software. 
@@ -520,10 +562,10 @@ In het project is gewerkt met de RUP ontwikkelmethodiek, aan de hand van deze fa
 \section{Inceptiefase}\label{sec:inceptiefase}
 
 Aan het begin van het afstudeerproject is een plan van aanpak (projectplan) opgesteld met input vanuit Alten.
-Dit plan is toegevoegd als bijlage \ref{sec:bijlage:plan-van-aanpak}
+Dit plan is toegevoegd als bijlage \ref{app:bijlage:plan-van-aanpak}
 Om achter de eisen en wensen van Alten te komen zijn middels meerdere gesprekken het probleem en doel van de opdracht geanalyseerd om deze concreet te beschrijven.
 Voor dit onderdeel waren meerdere gesprekken nodig, omdat de achtergrond van het project in eerste instantie niet concreet omschreven was.
-Door de meerdere gesprekken met Alten is de opdracht geconcretiseerd. De geconcretiseerde opdracht is te lezen bij \autoref{sec:opdrachtomschrijving} \nameref{sec:opdrachtomschrijving}
+Door de meerdere gesprekken met Alten is de opdracht geconcretiseerd. De geconcretiseerde opdracht is te lezen bij \autoref{sec:opdrachtomschrijving} \nameref{sec:opdrachtomschrijving}.
 
 Voor het schrijven van het plan van aanpak was vijf weken ingepland. 
 In eerste instantie werd geschat dat die dusdanig veel tijd was dat er tijdens deze fase al begonnen kon worden aan kleine onderzoeken.
@@ -534,7 +576,7 @@ Hierdoor zijn de volle vijf weken van de inceptiefase gebruikt om tot een kwalit
 
 \section{Elaboratiefase}\label{sec:elaboratiefase}
 
-De elaboratie fase is begonnen met het opstellen van een software requirements specificatie(SRS) te vinden in bijlage \ref{sec:softwarerequirementspecification}.
+De elaboratie fase is begonnen met het opstellen van een software requirements specificatie(SRS) te vinden in bijlage \ref{app:softwarerequirementspecification}.
 Dit kon gedaan worden met de requirements van de opdrachtgever uit het plan van aanpak en het doorvragen aan de opdrachtgever.
 Door het vooraf maken van dit document werd de opdracht verder geconcretiseerd.
 Deze requirements konden weer meegenomen worden in het onderzoeksverslag als criteria in keuzes.  
@@ -548,43 +590,91 @@ Dit betekend dat er in iteraties van twee weken gewerkt is.
 De onderzoekstaken zijn van te voren al toegewezen aan een specifieke sprint.
 Bij het begin van elke sprint zijn de taken geconcretiseerd.
 Deze keuze is gemaakt omdat  veel taken in het project de kennis vereisen van de taak ervoor.
-%TODO bijlage toevoegen naar iteratieplanning
+
 
 Er is het besluit gemaakt om de elaboratiefase met vier weken te verkorten. 
 Dit besluit is gemaakt omdat het duidelijk werd dat het belangrijk was dat er bij de zogeheten 80\% versie van het project een product op te leveren die al voldoende is om op af te studeren. 
 Er is op dat moment voldoende kennis uit het onderzoek aanwezig om een goede simulatie te kunnen schrijven die zich zou houden aan de limieten van de te gebruiken hardware. 
 Meegenomen in het besluit was dat de HAN zelf ook een hogere prioriteit heeft op softwareontwikkeling dan het onderzoek ook al moeten ze wel beiden aanwezig zijn.
 
-Daarom heeft de laatste week van de elaboratie fase in het teken gestaan van het op orde maken van het Software Design Document te vinden in bijlage  \ref{sec:softwarerequirementspecification}.
+Daarom heeft de laatste week van de elaboratie fase in het teken gestaan van het op orde maken van het Software Design Document te vinden in bijlage  \ref{app:softwarerequirementspecification}.
 Deze week is ook de eerste week dat er code geschreven is. 
 Dit was vaak code die bestond uit lege classes of kleine stukjes proef code zoals het uitproberen hoe een abstracte drone geplaatst kon worden in Gazebo.
 
 \section{Constructiefase}\label{sec:constructiefase}
 Het voorgaande besluit hield in dat er nog zes weken de tijd was om de simulatie te realiseren voor de 80\% versie ingeleverd moest worden.
-\paragraph{Abstracte drone}
-Er is begonnen met het ontwikkelen van een de abstracte drone die voorzien was van een interface waarmee die aangestuurd kon worden zich te verplaatsen naar verschillende locaties. Wat hierin een uitdaging was was het injecteren van de drone informatie in Gazebo en het vervolgens aansturen. Dit is gedaan via een SDF beschrijving die een plugin heeft die drone voorziet van een motor. Deze motor kan vervolgens via een Ros service aangesproken worden. Zo kon er vanuit een aanroep in de console of het Ros programma RQT een drone verplaatst worden van positie. 
+\paragraph{Abstracte gesimuleerde drone}
+Er is begonnen met het ontwikkelen van een abstracte drone die voorzien is van een interface  om aangestuurd te worden zich te verplaatsen naar verschillende locaties.
+Een abstracte drone houdt in dat alles wat niet van belang is weglaten mag worden daardoor bleef er alleen blokje over.
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.6\linewidth]{Afbeeldingen/dronegroep.png}\end{center}
+	\caption{Groep van drones in de simulatie.}
+	\label{fig:dronegroep}
+\end{figure}
+
+Wat hierin een uitdaging was, was het injecteren van de drone informatie in Gazebo en het vervolgens aansturen. Dit is gedaan via een SDF beschrijving \cite{sdf} die een plugin heeft die de drone voorziet van een motor zoals in het onderstaand voorbeeld te zien is. 
+
+\begin{lstlisting}
+<plugin name='DroneEngine' filename='libDroneEngine.so'>
+	<DroneID>0</DroneID>
+</plugin>
+\end{lstlisting}
+
+Deze motor kan vervolgens via een Ros service aangesproken worden. Zo kon er vanuit een aanroep in de console of het Ros programma RQT een drone verplaatst worden van positie. 
+
 \paragraph{Directe communicatie}
 Nu er drones in de simulatie mogelijk waren betekende dat er meshnetwerk componenten gekoppeld konden worden aan de drones in de simualtie.
+
 Er is begonnen met het schrijven van een plugin die het netwerkcomponent representeerde in de simulatie. 
-Vervolgens konden deze op twee drones 'aangesloten' worden om vervolgens deze met elkaar te laten communiceren.
+Vervolgens konden deze op twee drones `aangesloten' worden om vervolgens deze met elkaar te laten communiceren.
 Het communiceren was nog een simpele applicatie waarbij een component een 32 byte array naar de andere moest sturen waarop het andere component weer response moest geven.
 Dit lukte al vrij snel waarop de volgende stap was het limiteren van de communicatie op basis van de onderlinge afstand.
+
 Hiervoor is de draadloze communicatie simulator tot stand gekomen. 
 Deze applicatie moet draaien om onderlinge communicatie mogelijk te maken omdat de netwerkcomponenten niet meer direct met elkaar mogen praten.
 In deze simulator zijn regels gesteld of het op basis van afstand het toegestaan is om een bericht te versturen.
 Een uitdaging hierin was het op de hoogte blijven van de locatie van een node. 
-Er is besloten dat dit aan de hand van een Rostopic zou gebeuren zodat een drone als die zich verplaatst continue zijn nieuwe positie door kan geven. Een netwerkcomponent kan op zijn beurt op dit topic aangeven op welke drone hij aangesloten zit en op welk topic hij berichten wil ontvangen. De werking hiervan kon getest worden door drones met een directe aansturing te verplaatsen.
+Er is besloten dat dit aan de hand van een Rostopic zou gebeuren zodat een drone als die zich verplaatst continue zijn nieuwe positie door kan geven.
+Een netwerkcomponent kan op zijn beurt op dit topic aangeven op welke drone hij aangesloten zit en op welk topic hij berichten wil ontvangen. De werking hiervan kon getest worden door drones met een directe aansturing te verplaatsen.
+
 \paragraph{Broadcast}
-Met een fysieke NRF24 is het mogelijk om op een kanaal een bericht te versturen waar iedere andere NRF24 binnen bereik.
+Met een fysieke NRF24 antenne is het mogelijk om op een kanaal een bericht te versturen naar iedere andere NRF24 antenne binnen bereik.
 Zo komt er een bericht aan via een zogeheten broadcast. 
 In een simulatie werkt dit niet omdat er niet iets alle kanten opgestuurd kan worden.
-Daarom is er besloten een functie toe te voegen aan de draadloze communicatie simulator waarmee opgevraagd kan worden wie er binnen bereik is. Zo kon er toch een implementatie gemaakt worden waar een broadcast uitgevoerd wordt.  
+Daarom is er besloten een functie toe te voegen aan de draadloze communicatie simulator waarmee opgevraagd kan worden wie er binnen bereik is.
+Zo kon er toch een implementatie gemaakt worden waar een broadcast uitgevoerd wordt.
+
+\begin{lstlisting}
+bool WirelessSignalSimulator::getNodesInRange(
+drone_meshnetwork_simulation::AreaScan::Request &req,
+drone_meshnetwork_simulation::AreaScan::Response &res )
+{   
+auto from = Network.find( req.id );
+res.near.clear( ); //Clear the response before filling.
+if ( from != Network.end( ) ) {
+	for ( std::pair< uint8_t, Node * > other : Network ) {
+		if ( other.first == from->first ) continue;  //Not interrested in ourself
+		if ( !other.second->getOn( ) ) continue; //Ignore nodes that are turned off
+		// using pythgoras in the function Vector3 to get the distance between the
+		// nodes
+		float distance =
+		from->second->getPosition( ).Distance( other.second->getPosition( ) );
+		if ( distance < maxComDistance ) {
+		res.near.push_back( ( int )other.first );
+		}
+	}	
+	return true;
+} else {return false;}
+}
+\end{lstlisting} 
+ 
 \paragraph{Gateway router verbinding}
-Nu er een implementatie was in de simulatie waarmee eigenlijk alle mogelijkheden nagebootst konden worden die een fysieke antenne zou aanbieden was het tijd om een te beginnen aan het implementeren van de routeringstechniek die uit het onderzoek gekozen was.
+Nu er een implementatie was in de simulatie waarmee eigenlijk alle mogelijkheden nagebootst konden worden die een fysieke antenne zou kunnen aanbieden, was het tijd om te beginnen aan het implementeren van de routeringstechniek die uit het onderzoek gekozen was.
+
 Een eis was dat het netwerk altijd bestaat uit minimaal één gateway en nul tot 100 routers.
 Een logische stap was dus het scheiden van de logica van het netwerkcomponent in een gateway en in een router.
-Als andere eis van het netwerk stond dat een router altijd direct of indirect verbinding moest hebben met een gateway.
-De volgende implementatie stap die genomen is was registreren in een router of deze daadwerkelijk een verbinding had met een gateway.
+Een andere eis van het netwerk stelt dat een router altijd direct of indirect verbinding moet hebben met een gateway.
+De volgende implementatie stap die genomen is, was het registreren in een router of deze daadwerkelijk een verbinding heeft met een gateway.
 Er is voor gekozen om een pessimistische implementatie te maken waarbij een router alleen mag claimen dat hij een verbinding heeft met een gateway op het moment dat hij een bericht ontvangt van de gateway die voor hem geadresseerd is.
 Deze berichten worden onderling uitgewisseld via een heartbeat. 
 
@@ -594,7 +684,7 @@ Deze berichten worden onderling uitgewisseld via een heartbeat.
 	\label{fig:bevestigingverbinding}
 \end{figure}
 \paragraph{Verbinding router naar een gateway}
-Na het implementeren van een heartbeat voor een enkele router binnen bereik was de volgende stap om een heartbeat te implementeren voor een router buiten bereik. Dit hield eigenlijk in dat er een implementatie moest komen voor het doorsturen van berichten. Ook hier werd eerst simpel begonnen met twee routers en een gateway. Het eerste deel van de route was het makkelijk de gateway had namelijk altijd hetzelfde adres namelijk 0. Daarom kon er vrij snel al een implementatie gemaakt worden waar als de tussen node een bericht ontving voor 0 dat deze doorgegeven moest worden aan de gateway. De weg terug wordt nu complexer voor de gateway hij kan namelijk niet simpelweg het bericht terug sturen want dat is buiten het bereik.
+Na het implementeren van een heartbeat voor een enkele router binnen bereik was de volgende stap om een heartbeat te implementeren voor een router buiten bereik het bereik van een gateway. Dit hield eigenlijk in dat er een implementatie moest komen voor het doorsturen van berichten. Er is eerst simpel begonnen met twee routers en een gateway. Het eerste deel van de route was het gemakkelijkste de gateway had namelijk altijd hetzelfde adres namelijk 0. Daarom kon er vrij snel al een implementatie gemaakt worden. In de applicatie, als de tussen node een bericht ontving voor 0 moet deze doorgegeven moest worden aan de gateway. De weg terug wordt nu complexer voor de gateway hij kan namelijk niet simpelweg het bericht terug sturen want dat is buiten het bereik.
 \paragraph{Routeringstechniek}
 Er moet dus een routeringstechniek gemaakt worden om bij de node te komen.
 In het geval van de gateway is er de volgende kennis aanwezig:
@@ -623,30 +713,110 @@ Als laatste punt over LMR moet benoemd worden dat het netwerk zich event driven 
 Dit houdt in dat er alleen informatie wordt rondgestuurd over nieuwe of verbroken verbindingen op het moment dat er een wijziging optreedt in het netwerk. 
 Volgens de LMR techniek wordt een verbroken verbinding pas gedetecteerd op het moment dat vinden van een pad naar een aangesloten buur niet lukt.
 Omdat de opdracht was dat het netwerk snel moet doorhebben dat een verbinding verloren is, is er toegevoegd dat elk punt periodiek de verbinding van direct aangesloten punten naloopt. 
-Deze routeringstechniek is deze voorzien van unittesten die testen of de routes daadwerkelijk gevonden worden en de tabellen juist worden bijgehouden.
+Deze routeringstechniek is voorzien van unittesten die testen of de routes daadwerkelijk gevonden worden en de tabellen juist worden bijgehouden.
+Een voorbeeld van een test is hieronder te zien.
+\begin{lstlisting}
+TEST( TestSuiteHybridLMRoutingProtocol, findRouteToGrandChild )
+{
+	HybridLMRoutingProtocol CTT;
+	CTT.OtherCanCommunicateWithNode( 1, 4 );
+	CTT.OtherCanCommunicateWithNode( 2, 5 );
+	CTT.OtherCanCommunicateWithNode( 3, 5 );
+
+	EXPECT_TRUE( CTT.getDirectionToNode( 5 ) == 2 );
+}
+\end{lstlisting}
 
 \paragraph{Berichten}
 Binnen het netwerk worden compacte berichten gebruikt die een vaste volgorde in een 32 byte array hebben.
-Om te zorgen dat deze berichten juist in een array gezet worden en er ook weer juist uitgehaald worden is elke type bericht voorzien een unittest.
+Deze worden per byte in de array geplaatst en aan de andere kan er weer uitgehaald.
+De code die hier hoofdzakelijk voor  gebruikt wordt zijn twee functies die als volgt gaan:
+\begin{lstlisting}
+ void Message::CopyToCharArray( uint8_t *value, uint16_t size, uint8_t *arr,
+uint16_t start )
+{
+for ( uint16_t i = 0; i < size; i++ ) {
+arr[i + start] = value[i];
+}
+}
+
+void Message::CopyFromCharArray( uint8_t *value, uint16_t size,
+const uint8_t *arr, uint16_t start )
+{
+for ( uint16_t i = 0; i < size; i++ ) {
+value[i] = arr[i + start];
+}
+}
+\end{lstlisting}
+
+Om te zorgen dat deze berichten juist in een array gezet worden en er ook weer juist uitgehaald worden is elke type bericht voorzien een meerdere unittesten.
+Naast de standaard unit testen worden ook bijzondere locaties getest zoals de locatie van Lelystad airport waar de landingsbaan onder zee niveau ligt.
+Dit te zien in de volgende test:
+\begin{lstlisting}
+TEST( TestMessages, locationLelystadAirportMessageToPayload )
+{
+float lat = 52.455702;
+float lon = 5.519210;
+int16_t hei = -5;
+uint32_t time = 1557435698;
+
+LocationMessage amsg( 66, 55, 44, 33, lat, lon, hei, time );
+uint8_t buffer[MAX_PAYLOAD];
+amsg.toPayload( buffer );
+
+LocationMessage msg( buffer );
+
+EXPECT_EQ( LOCATION, msg.getMessageType( ) );
+EXPECT_EQ( lat, msg.getLatitude( ) );
+EXPECT_EQ( lon, msg.getLongitude( ) );
+EXPECT_EQ( hei, msg.getHeight( ) );
+EXPECT_EQ( time, msg.gettimeSincePosix( ) );
+}
+\end{lstlisting}
 
 \paragraph{Drone aansturing}
-Nu er een communicatie mogelijk is tussen de netwerkcomponenten en deze in staat zijn correct te kunnen detecteren of er een verbinding naar een gateway mogelijk is kunnen de componenten aangesloten worden op de interface van de drone voor aansturing.
-Omdat de abstracte drone niet via een enkele interface aangestuurd kan worden is gebruik gemaakt van een adapter tussen het netwerkcomponent en de drone. 
-Ook hier is weer simpel begonnen door, het eerst mogelijk te maken door met het ontvangen van een bericht op het netwerkcomponent een doel te sturen naar een dronemotor. Vervolgens kon er getest worden of dit werkte door zelf een bericht op te stellen en dit direct naar de antenne te sturen van de netwerkmodule.
+Nu er communicatie mogelijk is tussen de netwerkcomponenten en deze in staat zijn correct te kunnen detecteren of er een verbinding naar een gateway mogelijk is kunnen de componenten aangesloten worden op de interface van de drone voor aansturing.
+Omdat de abstracte drone niet via een enkele interface aangestuurd kan worden is gebruik gemaakt van een adapter \cite{adapter} tussen het netwerkcomponent en de drone. 
+De adapter is te zien in \autoref{fig:adapter}.
 
-\paragraph{Drone manager}
-Omdat er nog geen manier was om op een simpele manier berichten het netwerk in te kunnen sturen is de dronemanager ontwikkeld. Deze applicatie start een Rosservice die communiceert op een Rostopic waar alle gateways naar luisteren. Omdat er alleen interesse is naar het versturen van locaties naar drones kan ook alleen dit gepubliceerd worden op het topic. Zodra een gateway een nieuw bericht ontvangt op het topic maakt hij hier een bericht van die het netwerk ingestuurd wordt met een verzoek voor verplaatsing. Op deze manier kon ook makelijker getest worden of de drone aansturing goed werkte en of een punt ver weg in het netwerk daadwerkelijk in staat was berichten van een gateway te ontvangen.
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/RosEngineAdapater.png}\end{center}
+	\caption{Uitwerking adapter tussen de DroneEninge en het MeshnetwerkComponent.}
+	\label{fig:adapter}
+\end{figure}
+
+Ook hier is weer simpel begonnen door, het eerst mogelijk te maken door met het ontvangen van een bericht op het netwerkcomponent een doel te sturen naar een dronemotor. Vervolgens kon er getest worden of dit werkte door zelf een bericht op te stellen en dit direct naar de antenne te sturen van de netwerkmodule. 
+Bij het ontvangen van het bericht zal de drone zich verplaatsen naar de locatie die opgegeven is.
+
+\paragraph{Dronemanager}
+Omdat er nog geen manier was om op een simpele manier berichten het netwerk in te kunnen sturen is de dronemanager ontwikkeld. Deze applicatie start een Rosservice die communiceert op een Rostopic waar alle gateways naar luisteren. Omdat er alleen interesse is naar het versturen van locaties naar drones kan ook alleen dit gepubliceerd worden op het topic.
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/LocationMessageRQT.png}\end{center}
+	\caption{Het versturen van een verplaatsingsverzoek via de dronemanager.}
+	\label{fig:serviccaller}
+\end{figure}
+
+Zodra een gateway een nieuw bericht ontvangt op het topic maakt hij hier een bericht van die het netwerk ingestuurd wordt met een verzoek voor verplaatsing. Op deze manier kon ook makelijker getest worden of de drone aansturing goed werkte en of een punt ver weg in het netwerk daadwerkelijk in staat was berichten van een gateway te ontvangen.
 
 \paragraph{Protocol bij een verloren verbinding met de gateway}
-De opdracht stelt dat drones zich moeten verplaatsen bij een verloren verbinding naar een alternatieve locatie om zo te proberen de verbinding te herstellen. Hier was de eerste stap om eerst te ontdekken of een netwerkmodule alleen is of dat er nog andere punten in de buurt zijn die ook een verbinding verloren zijn. Hiervoor kon de broadcast functie goed gebruikt worden. De meeste simpele implementatie kon vervolgens gemaakt worden voor de drone die in zijn eentje de verbinding met de gateway verloren is. Na overleg met Alten is besloten dat het voor nu voldoende was als de drone eerst terug vliegt naar het punt dat verloren is gegaan om daar te zoeken naar een nieuwe verbinding met de gateway. Op het moment dat daar nog steeds geen verbinding gevonden is moet de drone terug keren naar de locatie waar de gateway staat.   
+De opdracht stelt dat drones zich moeten verplaatsen bij een verloren verbinding naar een alternatieve locatie om zo te proberen de verbinding te herstellen. 
+Hier was de eerste stap om eerst te ontdekken of een netwerkmodule alleen is of dat er nog andere punten in de buurt zijn die ook een verbinding verloren zijn. 
+Hiervoor kon de broadcast functie goed gebruikt worden.
+ De meeste simpele implementatie kon vervolgens gemaakt worden voor de drone die in zijn eentje de verbinding met de gateway verloren is. 
+Na overleg met Alten is besloten dat het voor nu voldoende was als de drone eerst terug vliegt naar het punt dat verloren is gegaan om daar te zoeken naar een nieuwe verbinding met de gateway.
+Op het moment dat daar nog steeds geen verbinding gevonden is moet de drone terug keren naar de locatie waar de gateway staat.   
 
 Op het moment dat er groep is die verloren gaat moet er een overleg gepleegd worden tussen de drones, het heeft immers geen zin om allemaal naar een zelfde locatie te bewegen of om twee werkende netwerkmodules op een plek te parkeren. 
 Er is nu geïmplementeerd dat elke drone berekend wat zijn afstand is tot de gateway, de drone met de grootste afstand die wil verplaatsen naar een plek waar nog geen andere drone staat zal een beweging uitvoeren.  
+
+Een demonstratie hiervan is te zien in de video's van bijlage \ref{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing}.
    
 \paragraph{Meerdere gateways in een netwerk}
 Een wens van Alten is de mogelijkheid om meerdere drones te gebruiken in een netwerk. 
 Hiervoor is logica toegevoegd aan de routers dat er een voorkeur voor een gateway bestaat.
 Op het moment dat een router een bericht krijgt van een ander punt in het netwerk die minder hops tot aan een gateway heeft dan neemt de router het id over van de voorkeur gateway van dat punt. 
+
+Een video waar de werking van twee gateways in het netwerk gedemonstreerd wordt is te vinden in bijlage  \ref{sec:gatewaywisselmp4}
 
 \chapter{Resultaten}\label{sec:resultaten}
 
@@ -800,7 +970,7 @@ Ik had collega's meer kunnen betrekken door presentaties te geven over inhoudeli
 
 Als ik terugkijk naar wat ik nog meer had kunnen doen denk ik dat alleen maar zou kunnen adviseren aan toekomstige afstudeerders om te gaan werken aan afstudeeropdrachten die direct invloed hebben op het product van het bedrijf. Dit forceert het bedrijf om zich actief met de student bezig te houden omdat de impact van het resultaat groter is. 
 
-Het resultaat van deze presentaties zal ik later hier beschrijven nadat ze gehouden zijn
+Het resultaat van deze presentaties zal ik later hier beschrijven nadat ze gehouden zijn.
 
 
 \chapter{Conclusie}\label{sec:conclusie}
@@ -839,8 +1009,6 @@ Wanneer dit project vervolgt wordt het volgende geadviseerd aan Alten:
 	
 	\item Breidt de simulatie verder uit op basis van het gedrag van het fysieke netwerkcomponent die is opgeleverd. Focus hier op de communicatie van berichten, en hoe snel de netwerkmodule moet concluderen dat er geen verbinding mogelijk is.
 	
-	\item 
-	
 	\item Schrijf de drone engine om naar het software patroon van een state machine en voeg een functie toe in de aangeboden interface die de staat van de drone aangeeft. Zo kan de netwerkmodule nog betere beslissingen nemen of bijvoorbeeld pas timers starten na het landen van de drone.
 	\item Voordat de overstap gemaakt wordt van een abstracte drone naar een volledig gesimuleerde drone in de simulatie adviseer ik een uitbreiding tot een gesimuleerde drone die een batterijduur heeft.
 \end{itemize}
@@ -853,18 +1021,62 @@ Wanneer dit project vervolgt wordt het volgende geadviseerd aan Alten:
 \chapter{Documenten}
 Ter verantwoording van dit afstudeerverslag zijn de gemaakte documenten meegeleverd.
 \section[Onderzoeksrapport Drone meshnetwerk simulatie]{Onderzoeksrapport Drone meshnetwerk simulatie.pdf}\label{sec:onderzoeksrapport-drone-meshnetwerk-simulatie}
-\section[Plan van aanpak]{Plan van aanpak.pdf}\label{sec:bijlage:plan-van-aanpak}
-\section[SoftwareDesignDocumen]{SoftwareDesignDocument.pdf}
-\section[SoftwareRequirementSpecification]{SoftwareRequirementSpecification.pdf}\label{sec:softwarerequirementspecification}
-
+Het onderzoekrapport.
+\section[Plan van aanpak]{Plan van aanpak.pdf}\label{app:bijlage:plan-van-aanpak}
+Het plan van aanpak.
+\section[SoftwareDesignDocument]{SoftwareDesignDocument.pdf}\label{app:SoftwareDesignDocument}
+Het software design document.
+\section[SoftwareRequirementSpecification]{SoftwareRequirementSpecification.pdf}\label{app:softwarerequirementspecification}
+Het software requirement specificatie.
 \chapter{Broncode}\label{app:broncode}
 Ter verantwoording van dit afstudeerverslag is de broncode opgeleverd en vinden in:
 
-./Code/
+../Code/
 
 \chapter{Resultaat CppCheck}\label{sec:resultaat-cppcheck}
+
 \begin{center}\includegraphics[page=1,width=.8\linewidth]{Bijlagen/cppcheck-gui.pdf}\end{center}
+Te vinden in ./Bijlagen/.
 
 \chapter{Resultaten GoogleTest}\label{sec:resultaten-googletest}
+In deze bijlage zijn de resultaten van de Google Test toegevoegd.
+Deze zijn te vinden in ./Bijlagen/test\textunderscore results/drone\textunderscore meshnetwork\textunderscore simulation/.
+
+
+
+\section{gtest-drone\textunderscore meshnetwork\textunderscore simulation-GatewayDrone-test.xml}\label{sec:gtest-dronemeshnetworksimulation-gatewaydrone-testxml}
+Bevat de testresultaten van het coderen en decoderen van de berichten die het netwerkcomponent gebruikt.
+
+\section{gtest-drone\textunderscore meshnetwork\textunderscore simulation-HybridLMRoutingProtocol-test.xml}\label{sec:gtest-dronemeshnetworksimulation-hybridlmroutingprotocol-testxml}
+Bevat de testresultaten van het routeringsprotocol.
+
+\section{gtest-drone\textunderscore meshnetwork\textunderscore simulation-Vector3-test.xml}\label{sec:gtest-dronemeshnetworksimulation-vector3-testxml}
+Bevat de testresultaten van de Vector3 template class.
+
+\chapter{Templates}\label{app:templates}
+Bevat template documenten te vinden in ./Templates/
+\section{IterationAssessment.pdf}\label{app:IterationAssessment}
+\section{Iteratieplan.pdf}\label{app:Iteratieplan}
+\section{Usecase.pdf}\label{app:Usecase}
+
+
+\chapter{Videos simulatie netwerkherstel door drone verplaatsing}\label{sec:videos-simulatie-netwerkherstel-door-drone-verplaatsing}
+De video's van deze bijlagen zijn te vinden door het volgende pad te volgen: \newline
+./Bijlagen/Videos simulatie netwerkherstel door drone verplaatsing/
+\section{enkele verloren drone situatie 1.mp4}\label{sec:enkele-verloren-drone-situatie-1mp4} Video van een enkele drone die verbinding verliest en dit met een enkele stap weer opbouwt.
+\section{enkele verloren drone situatie 2.mp4}\label{sec:enkele-verloren-drone-situatie-2mp4} Video van een enkele drone die verbinding verliest en nadat een enkele stap niet werkt weer terugkeert naar de gateway.
+\section{groep verloren drones situatie 1.mp4}\label{sec:groep-verloren-drones-situatie-1mp4} Video van een groep verloren drones waarbij het terugzetten van een enkele stap van een drone verbinding weer herstelt.
+\section{groep verloren drones situatie 2.mp4}\label{sec:groep-verloren-drones-situatie-2mp4} Video van een groep verloren drones waarbij twee drones een verplaatsing moeten uitvoeren voor het herstellen van het netwerk.
+\section{groep verloren drones situatie 3.mp4}\label{sec:groep-verloren-drones-situatie-3mp4} Video waarbij alle werkende drones terug keren naar de gateway omdat er geen herstel wordt gevonden.
+
+\chapter{Videos drone simulatie}\label{sec:videos-drone-simulatie}
+Video's in ./Bijlagen/
+%\section{gateway drone en 99 routerdrones.mp4}\label{sec:gateway-drone-en-99-routerdronesmp4}
+%Video van 99 drones die verbinden met een gateway drone te vinden in:
+\section{GatewayWissel.mp4}\label{sec:gatewaywisselmp4}
+Video van drones die zich verspreiden, hier zijn twee gateways bij aanwezig.
+Vervolgens wordt een essentieel punt uit gezet. 
+De daarmee verbonden router wisselt van gateway. 
+
 
 \end{document}

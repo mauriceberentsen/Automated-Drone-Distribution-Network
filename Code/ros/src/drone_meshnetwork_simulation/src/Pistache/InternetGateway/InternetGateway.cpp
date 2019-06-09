@@ -30,6 +30,7 @@ InternetGateway::InternetGateway(/* args */)
 
 InternetGateway::~InternetGateway()
 {
+
 }
 
 void InternetGateway::init(Communication::Internet::IGatewayCommands *IGC,uint8_t _threads)
@@ -82,5 +83,6 @@ void InternetGateway::InternetService()
     router.initFromDescription(desc);
     httpEndpoint->setHandler(router.handler());
     httpEndpoint->serve();
-
+    httpEndpoint->shutdown();
+    InternetConnectionThread.join();
 }

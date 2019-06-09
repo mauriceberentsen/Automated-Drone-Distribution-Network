@@ -25,6 +25,7 @@ NRF24HighLevelInterface::NRF24HighLevelInterface()
 
 NRF24HighLevelInterface::~NRF24HighLevelInterface()
 {
+    destroy(lowLevelInterface);
 }
 
 void NRF24HighLevelInterface::StartAntenna( Communication::Wireless::IMeshNetwork* IMN )

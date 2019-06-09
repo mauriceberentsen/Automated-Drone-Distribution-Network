@@ -194,7 +194,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 #############
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-HybridLMRoutingProtocol-test src/Communication/RoutingTechnique/tests/utestChildTableTree.cpp
+catkin_add_gtest(${PROJECT_NAME}-HybridLMRoutingProtocol-test src/Communication/RoutingTechnique/tests/utestHybridLMRoutingProtocol.cpp
                                                      src/Communication/RoutingTechnique/HybridLMRoutingProtocol.cpp)
 
 catkin_add_gtest(${PROJECT_NAME}-GatewayDrone-test src/Communication/Messages/Tests/utestMessage.cpp
