@@ -131,31 +131,31 @@
 %\addcontentsline{toc}{section}{\protect\numberline{}Voorwoord}
 %\pagebreak
 \chapter*{Managementsamenvatting}\label{sec:managementsamenvatting}
-Het doel van "Drone meshnetwerk simulatie"\ is het zetten van de eerste stap in de ontwikkeling van het dronenetwerk. Hiervoor is de volgende opdracht opgesteld:
+Het doel van ``Drone meshnetwerk simulatie"\ is het zetten van de eerste stap in de ontwikkeling van het dronenetwerk. Hiervoor is de volgende opdracht opgesteld:
 \begin{quotation}
-	\textit{Maak een netwerkmodule voor een drone die het mogelijk maakt om meerdere drones onderling te voorzien van een zelf herstellend meshnetwerk. Maak deze module na in een simulatie die geschikt is om meer dan 100 drones te simuleren waarvan het netwerk zich gelijk gedraagt zodat er verdeelalgoritmes getest kunnen worden.}
+	\textit{Maak een netwerkmodule voor een drone die het mogelijk maakt om meerdere drones onderling te voorzien van een zelf herstellend meshnetwerk. Maak deze module na in een simulatie die geschikt is om meer dan 100 drones te simuleren, waarvan het netwerk zich gelijk gedraagt zodat er verdeelalgoritmes getest kunnen worden.}
 \end{quotation}
 
-Deze opdracht is uitgevoerd door eerst literatuur onderzoek uit te voeren.
+%Deze opdracht is uitgevoerd door eerst literatuur onderzoek te doen.
 
 Eerst is er gekeken welke simulatiesoftware gebruikt moet worden voor het simuleren van het dronenetwerk.
 Er is gekozen om dit te doen in de softwarecombinatie Ros + Gazebo omdat dit het hoge aantal drones kan verwerken en ook toegang heeft tot een physics engine.
 
-Om een betere keuze te kunnen maken welke hardware gebruikt zou moeten worden voor onderlinge communicatie is er eerst gekeken wat de grootte van de payload is die verstuurd zou moeten worden om nuttig te zijn in een netwerk.
+Om een betere keuze te kunnen maken welke hardware gebruikt zou moeten worden voor onderlinge communicatie, is er eerst gekeken wat de grootte van de payload is die verstuurd zou moeten worden om nuttig te zijn in een netwerk.
 
-Vervolgens is gekeken naar welke hardware gebruik zou moeten worden voor de onderlinge communicatie. Hier is gekozen voor een Raspberry Pi model 2B+ met een daarop aangesloten radio module nRF24l01+.
+Vervolgens is gekeken naar welke hardware gebruikt zou moeten worden voor de onderlinge communicatie. Hier is gekozen voor een Raspberry Pi model 2B+ met een daarop aangesloten radio module de nRF24l01+.
 
-Hierna is er een keuze gemaakt welke routeringstechniek gebruik moet worden waarop de conclusie was om een hybride routeringstechniek te gebruiken die als basis een reactief protocol heeft met als toevoeging dat richtingen opgeslagen worden. De student heeft een aangepaste versie van de Lightweight Mobile Routing Protocol(LMR) toegepast. 
+Hierna is er een keuze gemaakt welke routeringstechniek gebruikt moet worden waarop de conclusie was om een hybride routeringstechniek te gebruiken. Deze techniek heeft als basis een reactief protocol met als toevoeging dat richtingen opgeslagen worden in plaats van routes. De student heeft een aangepaste versie van de Lightweight Mobile Routing Protocol(LMR) toegepast. 
 
-Er is een conclusie getrokken dat het voor dit project niet nodig is om een drone volledig te implementeren. Een abstracte versie zal voldoen. Hier zijn regels over opgesteld waar deze aan zou moet voldoen. 
+Er is een conclusie getrokken dat het voor dit project niet nodig is om een drone volledig te implementeren. Er zijn regels opgesteld waar een drone minimaal aan zou moeten voldoen om een abstracte drone te representeren. 
 
-Om de opdracht uit te kunnen voeren heeft de student een simulatie gemaakt waar drones zich kunnen voortbewegen en zich conform de casus opgesteld in het plan van aanpak kunnen verdelen. De drones volgen het gedrag van een meshnetwerk en er is applicatie aanwezig om op realistische wijze verzoeken te sturen naar de drones voor verplaatsing. 
+Om de opdracht uit te kunnen voeren heeft de student een simulatie gemaakt waar drones zich kunnen voortbewegen en zich conform de casus kunnen verdelen. De drones volgen het gedrag van een meshnetwerk en er is applicatie aanwezig om op realistische wijze verzoeken te sturen naar de drones voor verplaatsing. 
 
 De opgeleverde software wordt onderbouwd in het software design document en de software requirements specificatie.
 
 Concluderend is er een simulator opgeleverd waarin drones verdeeld kunnen worden.
-Deze simulator kan gebruikt worden om te experimenteren met verdelingen of netwerkgedrag.
-Daarnaast is er een fysiek prototype opgeleverd van een netwerkmodule die zich gelijk gedraagt als de gesimuleerde netwerkmodule.   
+Deze simulator kan gebruikt worden om te experimenteren met verdelingen en netwerkgedrag.
+Daarnaast is er een fysiek prototype opgeleverd van een netwerkmodule die zich gelijk gedraagt als de gesimuleerde netwerkmodule en via een REST service aangestuurd kan worden.   
 
 \tableofcontents
 \clearpage
@@ -421,7 +421,7 @@ De keuze om toch de Redmine server van Alten te gebruiken is gebaseerd op het vo
 
 \section{\LaTeX}
 
-De keuze om latex te overwegen in het project is al bijna twee jaar voor het afstuderen begon gemaakt. 
+De keuze om Latex te overwegen in het project is al bijna twee jaar voor het afstuderen begon gemaakt. 
 Toen de leraar Joost Kraaijeveld tijdens het semester World of Robots de mogelijkheden liet zien van Latex is er in eigen tijd meer aandacht gestoken in de markup taal.
 Het werd duidelijk dat Latex de tool was voor het schrijven van wetenschappelijke artikelen of technische documentatie.
 Hier kwam uit dat Latex veel voor je kan automatiseren zoals referenties, bibliografie, betiteling en het opstellen van formules maar dat er wel een leercurve bij zit.
@@ -822,6 +822,38 @@ Op het moment dat een router een bericht krijgt van een ander punt in het netwer
 
 Een video waar de werking van twee gateways in het netwerk gedemonstreerd wordt is te vinden in bijlage  \ref{sec:gatewaywisselmp4}
 
+\paragraph{Fysiek prototype router}
+Na de oplevering van de 80 procent versie is er gewerkt aan de oplevering van een fysieke netwerkmodule.
+Hiervoor was de makkelijkste stap om de router software draaiende te krijgen op de raspberry.
+Dit omdat alleen het virtuele NRF24 component vervangen hoefde te worden voor een fysieke.
+In eerste instantie verliep dit goed, vooraf waren er al ontwerpen gemaakt op basis van de beschikbare NRF24 libary \cite{nrf24git}.
+
+Wat een tegenvaller was, was dat ik vergeten was dat er een Vector3 gebruikt werd uit de libary die meegeleverd wordt met Gazebo.
+Omdat er in de software alleen de Vector3 een afhankelijk heeft naar de libary is er besloten de Vector3 zelf te implementeren in een template class.
+Na het implementeren van deze template class kon er een router programma gecompileerd worden voor de Raspberry Pi.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.7\linewidth]{Afbeeldingen/raspberryOpKantoor.jpg}\end{center}
+	\caption{Raspberry aangesloten op de antenne voor korte afstand.}
+	\label{fig:raspopkantoor}
+\end{figure}
+
+Door twee Raspberry Pi's op het netwerk aan te sluiten van Alten (\autoref{fig:raspopkantoor}) konden ze via een ssh verbinding gestart worden om met elkaar te communiceren wat het eerst contact via de fysieke NRF opleverde te zien in bijlage \ref{sec:eerstecontactmp4}.
+
+\paragraph{Fysiek prototype gateway}
+
+Tenslotte was er nog net tijd voor een laatste implementatie die de oplevering compleet zou maken naar wat beloofd is in het begin van het project.
+Kort overleg gaf de goedkeuring om zonder uitgebreid onderzoek een C++ libary te pakken voor de internetgateway.
+Deze goedkeuring was gebaseerd op het feit dat het toch om een prototype ging en het gewoon heel cool zou zijn om alles op te kunnen leveren.
+Na kort zoekwerk op het internet kwam Pistache \cite{pisrest} naar voren vanwege het gemak voor het opzetten van een REST framework.
+
+Wat een mooi moment was voor mij als programmeur was dat ik de service eerst ontwikkeld heb voor de gesimuleerde gateway.
+Vervolgens heb ik de Pistache libary geïnstalleerd op de Raspberry Pi en kon daar zo dezelfde software draaien als in de simulatie.
+Dit bewees voor mij het nut van de simulatie als ontwikkelaar omdat de simulatie mij dus de mogelijkheid biedt software te ontwikkelen op mijn pc voor mijn pc.
+Vervolgens kan ik deze software op de Raspberry Pi zetten en dezelfde code compileren.
+
+Een video met audio is te vinden in bijlage \ref{sec:fysieke-router-en-dronemp4} waar de gateway getoond wordt in samenspel met een router.
+
 \chapter{Resultaten}\label{sec:resultaten}
 
 %Inhoudelijk, wat heb je opgeleverd, met welke kwaliteit? Was dit ook volgens plan? Ben je afgeweken en zo
@@ -891,7 +923,7 @@ Daarom is er gekozen om de simulatie een hogere prioriteit te geven zodra de ges
 
 Een tegenvaller van de simulatie in Gazebo was dat voor het simuleren van 100 drones en dit visueel te maken een computer met een dedicated GPU nodig is. Dit was vooraf niet verwacht omdat de drones in de simulatie alleen maar vliegende blokjes zijn. 
 
-Het opgeleverde product voldoet wel aan de wens van Alten zij wil namelijk verdeelalgoritmes kunnen testen waarbij de drones op een realistische wijze worden aangestuurd en dat is ook opgeleverd.  Verder is de simulatie voorzien van voldoende documentatie.  
+Het opgeleverde product voldoet wel aan de wens van Alten. Alten wil namelijk verdeelalgoritmes kunnen testen waarbij de drones op een realistische wijze worden aangestuurd, en dat is opgeleverd.  Verder is de simulatie voorzien van voldoende documentatie.  
 
 \section{Hardwareprototype}\label{sec:hardwareprototype}
 Het huidige hardware prototype staat nog echt in de kinderschoenen.
@@ -899,7 +931,7 @@ Hoewel het routeringsprotocol die gebruikt wordt in het prototype zichzelf bewez
 Daarom kan er onvoldoende garantie gegeven worden op het gedrag van het prototype.
 Dankzij de opzet van de code kan er wel eerst getest worden in de simulatie waarna het vervolgens mogelijk is om de code direct te draaien op de prototype.
 Dit zal de doorontwikkeling aanzienlijk versnellen voor het prototype.
-%Op dit moment is er er nog geen werkend hardware prototype. Als de tijd het toestaat ga ik hier aan werken na de 80\% versie
+
 
 
 \section{Software requirements specificatie}\label{sec:software-requirements-specificatie}
@@ -970,32 +1002,25 @@ Alten heeft dit voorkomen door mij overal actief bij te betrekken en mij dezelfd
 
 Een les die ik hier uit leer is dat ik meer mijn best had moeten doen om collega's inhoudelijk te betrekken bij mijn afstuderen. Dat het afstuderen alleen uitgevoerd moet worden is een feit maar dit betekend nog niet dat het eenzaam hoeft te zijn.
 
-Ik had collega's meer kunnen betrekken door presentaties te geven over inhoudelijke keuzes in het project. Dit zou hun de kans geven om gericht feedback te geven over mijn werk. Om van acties ook daden te maken heb ik ondertussen twee presentatie momenten ingepland met het volledige team in Apeldoorn.
+Ik had collega's meer kunnen betrekken door presentaties te geven over inhoudelijke keuzes in het project. Dit zou hun de kans geven om gericht feedback te geven over mijn werk. Terugkijkend ben ik hier zelf niet proactief genoeg in geweest.
 
-Als ik terugkijk naar wat ik nog meer had kunnen doen denk ik dat alleen maar zou kunnen adviseren aan toekomstige afstudeerders om te gaan werken aan afstudeeropdrachten die direct invloed hebben op het product van het bedrijf. Dit forceert het bedrijf om zich actief met de student bezig te houden omdat de impact van het resultaat groter is. 
+Als ik terugkijk naar wat ik nog meer had kunnen doen denk ik dat alleen maar zou kunnen adviseren aan toekomstige afstudeerders om te gaan werken aan afstudeeropdrachten die invloed hebben op het product van het bedrijf. Dit forceert het bedrijf om zich actief met de student bezig te houden omdat de impact van het resultaat groter is. 
 
-\subsection{Resultaat presentatie}
-
+\section{Presentatie oefening voor verdediging}
 Om te oefenen voor de verdediging en mijn collega's inzicht te geven in mijn product heb ik een presentatie gehouden zoals ik dat zou doen tijdens mijn verdediging.
-De presentatie is gehouden voor een publiek van negen personen.
+De presentatie is gehouden voor een publiek van negen engineers.
 Om op de presentatie feedback te krijgen heb ik gebruik gemaakt van een feedbackformulier waar de focus lag op mijn presentatie skills.
-Er was ruimte op het formulier om schriftelijk feedback te geven en er kon met -.+ of ++ een waardering 
-Aan het einde van de presentatie konden er vakinhoudelijke vragen gesteld worden.
-
-\paragraph{Presentatie skills}
+Er was ruimte op het formulier om schriftelijk feedback te geven, en er kon met -, + of ++ een waardering gegeven worden.
+Aan het einde van de presentatie konden er vakinhoudelijke vragen gesteld worden zoals dat bij de echte verdediging ook zou zijn..
+\subsection{Feedback op de presentatie}
 Als eerste wil ik de feedback ingevuld op het formulier behandelen die de kwaliteit van de presentatie behandeld.
 De feedback is opgedeeld in structuur, inhoud, non-verbaal, spreekstijl, visueel en contact met publiek.
 Elk stuk wordt hieronder apart behandeld.
-
-\subparagraph{Structuur
-(-[0], +[4], ++[4], leeg[1]) }
+\subsubsection{Structuur (-[0], +[4], ++[4], leeg[1]) }
 
 In de feedback wordt aangegeven dat de opbouw goed is.
 Een terugkerend punt die in de feedback staat is dat er niet genoeg aandacht wordt gegeven aan de probleemstelling.
-
-\subparagraph{Inhoud
-(-[0], +[3], ++[3], leeg[3]) }
-
+\subsubsection{Inhoud (-[0], +[3], ++[4], leeg[2]) }
 Ook de feedback over de inhoud was positief.
 Het publiek was tevreden over mijn kennis over de zaken en het verhaal werd duidelijk verteld.
 Ze vonden de reflectie over het project een leuke toevoeging 
@@ -1004,12 +1029,47 @@ Punten uit de feedback zijn dat ik niet moet twijfelen over wat ik moet uitlegge
 Ik bepaal van te voren wat ik wil toelichten.
 Tijdens de presentatie gebruik het woord ``we'' op het moment dat ik beslissingen toelicht.
 Als feedback wordt aangegeven dat ik niet we maar ik moet gebruiken, het is wellicht met Alten overlegd maar het is mijn project.
+\subsubsection{Non-verbaal (-[0], +[6], ++[1], leeg[2])}
+Ook hierover waren de feedbackgevers positief. Er wordt aangegeven dat ik autoriteit uitstraal, zeker overkom en een rustige sfeer heb. 
+Leerpunten die gegeven worden zijn dat ik moet letten waar ik naartoe kijk dus niet te veel naar hetzelfde persoon of het bord.
+\subsubsection{Spreekstijl (-[0], +[3], ++[6], leeg[0])}
+Over de spreekstijl waren mijn collega's heel enthousiast.
+De rust die ik tijdens de presentatie bewaarde waren ze niet gewend van stagiaires.
+Ik praatte duidelijk en articuleerde goed.
+Wel moest ik oppassen dat de rust die ik had niet ten kostte zou gaan van mijn enthousiasme. 
 
+\subsubsection{Visueel (-[1], +[6], ++[0], leeg[2])}
+Het visuele gedeelte was een minder sterk stuk de presentatie. 
+Zo waren bepaalde figuren zoals het domeinmodel onleesbaar voor het publiek.
+De demo filmpjes hadden last van het zonlicht waardoor het niet goed zichtbaar was voor iedereen.
+Een collega vond ook dat ik de presentatie te veel als leidraad gebruikte en heeft daarom een - gegeven.
 
-\subparagraph{Non-verbaal
-(-[0], +[6], ++[1], leeg[2])}
+Waar de collega's positief over waren was een zelfbedachte techniek die ik gebruikt heb in mijn presentatie.
 
-Ook hierover waren de feedbackgevers positief. Er wordt aangegeven dat ik autoriteit uitstraal, zeker overkom en een rustige . 
+\begin{figure}[H]%
+	\centering
+	\subfloat[Slide waar het pad geintroduceerd wordt.]{{\includegraphics[width=5cm]{Afbeeldingen/Presentate1.png} }}%
+	\qquad
+	\subfloat[Slide waar de status van het pad bovenin zichtbaar is.]{{\includegraphics[width=5cm]{Afbeeldingen/Presentate2.png} }}%
+	\caption{Slides uit de presentatie van de verdediging.}%
+	\label{fig:vergelijkschermmen}%
+\end{figure}
+
+Het continue tonen van het pad bovenin de presentatie heb ik bedacht omdat ik het publiek wil meenemen op het pad die ik de afgelopen maanden heb bewandeld.
+Een voordeel hieraan is dat het duidelijk is voor zowel mijzelf als het publiek waar we zijn in de presentatie.
+
+\subsubsection{Contact met publiek (-[0], +[0], ++[7], leeg[2])}
+Het contact met het publiek was volgens iedereen goed in orde.
+Dit komt volgens hun omdat ik veel kennis had om goede inhoudelijke antwoorden te kunnen geven.  
+Een tip die ik meekreeg was om bepaalde vragen voor te bereiden door ze in slides achter de presentaties te stoppen.
+
+\subsection{Conclusie}
+
+Op basis van de feedback kan ik concluderen dat ik het houden van de verdediging beheers.
+Het is natuurlijk afwachten hoe het straks zal gaan tijdens de echte verdediging.
+Veel kracht van de presentatie kwam uit de rust die ik kon bewaren.
+De feedback geeft de laatste tips om de presentatie af te maken vooral de tip om slides voor mogelijke vragen toe te voegen vond ik handig.
+
 
 \chapter{Conclusie}\label{sec:conclusie}
 %Inhoudelijk, wat heeft het project opgeleverd, zet dat af tegen de doelstelling, heb je die gehaald?
@@ -1048,7 +1108,9 @@ Wanneer dit project vervolgt wordt het volgende geadviseerd aan Alten:
 	\item Breidt de simulatie verder uit op basis van het gedrag van het fysieke netwerkcomponent die is opgeleverd. Focus hier op de communicatie van berichten, en hoe snel de netwerkmodule moet concluderen dat er geen verbinding mogelijk is.
 	
 	\item Schrijf de drone engine om naar het software patroon van een state machine en voeg een functie toe in de aangeboden interface die de staat van de drone aangeeft. Zo kan de netwerkmodule nog betere beslissingen nemen of bijvoorbeeld pas timers starten na het landen van de drone.
+	
 	\item Voordat de overstap gemaakt wordt van een abstracte drone naar een volledig gesimuleerde drone in de simulatie adviseer ik een uitbreiding tot een gesimuleerde drone die een batterijduur heeft.
+	
 \end{itemize}
 
 \bibliographystyle{apacite}
@@ -1116,5 +1178,12 @@ Video van drones die zich verspreiden, hier zijn twee gateways bij aanwezig.
 Vervolgens wordt een essentieel punt uit gezet. 
 De daarmee verbonden router wisselt van gateway. 
 
+\chapter{Video fysiek hardware prototype}
+Video's van het fysieke component.
+Te vinden in ./Bijlagen/
+\section{eerstecontact.mp4}\label{sec:eerstecontactmp4}
+Video van fysieke routers die met elkaar communiceren.
+\section{Fysieke router en drone.mp4}\label{sec:fysieke-router-en-dronemp4}
+Video van fysieke router en gateway die verbinden met elkaar
 
 \end{document}
