@@ -730,24 +730,28 @@ TEST( TestSuiteHybridLMRoutingProtocol, findRouteToGrandChild )
 \paragraph{Berichten}
 Binnen het netwerk worden compacte berichten gebruikt die een vaste volgorde in een 32 byte array hebben.
 Deze worden per byte in de array geplaatst en aan de andere kan er weer uitgehaald.
-De code die hier hoofdzakelijk voor  gebruikt wordt zijn twee functies die als volgt gaan:
+De code die hier hoofdzakelijk voor gebruikt wordt zijn twee functies die als volgt gaan:
 \begin{lstlisting}
  void Message::CopyToCharArray( uint8_t *value, uint16_t size, uint8_t *arr,
 uint16_t start )
 {
 for ( uint16_t i = 0; i < size; i++ ) {
-arr[i + start] = value[i];
-}
+	arr[i + start] = value[i];
+	}
 }
 
 void Message::CopyFromCharArray( uint8_t *value, uint16_t size,
 const uint8_t *arr, uint16_t start )
 {
 for ( uint16_t i = 0; i < size; i++ ) {
-value[i] = arr[i + start];
-}
+	value[i] = arr[i + start];
+	}
 }
 \end{lstlisting}
+In de eerst functie wordt een waarde per byte gekopieerd naar een array van byte.
+De tweede functie doet juist het omgekeerde.
+Een belangrijke voorwaarde is dat de programmeur precies weet hoe groot het data type is en op welke plek de waarde in een array staat. 
+
 
 Om te zorgen dat deze berichten juist in een array gezet worden en er ook weer juist uitgehaald worden is elke type bericht voorzien een meerdere unittesten.
 Naast de standaard unit testen worden ook bijzondere locaties getest zoals de locatie van Lelystad airport waar de landingsbaan onder zee niveau ligt.
@@ -775,7 +779,7 @@ EXPECT_EQ( time, msg.gettimeSincePosix( ) );
 \end{lstlisting}
 
 \paragraph{Drone aansturing}
-Nu er communicatie mogelijk is tussen de netwerkcomponenten en deze in staat zijn correct te kunnen detecteren of er een verbinding naar een gateway mogelijk is kunnen de componenten aangesloten worden op de interface van de drone voor aansturing.
+Nu er communicatie mogelijk is tussen de netwerkcomponenten, en deze in staat zijn correct te kunnen detecteren of er een verbinding naar een gateway mogelijk is, kunnen de componenten aangesloten worden op de interface van de drone voor aansturing.
 Omdat de abstracte drone niet via een enkele interface aangestuurd kan worden is gebruik gemaakt van een adapter \cite{adapter} tussen het netwerkcomponent en de drone. 
 De adapter is te zien in \autoref{fig:adapter}.
 
@@ -970,8 +974,42 @@ Ik had collega's meer kunnen betrekken door presentaties te geven over inhoudeli
 
 Als ik terugkijk naar wat ik nog meer had kunnen doen denk ik dat alleen maar zou kunnen adviseren aan toekomstige afstudeerders om te gaan werken aan afstudeeropdrachten die direct invloed hebben op het product van het bedrijf. Dit forceert het bedrijf om zich actief met de student bezig te houden omdat de impact van het resultaat groter is. 
 
-Het resultaat van deze presentaties zal ik later hier beschrijven nadat ze gehouden zijn.
+\subsection{Resultaat presentatie}
 
+Om te oefenen voor de verdediging en mijn collega's inzicht te geven in mijn product heb ik een presentatie gehouden zoals ik dat zou doen tijdens mijn verdediging.
+De presentatie is gehouden voor een publiek van negen personen.
+Om op de presentatie feedback te krijgen heb ik gebruik gemaakt van een feedbackformulier waar de focus lag op mijn presentatie skills.
+Er was ruimte op het formulier om schriftelijk feedback te geven en er kon met -.+ of ++ een waardering 
+Aan het einde van de presentatie konden er vakinhoudelijke vragen gesteld worden.
+
+\paragraph{Presentatie skills}
+Als eerste wil ik de feedback ingevuld op het formulier behandelen die de kwaliteit van de presentatie behandeld.
+De feedback is opgedeeld in structuur, inhoud, non-verbaal, spreekstijl, visueel en contact met publiek.
+Elk stuk wordt hieronder apart behandeld.
+
+\subparagraph{Structuur
+(-[0], +[4], ++[4], leeg[1]) }
+
+In de feedback wordt aangegeven dat de opbouw goed is.
+Een terugkerend punt die in de feedback staat is dat er niet genoeg aandacht wordt gegeven aan de probleemstelling.
+
+\subparagraph{Inhoud
+(-[0], +[3], ++[3], leeg[3]) }
+
+Ook de feedback over de inhoud was positief.
+Het publiek was tevreden over mijn kennis over de zaken en het verhaal werd duidelijk verteld.
+Ze vonden de reflectie over het project een leuke toevoeging 
+
+Punten uit de feedback zijn dat ik niet moet twijfelen over wat ik moet uitleggen. 
+Ik bepaal van te voren wat ik wil toelichten.
+Tijdens de presentatie gebruik het woord ``we'' op het moment dat ik beslissingen toelicht.
+Als feedback wordt aangegeven dat ik niet we maar ik moet gebruiken, het is wellicht met Alten overlegd maar het is mijn project.
+
+
+\subparagraph{Non-verbaal
+(-[0], +[6], ++[1], leeg[2])}
+
+Ook hierover waren de feedbackgevers positief. Er wordt aangegeven dat ik autoriteit uitstraal, zeker overkom en een rustige . 
 
 \chapter{Conclusie}\label{sec:conclusie}
 %Inhoudelijk, wat heeft het project opgeleverd, zet dat af tegen de doelstelling, heb je die gehaald?
