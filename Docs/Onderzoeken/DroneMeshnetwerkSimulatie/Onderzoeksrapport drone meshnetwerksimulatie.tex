@@ -129,9 +129,21 @@
 
 \chapter*{Managementsamenvatting}
 
+%\item Welke simulatiesoftware is geschikt om een netwerk van ongeveer 100 drones in na te bootsen?
+%\item Wat is de grootte van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?
+%\item Welke meshnetwerk hardware is geschikt voor het onderling verbinden van drones?
+%\item Welke meshnetwerk techniek is geschikt voor de te gebruiken hardware?
+%\item Is het mogelijk voor een netwerkmodule om een netwerk te herstellen door het de mogelijkheid te geven zich vrij te bewegen?
+%\item Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?
+
 In dit onderzoek word onderzocht hoe netwerkmodules een groep van honderd drones kunnen voorzien van een onderling meshnetwerk die snel kan reageren op uitval van netwerkpunten.
 
-Literatuuronderzoek heeft aangetoond dat een nRF24l01+ de meeste potentie heeft voor het meshnetwerk vanwege zijn snelheid van \SI{250}{\kilo\bit\per\second} op een afstand van 700 meter.
+De drones moeten gesimuleerd worden. Onderzoek heeft aangetoond dat dit het beste gedaan kan worden in een combinatie van Ros met Gazebo.
+
+Voordat er een onderzoek gestart kon worden naar welke antenne gebruik moest worden is er eerst gekeken hoe groot de berichten zijn die verstuurd worden.
+Er is aangetoond dat een bericht die nuttig is voor het aansturingssysteem niet groter hoeft te zijn dan 16 bytes.
+
+Literatuuronderzoek heeft aangetoond dat een nRF24l01+ antenne de meeste potentie heeft voor het meshnetwerk vanwege zijn snelheid van \SI{250}{\kilo\bit\per\second} op een afstand van 700 meter.
 
 De gekozen controller om aan te sluiten op de drone is een Raspberry Pi model 2B+. Deze is gekozen door zijn compatibiliteit met een NRF24 en rijke I/O interface. 
 De software voor het meshnetwerk is ontwikkeld voor het gebruik op een Raspberry Pi model 2B+ en geschreven in C++.   
@@ -140,7 +152,7 @@ Er is een aangepaste variant van het lightweight mobile routering protocol toege
 
 Om dit onderzoek te ondertussen is er een simulatie gebouwd waarin abstracte drones met daarop een aangesloten netwerkcomponent kunnen rondvliegen. Dit maakt de simulatie bruikbaar voor het testen van zowel routeringstechnieken als (her)verdelingen. 
 
-Om aan te tonen dat de mogelijkheid om een drone te kunnen verplaatsen bijdraagt aan het zelfherstellend vermogen van een meshnetwerk is er een oplossing geïmplementeerd waar de drones een stap terug nemen in het netwerk op het moment dat ze geen verbinding meer hebben.  Testen hebben aangetoond dat dit idee alleen een goede toevoeging is op het moment dat er een enkele drone uitvalt in een kritische verbinding. Op het moment dat er meer drones in een verbinding uitvallen komen de drones terug naar de gateway, waardoor er een potentieel groot deel van een netwerk wegvalt. Het doel om aan te tonen dat de simulatie bruikbaar is in het onderzoeken van (her)verdelingen is daarmee wel bewezen.
+Om aan te tonen dat de mogelijkheid om een drone te kunnen verplaatsen bijdraagt aan het zelfherstellend vermogen van een meshnetwerk is er een oplossing geïmplementeerd waar de drones een stap terug nemen in het netwerk, op het moment dat ze geen verbinding meer hebben.  Testen hebben aangetoond dat dit idee alleen een goede toevoeging is op het moment dat er een enkele drone uitvalt in een kritische verbinding. Op het moment dat er meer drones in een verbinding uitvallen komen de drones terug naar de gateway, waardoor er een potentieel groot deel van een netwerk wegvalt. Het doel om aan te tonen dat de simulatie bruikbaar is in het onderzoeken van (her)verdelingen is hiermee wel bewezen.
 
 \tableofcontents
 \clearpage
@@ -208,7 +220,7 @@ Tenslotte wordt de invloed van het onderzoek op het afstudeerproject beschreven.
 \section{Hoofdvraag}
 Het doel van dit onderzoeksrapport is het beantwoorden van de volgende opgesteld hoofdvraag:
 \begin{quotation}
-\textit{Hoe kunnen netwerkmodules een groep van ongeveer 100 drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?}	
+\textit{``Hoe kunnen netwerkmodules een groep van ongeveer 100 drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?''}	
 \end{quotation}
 Doordat de uitvoerende student van dit onderzoek niet beschikt over een certificaat om met drones te mogen vliegen behoudt dit onderzoek zich tot een simulatie.
 
@@ -245,9 +257,9 @@ De vijf verschillende werkplaatsen binnen het framework zijn: \textit{lab, veld,
 De deelvragen gaan gedeeltelijk over keuzes van gebruik. 
 Welke software en hardware is geschikt, is een vraag die veel naar voren komt.
 Hieruit valt te concluderen dat de onderzoeker zich nog aan het oriënteren is.
-"De onderzoeksruimte bieb bevat een verzameling methoden en technieken die dienen tot oriëntatie op beschikbaar werk."\cite{MethodenKaart}.
+``De onderzoeksruimte bieb bevat een verzameling methoden en technieken die dienen tot oriëntatie op beschikbaar werk."\cite{MethodenKaart}.
 Daarom wordt er gekozen om een bieb onderzoek uit te voren naar de deelvragen die gaan over geschiktheid.
-Dit zodat de onderzoeker zich nog kan oriënteren naar het beschikbare aanbod en nog op nieuwe deelvragen kan komen. 
+Dit zodat de onderzoeker zich nog kan oriënteren naar het beschikbare aanbod en op nieuwe deelvragen kan komen. 
 
 Lab onderzoek wordt pas later uitgevoerd omdat niet alle hardware voor handen is, maar ook omdat er niet genoeg tijd voor beschikbaar is.
 \citeauthor{MethodenKaart} zegt het volgende over lab onderzoek: De onderzoeksruimte lab bevat methoden die geschikt zijn om de oplossing te toetsen aan een aspect van de toepassingscontext.
@@ -292,15 +304,15 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 		\hypertarget{alg3}{ALG3}	&\begin{tabular}[c]{@{}l@{}}Heeft ondersteuning voor het Linux platform Ubuntu 18.04.\end{tabular}        \\ \hline
 		\hypertarget{alg4}{ALG4}	&Software is gratis in gebruik voor studenten.        \\ \hline
 		\hypertarget{sk1}{SK1}		&\begin{tabular}[c]{@{}l@{}}Heeft ondersteuning voor UAV's (unmanned air vehicle) ook wel drones genoemd.\end{tabular} \\ \hline
-		\hypertarget{sk2}{SK2}		&\begin{tabular}[c]{@{}l@{}}Ondersteunt de simulatie van locatie bepaling sensoren zoals GPS.\end{tabular}        \\ \hline
+		\hypertarget{sk2}{SK2}		&\begin{tabular}[c]{@{}l@{}}Ondersteunt de simulatie van locatiebepaling sensoren zoals GPS.\end{tabular}        \\ \hline
 		\hypertarget{sk3}{SK3}		&\begin{tabular}[c]{@{}l@{}}Heeft een kant en klare oplossing voor simulatie van externe krachten zoals wind.\end{tabular}        \\ \hline
 		\hypertarget{sk4}{SK4}		& Heeft een ingebouwde pathfinding oplossing.        \\ \hline
-		\hypertarget{sk5}{SK5}		& Ondersteunt ROS als middleware.        \\ \hline
+		\hypertarget{sk5}{SK5}		& Ondersteunt Ros als middleware.        \\ \hline
 		\hypertarget{sk6}{SK6}		& Ondersteunt de detectie van botsingen.        \\ \hline
 		\hypertarget{sk7}{SK7}		& Ondersteunt de simulatie 100 drones tegelijk.        \\ \hline
 		DR1		& De drone is een quadcopter.        \\ \hline
 		DR2		& De drone is is voorzien van een API voor aansturing op basis van coördinaten.       \\ \hline
-		DR3		& De API sluit aan op de middleware ROS melodic.        \\ \hline
+		DR3		& De API sluit aan op de middleware Ros melodic.        \\ \hline
 		DR4		& De drone is bruikbaar binnen de gekozen simulatiesoftware Gazebo.        \\ \hline
 		DR5		& De drone moet een kleine goedkope drone representeren.        \\ \hline
 		\hypertarget{ph1}{PH1}		& Ondersteunt een bereik van minimaal 500 meter.  \\ \hline
@@ -322,11 +334,11 @@ In \autoref{tab:criteria} worden codes gebruikt als naam voor de criteria, wat d
 
 \section[Welke simulatiesoftware?]{Welke simulatiesoftware is geschikt om een drone in na te bootsen?}
 \label{sec:welkesim}
-Voor het onderzoek wordt gebruik gemaakt van een simulatie omgeving.
+Voor het onderzoek wordt gebruik gemaakt van een simulatieomgeving.
 Welke software gebruikt moet worden staat vastgesteld in deze paragraaf.
 De keuze van software wordt bepaald door het uitvoeren van de bieb onderzoeksmethode. 
 In de \autoref{tab:criteria} staan de criteria toegelicht waar de simulatiesoftware aan moet voldoen.
-Als hoofdcriteria wordt een lijst opgesteld met simulatoren, die ondersteuning hebben voor ROS.
+Als hoofdcriteria wordt een lijst opgesteld met simulatoren, die ondersteuning hebben voor Ros.
 Vervolgens worden deze aan de hand van een kruistabel onderworpen aan de andere criteria.
 Deze techniek is gebaseerd op de "Comparison Chart" van \cite{CMDmethod} uit de "\textit{CMD Methods Pack}"
 
@@ -364,22 +376,22 @@ In de \autoref{tab:kruissimkeuze} komt de simulatiesoftware van Gazebo en Webots
 Het is nu zaak om te uit te zoeken welke van de twee het meest geschikt is voor het uitvoeren van dit onderzoek.
 
 \subsection{Gazebo of Webots?}
-In januari 2018 hebben \citeauthor{RobotCompare} een publicatie geschreven waarin zij drie simulatoren vergelijken in het aanbod van features en performance\cite{RobotCompare}. 
+In januari 2018 hebben \citeauthor{RobotCompare} een publicatie geschreven waarin zij drie simulatoren vergelijken in het aanbod van features en performance \cite{RobotCompare}. 
 Zij hebben een vergelijking gedaan tussen V-REP, Gazebo en ARGoS. 
-ARGoS is niet meegenomen in de overweging voor het huidige onderzoek omdat het geen ondersteuning heeft voor ROS.
+ARGoS is niet meegenomen in de overweging voor het huidige onderzoek omdat het geen ondersteuning heeft voor Ros.
 
 Uit de resultaten van de publicatie blijkt dat Webots als het meest gebruiksvriendelijk naar voren in het gebruik en is in het bezit van de meeste features.
 Het grote nadeel van Webots is dat het veel kracht vraagt van de computer, waardoor het niet geschikt is voor de simulatie van meerdere drones tegelijk.
 
 Daarmee komt de keuze uit op Gazebo. 
 De resultaten in de publicatie van \citeA{RobotCompare} tonen aan dat de software in staat is om veel drones tegelijk aan te kunnen sturen.
-\citeA{RobotCompare} geven als nadeel aan Gazebo dat de software niet in staat is om 3d meshes te manipuleren, de user interface niet innovatief is en Gazebo soms problemen met dependencies door de verschillende versies van ROS.
+\citeA{RobotCompare} geven als nadeel aan Gazebo dat de software niet in staat is om 3d meshes te manipuleren, de user interface niet innovatief is en Gazebo soms problemen heeft met dependencies door de verschillende versies van Ros.
 Dit laatste brengt een risico met zich mee voor het onderzoek daarom is het ook zaak dat dit als criteria meegenomen word in de deelvraag van \autoref{sec:dronekeuze} \nameref{sec:dronekeuze}. 
 
 \subsection{Conclusie}
 Voor het onderzoek wordt Gazebo gebruikt omdat het voldoet aan de gestelde \nameref{chapter:criteria}.
-De meest recente versie van Gazebo, die niet geen beta is op 19 februari 2019, is Gazebo 9.
-Deze versie vereist het gebruik van ROS Melodic volgens haar eigen website  (\href{http://gazebosim.org/tutorials?tut=ros_wrapper_versions}{zie link}).
+De meest recente stabiele versie van Gazebo is Gazebo 9.
+Deze versie vereist het gebruik van Ros Melodic volgens haar eigen website \cite{versiongazeb}.
 
 \section[Welke grootte voor de payload?]{Wat is de grootte van de payload die een netwerkmodule aangesloten op een drone moet versturen om nuttig te zijn voor het aansturingssysteem?}
 
@@ -396,7 +408,7 @@ Om deze reden wordt niet gekeken naar een tekstuele serialisatie mogelijkheden z
 "Binary Serialization is converting the object in binary format and being able to store it in a storage medium"\cite{binary}. 
 Het binair samenstellen van informatie is een efficiënte manier, omdat de data met een minimale overhead wordt samengesteld \cite{binaryMessaging}.
 Het nadeel die deze wijze met zich meebrengt is dat het resultaat van het bericht niet meer makkelijk leesbaar is voor mensen.
-Voor dit project ligt daar geen focus op dus is dit nadeel te verwaarlozen.
+Tijdens dit project ligt daar geen focus op, dus is dit nadeel te verwaarlozen.
 
 \citeA{binaryMessaging} hebben onderzoek gedaan naar een efficiënte manier van de inzet van binaire berichten ter vervanging van tekstuele serialisatie.
 Hoewel dat in het huidige onderzoek niet het geval is, kan er wel geleerd worden hoe de berichten gebruikt worden.
@@ -432,7 +444,8 @@ Hiermee komt het eerste deel van het bericht dus al tot stand het telt nu minima
 
 \subsection{Wat is nuttige informatie die in een bericht kan staan voor of van een aansturingssysteem?}
 \label{sub:watisnuttigeinformatie}
-Hoewel er nog niet bekend is welk type netwerk er gebruikt gaat worden is het al wel bekend dat dit een low power long range netwerk zal zijn om aan de requirements te voldoen.
+Het is nog niet bekend is welk type netwerk er gebruikt gaat worden.
+Wat al wel bekend is dat dit een low power long range netwerk zal zijn om aan de requirements te voldoen.
 Een gedeelde eigenschap van zulke netwerken is de lage bandbreedte waardoor ze niet geschikt zijn voor realtime applicaties.
 Deze kennis kan toegepast worden op de informatie die de drones met hun netwerkmodules bij zich dragen. 
 Informatie zoals snelheid en richting heeft geen prioriteit om verstuurd te worden omdat deze niet relevant is voor het aansturingssysteem aangezien hier geen beslissingen op gebaseerd kunnen worden.
@@ -474,7 +487,7 @@ int main( int argc, const char* argv[] )
 Door een coördinaat te gebruiken van 5 cijfers achter het decimaal kan een plek op aarde met een precisie van ongeveer 1,10 meter nauwkeurig aangeven worden.
 Het is gebruik hiervan is realistisch omdat met alleen realtime GPS data de accuraatheid ongeveer 4 meter is \cite{GPSaccu}.
 Er wordt per as een float gebruikt dit houdt in dat minimaal 8 bytes nodig zijn voor een coördinaat.
-Dit is 4 bytes per float en exclusief de separator. 
+Dit zijn 4 bytes per float exclusief de separator. 
 
 \subsubsection{Hoogte van de drone}
 \citeA{GPSheight} hebben onderzoek gedaan naar de accuraatheid van de hoogtebepaling bij drones. 
@@ -520,7 +533,7 @@ Als conclusie is bepaald dat voor dit bericht een grootte van minimaal 16 bytes 
 
 Eén van de wensen van de Alten is het in kaart brengen van de onderlinge verbindingen van de modules in het drone netwerk. 
 Als voorbeeld hoe dit eruit kan zien is de schets afkomstig van de casus uit het plan van aanpak toegevoegd als bijlage te vinden in \autoref{app:schetsNetwerk}.
-De informatie van de locatie van de netwerkpunten zijn al bekend door het gebruik van het bericht in \autoref{sub:locatie}
+De informatie van de locatie van de netwerkpunten zijn al bekend door het gebruik van het bericht in \autoref{sub:locatie}.
 Wat overblijft als onbekende informatie is de onderlinge verbinding.
 
 In het netwerk kunnen twee rollen verdeeld worden.
@@ -547,7 +560,7 @@ De ontvangers en zenders zijn verdeelt in \autoref{tab:ontvangerzender}.
 Om snel aan te kunnen tonen dat er weinig informatie nodig is om een topologie op te stellen gebruikt de student PlantUML.
 Hiermee wordt aangetoond dat een bericht die de ontvanger aanmaakt zodra een zender zich bij hem aanmeld waar in staat wie de zender is genoeg is voor een topologie.
 De keuze om de verantwoording bij de ontvanger neer te leggen is omdat een zender niet bij elke soort netwerk weet wie de ontvanger is.
-De uitwerking hiervan is zichtbaar in \autoref{fig:toplogienetwerkuml}
+De uitwerking hiervan is zichtbaar in \autoref{fig:toplogienetwerkuml}.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{zenderontvangertopo}\end{center}
@@ -560,7 +573,7 @@ De uitwerking hiervan is zichtbaar in \autoref{fig:toplogienetwerkuml}
 Het ID van de ontvanger zit al in het bericht aangezien deze de opsteller van het bericht is.
 Dit houdt in dat enkel een ID toegevoegd hoeft te worden van de aangemelde zender.
 De byte grootte van de ID's is al bekend deze telt namelijk 1 byte.
-Daarmee zou het bericht het volgende format krijgen te zien in \autoref{tab:topologiemessage}
+Daarmee zou het bericht het volgende format krijgen te zien in \autoref{tab:topologiemessage}.
 
 \begin{table}[H]
 	\centering
@@ -602,8 +615,9 @@ Een meshnetwerk is een term die gebruikt wordt voor een topologie techniek in ne
 Om een voorbeeld beter toe te kunnen lichten worden eerst de tegenhangers besproken de ster en boom topologie.
 
 Een doorsnee huishouden maakt zeer waarschijnlijk gebruik van een ster topologie.
-Er staat een modem bij de aansluiting in het huis die een Wifi signaal uitzendt waar vervolgens alle mobiele apparaten mee verbinden en vaak nog een fysieke poorten aanbiedt voor een bekabelde verbinding.
-Dat levert een topologie op zichtbaar in \autoref{fig:toplogiester}
+Er staat een modem bij de aansluiting in het huis die een Wifi signaal uitzendt.
+Alle mobiele apparaten kunnen hiermee verbinden en er zijn vaak nog een fysieke poorten voor een bekabelde verbinding.
+Dat levert een topologie op zichtbaar in \autoref{fig:toplogiester}.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.4\linewidth]{sterTopo}\end{center}
@@ -622,7 +636,7 @@ Vertaalt naar een topologie zou dit er als \autoref{fig:toplogieboom} uitzien.
 \end{figure}
 
 Een probleem wat uit deze twee voorbeelden duidelijk wordt is de grens van het bereik. 
-Deze is namelijk alleen uit te breiden in door het toevoegen van extra netwerkpunten.
+Deze is namelijk alleen uit te breiden door het toevoegen van extra netwerkpunten.
 De meshnetwerk techniek is een oplossing voor dit probleem.
 In een meshnetwerk zijn de apparaten in staat om direct met elkaar te verbinden. 
 Zo is elk apparaat in het netwerk direct een uitbreiding in het bereik van het netwerk doordat het informatie kan doorgeven.
@@ -647,11 +661,11 @@ In LoRa wordt gesproken over type A, B en C waarbij elke type gericht is op een 
 
 \begin{itemize}
 	\item \textbf{Type A} is de energiezuinigste variant doordat het alleen online komt op het moment dat het data moet versturen.
-Het grote nadeel van dat het communiceren naar dit type onmogelijk is en het dus ook niet bijdraagt het uitbreiden van het netwerk.
+Een nadeel hieraan is  dat het communiceren naar dit type node onmogelijk is en het dus ook niet bijdraagt het uitbreiden van het netwerk.
 	\item \textbf{Type B} is een variant van type A welke na het zenden van een bericht enige tijd online blijft om een berichten te kunnen ontvangen. 
 Een voordeel is dat deze dus wel op afstand aan te sturen is maar nog steeds is deze alleen een gebruiker van het netwerk.
-	\item \textbf{Type C} is de minst zuinige variant van de nodes doordat hij altijd aan staat.
-Het nadeel is dus dat deze het meest stroom verbruikt daarin tegen kan deze node wel de belangrijke rol krijgen van router en biedt vergroot daarmee het meshnetwerk.
+	\item \textbf{Type C} is de minst zuinige variant van de nodes, omdat hij altijd aan staat.
+Het nadeel is dat deze node het meest stroom verbruikt. Daarin tegen kan deze node wel de belangrijke rol krijgen van router en vergroot daarmee het bereik van het meshnetwerk.
 \end{itemize}
 
 In het geval van de opdracht wordt alleen gekeken naar type C nodes, omdat er interesse is naar de dynamische plaatsing van dit type.
@@ -666,24 +680,23 @@ In de publicatie van \cite{LoraConnect} wordt het LoRaWAN netwerk onderzocht.
 Ook worden daar de grootste concurrenten van het LoRaWAN netwerk benoemd namelijk SigFox \citeyear{sigfox} en Narrowband IoT (NB-IoT).
 Ondanks het feit dat deze protocollen niet interessant zijn voor het project, omdat ze in de verkeerde OSI-laag vallen, is de netwerklaag wel interessant om te bekijken welke technieken er gebruikt worden.
 NB-IoT valt direct af als oplossing doordat het gebruikt maakt van mobiele communicatie en dus niet zou voldoen aan criteria \hyperlink{ph4}{PH4}.
-Daarna valt SiGFox ook af simpelweg, omdat het gebruik maar beperkt openbaar is gemaakt waardoor het niet geschikt is om een meshnetwerk mee te bouwen. 
+SiGFox valt ook af, omdat het gebruik maar beperkt openbaar is gemaakt. Om deze reden is het niet geschikt is om een meshnetwerk mee te bouwen. 
 Dan blijft uit deze publicatie het LoRaWAN netwerk over. 
 
 \subsubsection{LoRa}
-Het LoRaWAN netwerk is gebasseerd op de LoRa fysieke laag (PHY)\cite{LoRAMOD} implementatie om de communicatie af te handelen.
+Het LoRaWAN netwerk is gebaseerd op de LoRa fysieke laag (PHY) \cite{LoRAMOD} implementatie om de communicatie af te handelen.
 LoRaWAN is een netwerkstandaard opgezet voor telecom providers om het mogelijk te maken netwerken op te zetten voor communicatie over afstanden tot \SI{15}{\kilo\meter}.
 Alleen het LoRaWAN maakt gebruikt van een ster topologie doordat nodes maar één hop kunnen maken naar een gateway van het netwerk.
-Een andere nadeel die het LoRa netwerk heeft is dat ondanks de grote afstand die het kan afleggen door de spreidingsfactor te vergroten en de gevoeligheid van de ontvanger te verhogen dit ten koste gaat van de snelheid van de datadoorvoer.
-\citeA{LoraMesh} hebben in onderzoek gedaan naar de mogelijk om het LoRa PHY netwerk te gebruiken als meshnetwerk en ook aangetoond dat dit werkt.
-Het doel van hun onderzoek was om door middel van mesh technieken LoRa geschikter te maken voor verstedelijkt gebied zonder het toevoegen van extra gateways. 
+Een andere nadeel die het LoRa netwerk heeft, is dat ondanks de grote afstand die het kan afleggen door de spreidingsfactor te vergroten en de gevoeligheid van de ontvanger te verhogen, dit ten koste gaat van de snelheid van de datadoorvoer.
+\citeA{LoraMesh} hebben onderzoek gedaan naar de mogelijk om het LoRa PHY netwerk te gebruiken als meshnetwerk en ook aangetoond dat dit werkt.
+Het doel van hun onderzoek was om door middel van meshtechnieken LoRa geschikter te maken voor verstedelijkt gebied zonder het toevoegen van extra gateways. 
 Een nadeel wat ze beschrijven in de conclusie is het aantal nodes wat ze kunnen verwerken verkleind wordt.
 Dit komt door de degradatie van timing prestaties waarin ze stellen dat periode $p$ die een bericht nodig heeft om verstuurd te worden naar de gateway de volgende regel volgt ($p = 2h\cdot t$) waarbij $h$ het aantal hops is die het bericht maakt en $t$ de frametijd. Om de frametijd te berekenen geldt het volgende: $frametijd = \frac{framelengte}{bitsnelheid}$. 
-Voordeel van het gebruik die een mesh kan hebben ten opzichte van een ster netwerk is dat het een hogere bitsnelheid kan behouden, omdat er kleinere afstanden overbrugt hoeven te worden waardoor de frametijd alsnog klein kan blijven.
-Een voorwaarde van het gebruik van dit netwerk is dus wel dat de framelengte klein moet zijn waardoor het niet geschikt is voor het verwerken van grote berichten zoals afbeeldingen video of andere grote bestanden.
+Een voordeel van het gebruik die een mesh kan hebben ten opzichte van een ster netwerk is dat het een hogere bitsnelheid kan behouden. Dit kan een mesh omdat er kleinere afstanden overbrugt hoeven te worden waardoor de frametijd alsnog klein kan blijven.
+Een voorwaarde van het gebruik van dit netwerk is dus wel dat de framelengte klein moet zijn waardoor het niet geschikt is voor het verwerken van grote berichten zoals afbeeldingen, video of andere grote bestanden.
 
 \paragraph{LoRa samengevat}
-Als er gekeken wordt naar LPWAN oplossingen is LoRa PHY de enige noemenswaardige oplossing voor dit project.
-\citeA{LoraMesh} hebben al aangetoond dat een meshnetwerk op bais van LoRa mogelijk is waardoor het risico afneemt in de haalbaarheid van dit onderzoek.
+\citeA{LoraMesh} hebben al aangetoond dat een meshnetwerk op basis van LoRa mogelijk is waardoor het risico afneemt in de haalbaarheid van dit onderzoek.
 Een voordeel van dit netwerk is de afstand die de netwerkmodules van elkaar kunnen staan die met deze techniek kan oplopen tot meer dan 10 kilometer afhankelijk van de hoeveelheid en frequentie van de data die verstuurd moet worden.
 Een ander voordeel van deze techniek is dat het signaal enorme afstanden kan halen bij een vrije line of sight waarbij het wereldrecord zelf op 702 kilometer staat door een weerballon op 38 kilometer hoogte te gebruiken \cite{LoRARecord}.
 Hoewel deze extreme usecase niet zal voorkomen worden de netwerk modules wel gemaakt om aan drone gekoppeld te worden.
@@ -748,7 +761,8 @@ Daarom zal er in dit project gebruik gemaakt worden van de nRF24l01+.
 \autoref{sec:meshnetwerkkeuze} heeft als uitkomst gegeven dat er voor de communicatie een nRF24l01+ gebruikt moet worden.
 Deze moet alleen ook aangestuurd worden en dit kan op verschillende manieren.
 Voor nu heeft Alten aangegeven dat zij graag wil dat dit gedaan wordt op een Raspbery Pi Model 2B+.
-Deze heeft Alten al beschikbaar en wil eerst weten of het mogelijk is op een Rasperry pi voordat Alten gaat investeren in ontwikkeling op een microcontroller.
+Deze heeft Alten al beschikbaar en wil eerst weten of het mogelijk is op een Raspbery Pi.
+Als dit mogelijk is wil Alten pas gaan investeren in ontwikkeling op een microcontroller.
 De ontwikkeling op een Raspberry Pi model 2B+ sluit aan op de requirements gesteld aan het project en wordt op wens van de student uitgevoerd in C++.
 
 
@@ -756,8 +770,15 @@ De ontwikkeling op een Raspberry Pi model 2B+ sluit aan op de requirements geste
 \label{sec:meshnetwerktechniek}
 
 Het netwerk wordt opgebouwd door het toepassen van een meshnetwerktechniek.
-Wat een meshnetwerk is wordt al toegelicht in \autoref{sec:meshnetwerkkeuze:watismesh}.
-Een kenmerkend eigenschap van een meshnetwerk is het hebben van meerdere verbindingspunten per router of gateway. Dit wordt opgezet door een routeringstechniek. Er zijn verschillende technieken met elk voor en nadelen. De technieken zijn te verdelen in drie groepen: proactieve, reactief en hybride \cite{meshprotocols}. Het verschil tussen deze technieken zit hem in ontdekken van andere nodes in het netwerk. In de hierop volgende paragrafen worden deze technieken kort toegelicht. Vervolgens zal besloten worden welke van deze drie het meest geschikt is voor de te gebruiken hardware. Tenslotte zal gekeken worden binnen die groep gekozen worden welk techniek uitgewerkt wordt.
+Wat een meshnetwerk is, wordt toegelicht in \autoref{sec:meshnetwerkkeuze:watismesh}.
+Een kenmerkend eigenschap van een meshnetwerk is het hebben van meerdere verbindingspunten per router of gateway.
+Dit wordt opgezet door een routeringstechniek.
+Er zijn verschillende technieken met elk voor en nadelen.
+De technieken zijn te verdelen in drie groepen: proactief, reactief en hybride \cite{meshprotocols}.
+Het verschil tussen deze technieken zit in hoe routes naar andere nodes in het netwerk toe gevonden worden.
+In de hierop volgende paragrafen worden deze technieken kort toegelicht. 
+Afsluitend zal besloten worden welke van deze drie het meest geschikt is voor de te gebruiken hardware.
+
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=0.6\linewidth]{Afbeeldingen/meshprotocollen.png}\end{center}
@@ -781,18 +802,20 @@ In situaties waar paden vaak veranderen door het veranderen van node posities za
 \end{figure}
 
 In \autoref{fig:proactief} wordt een voorbeeld getoond waar punt A een bericht wil versturen naar punt B en C. 
-Punt A is op de hoogte van alle routes in het netwerk net als de andere punten in het netwerk dat zijn.
+Punt A en alle andere punten in het netwerk zijn op de hoogte van alle routes in het netwerk.
 In de huidige situatie zijn er 21 verbindingen in het netwerk tussen de nodes.
 Er zijn 14 punten aanwezig in het netwerk minimaal zullen er dus voor het op de hoogte brengen van bestaande verbindingen 294 ($14 \times 21$) berichten rondgestuurd moeten worden. 
 
-Vervolgens kan er een pad gemaakt worden waarover een bericht verstuurd kan worden.
+Na introductie kan er een pad gemaakt worden waarover een bericht verstuurd kan worden.
 Dit voorbeeld laat goed zien dat deze routingstechniek zijn voordeel haalt wanneer de nodes stil blijven staan, omdat er dan niet opnieuw berichten verstuurd hoeven te worden. 
  
 \subsection{Reactieve routeringstechniek}
 \label{sec:meshnetwerktechniek:reactieve}
 
 Een reactieve routeringstechniek is een methode waarbij de nodes geen routes opslaan maar op aanvraag routes opbouwen. 
-Dit scheelt in het gebruik van geheugen en het heeft minder berichten bij het initialiseren van het netwerk. Daarentegen kost het deze techniek meer tijd om een bericht te versturen, omdat er voordat er een bericht verstuurd kan worden eerst een route opgebouwd moet worden.
+Dit scheelt in het gebruik van geheugen en het gebruikt minder berichten bij het initialiseren van het netwerk. 
+Daarentegen kost het deze techniek meer tijd om een bericht te versturen.
+Het kost meer tijd omdat er voordat er een bericht verstuurd kan worden eerst een route opgebouwd moet worden.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=0.45\linewidth]{Afbeeldingen/reactive.png}\end{center}
@@ -815,7 +838,9 @@ Een hybride routeringstechniek is een techniek die een proactieve en reactieve t
 	\label{fig:hybride}
 \end{figure}
 
-In dit voorbeeld is een hybride routeringstechniek uitgewerkt er zijn veel meer varianten aanwezig het voorbeeld is om te laten zien hoe reactief en proactief geactiveerd wordt.
+In dit voorbeeld is een hybride routeringstechniek uitgewerkt.
+Er zijn veel meer varianten aanwezig.
+Het voorbeeld is om te laten zien hoe reactief en proactief gecombineerd kan worden.
 In deze situatie is de gateway voorzien van een proactief protocol waardoor het alle routes kent. 
 De routers hoeven daardoor alleen een route te bereken naar een gateway toe.   
   
@@ -831,7 +856,7 @@ Daarom is de conclusie om een zelf een hybride variant te maken van het reactiev
 Dit protocol wordt gebruikt, omdat het een protocol is die een hop routeringstechniek gebruikt waardoor de payload klein blijft.
 De techniek is niet afhankelijk van een gateway en nodes hoeven alleen te bewust te zijn van de buren en met wie die buren verbonden zijn.
 Het protocol hoeft alleen maar aangepast te worden zodat routes opgeslagen blijven.
-Doordat deze techniek geen routes hoeft op te slaan van het volledige netwerk  maar allen die van hun aangesloten buren en hun aangesloten punten zullen er geen grote routeringstabellen gecreëerd worden.
+Doordat deze techniek geen routes hoeft op te slaan van het volledige netwerk  maar alleen die van hun aangesloten buren en hun aangesloten punten zullen er geen grote routeringstabellen gecreëerd worden.
 
  
 
@@ -839,8 +864,8 @@ Doordat deze techniek geen routes hoeft op te slaan van het volledige netwerk  m
 \section[minimaal benodigd om een abstracte drone te representeren]{Wat is minimaal benodigd in een simulatie om abstracte drone te representeren?}
 \label{sec:dronekeuze}
 
-In \autoref{sec:welkesim} is geconcludeerd dat als simulatiesoftware ROS melodic met Gazebo9 wordt gebruikt.
-Hierin kwam naar voren dat niet elke drone package gebruikt kan worden doordat ze specifiek gemaakt zijn voor de versie van ROS.
+In \autoref{sec:welkesim} is geconcludeerd dat als simulatiesoftware Ros melodic met Gazebo9 wordt gebruikt.
+Hierin kwam naar voren dat niet elke drone package gebruikt kan worden doordat ze specifiek gemaakt zijn voor de versie van Ros.
 Omdat het project de focus heeft op de werking van netwerkmodules voldoet een abstracte versie van een drone.
 Zo hoeft deze bijvoorbeeld op dit moment nog niet realistisch te vliegen.
 
@@ -852,19 +877,24 @@ Daarom is besloten dat de drone het volgende moet kunnen in de simulatie:
 	\item Een drone moet zich kunnen voortbewegen.
 	\item Een drone verplaatsing begint altijd met opstijgen en eindigt altijd met een landing.
 	\item Een drone moet voorzien zijn van module die een locatie kan teruggeven. 
-	\item Een drone moet mag een basisvorm gebruiken om zich zichtbaar te maken in de simulatie
+	\item Een drone mag een basisvorm gebruiken om zich zichtbaar te maken in de simulatie
 \end{itemize}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=0.45\linewidth]{Afbeeldingen/dronegroep.png}\end{center}
+	\caption{Groep van drones in de simulatie.}
+	\label{fig:abstractdrones}
+\end{figure}
 
 
 \chapter{Oplossingsrichtingen}
 
-
 In dit hoofdstuk worden oplossingsrichtingen beschreven die bijdragen aan het beantwoorden van de hoofdvraag. 
-Een logisch vervolg voor elke oplossingsrichting is dat deze vervolgt wordt in het \autoref{experimenten} \nameref{experimenten} om te bewijzen dat deze oplossingsrichting werkt.
+Eke oplossingsrichting wordt vervolgt in \autoref{experimenten} \nameref{experimenten} om de oplossingsrichting te testen.
 
 \section{Hybride Lightweight Mobile Routing}\label{sec:hybride-lightweight-mobile-routing}
 
-\autoref{sec:meshnetwerktechniek} heeft uitgewezen dat het implementeren van een aangepast versie van het LMR protocol aangeraden wordt als implementatie. In deze paragraaf wordt verdiepend behandeld hoe dit protocol werkt en wat er aangepast moet worden.
+\autoref{sec:meshnetwerktechniek} heeft uitgewezen dat het implementeren van een aangepast versie van het LMR protocol aangeraden wordt als implementatie. Deze paragraaf behandeld hoe dit protocol werkt en wat er aangepast moet worden.
 
 \subsection{Hoe werkt Lightweight Mobile Routing?}
 
@@ -908,7 +938,10 @@ De routes worden opgeslagen terwijl er alleen maar interesse is in de eerste sta
 In het voorbeeld van \autoref{fig:reversallmr} slaat A bijvoorbeeld route C-B-A en C-F-B-A op. 
 Beiden geven het zelfde effect bij het zoeken voor een een route naar C, het bericht moet aan B gegeven worden.
 
-Het idee om ruimte te bewaren is om twee soorten tabellen bij te houden. Een tabel van direct aangesloten punten waarbij elke aangesloten punt ook een eigen tabel heeft met punten waar deze directe buur mee kan communiceren. In het bovenstaande voorbeeld zou dit betekenen dat A alleen hoeft te weten dat hij via B met C en F kan communiceren. Dit bespaart ruimte in het opslaan van routes maar ook in de grote van berichten, nu hoeven er immers geen routes meer rondgestuurd te worden alleen notificaties van nieuwe verbindingen.
+Het idee, om ruimte te besparen, is om twee soorten tabellen bij te houden.
+Een tabel van direct aangesloten punten waarbij elke aangesloten punt ook een eigen tabel heeft met punten waar deze directe buur mee kan communiceren.
+In het bovenstaande voorbeeld zou dit betekenen dat A alleen hoeft te weten dat hij via B met C en F kan communiceren.
+Dit bespaart ruimte in het opslaan van routes maar ook in de grootte van berichten. Nu hoeven er immers geen routes meer rondgestuurd te worden, maar alleen notificaties van nieuwe verbindingen.
 
 Om te laten zien hoe deze implementatie zich vertaald naar een praktisch voorbeeld van een netwerk met een gateway en routers is er een extra afbeelding gemaakt te zien in \autoref{fig:routeringstabel}.
 
@@ -920,7 +953,11 @@ Om te laten zien hoe deze implementatie zich vertaald naar een praktisch voorbee
 
 In \autoref{fig:routeringstabel} wordt geïllustreerd hoe de routeringstabellen van een gateway en verschillende routers er uitzien.
 Een nadeel van de huidige implementatie is dat er geen rekening wordt gehouden met het kortste pad door het netwerk.
-Als in \autoref{fig:routeringstabel} bijvoorbeeld de gateway een bericht wil versturen naar router nummer 8 zal dit gebeuren via de weg 0-5-7-8 in plaats van de kortste weg 0-6-8. Dit komt omdat er eerst gekeken wordt of het bericht voor de geadresseerde een direct aangesloten punt is, als dat niet zo is worden de tabellen van de indirecte punten nagelopen. Omdat deze op numerieke volgorde de tabellen van externe punten nazoekt zal de tabel van punt 5 als eerste een routepunt geven.
+Als in \autoref{fig:routeringstabel} bijvoorbeeld de gateway een bericht wil versturen naar router nummer 8 zal dit gebeuren via de weg 0-5-7-8 in plaats van de kortste weg 0-6-8.
+Dit komt omdat er eerst gekeken wordt of het bericht voor een direct aangesloten punt is.
+Wanneer dat niet zo is worden de tabellen van de indirecte punten nagelopen. 
+De tabellen zijn gesorteerd op numerieke volgorde.
+Wanneer het algoritme de tabellen van externe punten nazoekt zal de tabel van punt 5 als eerste een routepunt geven.
 
 \subsection{Netwerk ondersteunen met heartbeats}
 
@@ -941,7 +978,9 @@ Het veranderen van de LMR door er heartbeat aan toe te voegen maakt de techniek 
 Zoals al eerder beschreven is een routeringstechniek die deels proactief is en deels reactief een hybride techniek.
 Vandaar dat deze techniek onder naam zal vallen hybride lightweight mobile routing (H-LMR).
 In de huidige implementatie of die van de originele LMR wordt geen rekening gehouden met het kortste pad.
-Op het moment dat dit wel wenselijk wordt kunnen de heartbeatberichten uit het netwerk gebruikt worden om het aantal hops te tellen die een bericht heeft ondergaan om zo te registreren hoever een node per punt verwijderd is. Een tegenzijde hiervan zou zijn dat er wel weer extra rekenkracht vereist wordt voor het zoeken van een pad.
+Op het moment dat dit wel wenselijk wordt kunnen de heartbeat berichten uit het netwerk gebruikt worden.
+Deze zijn inzetbaar om het aantal hops te tellen die een bericht heeft ondergaan om zo te registreren hoever een node per punt verwijderd is.
+Een keerzijde zou zijn dat er wel weer extra rekenkracht vereist wordt voor het zoeken van een pad.
 
 \section{Een stap terug voor netwerkherstel}\label{sec:drone-aansturing-een-stap-terug-voor-netwerkherstel}
 
@@ -1003,13 +1042,13 @@ Als de drone op locatie D staat kan hij een verbinding leggen met drone E waardo
 \end{figure}
 
 \paragraph{Uitval van een enkele drone die het indirecte aanknooppunt is voor de groep}
-Als punt E uitvalt zoals te zien in \autoref{fig:groep_E_kapot} zou alleen een berekening wie het verste van de gateway afstaat betekenen dat drone B zich zou verplaatsen naar de plek van drone D.
+Als punt E uitvalt zoals te zien in \autoref{fig:groep_E_kapot} zou alleen een berekening wie het verste van de gateway afstaat het effect hebben dat drone B zich moet verplaatsen naar de plek van drone D.
 Dit terwijl drone D nog gewoon werkt.
 Daarom zal er in de onderhandeling over wie zich moet verplaatsten worden meegenomen of er al een andere drone op de plek staat.
 Als dit zo is sluit de drone zichzelf buiten van de onderhandeling.
 In de situatie waar drone E uitvalt zal dit dus betekenen dat drone D zich naar de positie van E verplaatst.
 Vervolgens zullen de drones A-B-C alsnog geen verbinding hebben waardoor er opnieuw onderhandeld moet worden. 
-Het resultaat moet dan zijn dat B zich verplaatst naar de oude positie van B.  
+Het resultaat moet dan zijn dat B zich verplaatst naar de oude positie van D.  
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.8\linewidth]{Afbeeldingen/droneopstelling_GroepXL_een_kapot.png}\end{center}
@@ -1030,8 +1069,9 @@ Het effect zal zijn dat punt A, B en C zich eerste naar punt D zullen verplaatse
 \subsection{Conclusie}
 
 Het protocol om de drone een stap terug te laten zetten in het netwerk is een zwak protocol die wel gemakkelijk te implementeren is.
-Het is bedacht met het idee om te laten zien dat er potentie zit in het gebruiken van drones voor het bevorderen van het netwerken.
+Het is bedacht met het idee om te laten zien dat er potentie zit in het gebruiken van drones voor het bevorderen van het zelfherstellend vermogen van netwerken.
 De implementatie zal geen optimale verdeling bevorderen en geeft het netwerk alleen maar een kans om zich te herstellen op het moment dat er een enkele drone uitvalt.
+Desalniettemin toont het idee wel aan dat drones toepasbaar kunnen zijn voor het zelfherstellend vermogen.
 
 
 \chapter{Experimenten}
@@ -1100,7 +1140,7 @@ In de applicatie ziet dit er als volgt uit.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/testopstellingmetzes_debug_info_fusion.png}\end{center}
-	\caption{Applicatie gazebo waar zes routers en een gateway getoond worden samen met debug informatie.}
+	\caption{Applicatie Gazebo waar zes routers en een gateway getoond worden samen met debug informatie.}
 	\label{fig:applicatie-testopstelling-gateway-zes-routers}
 \end{figure}  
 
@@ -1164,7 +1204,7 @@ Er zijn genoeg scenario's getest om aan te tonen dat het netwerk zichzelf kan he
 \section[Netwerkherstel door beweging  drone]{Is het mogelijk voor netwerkmodule om een netwerk te herstellen door het de mogelijkheid te geven zich vrij te bewegen?}
 \label{experimenten:herstelnetwerk}
 
-In \autoref{sec:drone-aansturing-een-stap-terug-voor-netwerkherstel} wordt een voorstel gedaan voor het herstellen van het netwerk door drones een stap terug te laten nemen in het netwerk. Eerst wordt er kort toegelicht wat er toegevoegd moet worden aan de modules om dit mogelijk te maken. Vervolgens worden de bedacht scenario's test. Vervolgens zal in de conclusie een oordeel gegeven worden over de effectiviteit van het voorstel.
+In \autoref{sec:drone-aansturing-een-stap-terug-voor-netwerkherstel} wordt een voorstel gedaan voor het herstellen van het netwerk door drones een stap terug te laten nemen in het netwerk. Eerst wordt er kort toegelicht wat er toegevoegd moet worden aan de modules om dit mogelijk te maken. Vervolgens worden de bedachte scenario's getest.Tenslotte zal in de conclusie een oordeel gegeven worden over de effectiviteit van het voorstel.
 
 \subsection{Aanpassingen voor de software}
 In het voorstel wordt gesteld dat de drone terug moet vliegen naar het punt in het netwerk die een stap dichterbij de gateway is.
@@ -1202,7 +1242,7 @@ Dit zal gebeuren door gezamenlijk een tabel op te bouwen door de afstand uit te 
 	\label{tab:afstandtabelverplaatsing}
 \end{table}
 
-In \autoref{tab:afstandtabelverplaatsing} is een voorbeeld geven van een tabel waar dit overleg in gepleegd is. 
+In \autoref{tab:afstandtabelverplaatsing} wordt een voorbeeld gegeven van een tabel waar dit overleg gepleegd is. 
 Drone 5 en 3 hebben in dit tabel aangegeven dat verplaatsen voor hun geen zin heeft door een waarde van -1 te sturen sluiten ze zichzelf buiten.
 Door de tabel te sorteren, in dit geval van links naar rechts, kan elke drone kijken of hij het ID heeft van de eerste drone met een waarde boven 0. Als hij dit heeft wordt hij aangewezen om zich te verplaatsen.
 
@@ -1243,9 +1283,9 @@ In de video is te zien dat de drone die de grootste afstand tot de gateway verwi
 \paragraph{Test 2:} In de tweede test wordt de situatie nagebootst zoals deze wordt omschreven in \autoref{fig:groep_E_kapot}.
 Deze test is opgenomen en zichtbaar in bijlage \ref{sec:groep-verloren-drones-situatie-2mp4}
 
-In deze test is te zien dat de drone die zorgde voor de verbinding van de hele groep uitvalt. Vervolgens gebeurd er even niks omdat er onderling een overleg tot actie wordt gehouden. Dan zie je de drone die de andere drie drones verbind zich verplaatsen naar de drone die uitgevallen is.
+In deze test is te zien dat de drone die zorgde voor de verbinding van de hele groep uitvalt. Vervolgens gebeurd er even niks omdat er onderling een overleg tot actie wordt gehouden. Dan zie je de drone die de andere drie drones verbind, zich verplaatsen naar de drone die uitgevallen is.
 In de debugging zie je deze drone online komen terwijl de andere drie drones die achtergelaten zijn opnieuw overleg gaan plegen. 
-Vervolgens zie je de uiterste drone zich verplaatsen naar de plek waar hun aankooppunt eerst stond waarna alle drone vervolgens weer een verbinding opbouwen. Deze test is dus naar verwachting verlopen en het netwerk heeft zich herstelt.
+Vervolgens zie je de uiterste drone zich verplaatsen naar de plek waar hun aankooppunt eerst stond waarna alle drones vervolgens weer een verbinding opbouwen. Deze test is dus naar verwachting verlopen en het netwerk heeft zich herstelt.
 
 \paragraph{Test 3:} In de eerste test wordt de situatie nagebootst zoals deze wordt omschreven in \autoref{fig:groep_B_C_kapot}.
 Deze test is opgenomen en zichtbaar in bijlage \ref{sec:groep-verloren-drones-situatie-3mp4}
@@ -1254,10 +1294,10 @@ In de laatste test is te zien hoe twee drones worden uitgezet die samen de verbi
 Op het moment dat de groep gedetecteerd heeft dat hun verbindingspunt is uitgevallen verplaatsen zij zich stuk voor stuk naar dit punt toe.
 Vervolgens verplaatsen ze zich in dezelfde volgorde naar de gateway toe.
 
-Hoewel de uitvoer van deze test anders iets ander liep dan verwacht is het resultaat hetzelfde.
+Hoewel de uitvoer van deze test anders ander liep dan verwacht is het resultaat hetzelfde.
 De verwachting was dat de drones zich niet zouden verplaatsen naar de plek van een actieve drone.
 Omdat er alleen locaties worden opgevraagd van actieve drones die een verbinding hebben met een gateway zijn de drones zich niet van bewust hoe ze rekening moeten houden elkaars positie wanneer er geen verbinding is.
-Het resultaat moest zijn dat alle drones terugkeren naar de gateway is behaald.
+Het resultaat dat alle drones terugkeren naar de gateway is behaald.
 
 \subsection{Conclusie}
 
@@ -1275,7 +1315,7 @@ Positieve punten van het protocol zijn:
 De negatief punten van het protocol:
 \begin{itemize}
 	\item Op het moment dat twee drones uitvallen zullen er complete takken van het netwerk terugkeren naar de gateway.
-	\item Het algoritme is sloom doordat er telkens gewacht moet worden of de verplaatsing de oplossing is geweest voor het probleem.
+	\item Het algoritme is sloom omdat er telkens gewacht moet worden of de verplaatsing de oplossing is geweest voor het probleem.
 	\item Voordat een groep terugkeert verzamelen ze zich eerst. Een voorstel is om direct een bericht te versturen naar de groep dat de verplaatsing geen zin had en iedereen mag terugkeren.
 	\item Het overleg wordt gebaseerd op afstand tot de gateway. Als er bijvoorbeeld uitrol is van drones die verdeelt zijn in een hoefijzer gaat dit problemen opleveren omdat de afstand dan juist kleiner is.
 \end{itemize} 
@@ -1289,7 +1329,7 @@ Hoe dit gedaan is en de resultaten worden hieronder beschreven.
 
 \subsection{De testopstelling}
 
-De inzet van de drones heeft het initieel idee om ingezet te worden in gebied waar geen ander signaal mogelijk is voor een netwerk. 
+De inzet van de drones heeft het initieel het idee om ingezet te worden in een gebied waar geen ander signaal mogelijk is voor een netwerk. 
 In Nederland is het bijna onmogelijk om een gebied te vinden die toegankelijk is voor de student waar geen mobiel netwerk aanwezig is.
 Wel is het zo dat de mobiele netwerken in een andere band zitten dan de \SI{2,4}{\giga\hertz} verbinding die de nRF24l01+ gebruikt \cite{telefoonBand}. Daarom zal het de test niet storen. 
 Om te kunnen testen in een gebied waar geen apparatuur is die wel op deze band stoort is er gekozen voor een weiland in het buitengebied te zien in \autoref{fig:testgebied}.
@@ -1323,7 +1363,7 @@ Er is een test uitgevoerd waarbij er een netwerkmodule 1000 pakketten verstuurd 
 \subsection{Resultaten}
 
 In de bijlage \ref{app:testresultaten-lange-afstandtest-nrf24l01} zijn de exacte resultaten van de test terug te vinden.
-Deze resultaten zijn verwerkt in de volgende grafiek te zien in:
+Deze resultaten zijn verwerkt de grafiek te zien in \autoref{fig:grafiektestresultaten }
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=1\linewidth]{Afbeeldingen/meetresultaten.png}\end{center}
@@ -1337,12 +1377,15 @@ Bij 500 meter verliest de module gemiddeld 28,55 van de 1000 pakketen waarbij de
 Dit houdt in dat er dus gemiddeld 2,85 procent pakketten verloren gaan met een uitschieter van 4,1 procent.
 Daarmee wordt de eis behaald van een maximum van 5 procent verlies. 
 
-Wat ook een interessante trend is in de grafiek is dat hoewel de snelheid vanaf 300 meter afneemt, de delay pas toeneemt bij 500 meter. Er is onvoldoende onderzoek aanwezig om te onderbouwen waarom dit is. Een hypothese is dat de boom die niet direct in het zich staat maar wel aanwezig is na 500 meter invloed heeft op het signaal. Dit omdat het signaal die tegen de boom aankomt ook terug zal reflecteren waardoor het kan storen.  
+Een interessante trend in de grafiek is dat hoewel de snelheid vanaf 300 meter afneemt, de delay pas toeneemt bij 500 meter. 
+Er is onvoldoende onderzoek aanwezig om te onderbouwen waarom dit is.
+Een hypothese is dat de boom die niet direct in het zicht staat maar wel aanwezig is na 500 meter invloed heeft op het signaal. 
+Dit omdat het signaal die tegen de boom aankomt ook terug zal reflecteren waardoor het kan storen.  
 
 
 \chapter{Conclusie}
 \label{chapter:conclusie}
-In dit hoofstuk wordt een conclusie getrokken op de vraag: Hoe kunnen een netwerkmodules een groep van ongeveer honderd drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?
+In dit hoofdstuk wordt een conclusie getrokken op de vraag: Hoe kunnen een netwerkmodules een groep van ongeveer honderd drones voorzien van een onderling meshnetwerk die snel reageert op uitval van netwerkpunten?
 
 Dit wordt vervolgt met een advies die voortvloeit uit de kennis van dit verslag.
 
@@ -1350,18 +1393,19 @@ Dit wordt vervolgt met een advies die voortvloeit uit de kennis van dit verslag.
 
 Uit de resultaten van dit onderzoek is gebleken dat door het combineren van een drone met een controller die zelfstandig kan opereren, een meshnetwerk opgezet kan worden van honderd drones. De controller moet toegang hebben tot een antenne voor onderlinge communicatie waarbij het advies is om gebruik te maken van een \nameref{sec:nrf24l01} vanwege zijn bereik en snelheid. Het onderzoek heeft de fase bereikt waarin de nRF24l01+ module aangesloten op een Raspberry Pi met de ontwikkelde software getest is maar nog wel in de kinderschoenen staat. 
 
-Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is de mogelijkheid voor de individuele netwerkpunten dat deze in staat zijn te kunnen verifiëren dat een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway waarmee routes onderhouden worden. 
+Om het netwerk te kunnen opbouwen en onderhouden wordt een aangepaste variant van de reactieve routeringstechniek LMR toegepast. Belangrijk bij het gebruiken van deze techniek is dat de individuele netwerkpunten in staat zijn te kunnen verifiëren dat er een verbinding bestaat. De routeringstechniek is aangepast zodat deze zich enigszins proactief gedraagt door het versturen van heartbeats naar de gateway waarmee routes onderhouden worden. 
 
 \section{Advies}
 Het advies uit dit onderzoek luidt als volgt:
 
 Op het moment dat Alten besluit om drones in te gaan zetten voor het verspreiden van netwerken zal zij zich bewust moeten zijn van haar plan voor dit netwerk.
-Het aangepast LMR protocol is geschikt voor een netwerk waarbij de drones zich verspreiden over een gebied en zich maar incidenteel verplaatsen naar een ander punt.
+Het aangepaste LMR protocol is geschikt voor een netwerk waarbij de drones zich verspreiden over een gebied en zich incidenteel verplaatsen naar een ander punt.
 Dit is zo gemaakt omdat dit zo aangegeven is door Alten.
-Op het moment dat Alten besluit dat de drone een andere gedrag moeten krijgen zoals bijvoorbeeld swarming dan is het protocol ongeschikt en is het advies om te kijken naar een reactief protocol die altijd nieuwe paden berekend.
-Hetzelfde geldt als Alten besluit dat de drones altijd op een zelfde positie zullen staan, dan zal een proactief protocol een beter alternatief zijn om zo berichten over het kortste pad te kunnen sturen.    
+Op het moment dat Alten besluit dat de drones een andere gedrag krijgen zoals swarming dan is het protocol ongeschikt en is het advies om te kijken naar een reactief protocol die altijd nieuwe paden berekend.
+Als Alten besluit dat de drones altijd op een zelfde positie zullen staan, dan zal een proactief protocol een beter alternatief zijn om zo berichten over het kortste pad te kunnen sturen.    
 
-Dit onderzoek heeft daarnaast aangetoond dat de simulatiesoftware gebruikt kan worden voor het testen van geautomatiseerde herverdelingen bij uitval van netwerkpunten. Het advies luidt wel om het huidige geïmplementeerde herstelprotocol niet te gebruiken, aangezien deze kritieke negatieve kenmerken heeft. 
+Dit onderzoek heeft daarnaast aangetoond dat de simulatiesoftware gebruikt kan worden voor het testen van geautomatiseerde herverdelingen bij uitval van netwerkpunten. 
+Het advies is wel om het huidig geïmplementeerde herstelprotocol niet te gebruiken, aangezien deze te veel negatieve kenmerken heeft. 
 
 \bibliographystyle{apacite}
 \bibliography{bilbliography.bib}
