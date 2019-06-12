@@ -184,7 +184,7 @@ Daarnaast is er een fysiek prototype opgeleverd van een netwerkmodule die zich g
 %	Router & Netwerkcomponent die berichten kan doorsturen. \\ \hline
 	Routeringstechniek & \begin{tabular}[c]{@{}l@{}}Techniek die gebruikt voor het opbouwen van een pad binnen\\ een netwerk.\end{tabular} \\ \hline
 	RQT & Programma aangeboden door Ros voor aansluiting op Ros nodes. \\ \hline
-	SDF & \begin{tabular}[c]{@{}l@{}}XML format gebruikt voor het inladen van objecten en werelden\\ in gazebo\end{tabular} \\ \hline
+	SDF & \begin{tabular}[c]{@{}l@{}}XML format gebruikt voor het inladen van objecten en werelden\\ in Gazebo\end{tabular} \\ \hline
 	Seriële verbinding & Een communicatieverbinding het meest bekend van USB. \\ \hline
 	Simulatie software & Software die fysieke objecten nabootst in software. \\ \hline
 %	Unittest & Geautomatiseerde test die functie test op resultaat. \\ \hline
@@ -476,7 +476,7 @@ Omdat er al een template aanwezig was heb ik mij volop kunnen concentreren op wa
 \section{Template Vector3 class}
 
 Tijdens het bouwen van de software van het netwerkcomponent is er begonnen met het maken van software voor de simulatie.
-Vanuit gemak is er op dat moment gebruik gemaakt van de bestaande Vector3 die meegeleverd wordt met ROS \cite{ignitionVector}.
+Vanuit gemak is er op dat moment gebruik gemaakt van de bestaande Vector3 die meegeleverd wordt met Ros \cite{ignitionVector}.
 Op dat moment was het een makkelijke oplossing zodat er snel verder gewerkt kon worden. 
 
 Later toen de software ook moest draaien op een Raspberry Pi kwam de afhankelijkheid terug naar voren die gecreëerd was.
@@ -516,7 +516,7 @@ Een uitdraai van de de unittesten is terug te vinden in bijlage \ref{sec:resulta
 \section{CMake}
 Aan het einde van het project heeft de gesimuleerde software de overstap gemaakt naar het fysieke prototype. 
 Hiervoor moest de code gecompileerd worden op een Raspberry Pi.
-In de simulator werd ik als ontwikkelaar natuurlijk al een beetje verwend door het standaard aanwezige catkin  in ros.
+In de simulator werd ik als ontwikkelaar natuurlijk al een beetje verwend door het standaard aanwezige catkin  in Ros.
 Voor het compileren van de code op de Raspberry Pi kwam ik eerst nog weg door telkens een lang commando in te voeren waarmee het router programma werd aangemaakt.
 Later toen er ook nog een gateway programma aangemaakt moest worden heb ik besloten om een overstap te maken naar CMake \cite{cmake}.
 
