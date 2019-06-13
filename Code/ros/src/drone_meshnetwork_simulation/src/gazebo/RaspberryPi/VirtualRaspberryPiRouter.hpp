@@ -14,8 +14,8 @@
 #include "IVirtualRaspberryPi.hpp"
 
 #include "../../Communication/Meshnetwork/MeshnetworkRouter.hpp"
-#include "../../ros/RosDroneEngineConnector.hpp"
 #include "../../Communication/RoutingTechnique/HybridLMRoutingProtocol.hpp"
+#include "../../ros/RosDroneEngineConnector.hpp"
 #include "../../ros/WirelessSimulation/VirtualNRF24.hpp"
 
 namespace gazebo
@@ -40,7 +40,6 @@ namespace RaspberryPiSimulation
    *
    */
   void StartSoftware( );
-
 
  private:
   /// \brief The nodeID for the gateway

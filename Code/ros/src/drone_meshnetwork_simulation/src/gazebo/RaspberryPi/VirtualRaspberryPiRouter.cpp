@@ -30,7 +30,7 @@ namespace RaspberryPiSimulation
  }
 
  void VirtualRaspberryPiRouter::Load( physics::ModelPtr _parent,
-                                  sdf::ElementPtr _sdf )
+                                      sdf::ElementPtr _sdf )
  {
   // Store the pointer to the model
   this->model = _parent;
@@ -60,7 +60,6 @@ namespace RaspberryPiSimulation
       nodeID, droneID, debug, routing, engine, NRF24 );
   meshnetworkRouter->Init( );
  }
-
 
 }  // namespace RaspberryPiSimulation
 

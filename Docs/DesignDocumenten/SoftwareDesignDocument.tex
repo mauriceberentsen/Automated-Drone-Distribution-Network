@@ -116,15 +116,15 @@
 \chapter{Inleiding}
 \label{inleiding}
 Het volgende verslag betreft de Software Requirements Specification voor de afstudeerstage van Maurice Berentsen (hierna: student).
-Dit document volgt het document: \textit{``Software Design Description Template``} \cite{template:sdd}
+Dit document volgt het document: \textit{``Software Design Description Template''} \cite{template:sdd}
 
-Het beschrijft de hoe de uiteindelijke applicatie eruit zal zien en wat de functionaliteit hiervan zal zijn. Op de manier is het voor de student, maar ook voor de betrokken partijen, duidelijk wat er gerealiseerd zal worden. Het verduidelijk de werking van de subcomponenten en de onderlinge relaties. 
+Het beschrijft hoe de uiteindelijke applicatie eruit zal zien en wat de functionaliteit hiervan zal zijn. Op deze manier is het voor de student, maar ook voor de betrokken partijen, duidelijk wat er gerealiseerd zal worden. Dit document verduidelijkt de werking van de componenten en de onderlinge relaties. 
 
 \section{Leeswijzer}
 \label{inleiding:beschrijving:leeswijzer}
 Eerst zal een korte beschrijving gegeven worden van het doel van dit document.
 Daarna wordt er met een tabel een begrippenlijst toegelicht.
-In het tweede hoofdstuk is als eerste een component diagram te vinden waarin de functionaliteit van de verschillende componenten te vinden is en de manier waarop deze componenten met elkaar communiceren.
+In het tweede hoofdstuk is als eerste een package diagram te vinden waarin de functionaliteit van de verschillende componenten te vinden is en de manier waarop deze componenten met elkaar communiceren.
 Vervolgens is de algemene flow van het programma te zien, hierin wordt duidelijk welke stappen er onder water worden genomen als er een bepaalde actie wordt uitgevoerd.
 In hoofdstuk drie worden alle subsystemen duidelijk uitgewerkt en worden de ontwerpen van deze systemen uitgewerkt. 
 \chapter*{Begrippenlijst}
@@ -151,11 +151,11 @@ In hoofdstuk drie worden alle subsystemen duidelijk uitgewerkt en worden de ontw
 	Physics engine & Software die natuurwetten toepast op virtuele objecten. \\ \hline
 	\begin{tabular}[c]{@{}l@{}}Raspeberry Pi \\ model 2B+\end{tabular} & Micro computer geschikt voor prototyping. \\ \hline
 	Ros & \begin{tabular}[c]{@{}l@{}}Robot operating system. Wordt gebruikt voor de transportlaag \\ naar zowel virtuele als gesimuleerde robots.\end{tabular} \\ \hline
-	Rosservice & Een request response mechanisme gebruikt door ros nodes. \\ \hline
-	Rostopic & Publicatie voor het gebruik van een subscriber patroon binnen ros. \\ \hline
+	Rosservice & Een request response mechanisme gebruikt door Ros nodes. \\ \hline
+	Rostopic & Publicatie voor het gebruik van een subscriber patroon binnen Ros. \\ \hline
 	Router & Netwerkcomponent die berichten kan doorsturen. \\ \hline
 	Routeringstechniek & \begin{tabular}[c]{@{}l@{}}Techniek die gebruikt voor het opbouwen van een pad binnen\\ een netwerk.\end{tabular} \\ \hline
-	RQT & Programma aangeboden door ros voor aansluiting op ros nodes. \\ \hline
+	RQT & Programma aangeboden door Ros voor aansluiting op Ros nodes. \\ \hline
 	SDF & \begin{tabular}[c]{@{}l@{}}XML format gebruikt voor het inladen van objecten en werelden\\ in Gazebo\end{tabular} \\ \hline
 	Seriële verbinding & Een communicatieverbinding het meest bekend van USB. \\ \hline
 	Simulatie software & Software die fysieke objecten nabootst in software. \\ \hline
@@ -166,10 +166,12 @@ In hoofdstuk drie worden alle subsystemen duidelijk uitgewerkt en worden de ontw
 
 \chapter{Architectural Overview}
 \label{architectural}
-In het component diagram \autoref{fig:componentdiagram} op de volgende pagina is te zien dat bepaalde componenten voorzien zijn van een andere kleur. 
-De groene kleur betekend dat het component voorzien is door Gazebo.
-De rode en blauw kleur zijn gegeneerd door ROS, waarbij de rode een rosservice zijn en de blauwe een rostopic.
-Op het hoogste niveau is het diagram te verdelen in vier pakketten.
+In het package diagram \autoref{fig:packagediagram} op de volgende pagina is te zien dat bepaalde onderdelen voorzien zijn van een andere kleur. 
+De groene kleur betekend dat het voorzien is door een externe libary.
+De rode en blauw kleur zijn gegeneerd door Ros, waarbij de rode een rosservice zijn en de blauwe een rostopic.
+Op het hoogste niveau is het diagram te verdelen in zeven pakketten.
+De worden eerst beschreven.
+Na het package diagram zal elke interface kort toegelicht worden
 
 \section{Hoofdgroepen}
 
@@ -178,30 +180,33 @@ Het heeft de intelligentie om het netwerk in kaart te brengen en te routeren.
 Daarnaast is het in staat om een beslissing te nemen om een verzoek te sturen om de drone te verplaatsen.
 Tenslotte bevat het meerdere berichten die gebruikt om het netwerk te kunnen onderhouden en op te bouwen.    
 
-\textbf{Drone} is op dit moment een leeg component waar alleen een high level interface aanwezig is die de mogelijkheid biedt om de huidige locatie van een drone terug te geven of een nieuwe locatie als doel te geven aan de drone. 
+\textbf{Raspberry} is het pakket die de software voor een Raspberry Pi onderscheid in twee rollen. Een Raspberry Pi kan de rol van gateway hebben of de rol van router in het meshnetwerk.
 
 \textbf{Gazebo} is de plek waar de virtualisatie van de drone plaats vindt.
 Er kunnen virtuele router of gateway drones gemaakt worden die voorzien zijn van een virtuele Raspberry Pi ingeladen met de juiste software en een virtuele drone motor.
 Deze worden als model plug-in gekoppeld aan de drone in een gesimuleerde wereld waar Gazebo vervolgens physics op de drones kan uitvoeren. 
 
-\textbf{ROS} is de groep waar de simulatie van de communicatie plaats vindt.
+
+\textbf{Vector} is een package waar alleen een Vector3 template class in zit. Deze wordt gebruikt om te rekenen met punten in de wereld. 
+
+\textbf{Ros} is de groep waar de simulatie van de communicatie plaats vindt.
 Er is een virtuele NRF24 om te communiceren met andere nodes in het netwerk.
 De aanwezige WirelessSignalSimulator zorgt dat dit realistisch gebeurd door alleen communicatie uit te voeren als dit volgens de voorwaarden mag.
 Dit bepaald de simulator met informatie die het krijgt van Gazebo en de NRF.
-Tenslotte is er een DroneManager aanwezig die een interface aanbiedt via ros voor de ontwikkelaar om verbinding te maken met de gateways uit het netwerk.
+Tenslotte is er een DroneManager aanwezig die een interface aanbiedt via Ros voor de ontwikkelaar om verbinding te maken met de gateways uit het netwerk.
 
-\textbf{Raspberry Pi} is het component die zich onderscheid in twee rollen, een Raspberry Pi kan de rol van gateway hebben of de rol van router in het meshnetwerk.
+\textbf{REST gateway} is het deel die verantwoording neemt voor het kunnen aanbieden van een REST service naar de gateway toe.
 
 \textbf{NRF24} is het gebruikte component om draadloze communicatie mogelijk te maken. Het is voorzien van een driver in de vorm van een low level interface en biedt zich aan via een high level interface voor communicatie.
 
-Na het component diagram zal elke subcomponent kort toegelicht worden
+
 
 
 \begin{landscape}
 	\begin{figure}[p]%
-		\includegraphics[width=\linewidth]{Afbeeldingen/ComponentDiagram.png}%
-		\caption{Globale component diagram.}
-			\label{fig:componentdiagram}
+		\includegraphics[width=.85\linewidth]{Afbeeldingen/PackageDiagram.png}%
+		\caption{Package diagram.}
+			\label{fig:packagediagram}
 	\end{figure}%
 \clearpage
 \end{landscape}
@@ -218,11 +223,11 @@ Deze high level interface wordt gebruikt voor het leggen van een verbinding naar
 Deze interface wordt gebruikt voor het ontvangen van commando's via een verbinding met een extern punt buiten het netwerk. Op dit moment is er alleen een functie aanwezig voor het verzoeken van een drone verplaatsing
 \subsection{IWirelessCommunication}
 \label{architectural:interfaces:IWirelessCommunication}
-In deze interface wordt de functionaliteit gesteld waar een draadloos communicatiemiddel aan moet voldoen. Het bevat functies om een antenne te starten en te stoppen. Het versturen van een bericht naar een specifiek punt of het zenden naar elke punt in de buurt. Er is een functie aanwezig om wanneer mogelijk debugging te gebruiken. Tenslotte moet een aansluitend component met deze interface moeten kunnen teruggeven of deze aan of uit staat.
+In deze interface wordt de functionaliteit gesteld waar een draadloos communicatiemiddel aan moet voldoen. Het bevat functies om een antenne te starten en te stoppen. Het versturen van een bericht naar een specifiek punt of het zenden naar elke punt in de buurt. Er is een functie aanwezig om debugging te gebruiken. Tenslotte moet een aansluitend component met deze interface moeten kunnen teruggeven of deze aan of uit staat.
 
 \subsection{IMeshNetwork}
 \label{architectural:interfaces:IMeshNetwork}
-Deze interface wordt aangeboden om een aangesloten draadloos communicatie middel de mogelijkheid te geven om berichten door te kunnen geven aan het \nameref{architectural:subcomponenten:MeshnetworkComponent} en het ID van dit component kenbaar te maken.
+Deze interface wordt aangeboden om een aangesloten draadloos communicatie middel de mogelijkheid te geven berichten door te kunnen geven aan het \nameref{architectural:subcomponenten:MeshnetworkComponent} en het ID van dit component kenbaar te maken.
 
 \subsection{IMeshDebugInfo}
 \label{architectural:interfaces:IMeshDebugInfo}
@@ -231,11 +236,11 @@ Deze interface wordt aangeboden om een verzameling variabelen openbaar te maken 
 \subsection{NRF24HighLevelInterface}
 \label{architectural:interfaces:NRF24HighLevelInterface}
 
-Deze high level interface is de aangeboden interface van de NRF24 en voldoet aan de interface \nameref{architectural:interfaces:IWirelessCommunication}. Het praat direct met de driver van de NRF24.  
+Deze high level interface is de aangeboden interface van de NRF24l01+ en voldoet aan de interface \nameref{architectural:interfaces:IWirelessCommunication}. Het praat via de low level interface met de RF24 libary.  
 
 \subsection{NRF24LowLevelInterface}
 \label{architectural:interfaces:NRF24LowLevelInterface}
-Deze low level interface is de driver van de NRF24
+De low level interface is het directe aansluitpunt met de RF24 libary
 
 
 \subsection{IDroneEngine}
@@ -254,8 +259,8 @@ Tenslotte is er functie aanwezig die aangeroepen wordt zodra een drone zich verp
 
 \section{Ros topics en services}
 \label{architectural:ros}
-Zoals al eerder benoemd wordt er gebruik gemaakt van de transportlaag van ROS. Dit wordt gedaan in de vorm van Ros topics en services. Hieronder worden de messages en services kort toegelicht.
-%ROS SERVICES
+Zoals al eerder benoemd wordt er gebruik gemaakt van de transportlaag van Ros. Dit wordt gedaan in de vorm van Ros topics en services. Hieronder worden de messages en services kort toegelicht.
+%Ros SERVICES
 \subsection{RequestGatewayDroneFlight}
 \label{architectural:ros:service:RequestGatewayDroneFlight}
 Via deze aangeboden service is het mogelijk om een verzoek te sturen naar de gateway voor een verplaatsing. In het verzoek moet het nodeID en locatie zitten.
@@ -267,7 +272,7 @@ Deze service maakt het mogelijk om een casus posities door te sturen naar de dro
 
 \subsection{PowerSwitch}
 \label{architectural:ros:service:PowerSwitch}
-Via deze simpele service kan een \nameref{architectural:subcomponenten:VirtualNRF24} aan of uit gezet worden.
+Via deze service kan een \nameref{architectural:subcomponenten:VirtualNRF24} aan of uit gezet worden.
 
 \subsection{WirelessMessageRequest}
 \label{architectural:ros:service:WirelessMessageRequest}
@@ -282,7 +287,7 @@ Dit is nodig om een algemene zending naar iedereen binnen bereik mogelijk te mak
 \label{architectural:ros:service:RequestGPS}
 Deze service wordt aangeboden door de \nameref{architectural:subcomponenten:DroneEngine} en biedt de mogelijkheid om de huidige locatie van een drone op te vragen. 
 
-%ROS TOPICS
+%Ros TOPICS
 \subsection{RequestGatewayDroneFlight}
 \label{architectural:ros:topic:RequestGatewayDroneFlight}
 Dit topic wordt gebruikt om locatieverplaatsingverzoeken op te publiceren. 
@@ -297,22 +302,28 @@ Een \nameref{architectural:subcomponenten:VirtualNRF24} luistert naar dit topic 
 
 \subsection{Location}
 \label{architectural:ros:topic:Location}
-Het location topic representeert de verbinding die een \nameref{architectural:subcomponenten:MeshnetworkComponent} zou hebben met een drone op doelen op te versturen waar de Drone heen moet vliegen. 
+Het location topic representeert de verbinding die een \nameref{architectural:subcomponenten:MeshnetworkComponent} zou hebben met een drone. Dit topic wordt gebruikt om doelen op te versturen waar de drone naartoe moet. 
 
 \subsection{DroneInfo}
 \label{architectural:ros:topic:DroneInfo}
 Dit topic is onmisbaar voor de \nameref{architectural:subcomponenten:WirelessSignalSimulator}. De informatie die hierop gepubliceerd wordt bevat informatie over de locatie van een \nameref{architectural:subcomponenten:VirtualNRF24} of die aan staat en naar welk \nameref{architectural:ros:topic:NRF24} topic deze luistert.
+
+\subsection{RestCommands}
+\label{architectural:rest:RestCommands}
+Deze interface wordt via een Rest service aangeboden. 
+Hiermee wordt het mogelijk om vanuit een extern punt commando's naar de gateway te versturen.
+
 
 \chapter{Detailed Design Description}
 \label{DetailedDesign}
 
 \section{Deployment Diagram}
 \label{DetailedDesign:deployment}
-In dit deployment diagram staan de executables (ROS nodes) die opgestart worden door de verschillende launch files, daarnaast zijn ook de twee executables meegenomen die gebruikt worden op de Raspberry Pi's
+In dit deployment diagram staan de executables (Ros nodes) die opgestart worden door de verschillende launch files, daarnaast zijn ook de twee executables meegenomen die gebruikt worden op de Raspberry Pi's
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{UML/out/DeploymentDiagram/DeploymentDiagram/DeploymentDiagram.png}\end{center}
-	\caption{deployment diagram drone meshnetwerk.}
+	\caption{Deployment diagram drone meshnetwerk.}
 	\label{fig:deploymentdiagram}
 \end{figure}
 
@@ -388,15 +399,15 @@ Dit bericht wordt gebruikt om de verbinding met anderen te onderhouden. Dit beri
 
 \subsubsection{IntroduceMessage}
 \label{architectural:subcomponenten:IntroduceMessage}
-Een introductie bericht wordt gebruikt door een node om schik voor te stellen aan alle andere nodes die dichtbij zijn. 
+Een introductie bericht wordt gebruikt door een node om zich voor te stellen aan alle andere nodes die dichtbij zijn. 
 
 \subsubsection{LocationMessage}
 \label{architectural:subcomponenten:LocationMessage}
-Dit bericht wordt gebruikt om de huidige locatie van een node door te sturen naar een ander.
+Dit bericht wordt gebruikt om de huidige locatie van een node door te sturen naar een andere node.
 
 \subsubsection{MissingMessage}
 \label{architectural:subcomponenten:MissingMessage}
-Zodra een \nameref{architectural:subcomponenten:MeshnetworkComponent} de verbinding verliest met een ander gebruikt hij dit bericht om andere daarover te informeren.
+Zodra een \nameref{architectural:subcomponenten:MeshnetworkComponent} de verbinding verliest met een node gebruikt hij dit bericht om andere nodes daarover te informeren.
 
 \subsubsection{MovementNegotiationMessage}	
 \label{architectural:subcomponenten:MovementNegotiationMessage}
@@ -404,11 +415,11 @@ Om onderling te onderhandelen tussen de nodes wie er actie moet ondernemen wordt
 
 \subsubsection{RoutingTechnique}
 \label{architectural:subcomponenten:RoutingTechnique}
-Dit component voorziet het meshnetwerk van een routing techniek wat dus inhoudt dat dit het component is die de communicatieroutes opbouwt naar andere punten in het netwerk.
+Dit component voorziet het meshnetwerk van een routingstechniek wat dus inhoudt dat dit het component is die de communicatieroutes opbouwt naar andere punten in het netwerk.
 
 \subsubsection{LightweightMobileRoutingProtocol}
 \label{architectural:subcomponenten:LightweightMobileRoutingProtocol}
-Deze techniek is een hybride meshnetwerk routing techniek waarbij een node de buren die deze heeft ziet als een kind.
+Deze techniek is een hybride meshnetwerk routeringstechniek waarbij een node de buren die deze heeft ziet als een kind.
 Als een node een nieuw kind heeft vertelt hij dit aan zijn buren.
 Omdat een node door zijn buren ook gezien wordt als kind registreren deze zijn nieuwe kind dus als kleinkind.
 Hierdoor hoeft een node alleen maar te zoeken aan wie welk kind hij een bericht hoeft door te geven. 
@@ -438,7 +449,7 @@ const uint8_t getNodeID( ) const;
 \end{lstlisting}
 
 \subparagraph{OnMsg}
-Deze functie geeft een antenne toegang tot een meshcomponent om berichten door te geven. Het bericht wordt opgegeven met een adresverwijzing tot de array waar het bericht in staat
+Deze functie geeft een antenne toegang tot een meshcomponent om berichten door te geven. Het bericht wordt doorgegeven met een adresverwijzing naar de array waar het bericht in staat
 
 \textbf{\textit{preconditie:}} Het meshcomponent heeft een thread gestart voor bericht afhandeling.
 
@@ -470,7 +481,7 @@ Deze functie laat de aangesloten gateway een verzoek doen tot het verplaatsen va
 \subsubsection{Intern aangeboden interface beschrijvingen}
 \label{DetailedDesign:CommunicatieComponentDiagram:interface:intern}
 
-Intern worden er twee interfaces aangeboden. Het MeshnetworkComponent biedt een interface IRoutingEssentials aan waar basale communicatie functies in zitten om routeringstechnieken mogelijk te maken.  Ook wordt er een interface IRoutinTechnique door het subcomponent RoutingTechnique aangeboden.
+Intern worden er twee interfaces aangeboden. Het MeshnetworkComponent biedt een interface IRoutingEssentials aan waar basale communicatie functies in zitten om routeringstechnieken mogelijk te maken.  De andere interface IRoutinTechnique wordt door het subcomponent RoutingTechnique aangeboden.
 
 \paragraph{IRoutingEssentials}
 
@@ -494,9 +505,9 @@ Deze functie wordt aangeroepen om het component te verzoeken om te kijken of er 
 \subparagraph{sendHeartbeat}
 Door het aanroepen van deze functie wordt er een hearbeat verzonden van het component naar een node met het opgegeven ID in de parameter.
 
-\textbf{\textit{preconditie:}} Geadresseerde is bekend bij de routing techniek.
+\textbf{\textit{preconditie:}} Geadresseerde is bekend bij de routeringstechniek.
 
-\textbf{\textit{postconditie:}} Routing techniek geeft terug welk adres het vervolg adres is voor het bericht.
+\textbf{\textit{postconditie:}} Routingstechniek geeft terug welk adres de volgende stap is voor het bericht.
 
 \paragraph{IRoutingTechnique}
 
@@ -528,33 +539,33 @@ const std::set< uint8_t > getSetOfChildren( );
 const bool empty( );
 \end{lstlisting}
 \subparagraph{getDirectionToNode}
-Deze functie is de functie waar de aanvragende interface het meeste belang bij heeft.
+Dit is de functie waar de aanvragende interface het meeste belang bij heeft.
 Deze functie verwacht een id van de geadresseerde node als parameter.
-De routing techniek zal vervolgens uitzoeken naar welke node een bericht doorgegeven moet worden om het bericht aan te laten komen bij de geadresseerde.
+De routingstechniek zal vervolgens uitzoeken naar welke node een bericht doorgegeven moet worden om het bericht aan te laten komen bij de geadresseerde.
 Dit adres wordt terug gegeven als een return waarde. 
 
-\textbf{\textit{preconditie:}} Geadresseerde is bekend bij de routing techniek.
+\textbf{\textit{preconditie:}} Geadresseerde is bekend bij de routeringstechniek.
 
-\textbf{\textit{postconditie:}} Routing techniek geeft terug welk adres het vervolg adres is voor het bericht.
+\textbf{\textit{postconditie:}} Routingstechniek geeft terug welk adres het vervolg adres is voor het bericht.
 
 \subparagraph{startRouting}
-De functie start routing wordt aangeroepen zodra de routing techniek moet beginnen met het opbouwen van communicatie routes.
+Deze functie wordt aangeroepen zodra de routingstechniek moet beginnen met het opbouwen van communicatie routes.
 
-\textbf{\textit{preconditie:}} Het communicatie waarover de routering gebeurd is beschikbaar
+\textbf{\textit{preconditie:}} De communicatie waarover de routering gebeurd is beschikbaar
 
 \textbf{\textit{postconditie:}} De node zich aangemeld bij andere nodes en kan adressen opslaan.
 
 \subparagraph{maintainRouting}
 Deze functie wordt herhaaldelijk aangeroepen in de software.
-Het roept de routing techniek aan om een onderhoud te plegen aan de opgebouwde routing informatie.
-Zo zal vaak het geval zijn dat de routing techniek controleert of de aansluitende nodes nog bestaan.
+Het roept de routeringstechniek aan om een onderhoud te plegen aan de opgebouwde routing informatie.
+In dit geval controleert de routeringstechniek of de aansluitende nodes nog bestaan.
 
-\textbf{\textit{preconditie:}} De routing techniek is gestart met routeren en heeft een lijst van beschikbare nodes.
+\textbf{\textit{preconditie:}} De routeringstechniek is gestart met routeren en heeft een lijst van beschikbare nodes.
 
 \textbf{\textit{postconditie:}} Er is onderhoud uitgevoerd aan de lijst van beschikbare nodes.
 
 \subparagraph{NodeMovedLocation} 
-Deze functie wordt aangeroepen zodra de drone zich verplaatst heeft. Het is aan de routing techniek om hier juist op te reageren.
+Deze functie wordt aangeroepen zodra de drone zich verplaatst heeft. Het is aan de routingtechniek om hier juist op te reageren.
 In de huidige implementatie worden alle routes als ongeldig gezien waardoor de tabel geleegd wordt. 
 
 \textbf{\textit{preconditie:}} Er is geen preconditie.
@@ -563,7 +574,7 @@ In de huidige implementatie worden alle routes als ongeldig gezien waardoor de t
 
 
 \subparagraph{cantCommunicateWithNode} 
-Deze functie wordt aangeroepen als er geen connectie gelegd kan worden met een node. Deze functie geeft terug op hoeveel routes de node had in het netwerk. 
+Deze functie wordt aangeroepen als er geen connectie gelegd kan worden met een node. Deze functie geeft 0 terug als er een alternatieve route mogelijk is naar de node. 
 
 \textbf{\textit{preconditie:}} De node is aanwezig in de route tabel.
 
@@ -626,7 +637,7 @@ Hier wordt met sequence diagrammen communicatie wegen omschreven die gebruikt wo
 
 \subsubsection{Heartbeat van router naar gateway met directe verbinding}
 \label{DetailedDesign:Communicatie:sequence:heartbeatrouter->gateway}
-Om duidelijk te maken hoe een bericht van een node naar een gateway komt, wordt het scenario van een heartbeat uitgewerkt in een direct verbinden.
+Om duidelijk te maken hoe een bericht van een node naar een gateway komt, wordt het scenario van een heartbeat uitgewerkt naar een direct verbonden router.
 Deze weg van communicatie wordt voor alle directe berichten hetzelfde uitgevoerd.
 Dat maakt het overbodig om voor elk type bericht een sequence diagram uit te werken
 \begin{figure}[H]
@@ -635,14 +646,14 @@ Dat maakt het overbodig om voor elk type bericht een sequence diagram uit te wer
 	\label{fig:communication:sequence:sequence:heartbeatrouter->gateway}
 \end{figure}
 In diagram \ref{fig:communication:sequence:sequence:heartbeatrouter->gateway} is de flow zichtbaar van een router die een heartbeat bericht verstuurd naar een gateway en daar ook weer response op krijgt.
-Op het moment dat een router het bericht om een heartbeat te versturen naar de gateway zal hij dit altijd doen naar de gateway waar hij een voorkeursverbinding (prefferedGateway) mee heeft.
-Hij zal aan de aangesloten routeringstechniek vragen of er een route mogelijk is naar de router een aan wie hij zijn bericht dan moet afgegeven.
-In het geval van deze sequence diagram heeft de router een directe verbinding met de gateway en is in stap 4 te zien dat het teruggegeven adres 0 is het adres van de gateway.
+Op het moment dat een router het bericht krijgt om een heartbeat te versturen naar de gateway, zal hij dit altijd doen naar de gateway waar hij een voorkeursverbinding (prefferedGateway) mee heeft.
+Hij zal aan de aangesloten routeringstechniek vragen of er een route mogelijk is naar de router en aan wie hij zijn bericht dan moet afgegeven.
+In het geval van deze sequence diagram heeft de router een directe verbinding met de gateway. In stap 4 is te zien dat het teruggegeven adres 0 is, het adres van de gateway.
 
 Vervolgens maakt de router een heartbeat bericht aan die het via de \nameref{architectural:interfaces:IWirelessCommunication} interface verstuurd naar de Gateway.
 De router geeft door aan de routeringstechniek in stap 10 en 11 of het zenden wel of niet gelukt is op basis van de succes feedback uit stap 9.
 Als het niet lukt geeft hij dit ook door aan zijn aangesloten punten in stap 12. 
-De werking hiervan is terug te vinden in \nameref{DetailedDesign:Communicatie:sequence:contactverlies}
+De werking hiervan is terug te vinden in \nameref{DetailedDesign:Communicatie:sequence:contactverlies}.
 Als laatste voordat de router zijn functie verlaat zet hij in stap 13 de boolean die bijhoudt of er verbinding is met de gateway (connectedToGateway) op false. Dit gebeurt omdat het component verwacht dat er reactie komt van de gateway die het weer op true zet.
 
 Bij stap 8 is het gelukt om het bericht te versturen naar de gateway die daar via zijn eigen \nameref{architectural:interfaces:IWirelessCommunication} interface het bericht ontvangt.
@@ -706,7 +717,7 @@ Op het moment dat een node doorheeft dat er een verbinding verloren is met een a
 De eerste stap die een meshcomponent onderneemt is het raadplegen van de routeringstechniek of er direct aangesloten nodes zijn.
 Per aangesloten node verstuurt het component een bericht dat er een andere node geen verbinding meer wil maken.
 Een uitzondering is als de direct aangesloten node degene is die het component geïnformeerd heeft over het feit van de vermissing.
-Die ontvangt geen bericht, omdat deze natuurlijk al op de hoogte is.
+Die ontvangt geen bericht, omdat deze al op de hoogte is.
 
 
 \subsection{Activity Diagrammen}
@@ -735,13 +746,13 @@ De onderstaande flow zichtbaar in \autoref{fig:communication:activity:meshrouter
 \end{figure}
 
 
-Zodra het programma start wordt als eerste de antenne aan gezet en wanneer dit geactiveerd is ook de debug stand van de antenne. 
-Nadat deze is opgestart wordt kenbaar gemaakt aan de routeringstechniek dat deze ook kan starten met het opbouwen van routes.
+Zodra het programma start wordt als eerste de antenne aan gezet. Wanneer aangegeven wordt ook de debug stand van de antenne geactiveerd. 
+Nadat deze is opgestart wordt kenbaar gemaakt aan de routeringstechniek dat deze kan starten met het opbouwen van routes.
 
 Nu deze twee zijn opgestart kan de basis lus van het programma beginnen. 
 Zolang het programma draait wordt deze lus herhaald.
 
-Elke  keer zodra het programma op dit punt aankomt wacht het 10(instelbaar) seconden.
+Elke  keer zodra het programma op dit punt aankomt wacht het 10 (instelbaar) seconden.
 Hierna controleert de router of de aangesloten antenne nog aan staat. 
 Als dit niet zo is begint de lus opnieuw.
 Als de antenne wel aan staat wordt er een verzoek gedaan aan de routeringstechniek om onderhoudt te plegen.
@@ -770,7 +781,8 @@ Als er nog steeds geen verbinding is wordt er gekeken of er al een timer gestart
 
 Als er nog geen timer gestart is wordt de routeringstechniek op de hoogte gebracht dat de verbinding verloren is met de gateway.
 Vervolgens worden de direct aangesloten nodes ook op de hoogte gebracht van de verloren verbinding.
-Tenslotte  wordt er een timer gestart door een boolean te schakelen en de huidige tijd op te slaan daarna wordt de functie verlaten.
+Tenslotte  wordt er een timer gestart door een boolean om te schakelen.
+Hierna wordt de huidige tijd opgeslagen waarna de functie wordt verlaten.
 
 Als er al wel een timer gestart is wordt er gekeken of de tijd die een node zonder verbinding mag zitten al verstreken is.
 Als deze tijd nog niet verstreken is wordt de functie verlaten.
@@ -787,18 +799,17 @@ In \autoref{fig:communication:activity:nood} wordt het uitgevoerde protocol toeg
 	\label{fig:communication:activity:nood}
 \end{figure}
 
-Het noodprotocol begint met een laatste controle of de node ondertussen alweer verbinding heeft 
-als dit zo is wordt het protocol niet uitgevoerd en de onderhandelingslijst leeg gehaald.
+Het noodprotocol begint met een laatste controle of de node ondertussen alweer verbinding heeft, als dit zo is wordt het protocol niet uitgevoerd en de onderhandelingslijst leeg gehaald.
 
 Wanneer er nog steeds geen verbinding is gelegd met een gateway wordt het protocol gestart.
-Eerst wordt de routing techniek geraadpleegd of er nog andere nodes verbonden zijn met deze node.
+Eerst wordt de routeringstechniek geraadpleegd of er nog andere nodes verbonden zijn met deze node.
 
 Als dat niet zo is wordt er een verzoek gestuurd naar de drone om zich te gaan verplaatsen naar de locatie die als laatste gemarkeerde is als goede locatie.
 Nadat deze verplaatst is wordt de locatie van de gateway ingesteld als laatst bekende goede locatie.
-Ook wordt de routeringstechniek op de hoogte gesteld dat er een verplaatsing heeft plaats gevonden.
+Hierna wordt de routeringstechniek op de hoogte gesteld dat er een verplaatsing heeft plaats gevonden.
 Als dit allemaal is uitgevoerd wordt dit protocol gesloten.
 
-Wanneer er wel andere nodes verbonden zijn met deze node dan moeten deze onderling gaan onderhandelen wie er een verplaatsing moet gaan uitvoeren om zo efficiënt mogelijk het netwerk proberen te herstellen. Deze werking is apart uitgelegd in de hier opvolgende activity diagram \ref{fig:communication:activity:verplaatsingsonderhandeling}. Nadat deze onderhandelingen zijn afgelopen wordt het noodprotocol afgesloten zodat het netwerk even een moment heeft een poging te doen zichzelf te herstellen.
+Wanneer er wel andere nodes verbonden zijn met deze node dan moeten deze onderling gaan onderhandelen wie er een verplaatsing moet gaan uitvoeren om zo efficiënt mogelijk het netwerk proberen te herstellen. Deze werking is apart uitgelegd in de hier opvolgende activity diagram \ref{fig:communication:activity:verplaatsingsonderhandeling}. Nadat deze onderhandelingen zijn afgelopen wordt het noodprotocol afgesloten zodat het netwerk een kans heeft om zichzelf te herstellen.
 \pagebreak
 \paragraph{Meshnetwerk router verplaatsingsonderhandeling}
 \autoref{fig:communication:activity:verplaatsingsonderhandeling} laat de flow zien die een enkele node neemt wanneer deze start met onderhandelen over wie er een verplaatsing moet uitvoeren.
@@ -831,7 +842,7 @@ Als dit zover is kijkt de node of hij de hoogste score heeft in een lijst.
 Wanneer een node de hoogste score heeft verzoekt hij de drone om zich te verplaatsen naar de laatst bekende goede locatie. Ook maakt de node dit bekend aan de routeringstechniek. 
 Vervolgens stelt de node de locatie van de gateway in als laatste bekende goede locatie.
 
-Tenslotte maakt de node altijd aan het einde van de onderhandeling de lijst waar alle onderhandel waardes in staan. 
+Tenslotte maakt de node altijd aan het einde van de onderhandeling de lijst waar alle onderhandel waardes in staan leeg. 
 
 \subsubsection{Activity diagrammen gateway}
 \label{DetailedDesign:Communicatie:Activity:gateway}
@@ -861,7 +872,7 @@ Dit volgende stuk beschrijft de flows in de applicatie die zowel de router als d
 \label{DetailedDesign:Communicatie:Activity:meshcomponent:onmsg}
 Deze paragraaf beschrijft acties die de applicatie onderneemt bij het ontvangen van een bericht. 
 \begin{figure}[H]
-	\begin{center}\includegraphics[width=.8\linewidth]{UML/out/Communication/activity/processMessage/processMessage.png}\end{center}
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/Communication/activity/processMessage/processMessage.png}\end{center}
 	\caption{Activity diagram meshnetwerk flow ontvangen bericht.}
 	\label{fig:communication:meshcomponent:onmsg}
 \end{figure}
@@ -869,7 +880,7 @@ Deze paragraaf beschrijft acties die de applicatie onderneemt bij het ontvangen 
 In het acitvity diagram is te zien dat er bij het ontvangen van een bericht eerst wordt gekeken of het bericht geadresseerd is voor de ontvangende node.
 Als die niet zo is dan wordt het bericht doorgestuurd naar een volgend punt.
 
-Wanneer het wel geadresseerd is voor de ontvangende node dan gaat het de functie in om het bericht te verwerken. Hoe het bericht verwerkt wordt is afhankelijk van het type die het bericht bij zich draagt. Dit wordt gedaan aan met een switch case. 
+Wanneer het wel geadresseerd is voor de ontvangende node dan gaat het de functie in om het bericht te verwerken. Hoe het bericht verwerkt wordt is afhankelijk van het type die het bericht bij zich draagt. Dit wordt gedaan met een switch case. 
 
 Voordat de functie verlaten wordt, zal altijd de routeringstechniek geïnformeerd worden over de communicatie.
 
@@ -886,8 +897,8 @@ In het communicatie component is een routeringstechniek aanwezig voor het vinden
 In het diagram is te zien dat er drie uitgang situaties zijn. 
 Eerst zal de techniek kijken of het adres behoord tot een direct aangesloten node en als dat zo is geeft hij dit terug.
 Als er direct aangesloten node is gevonden kijkt het systeem of een van de aangesloten nodes het adres kent.
-Wanneer een aangesloten node het adres ken,t geeft de routeringstechniek het adres van de aangesloten node terug.
-Tenslotte als niemand het adres, kent wordt dit terug gegeven.
+Wanneer een aangesloten node het adres kent geeft de routeringstechniek het adres van de aangesloten node terug.
+Tenslotte als niemand het adres kent wordt dit terug gegeven.
 
 \paragraph{Routeringstechniek actie bij bewijs van contact}
 \label{DetailedDesign:Communicatie:Activity:routeringtechniek:contactgevonden}
@@ -900,7 +911,7 @@ Als een node bewijs heeft dat er een verbinding is geeft hij dit door aan de rou
 \end{figure}
 
 Op het moment dat er contact gelegd is dan wordt er gekeken of dit direct contact was of dat er een aangesloten node een nieuw contact heeft gevonden. Als het direct contact was komt er een nieuwe route aftakking door het toevoegen van een kind van de node.
-Als er indirect een nieuw contact wordt gevonden dan wordt degene die dit aangeeft geregistreerd als nieuw punt wanneer die nog onbekend was. Vervolgens wordt aan het adres die gevonden is toegevoegd aan de set van degene die de vondst aangeeft.
+Als er indirect een nieuw contact wordt gevonden dan wordt degene die dit aangeeft geregistreerd als nieuw punt als deze nog onbekend is. Vervolgens wordt het adres die gevonden is toegevoegd aan de set van degene die de vondst aangeeft.
 
 \subsection{Ontwerpkeuzes gemaakt voor het communicatie component}
 \label{DetailedDesign:Communicatie:ontwerkeuzes}
@@ -916,7 +927,7 @@ Op het moment dat de aanroep bij het landen dus zou moeten gebeuren moet er ook 
  
 \subsubsection{Locaties onthouden door het hele bericht op te slaan}
 
-Op het moment dat een meshnetwerk component een locatie wil onthouden van de gateway of het component die een stap terug staat in het netwerk doet hij dit door het gehele bericht van het locatieverzoek te onthouden.
+Op het moment dat een meshnetwerk component een locatie wil onthouden van de gateway of het component die een stap terug staat in het netwerk, doet hij dit door het gehele bericht van een locatieverzoek te onthouden.
 Hierdoor is er een klein stuk opgeslagen data die niet gebruikt wordt, maar er blijft op een overzichtelijke manier wel data onthouden die er toe doet. 
 Zo kan er in het bericht gezien worden van wie er een locatie is opgeslagen en ook hoe oud dit bericht is.
 In een toekomstige applicatie kan het nodig zijn om met de leeftijd van het bericht andere beslissingen te maken.  
@@ -942,14 +953,14 @@ Het alternatief was om berichten binnen het systeem in een struct op te slaan wa
 \label{DetailedDesign:MeshNetwerk}
 Het sub syteem Gazebo is het component die verantwoordelijk is voor de simulatie van de drones. 
 Het is zowel verantwoordelijk voor het initialiseren van de virtuele hardware als aan elkaar koppelen van deze hardware.
-Hoewel het nu nog niet van toepassing is zal Gazebo uiteindelijk ook verantwoordelijk voor het toepassen van physics op de virutele drones. 
+Gazebo zal uiteindelijk ook verantwoordelijk zijn voor het toepassen van physics op de virtuele drones. 
 
 
 \subsection{Component Diagram}
 \label{DetailedDesign:MeshNetwerk:ComponentDiagram}
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/gazeboComponentDiagram.png}\end{center}
-	\caption{component diagram Gazebo.}
+	\caption{Component diagram Gazebo.}
 	\label{fig:component:Gazebo}
 \end{figure}
 
@@ -962,15 +973,15 @@ Het heeft geen effect op de clock snelheid deze is gelijk aan de computer waarop
 \subsubsection{VirtualRaspberryPi}
 \label{architectural:subcomponenten:VirtualRaspberryPi}
 Dit abstracte component wordt gebruikt ter generalisatie van een Raspberry Pi.
-Omdat deze Raspberry Pi altijd wordt toegevoegd aan een ander model erft dit component over van modelplugin.    
+Omdat deze Raspberry Pi altijd wordt toegevoegd aan een ander model erft dit component over van ModelPlugin.    
 
 \subsubsection{VirtualRaspberryPiRouter}
 \label{architectural:subcomponenten:VirtualRaspberryPiRouter}
-Deze \nameref{architectural:subcomponenten:VirtualRaspberryPi} is voorzien van een applicatie die de Raspberry Pi zich laat gedragen als in router in het meshnetwerk. 
+Deze \nameref{architectural:subcomponenten:VirtualRaspberryPi} is voorzien van een applicatie die de Raspberry Pi zich laat gedragen als een router in het meshnetwerk. 
 
 \subsubsection{VirtualRaspberryPiGateway}
 \label{architectural:subcomponenten:VirtualRaspberryPiGateway}
-Deze \nameref{architectural:subcomponenten:VirtualRaspberryPi} is voorzien van een applicatie die de Raspberry Pi zich laat gedragen als in gateway in het meshnetwerk. 
+Deze \nameref{architectural:subcomponenten:VirtualRaspberryPi} is voorzien van een applicatie die de Raspberry Pi zich laat gedragen als een gateway in het meshnetwerk. 
 
 
 \subsubsection{DroneSimulation}
@@ -991,10 +1002,10 @@ Een virtuele drone is een abstract component die alle variabelen bevat die nodig
 
 \subsubsection{GatewayDrone}
 \label{architectural:subcomponenten:GatewayDrone}
-Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualRaspberryPiGateway} plugin. 
+Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de SDF omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualRaspberryPiGateway} plugin. 
 \subsubsection{RouterDrone}
 \label{architectural:subcomponenten:RouterDrone}
-Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de sdf omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualRaspberryPiRouter} plugin. 
+Deze drone is een \nameref{architectural:subcomponenten:VirtualDrone} die in de SDF omschrijving wordt voorzien van een \nameref{architectural:subcomponenten:VirtualRaspberryPiRouter} plugin. 
 
 \subsubsection{DroneFactory}
 \label{architectural:subcomponenten:DroneFactory}
@@ -1004,19 +1015,22 @@ Dit component is verantwoordelijk voor het produceren van drones. Het is een Wor
 <plugin name="DroneFactory" filename="libDroneFactory.so">
 	<amountOfRouterDrones>17</amountOfRouterDrones>
 	<amountOfGatewayDrones>1</amountOfGatewayDrones>
+	<UseServer>0</UseServer>
 	<Debug>1</Debug>
 </plugin>
 \end{lstlisting}
 
 \paragraph{amountOfRouterDrones} Hiermee wordt het aantal in te laden router drones bepaald.
  
-\paragraph{amountOfRouterDrones} Hiermee wordt het aantal in te laden gateway drones bepaald.
+\paragraph{amountOfGatewayDrones} Hiermee wordt het aantal in te laden gateway drones bepaald.
+
+\paragraph{UseServer} Wanneer deze op true staat wordt de eerste gateway voorzien van een Rest server.
 
 \paragraph{Debug} Deze boolean bepaalt of de drones wel of geen debuging topic zullen hebben.
 
 \subsection{Interfaces}
 \label{DetailedDesign:MeshNetwerk:interfaces}
-In de vorm van ros transport types voldoet het Gazebo component aan extern aangeboden interfaces.
+In de vorm van Ros transport types voldoet het Gazebo component aan extern aangeboden interfaces.
 Door gebruik te maken van een ServiceServer \nameref{architectural:ros:service:RequestGPS} en een subscriber op het topic \nameref{architectural:ros:topic:Location} die samen de functionaliteit bieden benodigd voor de interface \nameref{architectural:interfaces:IDroneEngine}. 
 Door informatie te publiceren op het topic \nameref{architectural:ros:topic:DroneInfo} biedt het informatie per drone aan over locaties.
 
@@ -1082,7 +1096,7 @@ Doordat er maar een minimaal verschil zit tussen het opstarten van een virtuele 
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.90\linewidth]{UML/out/DroneSimulation/Sequence/VirtualRouter/VirtualRouter.png}\end{center}
-	\caption{Sequence diagram initialiseren van een virtuele gateway Raspberry Pi.}
+	\caption{Sequence diagram initialiseren van een virtuele router Raspberry Pi.}
 	\label{fig:communication:MeshNetwerk:sequence:routerRaspberryPi}
 \end{figure}
 
@@ -1103,12 +1117,12 @@ In de volgende sequentie wordt het opstarten van een dronefactory behandeld.
 	\label{fig:communication:MeshNetwerk:sequence:dronefactory}
 \end{figure}
 
-Bij het opstarten van een drone factory wordt de sdf geraadpleegd hoeveel gateway aangemaakt moeten worden. 
-Vervolgens zal de factory per gateway een instantie aanmaken die zichzelf via een sdf omschrijving injecteert in Gazebo.
-Deze sdf omschrijving wordt later in deze paragraaf verder toegelicht, tegelijk met die van een router drone.
+Bij het opstarten van een drone factory wordt de SDF geraadpleegd hoeveel gateway aangemaakt moeten worden. 
+Vervolgens zal de factory per gateway een instantie aanmaken die zichzelf via een SDF omschrijving injecteert in Gazebo.
+Deze SDF omschrijving wordt later in deze paragraaf verder toegelicht, tegelijk met die van een router drone.
 
 Nadat de factory alle gateway drones heeft gemaakt worden de router drones gemaakt.
-Voordat hij de drones aanmaakt, raadpleegt de factory het sdf bestand nogmaal om de variabele gridsize in te stellen.
+Voordat hij de drones aanmaakt, raadpleegt de factory het SDF bestand nogmaals om de variabele gridsize in te stellen.
 Gridsize bepaalt hoe breed elke kolom maximaal mag zijn
 
 Nadat de RouterDrones zijn aangemaakt is het factory programma klaar en zal het niets meer uitvoeren tijdens de simulatie.
@@ -1118,7 +1132,7 @@ Nadat de RouterDrones zijn aangemaakt is het factory programma klaar en zal het 
 Een drone inject bij de constructor een SDF omschrijving van zichzelf in Gazebo.
 Deze omschrijvingen worden nu behandeld.
 
-Een sdf omschfrijving van een router drone ziet er als volgt uit:
+Een SDF omschfrijving van een router drone ziet er als volgt uit:
 \begin{lstlisting}
 <sdf version ='1.6'>
  <model name ='router_drone'>
@@ -1157,7 +1171,7 @@ Een sdf omschfrijving van een router drone ziet er als volgt uit:
 </sdf>"
 \end{lstlisting} 
 
-Een sdf omschfrijving van een gateway drone ziet er bijna hetzelfde uit behalve dat deze aanspraak maakt op de plugin "MeshnetworkGateway"\ in plaats van "MeshnetworkRouter".  En de gebruikte kleur paars is in plaats van groen.
+Een SDF omschfrijving van een gateway drone ziet er bijna hetzelfde uit behalve dat deze aanspraak maakt op de plugin ``MeshnetworkGateway"\ in plaats van ``MeshnetworkRouter".  De gebruikte kleur paars is in plaats van groen.
 
 Belangrijke punten uit deze omschrijving zijn:
 
@@ -1169,12 +1183,12 @@ Belangrijke punten uit deze omschrijving zijn:
 
 \textbf{plugin name="MeshnetworkRouter" filename="libMeshnetworkRouter.so"} Deze plugin zorgt ervoor dat een drone voorzien wordt van een \nameref{architectural:subcomponenten:VirtualRaspberryPiRouter}.
 
-\textbf{plugin name="MeshnetworkGateway" filename="libMeshnetworkGateway.so"} Deze plugin zorgt ervoor dat een drone voorzien wordt van een \nameref{architectural:subcomponenten:VirtualRaspberryPiGateway}. Deze plugin is niet zichtbaar in het bovenstaande SDF voorbeeld, maar wordt wel gebruikt in het sdf format voor een gateway. 
+\textbf{plugin name="MeshnetworkGateway" filename="libMeshnetworkGateway.so"} Deze plugin zorgt ervoor dat een drone voorzien wordt van een \nameref{architectural:subcomponenten:VirtualRaspberryPiGateway}. Deze plugin is niet zichtbaar in het bovenstaande SDF voorbeeld, maar wordt wel gebruikt in het SDF format voor een gateway. 
 
-\textbf{plugin filename = 'libDroneEngine.so' name ='DroneEngine'} Deze plugin zorgt ervoor dat een drone wordt voorzien van eem \nameref{architectural:subcomponenten:DroneEngine}.
+\textbf{plugin filename = 'libDroneEngine.so' name ='DroneEngine'} Deze plugin zorgt ervoor dat een drone wordt voorzien van een \nameref{architectural:subcomponenten:DroneEngine}.
 
 
-\textbf{DroneID:} Dit zal het ID zijn van de drone zelf en wordt aan de motor gekoppeld, deze moet uniek zijn in het programma. Anders zullen er meerdere drones aangestuurd worden.
+\textbf{DroneID:} Dit zal het ID zijn van de drone zelf en wordt aan de motor gekoppeld, deze moet uniek zijn tijdens de simulatie. Anders zullen er meerdere drones aangestuurd worden met een enkel id.
 
 \textbf{nodeID:} Dit zal het ID zijn van het aangesloten netwerkcomponent. Ook deze moet uniek zijn in de huidige implementatie. 
 
@@ -1189,20 +1203,20 @@ Belangrijke punten uit deze omschrijving zijn:
 \paragraph{DroneEngine applicatie}
 \label{DetailedDesign:MeshNetwerk:Activity:initaliserenDrone}
 Elke drone is voorzien van een DroneEngine, dit component zorgt ervoor dat de drone in de simulatie kan voortbewegen op basis van doelen.
-Daarnaast biedt het de optie om de locatie van een drone op te vragen om zo een abstracte versie van een GPS na te bootsen.
+Daarnaast biedt het de optie om de locatie van een drone op te vragen om zo een een GPS na te bootsen.
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.45\linewidth]{UML/out/DroneSimulation/Activity/DroneEngine/DroneEngine.png}\end{center}
 	\caption{Activity diagram initialiseren van de DroneEngine.}
-	\label{fig:communication:MeshNetwerk:Activity:initialiserenDrone}
+	\label{fig:communication:MeshNetwerk:Activity:initialiserenDroneEngine}
 \end{figure}
 
 Op het moment dat een DroneEngine gestart wordt is het ophalen van de DroneID  het eerste wat het component doet.
-Vervolgens controleert het component of ROS al gestart is.
+Vervolgens controleert het component of Ros al gestart is.
 Wanneer deze nog niet gestart is wordt deze alsnog opgestart.
 Vervolgens wordt er een eigen rosnode gecreëerd.
 Deze rosnode wordt vervolgens gebruikt om te luisteren naar het topic waarvan de drone zijn doel locatie binnen krijgt.
 Hierna start de node een topic met droneinformatie waar de locatie van de drone en het id in staat.
-Vervolgens wordt er ook de gps service gestart.
+Vervolgens wordt er ook de GPS service gestart.
 Nu dit allemaal opgestart is wordt er een bericht gestuurd naar de wireless simulator met de huidige drone informatie.
 
 Om het initialiseren af te maken wordt er tenslotte een thread gestart die elke simulatie cycle wordt aangeroepen.
@@ -1224,11 +1238,11 @@ Dit is mogelijk, omdat de DroneEngine een modelplugin is waardoor het aanspraak 
 \end{figure}
 
 Op het moment dat er een beweging verzocht wordt, begint de drone met het berekenen wat de directe afstand is tussen de drone en het doel.
-Zodra de afstand berekend is wordt de afstand gedeeld door de snelheid waardoor er een tijd ontstaat die de beweging zal kosten.
+Zodra de afstand berekend is wordt de afstand gedeeld door de snelheid. Deze berekening geeft de tijd aan de beweging zal kosten.
 
 De eerste stap van de animatie is het instellen waar de animatie begint op tijdstip 0, in deze implementatie is dat op de locatie waar de drone al is.
 Vervolgens moet de drone opstijgen dit duurt 10 procent van de totale tijd die de drone beweegt.
-De hoogte van het opstijgen heeft een verband met afstand dit is namelijk de helft hiervan.
+De hoogte van het opstijgen heeft een verband met afstand, dit is namelijk de helft hiervan.
 Vervolgens wordt op 90 procent van de animatie een doel ingesteld om weer op dezelfde hoogte boven het doel te hangen.
 Tenslotte moet de animatie bij 100 procent landen op het ingestelde doel.
 
@@ -1244,31 +1258,32 @@ Omdat elke type Raspberry altijd een aparte plugin is zorgt deze overerving ervo
 
 \subsubsection{Doelen doorgeven met een rostopic}
 Bij een echte drone is het vrij aannemelijk dat de aansluiting via een seriële verbinding verloopt.
-Het gedrag van een rostopic komt meer overeen met een seriële verbinding dan de tegenhanger rosservice.
-In de meeste implementaties van een seriële verbinding wordt namelijk altijd een verbinding open gehouden. 
+Het gedrag van een rostopic komt meer overeen met een seriële verbinding dan het alternatief, rosservice.
+In de veel implementaties van een seriële verbinding wordt namelijk altijd een verbinding open gehouden. 
 
-\section{Design Sub-System ros}
+\section{Design Sub-System Ros}
 \label{DetailedDesign:WirelessSimulatie}
-Het volgende gedeelte zal gaan over het subcomponent ros. Het component is verantwoordelijk voor het simuleren van alle vormen van communicatie die gebruikt worden in het meshnetwerk. Het simuleert een NRF24 inclusief de draadloze communicatie.
+Het volgende gedeelte zal gaan over het pakket Ros. Dit onderdeel is verantwoordelijk voor het simuleren van alle vormen van communicatie die gebruikt worden in het meshnetwerk. Het simuleert een NRF24 inclusief de draadloze communicatie. Het biedt een adapter tussen de \nameref{architectural:subcomponenten:DroneEngine} en \nameref{architectural:subcomponenten:MeshnetworkComponent}.
+Tenslotte heeft het een onderdeel die zich voordoet als internetcomponent.
 
 \subsection{Component Diagram}
 \label{DetailedDesign:ros:ComponentDiagram}
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/rosComponentDiagram.png}\end{center}
-	\caption{Component diagram ros.}
+	\caption{Component diagram Ros.}
 	\label{fig:component:ros}
 \end{figure}
 
 %NAMESPACE Ros
 \subsubsection{RosDroneEngineConnector}
 \label{architectural:subcomponenten:RosDroneEngineConnector}
-Dit component is een adapter tussen de \nameref{architectural:subcomponenten:DroneEngine} en de interface \nameref{architectural:interfaces:IDroneEngine}. Die het mogelijk maakt om ros te gebruiken om aanspraak te maken op de virtuele drone.
+Dit is een adapter tussen de \nameref{architectural:subcomponenten:DroneEngine} en de interface \nameref{architectural:interfaces:IDroneEngine}. Die het mogelijk maakt om Ros te gebruiken om aanspraak te maken op de virtuele drone.
 
 \subsubsection{DroneManagerService}
 \label{architectural:subcomponenten:DroneManagerService}
 Dit component is de toegangspoort voor de ontwikkelaar tot de \nameref{architectural:subcomponenten:MeshnetworkGateway}.
-Op dit moment is het component alleen geschikt om verplaatsingverzoeken te versturen via de gateway naar de Drones.
-Hiervoor biedt het twee interfaces in de vorm van rosservices aan waarbij er een voor locaties is en de ander voor casussen. 
+Op dit moment is het component alleen geschikt om verplaatsingverzoeken te versturen via de gateway naar de drones.
+Hiervoor biedt het twee interfaces, in de vorm van rosservices, aan waarbij er één is voor verplaatsingen naar een locatie is en de ander voor casusverzoeken. 
 
 \subsubsection{DroneManager}
 \label{architectural:subcomponenten:DroneManager}
@@ -1282,7 +1297,7 @@ Deze internetmock laat de \nameref{architectural:subcomponenten:DroneManager} zi
 Het WirelessSimulation component is verantwoordelijk voor het simuleren van de NRF24 en het draadloze signaal hiervan. 
 \subsubsection{WirelessSignalSimulator}
 \label{architectural:subcomponenten:WirelessSignalSimulator}
-Deze simulator bepaald of twee nodes met elkaar mogen communiceren. Het doet met informatie die het continue ontvangt via het drone informatie topic. 
+Deze simulator bepaald of twee nodes met elkaar mogen communiceren. Dit wordt gedaan met informatie die het ontvangt via het drone informatie topic. 
 \subsubsection{Node}
 \label{architectural:subcomponenten:Node}
 Dit component wordt alleen gebruikt door de \nameref{architectural:subcomponenten:WirelessSignalSimulator} om te registreren welke Nodes bestaan, waar ze zijn en naar welk topic ze luisteren.
@@ -1299,24 +1314,36 @@ Deze kan de NRF24 naar een direct adres versturen of zenden naar alle NRF24 node
 Deze interface wordt aangeboden door \nameref{architectural:subcomponenten:RosInternetMock} biedt daarmee de optie om een internet verbinding op te zetten. 
  
 \begin{lstlisting}
-void Connect(Commands* IGC) 
-void Disconnect( )
+void init(Communication::Internet::IGatewayCommands *IGC, uint8_t threads = 1)
+void connect( )
+void disconnect( )
 \end{lstlisting}
+
+
+\subparagraph{init}
+\label{DetailedDesign:ros:extern:interfaces:IInternetConnection:Init}
+Deze functie zal het internet component initialiseren
+Als parameter wordt een verwijzing naar een aangeboden interface verwacht waar de internetconnectie gebruik van mag maken om commando's het netwerk in te sturen. Optioneel kan aangegeven wordt hoeveel threads de server mag gebruiken standaard is dit er een.
+
+
+\textbf{\textit{preconditie:}} Component die een internetverbinding wil kunnen maken kan de interface \nameref{architectural:interfaces:IGatewayCommands} aanbieden. Het adres die het component publiceert is beschikbaar
+
+\textbf{\textit{postconditie:}} Het component die externe services kan aanbieden is geïnitialiseerd. 
+
+
+
 
 \subparagraph{Connect} 
 \label{DetailedDesign:ros:extern:interfaces:IInternetConnection:Connect}
 Deze functie wordt aangeroepen om een verbinding op te zetten.
-Als parameter wordt een verwijzing naar een aangeboden interface verwacht waar de internetconnectie gebruik van mag maken om commando's het netwerk in te sturen. 
-
-\textbf{\textit{preconditie:}} Component die een internetverbinding wil maken kan de interface \nameref{architectural:interfaces:IGatewayCommands} aanbieden.
-
+\textbf{\textit{preconditie:}} Het component is geïnitialiseerd. 
 \textbf{\textit{postconditie:}} Er is een externe verbinding buiten het meshnetwerk opgezet geschikt om commando's het netwerk in te sturen.
 
 \subparagraph{Disconnect} 
 \label{DetailedDesign:ros:extern:interfaces:IInternetConnection:Disconnect}
 Deze functie wordt aangeroepen om een internet verbinding te verbreken.
 
-\textbf{\textit{preconditie:}} Er is geen postconditie aan deze functie. 
+\textbf{\textit{preconditie:}} Er is geen preconditie aan deze functie. 
 Wanneer er nog geen verbinding bestaat zal de uitkomst hetzelfde blijven
 
 \textbf{\textit{postconditie:}} Er bestaat geen internetverbinding meer. 
@@ -1424,7 +1451,7 @@ Deze functie wordt gebruikt om de huidige locatie van een drone op te vragen er 
 
 \textbf{\textit{postconditie:}} De huidige locatie van de drone is berekend en teruggegeven.
 
-\subsubsection{Extern aangeboden ros interfaces}
+\subsubsection{Extern aangeboden Ros interfaces}
 \label{DetailedDesign:ros:extern:rosinterfaces}
 Via rosservices en topic biedt het component ook externe functionaliteit en functies aan deze worden hieronder behandeld.
 
@@ -1472,10 +1499,11 @@ Om deze functie te gebruiken wordt een casus bericht verwacht deze heeft de volg
 uint32 caseID
 \end{lstlisting}
 
-Er is op dit moment één casus geïmplementeerd uit het plan van aanpak.
+Er is een casus geïmplementeerd uit het plan van aanpak.
 Deze casus gebruikt 17 drones. 
 Daarom kan er met caseID 0 alle drones naar die casus positie gezet worden en met 1 t/m 17 worden ze individueel naar deze positie gebracht.
-Met casus 100 wordt er een grid gemaakt van 10 bij 10 drones wanneer er minder aanwezig zijn vullen ze plek 0 tot het aantal wat er is.   
+Met casus 100 wordt er een grid gemaakt van 10 bij 10 drones wanneer er minder aanwezig zijn vullen ze plek 0 tot het aantal wat aanwezig is.
+Casus 101, 102, 201, 202 worden gebruik voor de situaties uit het onderzoek.   
 
 \textbf{\textit{preconditie:}}  De drone manager is verbonden met een drone gateway 
 
@@ -1518,17 +1546,17 @@ uint8 prefLoc
 \subparagraph{familySize} Het aantal nodes die de huidige node kent. Niet directe nodes kunnen dubbel voorkomen.
 \subparagraph{totalMessages} Het totaal aantal berichten die een node verstuurt heeft.
 \subparagraph{prefferedGateWay} Het ID van de gateway waar de node voorkeur voor heeft.
-\subparagraph{on} boolean die aangeeft of de antenne aan staat.
+\subparagraph{on} Boolean die aangeeft of de antenne aan staat.
 \subparagraph{hops} Het aantal hops die een node nodig heeft om de gateway te bereiken.
 \subparagraph{prefLoc} Het ID van een andere node waar deze node voorkeur voor heeft om in nood naartoe te verplaatsen. 
 
-\subsubsection{Intern aangeboden ros interfaces}
+\subsubsection{Intern aangeboden Ros interfaces}
 \label{DetailedDesign:ros:intern:rosinterfaces}
 
 \paragraph{/gateway}
 \label{DetailedDesign:ros:intern:rosinterfaces:topic:gateway}
 Het gateway topic is de verbinding tussen de \nameref{architectural:subcomponenten:DroneManager} en de \nameref{architectural:subcomponenten:RosInternetMock}.
-Omdat er op dit moment alleen ondersteuning is voor verzoeken tot het verplaatsen van een wordt er gebruik gemaakt van het bericht RequestGatewayDroneflight.
+Omdat er op dit moment alleen ondersteuning is voor verzoeken tot het verplaatsen van een drone wordt er gebruik gemaakt van het bericht RequestGatewayDroneflight.
 Dit bericht heeft de volgende samenstelling:
 
 \begin{lstlisting}
@@ -1557,7 +1585,7 @@ uint8[32] payload
 \paragraph{/SignalSimulator/othersinRange}
 \label{DetailedDesign:ros:intern:rosinterfaces:service:ss:range}
 Deze service wordt aangeboden door de \nameref{architectural:subcomponenten:WirelessSignalSimulator}.
-Het maakt het mogelijk voor een node om op te vragen wie er allemaal binnen bereik is.
+Het biedt de functie voor een node om op te vragen wie er allemaal binnen bereik is.
 Het opvragen gaat via het servicebericht AreaScan die er als volgt uit ziet:
 
 \begin{lstlisting}
@@ -1572,8 +1600,9 @@ uint8[] near
 \paragraph{/SignalSimulator/message}
 \label{DetailedDesign:ros:intern:rosinterfaces:service:ss:message}
 Om een bericht te kunnen versturen biedt de  \nameref{architectural:subcomponenten:WirelessSignalSimulator} een service aan. 
-Deze service verstuurd een bericht met opgelegde regels of het mogelijk zou zijn om een bericht te kunnen versturen.
-Het servicebericht wat gebruikt wordt is een WirelessMessage bericht die de volgende samenstelling heeft:
+Deze service verstuurd een bericht naar een andere Node.
+De serice doet dit met opgelegde regels of het mogelijk is een bericht te kunnen versturen
+Het servicebericht wat gebruikt wordt is een WirelessMessage bericht met de volgende samenstelling:
 
 \begin{lstlisting}
 uint8 from
@@ -1610,13 +1639,13 @@ bool on
 \subsection{Sequence Diagrams}
 \label{DetailedDesign:ros:sequence}
 
-Binnen het ros component vindt veel communicatie tussen componenten plaats door het gebruik van de ros transport laag.
+Binnen het Ros component vindt veel communicatie tussen componenten plaats door het gebruik van de Ros transport laag.
 Hoe deze communicatie verloopt wordt beter toegelicht met de volgende componenten.
 
 \subsubsection{Verzoek tot verplaatsing van een drone}
 \label{DetailedDesign:ros:sequence:verplaatsingdrone}
 
-Een dronemanager biedt de service aan om een verzoek te versturen om een drone te verplaatsen. 
+Een dronemanager biedt de service aan een verzoek te versturen om een drone te verplaatsen. 
 De dronemanager doet dit door te communiceren met het \nameref{architectural:subcomponenten:RosInternetMock} component.
 Deze werking staat hieronder uitgelegd.
 
@@ -1635,7 +1664,7 @@ Per \nameref{architectural:subcomponenten:MeshnetworkGateway} bestaat er een Ros
 \subsubsection{Verzoek tot casus situatie}
 \label{DetailedDesign:ros:sequence:casus}
 
-Om het makkelijk te maken om situaties te testen heeft de drone manager een service die het aanbiedt om drone in bepaalde casus verdeling te zetten.
+Om situaties makkelijk te kunnen testen heeft de drone manager een service die het aanbiedt de drones in een bepaalde casus verdeling te zetten.
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.95\linewidth]{UML/out/ros/sequence/CasusRequest/CasusRequest.png}\end{center}
@@ -1660,12 +1689,12 @@ Deze simulator bepaalt of dit mag met de onderlinge afstand en de aan of uit sta
 	\label{fig:ros:sequence:sequence:sendmessage}
 \end{figure}
 
-Op het moment dat een \nameref{architectural:subcomponenten:VirtualNRF24} een verzoekt tot het versturen van een bericht ontvangt, maakt het een WirelessMessage aan.
+Op het moment dat een \nameref{architectural:subcomponenten:VirtualNRF24} een verzoek tot het versturen van een bericht ontvangt, maakt het een WirelessMessage aan.
 Hij stelt de zender en ontvanger van het bericht in en kopieert het bericht naar de payload van WirelessMessage.
 Vervolgens wordt de service van de WirelessSignalSimulator voor het versturen van berichten aangeroepen om de WirelessMessage te versturen.
 Als deze service niet beschikbaar is wordt er een ROS\textunderscore ERROR geprint zichtbaar in stap 21.
 
-Als de service wel beschikbaar is gaat deze als eerste kijken of hij de zender en ontvanger kent.
+Als de service wel beschikbaar is gaat deze als eersteopgegeven kijken of hij de zender en ontvanger kent.
 Vervolgens kijkt de WirelessSimulator of beide antennes aan staan.
 Wanneer een van de twee niet bekend is of er staat er één uit zal er een false als response terug gegeven worden.
 
@@ -1696,7 +1725,7 @@ Dit bericht wordt tenslotte gepubliceerd naar de \nameref{architectural:subcompo
 \label{DetailedDesign:ros:sequence:sturendoelnaarengine}
 
 De \nameref{architectural:subcomponenten:RosDroneEngineConnector} biedt in zijn aangeboden interface twee functies aan.
-Een van die functies is het versturen van een doel naar de \nameref{architectural:subcomponenten:DroneEngine}. 
+Een functie is het versturen van een doel naar de \nameref{architectural:subcomponenten:DroneEngine}. 
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.8\linewidth]{UML/out/ros/sequence/powerSwitch/powerSwitch.png}\end{center}
@@ -1721,7 +1750,7 @@ De \nameref{architectural:subcomponenten:RosDroneEngineConnector} biedt in zijn 
 Als er een verzoek om een locatie gemaakt wordt, maakt de RosEngineConnector een RequestGPS bericht aan. 
 Vervolgens gebruikt hij dit bericht in een servicecall naar de \nameref{architectural:subcomponenten:DroneEngine} die als response de locatie terug zal geven. 
 Met deze waardes wordt een Vector3 aangemaakt welke vervolgens teruggegeven wordt.
-Er is nog geen goede afhandeling wanneer de DroneEngine niet beschikbaar is voor nu wordt er locatie (6,6,6) teruggegeven.
+Er is nog geen goede afhandeling wanneer de DroneEngine niet beschikbaar is. Nu wordt er locatie (6,6,6) teruggegeven.
 
 
 \subsection{Activity Diagrammen}
@@ -1752,21 +1781,21 @@ Omdat er tijdens het opstarten van een virtuele antenne veel stappen worden onde
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.4\linewidth]{UML/out/ros/activity/StartAntenna/StartAntenna.png}\end{center}
-	\caption{Activity diagram initialiseren van de DroneEngine.}
+	\caption{Activity diagram initialiseren van de virtuele antenne.}
 	\label{fig:ros:MeshNetwerk:Activity:antenne}
 \end{figure}
 
 Als een antenne start legt die als eerste verbinding met zijn vereiste interface \nameref{architectural:interfaces:IMeshNetwork}. 
-Vervolgens controleert de antenne of ros al draait als dit nog niet zo is start hij deze op.
-Hierna start de antenne een rosnode op die hij gebruikt voor ros transport.
+Vervolgens controleert de antenne of Ros al draait als dit nog niet zo is start hij deze op.
+Hierna start de antenne een rosnode op die hij gebruikt voor Ros transport.
 Zodra deze node opgestart is start de antenne met luisteren naar zijn eigen topic
-Als dit topic aangemaakt is maakt hij een ros publisher aan voor de nodeInfo.  
-Als dit gedaan is wacht de antenne tot de wirelessSignalSimulator luistert naar het topic.
+Als dit topic aangemaakt is maakt hij een Ros publisher aan voor de nodeInfo.  
+Vervolgens wacht de antenne tot de wirelessSignalSimulator luistert naar het topic.
 Wanneer deze luistert, publiceert de antenne de informatie.
 Vervolgens worden de services opgestart om nodes binnen bereik te vinden en de powerswitch.
-Tenslotte wordt er een thread opgestart voor het bufferen van ros berichten.
+Tenslotte wordt er een thread opgestart voor het bufferen van Ros berichten.
 
-\subsection{Ontwerpkeuzes gemaakt voor het ros component}
+\subsection{Ontwerpkeuzes gemaakt voor het Ros component}
 \label{DetailedDesign:ros:ontwerkeuzes}
 In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
 
@@ -1774,19 +1803,21 @@ In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
 Er is de keuze gemaakt om te bepalen of twee antennes mogen communiceren op basis van de onderlinge afstand die ze hebben.
 Deze afstand wordt bepaald door het toepassen van Pythagoras wat een relatief simpele berekening is. 
 Hoewel er in de werkelijkheid veel meer factoren komen kijken is deze implementatie het minst complex.
-De complexiteit van bijvoorbeeld de lengte van een onderlinge route om rekening te houden met objecten zou zo veel intensiever zijn voor de software dat het een groot effect heeft bij een simulatie van honderd drones.
+De complexiteit om rekening te houden van met deze factoren kan wel erg toenemen
+Een voorbeeld is het uitrekenen van de lengte van de route tussen twee punten, om zo rekening te houden met objecten.
+Dit zou een groot effect hebben bij een simulatie van honderd drones.
 
-\subsubsection{Wireless simulator in ros in plaats van Gazebo}
+\subsubsection{Wireless simulator in Ros in plaats van Gazebo}
 Eerst was de WirelessSignalSimulator geplaatst in het Gazebo component. 
 Toen viel op dat dit een hoge coupling gaf.
 Het was ook logisch om de simulatie van communicatie bij elkaar te bundelen in één package.
-Daarom is besloten om deze te plaatsen in ros in plaat van Gazebo.
+Daarom is besloten om deze te plaatsen in Ros in plaats van Gazebo.
 
 \subsubsection{RosDroneEngineConnector}
-Er wordt een adapter in ros geplaatst om een drone in Gazebo aan te sturen.
-Het zou software technisch gezien logischer zijn om de drone aan te sturen met een Gazebo adapter die een gelijk soort transport systeem heeft als ros.
-Er is gekozen om dit toch aan ros over te laten om zo alle communicatie via hetzelfde transport te laten verlopen.
-Dit zorgt ervoor dat het ros programma RQT inzicht geeft aan de ontwikkelaar over alle communicatie op één plek.
+Er wordt een adapter in Ros geplaatst om een drone in Gazebo aan te sturen.
+Het zou software technisch gezien logischer zijn om de drone aan te sturen met een Gazebo adapter die een gelijk soort transport systeem heeft als Ros.
+Er is gekozen om dit toch aan Ros over te laten om zo alle communicatie via hetzelfde transport te laten verlopen.
+Dit zorgt ervoor dat het Ros programma RQT inzicht geeft aan de ontwikkelaar over alle communicatie op één plek.
 
 
 \section{Design Sub-System NRF24}
@@ -1796,12 +1827,12 @@ Dit zorgt ervoor dat het ros programma RQT inzicht geeft aan de ontwikkelaar ove
 \label{DetailedDesign:NRF24:ComponentDiagram}
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.5\linewidth]{Afbeeldingen/NRF24ComponentDiagram.png}\end{center}
-	\caption{component diagram ros.}
+	\caption{Component diagram Ros.}
 	\label{fig:component:NRF24}
 \end{figure}
 
 Het component diagram bestaat uit twee interfaces. Een high level interface en een low level interface ook wel de driver genoemd.
-De high level interface biedt de interface IWirelessCommunication aan. Omdat deze al volledig behandeld is in \autoref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} \nameref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} wordt deze niet nogmaals behandeld
+De high level interface biedt de interface IWirelessCommunication aan. Omdat deze al volledig behandeld is in \autoref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} \nameref{DetailedDesign:ros:extern:interfaces:IWirelessCommunication} wordt deze niet nogmaals behandeld. Er wordt gebruik gemaakt van de libary RF24 \cite{nrf24git} voor directe aansturing naar het hardwarecomponent.
 
 \subsection{Aansluiting NRF24}
 
@@ -1811,7 +1842,7 @@ De high level interface biedt de interface IWirelessCommunication aan. Omdat dez
 	\label{fig:component:aansluting}
 \end{figure}
 
-Voor een stabieler voltage wordt een condensator van \SI{4.7}{\micro\farad} aanbevolen direct aangesloten op de ground en voltage poort van de nRF.
+Voor een stabieler voltage wordt een condensator van \SI{4.7}{\micro\farad} aanbevolen direct aangesloten op de ground en voltage poort van de NRF24l01+.
 
 \begin{table}[H]
 	\centering
@@ -1845,8 +1876,8 @@ Het instellen gebeurd door het volgende uit te voeren.
 	\label{fig:NRF24:sequence:SetupNRF24}
 \end{figure}
 
-Op het moment dat de NRF24 gestart wordt moet hij over twee adressen geïnformeerd worden.
-Het adres uniek voor deze nRF24 en het algemene broadcast adres waar alle nRF24's op werken.
+Zodra de NRF24 gestart wordt moet hij over twee adressen geïnformeerd worden.
+Het unieke adres voor deze NRF24 en het algemene broadcast adres waar alle NRF24's op werken.
 Omdat de NRF24 driver een rij van adressen heeft die hij allemaal in de gaten moet houden wordt een aparte functie gebruik voor het instellen van de adressen.
 Vervolgens kan de driver een instantie maken van de NRF24.
 De libary van de NRF24 vereist dat als eerste functie altijd begin() aangeroepen wordt.
@@ -1893,7 +1924,7 @@ Tenslotte wordt het bericht verstuurd terwijl er tijdelijk gestopt wordt met lui
 De functie retourneert of het zenden gelukt is op basis van de acknowledgement.    
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=1\linewidth]{UML/out/NRF24/sequence/lowlevelSendMessage/lowlevelSendMessage.png}\end{center}
-	\caption{Sequence diagram bericht versturen low level interface}
+	\caption{Sequence diagram bericht versturen low level interface.}
 	\label{fig:NRF24:sequence:lowlevelSendMessage}
 \end{figure}
 
@@ -1905,7 +1936,7 @@ Zodra dit het geval is geeft de driver dit bericht door aan de high level interf
 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=.6\linewidth]{UML/out/NRF24/sequence/recieveMessage/recieveMessage.png}\end{center}
-	\caption{Sequence diagram }
+	\caption{Sequence diagram ontvangen bericht.}
 	\label{fig:NRF24:sequence:recieveMessage}
 \end{figure}
 
@@ -1946,18 +1977,71 @@ Het resultaat wordt teruggegeven aan de \nameref{DetailedDesign:ros:extern:inter
 \label{DetailedDesign:NRF24:ontwerkeuzes}
 In het volgende stuk worden de keuzes gemaakt voor het component toegelicht.
 \subsubsection{Pipe verdeling}
-Er is gekozen om een vaste pipe verdeling te houden dit uit een statisch stuk en een circulaire buffer bestaat.
+Er is gekozen om een vaste pipe verdeling te houden die uit een statisch stuk en een circulaire buffer bestaat.
 De antenne kan op één pipe tegelijk schrijven. 
 Daarom wordt er per schrijf actie van pipe gewisseld.
-Er zijn twee adressen waar altijd interesse is om naar te luisteren dit zijn het broadvast adres en het eigen adres van de node.
-Dit staan daarom vast. 
+Er zijn twee adressen waar altijd interesse naar is om naar te luisteren dit zijn het broadcast adres en het eigen adres van de node.
+Deze staan daarom vast. 
 Dan blijven er drie plekken over om adressen in te zetten. 
 Deze worden circulair gebruikt waardoor altijd het adres die het oudste is verwijderd wordt.
 Deze adressen worden alleen gebruik voor acknowledgement het is daarom aannemelijk dat het oudste adres ook niet meer gebruikt gaat worden.
 
 \subsubsection{High en Low level interface}
-Hoewel er ook nog een aparte libary is voor de nRF wordt er toch nog een high en low interface toegepast. 
+Hoewel er ook nog een aparte libary is voor de NRF24l01+ wordt er toch nog een high en low interface toegepast. 
 Dit is gedaan om specifieke technische aanroepen uit de high level interface weg te houden.
+
+
+\section{REST gateway}
+\label{DetailedDesign:RESTgateway}
+De volgende sectie zal de werking beschrijven van de REST gateway. 
+Deze gateway maakt het mogelijk om via een REST service commando's het netwerk in te sturen. 
+De implementatie betreft een prototype daarom is er een beperkt aantal functies aanwezig en leunt de applicatie grotendeel op de applicatie Pistache \cite{pisrest}.
+
+\subsection{Component diagram}
+\label{DetailedDesign:RESTgateway:component}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.6\linewidth]{Afbeeldingen/RESTgatewayComponentDiagram.png}\end{center}
+	\caption{Component diagram REST gateway.}
+	\label{fig:component:RESTgateway}
+\end{figure}
+
+\subsubsection{InternetGateway}
+Deze class is het enige zelfgemaakte gedeelte uit dit component. 
+Het draagt de verantwoording van het opstarten en het draaiende houden van de REST service die aangeboden wordt via de interface RestCommands.
+Om deze service aan te kunnen bieden maakt het gebruik van de libary Pistache \cite{pisrest}.
+
+\subsection{Interfaces}
+Het component biedt twee interface aan. 
+De interface \nameref{DetailedDesign:ros:extern:interfaces:IInternetConnection} wordt al behandeld in het pakket van Ros en wordt daarom hier niet nogmaals behandeld.
+\subsubsection{RestCommands}
+Via een REST protocol de gateway een interface aan voor aansturing.
+De interface luistert hiervoor op het ipadres van het apparaat en gebruikt de poort 9080.
+
+De interface heeft twee aanwezige routes om een functie aan te bieden.
+
+\begin{lstlisting}
+POST:	/DroneMovement/:id/:latitude/:longitude/:height
+GET:	/ready
+\end{lstlisting}
+
+\paragraph{POST: /DroneMovement/:id/:latitude/:longitude/:height}
+Via deze route kunnen verzoeken verstuurd worden om een drone te verplaatsen.
+Door in de post aan te geven welke drone naar welke punt toe moet zal de gateway dit bericht vertalen naar een bericht gebruikt in het meshnetwerk en dit vervolgens versturen.
+
+\textbf{\textit{preconditie:}} De drone is aanwezig in het meshnetwerk.
+
+\textbf{\textit{postconditie:}} Het verzoek naar de drone om zich te verplaatsen is verstuurd.
+
+
+\paragraph{GET: /ready}
+Deze functie biedt de optie aan om te controleren of de REST service al is opgestart.
+
+\textbf{\textit{preconditie:}} -
+
+\textbf{\textit{postconditie:}} Er is een response over de staat van de REST service.
+
+
 
 \bibliographystyle{apacite}
 \bibliography{bilbliography.bib}

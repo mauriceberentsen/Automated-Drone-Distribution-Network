@@ -5,16 +5,18 @@ cp ./Docs/Afstudeerverslag/Afstudeerverslag/Afstudeerverslag.pdf ./Scriptie_Maur
 cp ./Docs/DesignDocumenten/SoftwareDesignDocument.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
 cp ./Docs/DesignDocumenten/SoftwareRequirementSpecification.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
 cp ./Docs/DesignDocumenten/SoftwareRequirementSpecification.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
-cp ./Docs/Onderzoeken/DroneMeshnetwerkSimulatie/Onderzoeksrapport\ Drone\ meshnetwerk\ simulatie.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
+cp ./Docs/Onderzoeken/DroneMeshnetwerkSimulatie/Onderzoeksrapport\ drone\ meshnetwerksimulatie.pdf ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/
 #copy templates to directory
 mkdir -p ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Templates
-cp -R ./Docs/Plan\ van\ aanpak/Templates/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Templates/
+cp -Rf ./Docs/Plan\ van\ aanpak/Templates/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Templates/
 #copy bijlagen to directory
 mkdir -p ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Bijlagen
-cp -R ./Docs/Onderzoeken/DroneMeshnetwerkSimulatie/Bijlagen/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Bijlagen/
+cp -Rf ./Docs/Onderzoeken/DroneMeshnetwerkSimulatie/Bijlagen/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Bijlagen/
+cp -Rf ./Docs/Afstudeerverslag/Afstudeerverslag/Bijlagen/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Bijlagen/
+rm ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Docs/Bijlagen/Meetresultaten\ nrf\ long\ range.ods
 #copy code to directory
 mkdir -p ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Code/
-cp -R ./Code/ros/src/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Code/
+cp -Rf ./Code/ros/src/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Code/
 rm -r ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Code/drone_meshnetwork_simulation/build/
 rm -r ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Code/drone_meshnetwork_simulation/.vscode
 rm ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Code/drone_meshnetwork_simulation/.clang-format
@@ -31,7 +33,7 @@ mkdir -p ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Ontwerpen/p
 cp -R ./Docs/DesignDocumenten/UML/out/* ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten/Ontwerpen/plantuml/image
 
 #zip it and ship it
-zip -r Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten.zip ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten
+zip -r Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten.zip ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten "*.ods"
 zip -r Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten_zonder_mp4.zip ./Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten -x "*.mp4"
 echo "  "
 echo "Created Scriptie_Maurice_Berentsen_561399_Drone_Meshnetwerk_Alten.zip at path:"

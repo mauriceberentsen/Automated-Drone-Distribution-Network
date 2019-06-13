@@ -31,7 +31,7 @@ namespace RaspberryPiSimulation
  }
  // cppcheck-suppress unusedFunction gazebo uses this function
  void VirtualRaspberryPiGateway::Load( physics::ModelPtr _parent,
-                                   sdf::ElementPtr _sdf )
+                                       sdf::ElementPtr _sdf )
  {
   // Store the pointer to the model
   this->model = _parent;
@@ -62,7 +62,6 @@ namespace RaspberryPiSimulation
       nodeID, droneID, debug, routing, engine, NRF24, internet );
   meshnetworkGateway->Init( );
  }
-
 
 }  // namespace RaspberryPiSimulation
 

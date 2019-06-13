@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include "drone_meshnetwork_simulation/RequestGatewayDroneFlight.h"
 #include "DroneManager.hpp"
+#include "drone_meshnetwork_simulation/RequestGatewayDroneFlight.h"
 namespace ros
 {
 namespace DroneManagerService
@@ -147,7 +147,7 @@ namespace DroneManagerService
     return true;
 
     break;
-       case 102:
+   case 102:
     RequestMovement( 1, -3, 4 );
     RequestMovement( 2, 3, 4 );
     RequestMovement( 3, 9, 4 );
@@ -166,14 +166,14 @@ namespace DroneManagerService
     return true;
 
     break;
-    case 201:
+   case 201:
     RequestMovement( 1, -1, 4 );
     RequestMovement( 2, -1, 10 );
     RequestMovement( 3, -1, 16 );
     return true;
 
     break;
-    case 202:
+   case 202:
     RequestMovement( 1, -1, 4 );
     RequestMovement( 2, -1, 12 );
     RequestMovement( 3, -1, 18 );
@@ -219,7 +219,7 @@ namespace DroneManagerService
     break;
    default:
     for ( int i = 1; i < req.caseID + 1; i++ ) {
-     int row, col,width;
+     int row, col, width;
      width = 10;
      row = i % width;
      col = std::floor( i / width );

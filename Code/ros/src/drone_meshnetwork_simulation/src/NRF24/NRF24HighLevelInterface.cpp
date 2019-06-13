@@ -4,9 +4,9 @@
  * @brief NRF24 HighLevelInterface.hpp
  * @version 1.0
  * @date 2019-05-21
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  */
 
 #include "NRF24HighLevelInterface.hpp"
@@ -15,53 +15,55 @@
 
 using namespace Communication::Messages;
 
-NRF24HighLevelInterface::NRF24HighLevelInterface()
-:lowLevelInterface(new NRF24LowLevelInterface(this)),
-                                        on(false),
-                   meshnetworkComponent(nullptr),
-                                    debuginfo(nullptr)
+NRF24HighLevelInterface::NRF24HighLevelInterface( )
+    : lowLevelInterface( new NRF24LowLevelInterface( this ) )
+    , on( false )
+    , meshnetworkComponent( nullptr )
+    , debuginfo( nullptr )
 {
 }
 
-NRF24HighLevelInterface::~NRF24HighLevelInterface()
+NRF24HighLevelInterface::~NRF24HighLevelInterface( )
 {
-    destroy(lowLevelInterface);
+ destroy( lowLevelInterface );
 }
 
-void NRF24HighLevelInterface::StartAntenna( Communication::Wireless::IMeshNetwork* IMN )
+void NRF24HighLevelInterface::StartAntenna(
+    Communication::Wireless::IMeshNetwork* IMN )
 {
-    meshnetworkComponent = IMN;
-    uint8_t node = meshnetworkComponent->getNodeID();
-    lowLevelInterface->Start(addressRange+node,addressRange);
-    on = true;
+ meshnetworkComponent = IMN;
+ uint8_t node = meshnetworkComponent->getNodeID( );
+ lowLevelInterface->Start( addressRange + node, addressRange );
+ on = true;
 }
 
-void NRF24HighLevelInterface::StopAntenna()
+void NRF24HighLevelInterface::StopAntenna( )
 {
-
 }
 
-bool NRF24HighLevelInterface::SendMessageTo(const uint8_t *msg)
+bool NRF24HighLevelInterface::SendMessageTo( const uint8_t* msg )
 {
-    return lowLevelInterface->SendMessage(addressRange+msg[TO],addressRange+msg[TO]+ackStart, msg);
+ return lowLevelInterface->SendMessage(
+     addressRange + msg[TO], addressRange + msg[TO] + ackStart, msg );
 }
 
-void NRF24HighLevelInterface::BroadcastMessage(const uint8_t *msg) 
+void NRF24HighLevelInterface::BroadcastMessage( const uint8_t* msg )
 {
-    lowLevelInterface->BroadcastMessage(msg);
-
+ lowLevelInterface->BroadcastMessage( msg );
 }
 
-const bool NRF24HighLevelInterface::On(){ return on; }
+const bool NRF24HighLevelInterface::On( )
+{
+ return on;
+}
 
- void NRF24HighLevelInterface::DebugingMode(
-     Communication::Wireless::IMeshDebugInfo* debug, const bool on )
- {
-     debuginfo = debug;
- }
+void NRF24HighLevelInterface::DebugingMode(
+    Communication::Wireless::IMeshDebugInfo* debug, const bool on )
+{
+ debuginfo = debug;
+}
 
- void NRF24HighLevelInterface::OnMessage(const uint8_t* message)
- {
-     meshnetworkComponent->OnMsg(message);
- }
-
+void NRF24HighLevelInterface::OnMessage( const uint8_t* message )
+{
+ meshnetworkComponent->OnMsg( message );
+}

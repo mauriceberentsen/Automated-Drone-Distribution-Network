@@ -10,8 +10,8 @@
  */
 #include <iostream>
 
-#include "HybridLMRoutingProtocol.hpp"
 #include "../Meshnetwork/MeshnetworkComponent.hpp"
+#include "HybridLMRoutingProtocol.hpp"
 
 namespace Communication
 {
