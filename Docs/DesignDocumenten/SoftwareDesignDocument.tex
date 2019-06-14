@@ -340,14 +340,14 @@ Om de gebruiker ervan te ontmoedigen is er daarom ook geen SDF bestand aanwezig 
 
 \section{Design Sub-Systeem Communicatie}
 Het sub-systeem communicatie is verantwoordelijk voor de communicatie door het gebruik van mesh technologie.
-Het subsysteem kan dit niet alleen en werkt daarom samen met andere subsystemen, welke zichtbaar zijn in het  \nameref{fig:componentdiagram}.
+Het subsysteem kan dit niet alleen en werkt daarom samen met andere subsystemen, welke zichtbaar zijn in het  \nameref{fig:packagediagram}.
 Het component communicatie bestaat ook weer uit kleinere componenten welke weergeven staan in het \nameref{fig:component:Communicatie}
   
 \label{DetailedDesign:Communicatie}
 \subsection{Component Diagram}
 \label{DetailedDesign:CommunicatieComponentDiagram}
 In de onderstaande afbeelding \ref{fig:component:Communicatie} staat het component diagram van de communicatie weergeven.
-Het is een extractie uit het \nameref{fig:componentdiagram} 
+Het is een extractie uit het \nameref{fig:packagediagram} 
 \begin{figure}[H]
 	\begin{center}\includegraphics[width=\linewidth]{Afbeeldingen/CommunicationComponentDiagram.png}\end{center}
 	\caption{Component diagram communicatie.}
@@ -1820,6 +1820,143 @@ Er is gekozen om dit toch aan Ros over te laten om zo alle communicatie via hetz
 Dit zorgt ervoor dat het Ros programma RQT inzicht geeft aan de ontwikkelaar over alle communicatie op één plek.
 
 
+\section{REST gateway}
+\label{DetailedDesign:RESTgateway}
+De volgende sectie zal de werking beschrijven van de REST gateway. 
+Deze gateway maakt het mogelijk om via een REST service commando's het netwerk in te sturen. 
+De implementatie betreft een prototype daarom is er een beperkt aantal functies aanwezig en leunt de applicatie grotendeel op de applicatie Pistache \cite{pisrest}.
+
+\subsection{Component diagram}
+\label{DetailedDesign:RESTgateway:component}
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.6\linewidth]{Afbeeldingen/RESTgatewayComponentDiagram.png}\end{center}
+	\caption{Component diagram REST gateway.}
+	\label{fig:component:RESTgateway}
+\end{figure}
+
+\subsubsection{InternetGateway}
+Deze class is het enige zelfgemaakte gedeelte uit dit component. 
+Het draagt de verantwoording van het opstarten en het draaiende houden van de REST service die aangeboden wordt via de interface RestCommands.
+Om deze service aan te kunnen bieden maakt het gebruik van de libary Pistache \cite{pisrest}.
+
+\subsection{Interfaces}
+Het component biedt twee interface aan. 
+De interface \nameref{DetailedDesign:ros:extern:interfaces:IInternetConnection} wordt al behandeld in het pakket van Ros en wordt daarom hier niet nogmaals behandeld.
+\subsubsection{RestCommands}
+Via een REST protocol de gateway een interface aan voor aansturing.
+De interface luistert hiervoor op het ipadres van het apparaat en gebruikt de poort 9080.
+
+De interface heeft twee aanwezige routes om een functie aan te bieden.
+
+\begin{lstlisting}
+POST:	/DroneMovement/:id/:latitude/:longitude/:height
+GET:	/ready
+\end{lstlisting}
+
+\paragraph{POST: /DroneMovement/:id/:latitude/:longitude/:height}
+Via deze route kunnen verzoeken verstuurd worden om een drone te verplaatsen.
+Door in de post aan te geven welke drone naar welke punt toe moet zal de gateway dit bericht vertalen naar een bericht gebruikt in het meshnetwerk en dit vervolgens versturen.
+
+\textbf{\textit{preconditie:}} De drone is aanwezig in het meshnetwerk.
+
+\textbf{\textit{postconditie:}} Het verzoek naar de drone om zich te verplaatsen is verstuurd.
+
+
+\paragraph{GET: /ready}
+Deze functie biedt de optie aan om te controleren of de REST service al is opgestart.
+
+\textbf{\textit{preconditie:}} -
+
+\textbf{\textit{postconditie:}} Er is een response over de staat van de REST service.
+
+\subsection{Sequence diagrams}
+\label{DetailedDesign:RESTgateway:sequence}
+
+De werking van het programma zal verder toegelicht worden met sequence diagrammen.
+Elke diagram wordt omschreven, na elke diagram wordt de flow tekstueel doorlopen.
+
+\subsubsection{Initialseren REST service}
+Wanneer een MeshnetworkComponent opstart roept hij de functie aan om de REST service te initialiseren. 
+In deze functie wordt het adres ingesteld voor de service en de te gebruiken routes gedefinieerd.
+Er kan meegegeven worden hoeveel threads de service mag gebruiken, standaard is dit er één.
+De service maakt een adres aan op de localhost en gebruikt poort 9080.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/REST/sequence/init/init.png}\end{center}
+	\caption{Sequence diagram initialiseren REST gateway.}
+	\label{fig:component:RESTgateway:init}
+\end{figure}
+
+De flow begint met een functie die een pointer verwacht naar de interface waarmee commando's het netwerk ingestuurd kunnen worden en optioneel hoeveel threads de service mag gebruiken.
+Vervolgens wordt er een adres aangemaakt.
+Dit adres wordt gebruikt in de constructor van een Endpoint.
+Vervolgens worden opties voor een Endpoint ingesteld en opgeslagen.
+Met deze opties wordt de Endpoint geïnitialiseerd.
+Tenslotte wordt de functie CreateDescription aanroepen in stap 6.
+In deze functie worden de padden beschreven voor de API die de REST service zal aanbieden.
+
+\subsubsection{Verbinden REST service}
+De functie connect zal een thread starten die de service zal opzetten.
+
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=1\linewidth]{UML/out/REST/sequence/connect/connect.png}\end{center}
+	\caption{Sequence diagram verbinden REST gateway.}
+	\label{fig:component:RESTgateway:connect}
+\end{figure}
+
+De functie start een thread op die de service start en meteen weer retourneren zodat het component zelf ook verder kan.
+De thread zal de router de beschrijving geven met de te gebruiken routes.
+Vervolgens zal de Endpoint aangeroepen worden om de service te starten.
+Wanneer dit klaar is joined de thread zichzelf omdat deze niet meer nodig is.
+
+\subsubsection{Afsluiten REST service}
+Om het mogelijk te maken de service te sluiten is er de functie disconnect.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.6\linewidth]{UML/out/REST/sequence/disconnect/disconnect.png}\end{center}
+	\caption{Sequence diagram afsluiten REST gateway.}
+	\label{fig:component:RESTgateway:disconnect}
+\end{figure}
+
+De functie zal aan de Endpoint doorgeven dat deze zichzelf mag afsluiten.
+
+
+\subsubsection{Gereed verzoek REST service}
+Om het mogelijk te maken voor ontwikkelaars om te controleren of de service is opgestart is er een GET route IP:9080/ready.
+Wanneer de service loopt geeft deze een HTTP statuscode OK.
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=.5\linewidth]{UML/out/REST/sequence/ready/ready.png}\end{center}
+	\caption{Sequence diagram REST gateway gereed.}
+	\label{fig:component:RESTgateway:ready}
+\end{figure}
+
+Zoals te zien in \autoref{fig:component:RESTgateway:ready} retourneert de functie altijd een HTTP statuscode OK.
+Op het moment dat de service dus nog niet gestart is zal de client vanzelf een timeout krijgen.
+
+
+\subsubsection{Verzoeken drone verplaatsing REST service}
+Om drone te kunnen verplaatsen is er een functie om deze commando's het netwerk in te kunnen sturen.
+Deze functie luistert REST POST verzoeken op de volgende route:  \\IP:9080/DroneMovement/:id/:latitude/:longitude/:height
+
+
+\begin{figure}[H]
+	\begin{center}\includegraphics[width=\linewidth]{UML/out/REST/sequence/RequestDroneMovement/RequestDroneMovement.png}\end{center}
+	\caption{Sequence diagram verzoken verplaatsing REST gateway.}
+	\label{fig:component:RESTgateway:movement}
+\end{figure}
+
+Zodra er een POST binnen komt wordt de functie RequestDroneMovement aangeroepen.
+Vervolgens worden alle waardes uit de URI gehaald om te vertalen naar een bericht voor het meshnetwerk.
+Zodra dit is doorgeven in stap 6 wordt de functie verlaten door een HTTP OK statuscode terug te geven.
+
+
+
+
+
+
 \section{Design Sub-System NRF24}
 \label{DetailedDesign:NRF24}
 
@@ -1990,141 +2127,6 @@ Deze adressen worden alleen gebruik voor acknowledgement het is daarom aannemeli
 Hoewel er ook nog een aparte libary is voor de NRF24l01+ wordt er toch nog een high en low interface toegepast. 
 Dit is gedaan om specifieke technische aanroepen uit de high level interface weg te houden.
 
-
-\section{REST gateway}
-\label{DetailedDesign:RESTgateway}
-De volgende sectie zal de werking beschrijven van de REST gateway. 
-Deze gateway maakt het mogelijk om via een REST service commando's het netwerk in te sturen. 
-De implementatie betreft een prototype daarom is er een beperkt aantal functies aanwezig en leunt de applicatie grotendeel op de applicatie Pistache \cite{pisrest}.
-
-\subsection{Component diagram}
-\label{DetailedDesign:RESTgateway:component}
-
-\begin{figure}[H]
-	\begin{center}\includegraphics[width=.6\linewidth]{Afbeeldingen/RESTgatewayComponentDiagram.png}\end{center}
-	\caption{Component diagram REST gateway.}
-	\label{fig:component:RESTgateway}
-\end{figure}
-
-\subsubsection{InternetGateway}
-Deze class is het enige zelfgemaakte gedeelte uit dit component. 
-Het draagt de verantwoording van het opstarten en het draaiende houden van de REST service die aangeboden wordt via de interface RestCommands.
-Om deze service aan te kunnen bieden maakt het gebruik van de libary Pistache \cite{pisrest}.
-
-\subsection{Interfaces}
-Het component biedt twee interface aan. 
-De interface \nameref{DetailedDesign:ros:extern:interfaces:IInternetConnection} wordt al behandeld in het pakket van Ros en wordt daarom hier niet nogmaals behandeld.
-\subsubsection{RestCommands}
-Via een REST protocol de gateway een interface aan voor aansturing.
-De interface luistert hiervoor op het ipadres van het apparaat en gebruikt de poort 9080.
-
-De interface heeft twee aanwezige routes om een functie aan te bieden.
-
-\begin{lstlisting}
-POST:	/DroneMovement/:id/:latitude/:longitude/:height
-GET:	/ready
-\end{lstlisting}
-
-\paragraph{POST: /DroneMovement/:id/:latitude/:longitude/:height}
-Via deze route kunnen verzoeken verstuurd worden om een drone te verplaatsen.
-Door in de post aan te geven welke drone naar welke punt toe moet zal de gateway dit bericht vertalen naar een bericht gebruikt in het meshnetwerk en dit vervolgens versturen.
-
-\textbf{\textit{preconditie:}} De drone is aanwezig in het meshnetwerk.
-
-\textbf{\textit{postconditie:}} Het verzoek naar de drone om zich te verplaatsen is verstuurd.
-
-
-\paragraph{GET: /ready}
-Deze functie biedt de optie aan om te controleren of de REST service al is opgestart.
-
-\textbf{\textit{preconditie:}} -
-
-\textbf{\textit{postconditie:}} Er is een response over de staat van de REST service.
-
-\subsection{Sequence diagrams}
-\label{DetailedDesign:RESTgateway:sequence}
-
-De werking van het programma zal verder toegelicht worden met sequence diagrammen.
-Elke diagram wordt omschreven, na elke diagram wordt de flow tekstueel doorlopen.
-
-\subsubsection{Initialseren REST service}
-Wanneer een MeshnetworkComponent opstart roept hij de functie aan om de REST service te initialiseren. 
-In deze functie wordt het adres ingesteld voor de service en de te gebruiken routes gedefinieerd.
-Er kan meegegeven worden hoeveel threads de service mag gebruiken, standaard is dit er één.
-De service maakt een adres aan op de localhost en gebruikt poort 9080.
-
-\begin{figure}[H]
-\begin{center}\includegraphics[width=1\linewidth]{UML/out/REST/sequence/init/init.png}\end{center}
-\caption{Sequence diagram initialiseren REST gateway.}
-\label{fig:component:RESTgateway:init}
-\end{figure}
-
-De flow begint met een functie die een pointer verwacht naar de interface waarmee commando's het netwerk ingestuurd kunnen worden en optioneel hoeveel threads de service mag gebruiken.
-Vervolgens wordt er een adres aangemaakt.
-Dit adres wordt gebruikt in de constructor van een Endpoint.
-Vervolgens worden opties voor een Endpoint ingesteld en opgeslagen.
-Met deze opties wordt de Endpoint geïnitialiseerd.
-Tenslotte wordt de functie CreateDescription aanroepen in stap 6.
-In deze functie worden de padden beschreven voor de API die de REST service zal aanbieden.
-
-\subsubsection{Verbinden REST service}
-De functie connect zal een thread starten die de service zal opzetten.
-
-
-\begin{figure}[H]
-	\begin{center}\includegraphics[width=1\linewidth]{UML/out/REST/sequence/connect/connect.png}\end{center}
-	\caption{Sequence diagram verbinden REST gateway.}
-	\label{fig:component:RESTgateway:connect}
-\end{figure}
-
-De functie start een thread op die de service start en meteen weer retourneren zodat het component zelf ook verder kan.
-De thread zal de router de beschrijving geven met de te gebruiken routes.
-Vervolgens zal de Endpoint aangeroepen worden om de service te starten.
-Wanneer dit klaar is joined de thread zichzelf omdat deze niet meer nodig is.
-
-\subsubsection{Afsluiten REST service}
-Om het mogelijk te maken de service te sluiten is er de functie disconnect.
-
-\begin{figure}[H]
-	\begin{center}\includegraphics[width=.6\linewidth]{UML/out/REST/sequence/disconnect/disconnect.png}\end{center}
-	\caption{Sequence diagram afsluiten REST gateway.}
-	\label{fig:component:RESTgateway:disconnect}
-\end{figure}
-
-De functie zal aan de Endpoint doorgeven dat deze zichzelf mag afsluiten.
-
-
-\subsubsection{Gereed verzoek REST service}
-Om het mogelijk te maken voor ontwikkelaars om te controleren of de service is opgestart is er een GET route IP:9080/ready.
-Wanneer de service loopt geeft deze een HTTP statuscode OK.
-
-\begin{figure}[H]
-	\begin{center}\includegraphics[width=.5\linewidth]{UML/out/REST/sequence/ready/ready.png}\end{center}
-	\caption{Sequence diagram REST gateway gereed.}
-	\label{fig:component:RESTgateway:ready}
-\end{figure}
-
-Zoals te zien in \autoref{fig:component:RESTgateway:ready} retourneert de functie altijd een HTTP statuscode OK.
-Op het moment dat de service dus nog niet gestart is zal de client vanzelf een timeout krijgen.
-
-
-\subsubsection{Verzoeken drone verplaatsing REST service}
-Om drone te kunnen verplaatsen is er een functie om deze commando's het netwerk in te kunnen sturen.
-Deze functie luistert REST POST verzoeken op de volgende route:  \\IP:9080/DroneMovement/:id/:latitude/:longitude/:height
-
-
-\begin{figure}[H]
-	\begin{center}\includegraphics[width=\linewidth]{UML/out/REST/sequence/RequestDroneMovement/RequestDroneMovement.png}\end{center}
-	\caption{Sequence diagram verzoken verplaatsing REST gateway.}
-	\label{fig:component:RESTgateway:movement}
-\end{figure}
-
-Zodra er een POST binnen komt wordt de functie RequestDroneMovement aangeroepen.
-Vervolgens worden alle waardes uit de URI gehaald om te vertalen naar een bericht voor het meshnetwerk.
-Zodra dit is doorgeven in stap 6 wordt de functie verlaten door een HTTP OK statuscode terug te geven.
-
-
-
 \bibliographystyle{apacite}
 \bibliography{bilbliography.bib}
 
@@ -2132,7 +2134,6 @@ Zodra dit is doorgeven in stap 6 wordt de functie verlaten door een HTTP OK stat
 \appendix
 %\section{Appendix 1}
 %\label{app:iteratieplan}
-
 
 
 
