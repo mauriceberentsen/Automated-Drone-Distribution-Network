@@ -104,13 +104,14 @@ namespace WirelessSimulation
  bool WirelessSignalSimulator::getNodesInRange(
      drone_meshnetwork_simulation::AreaScan::Request &req,
      drone_meshnetwork_simulation::AreaScan::Response &res )
- {   
+ {
   auto from = Network.find( req.id );
-  res.near.clear( ); //we dont want values in here
+  res.near.clear( );  // we dont want values in here
   if ( from != Network.end( ) ) {
    for ( std::pair< uint8_t, Node * > other : Network ) {
     if ( other.first == from->first ) continue;  // not interrested in ourself
-    if ( !other.second->getOn( ) ) continue; //We ignore nodes that are turned off
+    if ( !other.second->getOn( ) )
+     continue;  // We ignore nodes that are turned off
     float distance =
         from->second->getPosition( ).Distance( other.second->getPosition( ) );
     // using pythgoras in the function Vector3 to get the distance between to

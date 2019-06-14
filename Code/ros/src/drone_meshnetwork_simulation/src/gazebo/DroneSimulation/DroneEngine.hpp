@@ -12,14 +12,14 @@
 #define DRONEENGINE
 
 #include <functional>
+#include <gazebo/common/common.hh>
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
-#include <gazebo/common/common.hh>
 #include <thread>
-#include "ros/ros.h"
-#include "ros/callback_queue.h"
 #include "drone_meshnetwork_simulation/Location.h"
 #include "drone_meshnetwork_simulation/RequestGPS.h"
+#include "ros/callback_queue.h"
+#include "ros/ros.h"
 
 namespace gazebo
 {

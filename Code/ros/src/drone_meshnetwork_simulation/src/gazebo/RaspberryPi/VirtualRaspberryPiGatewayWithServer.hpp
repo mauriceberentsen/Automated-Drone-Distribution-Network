@@ -11,12 +11,12 @@
 #ifndef VIRTUALRASPBERRYPIGATEWAYWITHSERVER
 #define VIRTUALRASPBERRYPIGATEWAYWITHSERVER
 
-#include "IVirtualRaspberryPi.hpp"
 #include "../../Communication/Meshnetwork/MeshnetworkGateway.hpp"
 #include "../../Pistache/InternetGateway/InternetGateway.hpp"
+#include "IVirtualRaspberryPi.hpp"
 
-#include "../../ros/RosDroneEngineConnector.hpp"
 #include "../../Communication/RoutingTechnique/HybridLMRoutingProtocol.hpp"
+#include "../../ros/RosDroneEngineConnector.hpp"
 #include "../../ros/WirelessSimulation/VirtualNRF24.hpp"
 
 namespace gazebo
@@ -44,7 +44,6 @@ namespace RaspberryPiSimulation
    */
   void StartSoftware( );
 
-
  private:
   /// \brief The nodeID for the gateway
   uint8_t nodeID;
@@ -62,7 +61,7 @@ namespace RaspberryPiSimulation
   ros::WirelessSimulation::VirtualNRF24* NRF24;
   /// \brief Pointer to the internet connection
   InternetGateway* internet;
-  //ros::Internet::RosInternetMock* internet;
+  // ros::Internet::RosInternetMock* internet;
   /// \brief pointer to this model plugin
   physics::ModelPtr model;
  };

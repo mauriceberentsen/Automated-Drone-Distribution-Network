@@ -12,9 +12,8 @@
 #define NODEHPP
 
 #include "../../Vector/Vector3.hpp"
-#include "ros/ros.h"
 #include "drone_meshnetwork_simulation/NRF24.h"
-
+#include "ros/ros.h"
 
 namespace ros
 {

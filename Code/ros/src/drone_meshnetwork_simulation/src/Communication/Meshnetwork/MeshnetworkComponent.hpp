@@ -12,17 +12,17 @@
 #ifndef MESHNETWORKCOMPONENT
 #define MESHNETWORKCOMPONENT
 // system
+#include <functional>
 #include <map>
 #include <thread>
-#include <functional>
 // Offered interfaces
 #include "../RoutingTechnique/IRoutingEssentials.hpp"
-#include "../Wireless/IMeshNetwork.hpp"
 #include "../Wireless/IMeshDebugInfo.hpp"
+#include "../Wireless/IMeshNetwork.hpp"
 // Required interfaces
+#include "../../Drone/IDroneEngine.hpp"
 #include "../RoutingTechnique/IRoutingTechnique.hpp"
 #include "../Wireless/IWirelessCommunication.hpp"
-#include "../../Drone/IDroneEngine.hpp"
 // classes
 #include "../Messages/Message.hpp"
 namespace Communication

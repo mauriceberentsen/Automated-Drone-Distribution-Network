@@ -10,12 +10,12 @@
 #ifndef IGNORE
 
 // Bring in my package's API, which is what I'm testing
-#include "../MeshnetworkRouter.hpp"
-#include "../../Meshnetwork/MeshnetworkRouter.hpp"
-#include "../../RoutingTechnique/HybridLMRoutingProtocol.hpp"
 #include "../../../ros/RosDroneEngineConnector.hpp"
 #include "../../../ros/WirelessSimulation/VirtualNRF24.hpp"
 #include "../../../ros/WirelessSimulation/WirelessSignalSimulator.hpp"
+#include "../../Meshnetwork/MeshnetworkRouter.hpp"
+#include "../../RoutingTechnique/HybridLMRoutingProtocol.hpp"
+#include "../MeshnetworkRouter.hpp"
 // Bring in gtest
 #include <gtest/gtest.h>
 #include "gmock/gmock.h"

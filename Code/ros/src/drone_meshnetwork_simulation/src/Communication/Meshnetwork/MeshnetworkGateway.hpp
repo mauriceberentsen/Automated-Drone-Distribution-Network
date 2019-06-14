@@ -11,9 +11,9 @@
 #ifndef MESHNETWORKGATEWAY
 #define MESHNETWORKGATEWAY
 
-#include "MeshnetworkComponent.hpp"
-#include "../Internet/IInternetConnection.hpp"
 #include "../Internet/IGatewayCommands.hpp"
+#include "../Internet/IInternetConnection.hpp"
+#include "MeshnetworkComponent.hpp"
 
 namespace Communication
 {

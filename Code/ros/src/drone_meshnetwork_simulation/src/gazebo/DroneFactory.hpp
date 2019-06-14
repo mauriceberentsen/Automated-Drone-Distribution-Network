@@ -11,9 +11,9 @@
 #ifndef DRONEFACTORY
 #define DRONEFACTORY
 
-#include "gazebo/physics/physics.hh"
 #include "gazebo/common/common.hh"
 #include "gazebo/gazebo.hh"
+#include "gazebo/physics/physics.hh"
 
 namespace gazebo
 {

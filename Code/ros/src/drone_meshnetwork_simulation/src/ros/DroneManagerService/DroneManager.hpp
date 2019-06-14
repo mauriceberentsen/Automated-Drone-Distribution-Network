@@ -11,9 +11,9 @@
 #ifndef DRONEMANAGER
 #define DRONEMANAGER
 
-#include "ros/ros.h"
-#include "drone_meshnetwork_simulation/RequestDroneFlight.h"
 #include "drone_meshnetwork_simulation/CasusRequest.h"
+#include "drone_meshnetwork_simulation/RequestDroneFlight.h"
+#include "ros/ros.h"
 namespace ros
 {
 namespace DroneManagerService

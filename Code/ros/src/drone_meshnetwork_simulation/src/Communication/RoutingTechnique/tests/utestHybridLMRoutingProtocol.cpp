@@ -138,7 +138,8 @@ TEST( TestSuiteHybridLMRoutingProtocol, alternativeRouteToGrandchild )
  EXPECT_TRUE( CTT.getDirectionToNode( 5 ) == 3 );
 }
 
-TEST( TestSuiteHybridLMRoutingProtocol, noRouteToGrandchildBecauseMissingParent )
+TEST( TestSuiteHybridLMRoutingProtocol,
+      noRouteToGrandchildBecauseMissingParent )
 {
  HybridLMRoutingProtocol CTT;
  CTT.OtherCanCommunicateWithNode( 1, 4 );

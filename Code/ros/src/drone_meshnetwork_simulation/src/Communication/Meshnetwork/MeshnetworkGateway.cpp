@@ -35,7 +35,7 @@ namespace Meshnetwork
   prefferedGateWay = this->nodeID;
   // Give the InternetComponent some time to boot
   // Begin with routing nearby nodes
-  internet->connect();
+  internet->connect( );
   routerTech->startRouting( this );
  }
 

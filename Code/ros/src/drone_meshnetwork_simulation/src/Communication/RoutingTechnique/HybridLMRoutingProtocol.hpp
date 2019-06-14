@@ -13,8 +13,8 @@
 #include <map>
 #include <set>
 
-#include "IRoutingTechnique.hpp"
 #include "IRoutingEssentials.hpp"
+#include "IRoutingTechnique.hpp"
 namespace Communication
 {
 namespace Meshnetwork

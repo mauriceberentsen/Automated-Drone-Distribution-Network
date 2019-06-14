@@ -10,8 +10,8 @@
  */
 #ifndef IWIRELESS
 #define IWIRELESS
-#include "IMeshNetwork.hpp"
 #include "IMeshDebugInfo.hpp"
+#include "IMeshNetwork.hpp"
 namespace Communication
 {
 namespace Wireless

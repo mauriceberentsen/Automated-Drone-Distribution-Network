@@ -24,7 +24,7 @@ namespace Internet
  RosInternetMock::~RosInternetMock( )
  {
   disconnect( );
-  rosQueueThread.join();
+  rosQueueThread.join( );
  }
 
  void RosInternetMock::disconnect( )
@@ -32,7 +32,8 @@ namespace Internet
   this->rosNode->shutdown( );
  }
 
- void RosInternetMock::init( Communication::Internet::IGatewayCommands *IGC , uint8_t threads)
+ void RosInternetMock::init( Communication::Internet::IGatewayCommands *IGC,
+                             uint8_t threads )
  {
   meshnetworkGateway = IGC;
   // Initialize ros, if it has not already been initialized.
@@ -47,20 +48,17 @@ namespace Internet
   // Spin up the queue helper thread.
   this->rosQueueThread =
       std::thread( std::bind( &RosInternetMock::QueueThread, this ) );
-
-
-
  }
 
-void RosInternetMock::connect()
-{
-      ros::SubscribeOptions so = ros::SubscribeOptions::create<
+ void RosInternetMock::connect( )
+ {
+  ros::SubscribeOptions so = ros::SubscribeOptions::create<
       drone_meshnetwork_simulation::RequestGatewayDroneFlight >(
       "/gateway", 1000, boost::bind( &RosInternetMock::gatewayQueue, this, _1 ),
       ros::VoidPtr( ), &this->rosQueue );
   this->gatewaySub = this->rosNode->subscribe( so );
   ROS_INFO( "gateway connected to virtual internet" );
-}
+ }
 
  void RosInternetMock::QueueThread( )
  {

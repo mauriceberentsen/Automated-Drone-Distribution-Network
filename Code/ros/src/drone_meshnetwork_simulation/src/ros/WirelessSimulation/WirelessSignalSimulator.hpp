@@ -13,11 +13,11 @@
 
 #include <map>
 #include <thread>
-#include "ros/ros.h"
-#include "ros/callback_queue.h"
+#include "drone_meshnetwork_simulation/AreaScan.h"
 #include "drone_meshnetwork_simulation/DroneInfo.h"
 #include "drone_meshnetwork_simulation/WirelessMessage.h"
-#include "drone_meshnetwork_simulation/AreaScan.h"
+#include "ros/callback_queue.h"
+#include "ros/ros.h"
 
 #include "Node.hpp"
 

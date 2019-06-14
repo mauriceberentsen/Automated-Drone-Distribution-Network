@@ -8,9 +8,9 @@
  * @copyright Copyright (c) 2019
  *
  */
-#include <sstream>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 
 #include "Message.hpp"
 

@@ -1,46 +1,46 @@
 /**
  * @file MockDroneEngine.cpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief 
+ * @brief
  * @version 1.0
  * @date 2019-05-22
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  */
 
-#include <iostream>
 #include "MockDroneEngine.hpp"
+#include <iostream>
 
-
-MockDroneEngine::MockDroneEngine(/* args */)
+MockDroneEngine::MockDroneEngine( /* args */ )
 {
 }
 
-MockDroneEngine::~MockDroneEngine()
+MockDroneEngine::~MockDroneEngine( )
 {
 }
 
-void MockDroneEngine::turnOn(/* args */)
+void MockDroneEngine::turnOn( /* args */ )
 {
-    on = true;
+ on = true;
 }
 
-void MockDroneEngine::turnOff(/* args */)
+void MockDroneEngine::turnOff( /* args */ )
 {
-    on = false;
+ on = false;
 }
 
-void MockDroneEngine::setGoal(const float latitude, const float longitude,
-                       const float height)
+void MockDroneEngine::setGoal( const float latitude, const float longitude,
+                               const float height )
 {
-    pos.X(latitude);
-    pos.Y(longitude);
-    pos.Z(height);
-    std::cout<<"Move yourself towards: latitude[" << latitude <<"] longitude["<< longitude <<"] height["<< height <<"]"<<std::endl;
+ pos.X( latitude );
+ pos.Y( longitude );
+ pos.Z( height );
+ std::cout << "Move yourself towards: latitude[" << latitude << "] longitude["
+           << longitude << "] height[" << height << "]" << std::endl;
 }
 
- const Vector3< float > MockDroneEngine::getLocation(/* args */)
+const Vector3< float > MockDroneEngine::getLocation( /* args */ )
 {
-    return pos;
+ return pos;
 }

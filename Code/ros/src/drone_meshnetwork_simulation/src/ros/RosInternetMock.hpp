@@ -13,8 +13,8 @@
 // system
 #include <thread>
 // ros
-#include "ros/ros.h"
 #include "ros/callback_queue.h"
+#include "ros/ros.h"
 // gateway header
 #include "drone_meshnetwork_simulation/RequestGatewayDroneFlight.h"
 // internet interface
@@ -36,7 +36,8 @@ namespace Internet
  public:
   RosInternetMock( );
   ~RosInternetMock( );
-  void init( Communication::Internet::IGatewayCommands *IGC, uint8_t threads = 1 );
+  void init( Communication::Internet::IGatewayCommands *IGC,
+             uint8_t threads = 1 );
   void connect( );
   void disconnect( );
 
@@ -57,7 +58,7 @@ namespace Internet
   ros::CallbackQueue rosQueue;
   /// \brief Subscriber to the general gateway topic
   ros::Subscriber gatewaySub;
-  /// \brief Reference to the gateway for incoming messages 
+  /// \brief Reference to the gateway for incoming messages
   Communication::Internet::IGatewayCommands *meshnetworkGateway;
   /// \brief Pointer to the Ros Node of this class
   std::shared_ptr< ros::NodeHandle > rosNode;

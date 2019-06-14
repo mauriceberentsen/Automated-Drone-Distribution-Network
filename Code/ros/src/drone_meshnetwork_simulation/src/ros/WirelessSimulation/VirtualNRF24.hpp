@@ -13,18 +13,18 @@
 
 #include <thread>
 // ros
-#include "ros/ros.h"
 #include "ros/callback_queue.h"
+#include "ros/ros.h"
 // ros generated messages
-#include "drone_meshnetwork_simulation/WirelessMessage.h"
-#include "drone_meshnetwork_simulation/PowerSwitch.h"
 #include "drone_meshnetwork_simulation/NRF24.h"
 #include "drone_meshnetwork_simulation/NodeDebugInfo.h"
+#include "drone_meshnetwork_simulation/PowerSwitch.h"
+#include "drone_meshnetwork_simulation/WirelessMessage.h"
 // offered interface
 #include "../../Communication/Wireless/IWirelessCommunication.hpp"
 // Required interface
-#include "../../Communication/Wireless/IMeshNetwork.hpp"
 #include "../../Communication/Wireless/IMeshDebugInfo.hpp"
+#include "../../Communication/Wireless/IMeshNetwork.hpp"
 
 namespace Communication
 {

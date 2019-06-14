@@ -1,12 +1,12 @@
 /**
  * @file MockDroneEngine.hpp
  * @author M.W.J. Berentsen (mauriceberentsen@live.nl)
- * @brief 
+ * @brief
  * @version 1.0
  * @date 2019-05-22
- * 
+ *
  * @copyright Copyright (c) 2019
- * 
+ *
  */
 
 #ifndef MOCKDRONENGINE
@@ -16,11 +16,11 @@
 class MockDroneEngine : public Drone::IDroneEngine
 {
 private:
-Vector3< float > pos;
-bool on = true;
-    /* data */
+ Vector3< float > pos;
+ bool on = true;
+ /* data */
 public:
-    /**
+ /**
   * @brief Turns the engine on
   *
   */
@@ -38,7 +38,7 @@ public:
   * @param height
   */
  void setGoal( const float latitude, const float longitude,
-                       const float height );
+               const float height );
  /**
   * @brief Get the Location of the drone
   *
@@ -46,14 +46,8 @@ public:
   * drone
   */
  const Vector3< float > getLocation( );
-    MockDroneEngine(/* args */);
-    ~MockDroneEngine();
+ MockDroneEngine( /* args */ );
+ ~MockDroneEngine( );
 };
 
-
-
-
-
-
-
-#endif //MOCKDRONENGINE
+#endif  // MOCKDRONENGINE
