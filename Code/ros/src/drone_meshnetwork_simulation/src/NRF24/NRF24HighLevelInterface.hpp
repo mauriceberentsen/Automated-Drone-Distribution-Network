@@ -55,7 +55,7 @@ public:
   * @param debug Pointer to the debug interface of the meshnetworkComponent
   * @param on state
   */
- void DebugingMode( Communication::Wireless::IMeshDebugInfo* debug,
+ void DebugingMode( Communication::Meshnetwork::IMeshDebugInfo* debug,
                     const bool on = true );
  /**
   * @brief Get ON/OFF state
@@ -75,7 +75,7 @@ private:
  /// \brief The connected Meshnetwork Interface used for messages
  Communication::Wireless::IMeshNetwork* meshnetworkComponent;
  /// \brief Interface providing debug info about the meshnetwork
- Communication::Wireless::IMeshDebugInfo* debuginfo;
+ Communication::Meshnetwork::IMeshDebugInfo* debuginfo;
 };
 
 #endif  // NRF24HIGHLEVELINTERFACE

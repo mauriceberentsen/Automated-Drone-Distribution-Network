@@ -11,12 +11,12 @@
 
 #ifndef MOCKNETWORKCOMPONENT
 #define MOCKNETWORKCOMPONENT
-#include "../Communication/Wireless/IMeshDebugInfo.hpp"
+#include "../Communication/Meshnetwork/IMeshDebugInfo.hpp"
 #include "../Communication/Wireless/IMeshNetwork.hpp"
 #include "NRF24HighLevelInterface.hpp"
 
 class MockNetworkComponent : public Communication::Wireless::IMeshNetwork,
-                             public Communication::Wireless::IMeshDebugInfo
+                             public Communication::Meshnetwork::IMeshDebugInfo
 {
 private:
  uint8_t NodeID;

@@ -10,7 +10,7 @@
  */
 #ifndef IWIRELESS
 #define IWIRELESS
-#include "IMeshDebugInfo.hpp"
+#include "../Meshnetwork/IMeshDebugInfo.hpp"
 #include "IMeshNetwork.hpp"
 namespace Communication
 {
@@ -52,7 +52,7 @@ namespace Wireless
    * @param IMD Pointer to the debug interface of a meshcomponent
    * @param on on/off state
    */
-  virtual void DebugingMode( Communication::Wireless::IMeshDebugInfo* IMD,
+  virtual void DebugingMode( Communication::Meshnetwork::IMeshDebugInfo* IMD,
                              const bool on ) = 0;
   /**
    * @brief Get ON/OFF state

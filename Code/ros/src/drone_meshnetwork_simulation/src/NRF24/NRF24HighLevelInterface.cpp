@@ -58,7 +58,7 @@ const bool NRF24HighLevelInterface::On( )
 }
 
 void NRF24HighLevelInterface::DebugingMode(
-    Communication::Wireless::IMeshDebugInfo* debug, const bool on )
+    Communication::Meshnetwork::IMeshDebugInfo* debug, const bool on )
 {
  debuginfo = debug;
 }

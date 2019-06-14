@@ -17,8 +17,8 @@
 #include <thread>
 // Offered interfaces
 #include "../RoutingTechnique/IRoutingEssentials.hpp"
-#include "../Wireless/IMeshDebugInfo.hpp"
 #include "../Wireless/IMeshNetwork.hpp"
+#include "IMeshDebugInfo.hpp"
 // Required interfaces
 #include "../../Drone/IDroneEngine.hpp"
 #include "../RoutingTechnique/IRoutingTechnique.hpp"
@@ -31,7 +31,7 @@ namespace Meshnetwork
 {
  class MeshnetworkComponent : public RoutingTechnique::IRoutingEssentials,
                               public Wireless::IMeshNetwork,
-                              public Wireless::IMeshDebugInfo
+                              public IMeshDebugInfo
  {
  public:
   /**

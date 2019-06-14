@@ -23,7 +23,7 @@
 // offered interface
 #include "../../Communication/Wireless/IWirelessCommunication.hpp"
 // Required interface
-#include "../../Communication/Wireless/IMeshDebugInfo.hpp"
+#include "../../Communication/Meshnetwork/IMeshDebugInfo.hpp"
 #include "../../Communication/Wireless/IMeshNetwork.hpp"
 
 namespace Communication
@@ -81,7 +81,7 @@ namespace WirelessSimulation
    * @param debug Pointer to the debug interface of the meshnetworkComponent
    * @param on state
    */
-  void DebugingMode( Communication::Wireless::IMeshDebugInfo* debug,
+  void DebugingMode( Communication::Meshnetwork::IMeshDebugInfo* debug,
                      const bool on = true );
   /**
    * @brief Handles incomming ROS messages
@@ -129,7 +129,7 @@ namespace WirelessSimulation
   /// \brief The connected Meshnetwork Interface used for messages
   Communication::Wireless::IMeshNetwork* meshnetworkComponent;
   /// \brief Interface providing debug info about the meshnetwork
-  Communication::Wireless::IMeshDebugInfo* debuginfo;
+  Communication::Meshnetwork::IMeshDebugInfo* debuginfo;
   /// \brief Pointer to the Ros Node of this class
   std::unique_ptr< ros::NodeHandle > rosNode;
   /// \brief rosQueue for handling messages

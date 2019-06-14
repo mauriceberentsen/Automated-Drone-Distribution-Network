@@ -147,7 +147,7 @@ namespace WirelessSimulation
  }
 
  void VirtualNRF24::DebugingMode(
-     Communication::Wireless::IMeshDebugInfo* debug, const bool on )
+     Communication::Meshnetwork::IMeshDebugInfo* debug, const bool on )
  {
   debuginfo = debug;
   std::string DebugInfoName =

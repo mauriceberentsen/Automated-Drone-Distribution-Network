@@ -13,7 +13,7 @@
 #include <cstdint>
 namespace Communication
 {
-namespace Wireless
+namespace Meshnetwork
 {
  class IMeshDebugInfo
  {
