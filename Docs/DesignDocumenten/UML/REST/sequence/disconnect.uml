@@ -1,0 +1,11 @@
+@startuml
+
+autonumber
+participant ":MeshnetworkComponent" as MC
+participant ":InternetGateway" as IG
+participant "httpEndpoint:Endpoint" as http
+
+MC -> IG +: disconnect
+IG -> http -: shutdown
+
+@enduml

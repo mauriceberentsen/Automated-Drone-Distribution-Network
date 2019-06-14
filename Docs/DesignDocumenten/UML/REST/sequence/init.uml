@@ -1,0 +1,25 @@
+@startuml
+
+autonumber
+participant ":MeshnetworkComponent" as MC
+participant ":InternetGateway" as IG
+participant "addr:Address" as addr
+participant "httpEndpoint:Endpoint" as http
+participant "opts:Endpoint::Options" as opts
+
+MC -> IG +: init(IGatewayCommands *IGC,\n uint8_t _threads)
+IG -> addr *: <<create>>\nAddress( "*:9080" )
+activate addr
+IG -> http *: <<create>>\nEndpoint(addr)
+activate http
+IG -> opts *: <<create>>\nOptions().threads( _threads ).flags( Tcp::Options::InstallSignalHandler)
+activate opts
+IG -> http : init (opts)
+IG -> IG + : CreateDescription
+IG -> IG : Post(router, "/DroneMovement/:id/:latitude/:longitude/:height",\nRoutes::bind( &InternetGateway::RequestDroneMovement, this ))
+IG -> IG -: Get(router, "/ready", Routes::bind( &Generic::handleReady ))
+deactivate addr
+deactivate http
+deactivate opts
+MC <-- IG -
+@enduml

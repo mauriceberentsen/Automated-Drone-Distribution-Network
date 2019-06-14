@@ -1,9 +1,0 @@
-@startuml
-participant ":IWirelessCommunication" as IWC
-participant ":HighLevelInterface" as HLI
-participant ":LowLevelInterface" as LLI
- 
-IWC -> HLI : BroadcastMessage(message)
-HLI -> LLI : BroadcastMessage(message)
-
-@enduml

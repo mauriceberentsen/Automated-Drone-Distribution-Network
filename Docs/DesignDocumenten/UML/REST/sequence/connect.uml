@@ -1,0 +1,22 @@
+@startuml
+
+autonumber
+participant ":MeshnetworkComponent" as MC
+participant ":InternetGateway" as IG
+participant "InternetConnectionThread:thread" as thread
+participant "desc:Description" as desc
+participant "router:Router" as router
+participant "httpEndpoint:Endpoint" as http
+
+MC -> IG +: connect
+activate router
+activate desc
+activate http
+IG --> thread +: bind( &InternetGateway::InternetService)
+MC <-- IG -
+thread -> router : initFromDescription(desc)
+thread -> http : serve
+thread -> http : setHandler
+thread -> thread -: join
+
+@enduml

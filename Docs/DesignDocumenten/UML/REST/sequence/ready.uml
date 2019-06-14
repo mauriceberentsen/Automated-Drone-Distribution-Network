@@ -1,0 +1,11 @@
+@startuml
+actor "User" as User
+participant ":InternetGateway" as IG
+ 
+User -> IG +: handleReady(Request& req,ResponseWritter& res)
+note over User :Using REST route:\n GET:/ready
+
+User <-- IG -: Http::Code::Ok
+
+
+@enduml

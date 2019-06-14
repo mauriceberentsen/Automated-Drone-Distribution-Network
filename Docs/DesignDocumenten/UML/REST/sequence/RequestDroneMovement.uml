@@ -1,0 +1,17 @@
+@startuml
+autonumber
+actor "User" as User
+participant ":InternetGateway" as IG
+participant ":IGatewwayCommands" as GC
+ 
+User -> IG +: RequestDroneMovement(Request& req,ResponseWritter& res)
+note over User :Using REST route:\n POST:/DroneMovement/:id/:latitude/:longitude/:height
+IG -> IG : int id = req.param(":id")
+IG -> IG : float latitude = req.param(":latitude")
+IG -> IG : float longitude = req.param(":longitude")
+IG -> IG : int height = req.param(":height")
+IG -> GC : SendGoalRequestToDrone(id, latitude, longitude, height )
+User <-- IG -: Http::Code::Ok
+
+
+@enduml
