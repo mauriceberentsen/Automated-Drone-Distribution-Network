@@ -23,7 +23,7 @@ add_executable(${PROJECT_NAME}_gateway RaspberryGateway.cpp
  			          ../Drone/MockDroneEngine.cpp 
  				      ../NRF24/NRF24HighLevelInterface.cpp 
 					  ../NRF24/NRF24LowLevelInterface.cpp
-					  ../Pistache/InternetGateway/InternetGateway.cpp)
+					  ../RESTGateway/InternetGateway/InternetGateway.cpp)
 
 #####################################
 ##      HEADERS SEARCH PATHS       ##

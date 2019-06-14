@@ -143,7 +143,7 @@ add_library(MeshnetworkGatewayWithServer SHARED src/gazebo/RaspberryPi/VirtualRa
                                       src/Communication/Messages/Message.cpp
                                       src/ros/WirelessSimulation/VirtualNRF24.cpp
                                       src/ros/RosDroneEngineConnector.cpp
-                                      src/Pistache/InternetGateway/InternetGateway.cpp)
+                                      src/RESTGateway/InternetGateway/InternetGateway.cpp)
 
                                       
 target_link_libraries(MeshnetworkGatewayWithServer ${GAZEBO_LIBRARIES} ${roscpp_LIBRARIES} ${catkin_LIBRARIES} ${LIBRARIES_SEARCH_PATHS})

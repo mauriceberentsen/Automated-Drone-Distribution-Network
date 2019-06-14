@@ -12,7 +12,7 @@
 #define VIRTUALRASPBERRYPIGATEWAYWITHSERVER
 
 #include "../../Communication/Meshnetwork/MeshnetworkGateway.hpp"
-#include "../../Pistache/InternetGateway/InternetGateway.hpp"
+#include "../../RESTGateway/InternetGateway/InternetGateway.hpp"
 #include "IVirtualRaspberryPi.hpp"
 
 #include "../../Communication/RoutingTechnique/HybridLMRoutingProtocol.hpp"
